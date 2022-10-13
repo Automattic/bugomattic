@@ -7,9 +7,9 @@ function App() {
       <header className={styles.appHeader}>
 		<h1>Bugomattic (Ragnarok)</h1>
       </header>
-	  <main>
+		<main>
 		<p>More to come soon!</p>
-	  </main>
+		</main>
     </div>
   );
 }

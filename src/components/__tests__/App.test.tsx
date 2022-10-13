@@ -4,5 +4,5 @@ import App from '../app';
 
 test('Sample test', () => {
   render(<App />);
-  expect(screen.getByRole("heading")).toHaveTextContent("Bugomattic")
+  expect(screen.getByRole('heading')).toHaveTextContent('Bugomattic');
 });
