@@ -16,5 +16,5 @@ root.render(
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 
-// TODO: might not be a bad idea to add this in the future.
+// TODO: might not be a bad idea to add this in the future for local testing.
 // reportWebVitals();
