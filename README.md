@@ -1,46 +1,98 @@
-# Getting Started with Create React App
+# Bugomattic (Ragnarok)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Overview
 
-## Available Scripts
+Bugomattic is a tool that guides bug reporters to the right actions within large, complex organizations.
+It provides a highly configurable way to answer the question of "where should I report a bug I am seeing?"
 
-In the project directory, you can run:
+This tool is developed to be an internal tool for Automatticians. It is built with wepback and deployed
+within Automattic's internal sites. Others who find it useful may fork it and adapt it to work it for
+their organization, following the GPL 2.0 license.
 
-### `yarn start`
+For Automatticians... this is the up & coming tool that replaces the existing Bugomattic prototype.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Development
 
-The page will reload if you make edits.\s
-You will also see any lint errors in the console.
+### Quick Start
 
-### `yarn test`
+Dependencies: `git`, `node`, and `yarn`.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1. Clone the repository: `git clone [https or ssh link to repo]`
+2. In the repository root, install dependencies: `yarn`
+3. Start the application in development mode: `yarn start`
 
-### `yarn build`
+### Create React App
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+This app was initially bootstrapped with [Create React App](https://create-react-app.dev/).
+We will likely outgrow the simple bootstrapping and eventually need to
+[eject](https://create-react-app.dev/docs/available-scripts/#npm-run-eject), but for now
+it makes the most sense to rely on the simplicity of the built-in `react-scripts`.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Helpful Commands
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- `yarn start`: Run the app locally in development mode. This mode will use faked data instead of backend APIs.
+  It includes hot-reloading.
+- `yarn build`: Bundle the app for production. Bundles the application into the `build` folder.
+- `yarn test`: Run tests in watch mode (automatically retests on changes).
+- `yarn test:no-watch`: Run tests once, without watching.
+- `yarn lint`: Lint code and markdown files. Doesn't auto-fix.
+- `yarn lint:fix`: Lint and autofix code and markdown files.
 
-### `yarn eject`
+### Linting
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+This project uses `eslint` and `prettier` to lint and format code files. For almost everything, we use `eslint`
+to run `prettier`. The main exception is `.css` files, which are formatted directly by `prettier`.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+There are Husky pre-commit hooks that will block committing if files fail linting/formatting checks.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+If you are using VSCode, we highly recommend installing the relative extensions and configure fixing & formatting on save.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Add the following extensions:
 
-## Learn More
+- [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
+- [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Then add the following to your VSCode settings.json:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```json
+{
+	// Run ESLint when a file is saved
+	"editor.codeActionsOnSave": {
+		"source.fixAll.eslint": true
+	},
+
+	// Enable ESLint formatter
+	"eslint.format.enable": true,
+
+	// Use ESlint as the default formatter
+	"editor.defaultFormatter": "dbaeumer.vscode-eslint",
+
+	// Equivalent to `editor.codeActionsOnSave` and deprecated, but
+	// Prettier plugin still depends on it
+	"editor.formatOnSave": true,
+
+	// Use prettier for CSS files
+	"[css]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+}
+
+```
+
+### Other Style Guids & Conventions
+
+#### Tests
+
+Test files should be colocated with the files under test. Within a directory, create a `__tests__` directory,
+and name the test file `[file-under-test].test.ts[x]`.
+
+#### CSS
+
+CSS for a component should be colocated with that component. When possible, rely on
+[CSS Modules](https://github.com/css-modules/css-modules) instead of establishing namespaces in naming conventions.
+
+To work with CSS Modules, class names should use `camelCase`.
+
+#### File names
+
+Fill names should use `kebab-casing`.
