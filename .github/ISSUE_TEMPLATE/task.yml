@@ -1,0 +1,20 @@
+name: Task
+description: Tasks for engineers working on Bugomattic
+title: "[Task]:"
+labels: ["[Type] Task"]
+body:
+  - type: textarea
+    id: details
+    attributes:
+      label: Details
+      description: Details of the task
+    validations:
+      required: true
+
+  - type: textarea
+    id: checklist
+    attributes:
+      label: Checklist
+      description: Optional checklist of items for the task
+      value: |
+        - [ ]

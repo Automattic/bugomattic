@@ -1,0 +1,38 @@
+name: Feature Request
+description: Suggest an idea for Bugomattic!
+title: "[Feature Request]:"
+labels: ["[Type] Feature Request"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for submitting your idea!
+
+        Please be as descriptive as possible!
+        
+        Also, you don't need to set a priority label for feature requests.
+
+  - type: textarea
+    id: what
+    attributes:
+      label: '"What": What is your idea?'
+      description: Add a concise description of the feature being requested.
+      placeholder: e.g. I would like a new dropdown at <xyz>...
+    validations:
+      required: true
+
+  - type: textarea
+    id: why
+    attributes:
+      label: '"Why?": Why would this be impactful?'
+      description: Tell us about the problem or goal this feature request addresses.
+      placeholder: |
+        e.g. This make the site accessble to more people....
+    validations:
+      required: true
+
+  - type: textarea
+    id: how
+    attributes:
+      label: '"How?" How should this feature work?'
+      description: If you have them, add any screenshots, mockup, animations and/or videos to help illustrate how the feature could be done.
