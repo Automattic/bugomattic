@@ -1,0 +1,14 @@
+.app {
+	text-align: center;
+}
+
+.appHeader {
+	background-color: #282c34;
+	min-height: 4rem;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	font-size: 2rem;
+	color: white;
+}
