@@ -1,4 +1,4 @@
-#### What Changes In This PR?
+#### What Does This PR Add/Change?
 
 *
 
@@ -16,5 +16,5 @@ Give clear instructions, maybe even a checklist, for how to test the changes.
 Link related issues or issues that this PR fixes/closes
 -->
 
-Related to #
+Related to #  
 Closes #
