@@ -1,0 +1,52 @@
+name: Bug Report
+description: Let us know about a defect.
+labels: "[Type] Bug"
+title: "[Bug]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ### Thanks for contributing!
+
+        Please write a clear title, then fill in as many details as possible.
+        
+        Also, please set an initial priority label (they all start with "[Pri]").
+
+        __Avoid using image hosting services such as Cloudup, Droplr, Imgur, etc., to link to media.__
+        Instead, attach screenshot(s) or recording(s) directly in any of the text areas below: click, then drag and drop.
+  - type: textarea
+    id: summary
+    attributes:
+      label: Quick summary
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Start at Bugomattic home.
+        2. ...
+
+        Attach any media by drag and dropping or selecting upload.
+    validations:
+      required: true
+  - type: dropdown
+    id: browser
+    attributes:
+      label: Browser
+      description: (You may select more than one)
+      options:
+        - Google Chrome/Chromium
+        - Mozilla Firefox
+        - Microsoft Edge
+        - Mac Safari
+        - iOS Safari
+        - Android Chrome
+      multiple: true
+  - type: textarea
+    id: other_notes
+    attributes:
+      label: Other notes
+      placeholder: |
+        e.g. Logs, CLI or console errors, suggested fixes, observations, etc.
