@@ -6,6 +6,9 @@ import { LearnMoreLink, TaskMapping } from '../reporting-config';
  */
 export interface ApiClient {
 	loadReportingConfig(): Promise< ReportingConfigApiResponse >;
+	// More to come as we add to the API
+	// e.g. searchForDuplicats();
+	// e.g. saveNewReportingConfig();
 }
 
 /**
