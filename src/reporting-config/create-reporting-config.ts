@@ -84,7 +84,7 @@ function normalizeReportingConfig(
 }
 
 function indexReportingConfig( _response: ReportingConfigApiResponse ): IndexedReportingConfig {
-	// TODO: create real implementation!
+	// TODO: create real implementation once we know the indices we need!
 
 	return {
 		foo: 'bar',
