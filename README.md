@@ -34,7 +34,7 @@ it makes the most sense to rely on the simplicity of the built-in `react-scripts
   It includes hot-reloading.
 - `yarn build`: Bundle the app for production. Bundles the application into the `build` folder.
 - `yarn test`: Run tests in watch mode (automatically retests on changes).
-- `yarn test:no-watch`: Run tests once, without watching.
+- `yarn test:once`: Run tests once, without watching.
 - `yarn lint`: Lint code and markdown files. Doesn't auto-fix.
 - `yarn lint:fix`: Lint and autofix code and markdown files.
 

@@ -1,0 +1,247 @@
+{
+	"WordPress.com": {
+		"featureGroups": {
+			"Create": {
+				"features": {
+					"Full Site Editor": {
+						"keywords": [ "fse", "templates" ],
+						"description": "The extended description of the Site Editor on dotcom.",
+						"learnMoreLinks": [
+							{
+								"type": "general",
+								"displayText": "DotCom support documentation",
+								"href": "https://wordpress.com/support/full-site-editing/"
+							},
+							{
+								"type": "p2",
+								"subdomain": "fse"
+							}
+						],
+						"tasks": {
+							"bug": [
+								{
+									"link": {
+										"type": "github",
+										"repository": "Automattic/wp-calypso",
+										"projectSlugs": [ "Automattic/343" ],
+										"labels": [ "User Report", "FSE" ],
+										"template": "happiness-bug-report.yml"
+									}
+								}
+							],
+							"featureRequest": [
+								{
+									"link": {
+										"type": "github",
+										"repository": "Automattic/wp-calypso",
+										"projectSlugs": [ "Automattic/343" ],
+										"labels": [ "[Type] Feature Request", "FSE" ],
+										"template": "feature_request.yml"
+									}
+								}
+							],
+							"showStopper": [
+								{
+									"link": {
+										"type": "github",
+										"repository": "Automattic/wp-calypso",
+										"projectSlugs": [ "Automattic/343" ],
+										"labels": [ "User Report", "FSE", "[Pri] BLOCKER" ],
+										"template": "happiness-bug-report.yml"
+									}
+								},
+								{
+									"instructions": "After opening an issue, ping leads in the escalations channel.",
+									"link": {
+										"type": "slack",
+										"channel": "escalations"
+									}
+								}
+							]
+						}
+					},
+					"Gutenberg": {
+						"keywords": [ "editor", "blocks" ],
+						"description": "The integration of the Gutenberg editor on DotCom.",
+						"tasks": {
+							"bug": [
+								{
+									"instructions": "Test the bug on Core WordPress to see if it is reproducible apart from DotCom."
+								},
+								{
+									"instructions": "Report DotCom unique bugs in the wp-calypso repository.",
+									"link": {
+										"type": "github",
+										"repository": "Automattic/wp-calypso",
+										"projectSlugs": [ "Automattic/343" ],
+										"labels": [ "User Report", "Editor" ],
+										"template": "happiness-bug-report.yml"
+									}
+								},
+								{
+									"instructions": "Otherwise, report any issues affecting Core in the Gutenberg repository.",
+									"link": {
+										"type": "github",
+										"repository": "WordPress/gutenberg",
+										"template": "Bug_report.yml"
+									}
+								}
+							],
+							"featureRequest": [
+								{
+									"link": {
+										"type": "github",
+										"repository": "WordPress/gutenberg",
+										"template": "Feature_request.yml"
+									}
+								}
+							],
+							"showStopper": [
+								{
+									"instructions": "Test the bug on Core WordPress to see if it is reproducible apart from DotCom."
+								},
+								{
+									"instructions": "Report DotCom unique bugs in the wp-calypso repository.",
+									"link": {
+										"type": "github",
+										"repository": "Automattic/wp-calypso",
+										"projectSlugs": [ "Automattic/343" ],
+										"labels": [ "User Report", "Editor" ],
+										"template": "happiness-bug-report.yml"
+									}
+								},
+								{
+									"instructions": "Otherwise, report any issues affecting Core in the Gutenberg repository.",
+									"link": {
+										"type": "github",
+										"repository": "WordPress/gutenberg",
+										"template": "Bug_report.yml"
+									}
+								},
+								{
+									"instructions": "After opening an issue, ping leads in the escalations channel.",
+									"link": {
+										"type": "slack",
+										"channel": "escalations"
+									}
+								}
+							]
+						}
+					}
+				}
+			},
+			"Expand": {
+				"description": "A description of the Expand feature group.",
+				"learnMoreLinks": [
+					{
+						"type": "p2",
+						"subdomain": "expand"
+					}
+				],
+				"tasks": {
+					"bug": [
+						{
+							"link": {
+								"type": "github",
+								"repository": "Automattic/wp-calypso",
+								"projectSlugs": [ "Automattic/343" ],
+								"labels": [ "User Report", "Expand" ],
+								"template": "happiness-bug-report.yml"
+							}
+						}
+					],
+					"featureRequest": [
+						{
+							"link": {
+								"type": "github",
+								"repository": "Automattic/wp-calypso",
+								"projectSlugs": [ "Automattic/343" ],
+								"labels": [ "[Type] Feature Request", "Expand" ],
+								"template": "feature_request.yml"
+							}
+						}
+					],
+					"showStopper": [
+						{
+							"instructions": "Ping the leads on Slack to let them know of the issue.",
+							"link": {
+								"type": "slack",
+								"channel": "expand-escalations"
+							}
+						}
+					]
+				},
+				"features": {
+					"Premium Blocks": {
+						"description": "Premium Blocks description.",
+						"learnMoreLinks": [
+							{
+								"type": "slack",
+								"channel": "premium-blocks"
+							}
+						]
+					},
+					"Payment Blocks": {}
+				}
+			}
+		}
+	},
+	"Jetpack": {
+		"learnMoreLinks": [
+			{
+				"type": "general",
+				"href": "https://jetpack.com"
+			}
+		],
+		"tasks": {
+			"bug": [
+				{
+					"instructions": "Use Jurassic Ninja to test issue on Core WordPress + Jetpack"
+				}
+			],
+			"featureRequest": [],
+			"showStopper": [
+				{
+					"instructions": "Use Jurassic Ninja to test issue on Core WordPress + Jetpack"
+				}
+			]
+		},
+		"features": {
+			"Jetpack Cloud": {
+				"description": "The extended description of Jetpack Cloud.",
+				"learnMoreLinks": [
+					{
+						"type": "p2",
+						"subdomain": "owningteamp2"
+					}
+				],
+				"tasks": {
+					"bug": [
+						{
+							"link": {
+								"type": "github",
+								"repository": "Automattic/jpop-issues"
+							}
+						}
+					],
+					"featureRequest": [
+						{
+							"link": {
+								"type": "github",
+								"repository": "Automattic/jpop-issues"
+							}
+						}
+					],
+					"showStopper": [
+						{
+							"link": {
+								"type": "github",
+								"repository": "Automattic/jpop-issues"
+							}
+						}
+					]
+				}
+			}
+		}
+	}
+}
