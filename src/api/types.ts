@@ -1,9 +1,17 @@
 import { LearnMoreLink, TaskMapping } from '../reporting-config';
 
+/**
+ * An interface representing an interaction with the API.
+ * Can create multiple implementations to support local testing and production deployment.
+ */
 export interface ApiClient {
 	loadReportingConfig(): Promise< ReportingConfigApiResponse >;
 }
 
+/**
+ * The issue reporting config as stored in and fetched from the database.
+ * It follows a more heirarchical structure for easy reading and manual updating.
+ */
 export interface ReportingConfigApiResponse {
 	[ product: string ]: Product;
 }

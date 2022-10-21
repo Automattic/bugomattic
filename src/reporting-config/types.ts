@@ -1,16 +1,27 @@
+/**
+ * The operation-focused, client representation of the issue reporting config.
+ * We take the backend JSON and normalize it and index it to make it more usable by the client.
+ */
 export interface ReportingConfig {
 	normalized: NormalizedReportingConfig;
 	indexed: IndexedReportingConfig;
 }
 
+/**
+ * The issue reporting config noramlized, or "flattened", for easier client operations.
+ */
 export interface NormalizedReportingConfig {
 	features: Features;
 	featureGroups: FeatureGroups;
 	products: Products;
 }
 
+/**
+ * Indices built from the reporting configuration to facilitate searching for features.
+ * TODO: Implement, once we know what kind of searching we will support
+ */
 export interface IndexedReportingConfig {
-	foo: string; // To-do, figure out what indices we need.
+	foo: string; // TODO: figure out what indices we need.
 }
 
 interface Features {
