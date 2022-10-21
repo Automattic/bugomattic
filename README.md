@@ -96,3 +96,43 @@ To work with CSS Modules, class names should use `camelCase`.
 #### File names
 
 Fill names should use `kebab-casing`.
+
+#### Named exports
+
+Use named exports instead of default exports.
+
+```typescript
+// Do this
+export const FooBar;
+
+// Or this
+export function FooBar();
+
+// Not this
+const FooBar;
+export default FooBar;
+```
+
+#### Components
+
+Components should use PascalCase, and should use `function` syntax if possible.
+
+Props for a component should be declared in a local interface called `Props`.
+
+```tsx
+import React, { ReactNode } from 'react';
+
+interface Props {
+	text: string;
+	children: ReactNode;
+}
+
+export function MyComponent( { text, children }: Props ) {
+	return (
+		<div>
+			<p>{ text }</p>
+			{ children }
+		</div>
+	)
+}
+```
