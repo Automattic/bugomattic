@@ -66,12 +66,12 @@ interface Product {
 
 export interface SlackLink {
 	type: 'slack';
-	channel: string;
+	channel: string; // "escalations" e.g., no "#" needed
 }
 
 export interface P2Link {
 	type: 'p2';
-	subdomain: string;
+	subdomain: string; // For private wordpress.com p2s
 }
 
 export interface GeneralLink {
@@ -82,10 +82,10 @@ export interface GeneralLink {
 
 export interface NewGitHubIssueLink {
 	type: 'github';
-	repository: string; // Automattic/wp-calypso, e.g.
-	template?: string;
-	projectSlugs?: string[];
-	labels?: string[];
+	repository: string; // "Automattic/wp-calypso" e.g.
+	template?: string; // "bug_report.yml" e.g.
+	projectSlugs?: string[]; // "Automattic/xyz" e.g.
+	labels?: string[]; // "[Pri] High" e.g.
 }
 
 export type LearnMoreLink = SlackLink | P2Link | GeneralLink;

@@ -13,7 +13,7 @@ export interface ApiClient {
  * It follows a more heirarchical structure for easy reading and manual updating.
  */
 export interface ReportingConfigApiResponse {
-	[ product: string ]: Product;
+	[ productName: string ]: Product;
 }
 
 interface Product {
@@ -25,7 +25,7 @@ interface Product {
 }
 
 interface FeatureGroups {
-	[ featureGroup: string ]: FeatureGroup;
+	[ featureGroupName: string ]: FeatureGroup;
 }
 
 interface FeatureGroup {
@@ -36,7 +36,7 @@ interface FeatureGroup {
 }
 
 interface Features {
-	[ feature: string ]: Feature;
+	[ featureName: string ]: Feature;
 }
 
 interface Feature {
