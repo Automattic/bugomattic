@@ -1,5 +1,5 @@
-import { ApiClient, useApi } from '../api';
-import React, { FC, ReactNode, useEffect, useState } from 'react';
+import { useApi } from '../api';
+import React, { ReactNode, useEffect, useState } from 'react';
 import { ReportingConfig } from './types';
 import { ReportingConfigContext } from './context';
 import { createReportingConfig } from './create-reporting-config';
@@ -8,7 +8,7 @@ interface Props {
 	children: ReactNode;
 }
 
-export const ReportingConfigProvider: FC< Props > = ( { children } ) => {
+export function ReportingConfigProvider( { children }: Props ) {
 	const apiClient = useApi();
 	const [ reportingConfig, setReportingConfig ] = useState< ReportingConfig >();
 
@@ -35,4 +35,4 @@ export const ReportingConfigProvider: FC< Props > = ( { children } ) => {
 			{ children }
 		</ReportingConfigContext.Provider>
 	);
-};
+}

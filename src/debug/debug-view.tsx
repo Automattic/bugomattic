@@ -1,8 +1,8 @@
-import React, { FC } from 'react';
+import React from 'react';
 import { useReportingConfig } from '../reporting-config';
 import styles from './debug-view.module.css';
 
-export const DebugView: FC = () => {
+export function DebugView() {
 	const reportingConfig = useReportingConfig();
 
 	const output = reportingConfig
@@ -13,4 +13,4 @@ export const DebugView: FC = () => {
 			<pre>{ output }</pre>
 		</div>
 	);
-};
+}

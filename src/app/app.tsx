@@ -1,10 +1,10 @@
-import React, { FC } from 'react';
+import React from 'react';
 import { LocalApiProvider } from '../api';
 import { DebugView } from '../debug/debug-view';
 import { ReportingConfigProvider } from '../reporting-config';
 import styles from './app.module.css';
 
-export const App: FC = () => {
+export function App() {
 	return (
 		<LocalApiProvider>
 			<ReportingConfigProvider>
@@ -19,4 +19,4 @@ export const App: FC = () => {
 			</ReportingConfigProvider>
 		</LocalApiProvider>
 	);
-};
+}
