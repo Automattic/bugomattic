@@ -1,12 +1,20 @@
-import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
+import {
+	configureStore,
+	ThunkAction,
+	Action,
+	combineReducers,
+	PreloadedState,
+} from '@reduxjs/toolkit';
 import { ApiClient } from '../api';
 import { reportingConfigReducer } from '../reporting-config';
 
-export function createStore( apiClient: ApiClient ) {
+const rootReducer = combineReducers( {
+	reportingConfig: reportingConfigReducer,
+} );
+
+export function setupStore( apiClient: ApiClient, preloadedState?: PreloadedState< RootState > ) {
 	return configureStore( {
-		reducer: {
-			reportingConfig: reportingConfigReducer,
-		},
+		reducer: rootReducer,
 		// This is where the app dependency injection of the ApiClient happens.
 		// We are providing an instance of the ApiClient to all thunks created
 		// with createAsyncThunk().
@@ -17,13 +25,14 @@ export function createStore( apiClient: ApiClient ) {
 					extraArgument: { apiClient },
 				},
 			} ),
+		preloadedState,
 	} );
 }
 
 // These provide richer TypeScript typings for these core parts of the Redux store.
-type AppStore = ReturnType< typeof createStore >;
+export type RootState = ReturnType< typeof rootReducer >;
+export type AppStore = ReturnType< typeof setupStore >;
 export type AppDispatch = AppStore[ 'dispatch' ];
-export type RootState = ReturnType< AppStore[ 'getState' ] >;
 export type AppThunk< ReturnType = void > = ThunkAction<
 	ReturnType,
 	RootState,

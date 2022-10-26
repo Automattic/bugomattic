@@ -41,5 +41,15 @@ module.exports = {
 		},
 	},
 	plugins: [ 'react', '@typescript-eslint' ],
-	rules: {},
+	rules: {
+		'@typescript-eslint/ban-types': [
+			'error',
+			{
+				types: {
+					'{}': false,
+				},
+				extendDefaults: true,
+			},
+		],
+	},
 };

@@ -1,8 +1,18 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor, waitForElementToBeRemoved } from '@testing-library/react';
 import { App } from '../app';
+import { createMockApiClient, renderWithProviders } from '../../test-utils';
+import { ApiClient } from '../../api';
 
-test( 'Sample test', () => {
-	render( <App /> );
-	expect( screen.getByRole( 'heading' ) ).toHaveTextContent( 'Bugomattic' );
+describe( '[app]', () => {
+	let apiClient: ApiClient;
+
+	beforeEach( () => {
+		apiClient = createMockApiClient();
+	} );
+
+	test( 'Loading indicator goes away once reporting config is loaded', async () => {
+		renderWithProviders( <App />, { apiClient } );
+		await waitForElementToBeRemoved( () => screen.queryByText( 'Reporting config is loading...' ) );
+	} );
 } );
