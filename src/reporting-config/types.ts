@@ -5,6 +5,8 @@
 export interface ReportingConfigState {
 	normalized: NormalizedReportingConfig;
 	indexed: IndexedReportingConfig;
+	status: 'empty' | 'loading' | 'loaded' | 'error';
+	error: string | null;
 }
 
 /**

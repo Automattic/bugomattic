@@ -1,5 +1,5 @@
+import { normalizeReportingConfig } from '../reporting-config-parsers';
 import { ReportingConfigApiResponse } from '../../api';
-import { reportingConfigSlice, reportingConfigReducer, createFromApiResponse } from '..';
 
 function createFakeResponse(): ReportingConfigApiResponse {
 	return {
@@ -71,14 +71,12 @@ function createFakeResponse(): ReportingConfigApiResponse {
 }
 
 describe( '[reportingConfigSlice]', () => {
-	describe( 'Normalize Reporting Config Reducer', () => {
+	describe( 'Normalizing the Reporting Config', () => {
 		test( 'Creates the expected normalized reporting config', () => {
-			const initialState = reportingConfigSlice.getInitialState();
-			const { normalized } = reportingConfigReducer(
-				initialState,
-				createFromApiResponse( createFakeResponse() )
-			);
-			expect( normalized ).toMatchSnapshot();
+			// For this stage of early development, let's use a snapshot to make sure this keeps giving us
+			// the respected normalized output. We can add more granular testing later.
+			const normalizedReportingConfig = normalizeReportingConfig( createFakeResponse() );
+			expect( normalizedReportingConfig ).toMatchSnapshot();
 		} );
 	} );
 } );

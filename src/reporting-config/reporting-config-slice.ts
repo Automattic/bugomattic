@@ -1,7 +1,8 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import type { RootState } from '../app/store';
-import { ReportingConfigApiResponse } from '../api';
+import { ApiClient, ReportingConfigApiResponse } from '../api';
 import { IndexedReportingConfig, NormalizedReportingConfig, ReportingConfigState } from './types';
+import { indexReportingConfig, normalizeReportingConfig } from './reporting-config-parsers';
 
 const initialNormalizedReportingConfig: NormalizedReportingConfig = {
 	products: {},
@@ -16,106 +17,49 @@ const initialIndexedReportingConfig: IndexedReportingConfig = {
 const initialState: ReportingConfigState = {
 	normalized: initialNormalizedReportingConfig,
 	indexed: initialIndexedReportingConfig,
+	status: 'empty',
+	error: null,
 };
 
-function normalizeReportingConfig(
-	response: ReportingConfigApiResponse
-): NormalizedReportingConfig {
-	const normalizedReportingConfig: NormalizedReportingConfig = {
-		features: {},
-		featureGroups: {},
-		products: {},
-	};
-
-	for ( const productName in response ) {
-		const { featureGroups, features, description, learnMoreLinks, taskMapping } =
-			response[ productName ];
-		const productId = productName; // We can use name as ID, as being top level, they are unique.
-
-		normalizedReportingConfig.products[ productId ] = {
-			id: productId,
-			name: productName,
-			description: description,
-			learnMoreLinks: learnMoreLinks,
-			taskMapping: taskMapping,
-		};
-
-		if ( featureGroups ) {
-			for ( const featureGroupName in featureGroups ) {
-				const { features, description, learnMoreLinks, taskMapping } =
-					featureGroups[ featureGroupName ];
-				const featureGroupId = `${ productName }__${ featureGroupName }`;
-
-				normalizedReportingConfig.featureGroups[ featureGroupId ] = {
-					id: featureGroupId,
-					name: featureGroupName,
-					description: description,
-					learnMoreLinks: learnMoreLinks,
-					taskMapping: taskMapping,
-					product: productId,
-				};
-
-				for ( const featureName in features ) {
-					const { description, keywords, learnMoreLinks, taskMapping } = features[ featureName ];
-					const featureId = `${ productName }__${ featureGroupName }__${ featureName }`;
-
-					normalizedReportingConfig.features[ featureId ] = {
-						id: featureId,
-						name: featureName,
-						description: description,
-						keywords: keywords,
-						learnMoreLinks: learnMoreLinks,
-						taskMapping: taskMapping,
-						featureGroup: featureGroupId,
-					};
-				}
-			}
-		}
-
-		if ( features ) {
-			for ( const featureName in features ) {
-				const { description, keywords, learnMoreLinks, taskMapping } = features[ featureName ];
-				const featureId = `${ productName }__${ featureName }`;
-
-				normalizedReportingConfig.features[ featureId ] = {
-					id: featureId,
-					name: featureName,
-					description: description,
-					keywords: keywords,
-					learnMoreLinks: learnMoreLinks,
-					taskMapping: taskMapping,
-					product: productId,
-				};
-			}
-		}
-	}
-
-	return normalizedReportingConfig;
-}
-
-function indexReportingConfig( _response: ReportingConfigApiResponse ): IndexedReportingConfig {
-	// TODO: create real implementation once we know the indices we need!
-
-	return {
-		foo: 'bar',
-	};
-}
+export const loadReportingConfig = createAsyncThunk<
+	ReportingConfigApiResponse,
+	void,
+	{ extra: { apiClient: ApiClient } }
+>( 'reportingConfig/loadReportingConfig', async ( _, { extra } ) => {
+	const { apiClient } = extra;
+	return await apiClient.loadReportingConfig();
+} );
 
 export const reportingConfigSlice = createSlice( {
 	name: 'reportingConfig',
 	initialState,
-	reducers: {
-		createFromApiResponse: ( state, action: PayloadAction< ReportingConfigApiResponse > ) => {
-			state = {
-				normalized: normalizeReportingConfig( action.payload ),
-				indexed: indexReportingConfig( action.payload ),
-			};
-			return state;
-		},
+	reducers: {},
+	extraReducers: ( builder ) => {
+		builder
+			.addCase( loadReportingConfig.pending, ( state ) => {
+				return {
+					...state,
+					status: 'loading',
+				};
+			} )
+			.addCase( loadReportingConfig.rejected, ( state, { error } ) => {
+				return {
+					...state,
+					status: 'error',
+					error: `${ error.name }: ${ error.message }}`,
+				};
+			} )
+			.addCase( loadReportingConfig.fulfilled, ( state, { payload } ) => {
+				return {
+					normalized: normalizeReportingConfig( payload ),
+					indexed: indexReportingConfig( payload ),
+					status: 'loaded',
+					error: null,
+				};
+			} );
 	},
 } );
 
-export const { createFromApiResponse } = reportingConfigSlice.actions;
 export const reportingConfigReducer = reportingConfigSlice.reducer;
 
 export function selectReportingConfig( state: RootState ) {
@@ -128,4 +72,12 @@ export function selectNormalizedReportingConfig( state: RootState ) {
 
 export function selectIndexedReportingConfig( state: RootState ) {
 	return state.reportingConfig.indexed;
+}
+
+export function selectReportingConfigLoadStatus( state: RootState ) {
+	return state.reportingConfig.status;
+}
+
+export function selectReportingConfigError( state: RootState ) {
+	return state.reportingConfig.error;
 }

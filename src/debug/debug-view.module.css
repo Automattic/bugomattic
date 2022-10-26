@@ -1,5 +1,5 @@
-.content {
-	max-width: 960px;
-	margin-left: auto;
-	margin-right: auto;
+.debugData {
+	margin-top: 0;
+	background-color: #fafafa;
+	padding: 2rem;
 }

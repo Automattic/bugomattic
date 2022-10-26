@@ -1,15 +1,17 @@
 import React from 'react';
-import { useAppSelector } from '../app';
-import { selectReportingConfig } from '../reporting-config';
 import styles from './debug-view.module.css';
 
-export function DebugView() {
-	const reportingConfig = useAppSelector( selectReportingConfig );
-	const output = JSON.stringify( reportingConfig, null, 4 );
+interface Props {
+	data: any;
+}
+
+export function DebugView( { data }: Props ) {
+	const output = JSON.stringify( data, null, 4 );
 
 	return (
-		<div className={ styles.content }>
-			<pre>{ output }</pre>
+		<div>
+			<h2>Debug data:</h2>
+			<pre className={ styles.debugData }>{ output }</pre>
 		</div>
 	);
 }
