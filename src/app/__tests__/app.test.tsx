@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, waitFor, waitForElementToBeRemoved } from '@testing-library/react';
+import { screen, waitForElementToBeRemoved } from '@testing-library/react';
 import { App } from '../app';
 import { createMockApiClient, renderWithProviders } from '../../test-utils';
 import { ApiClient } from '../../api';
