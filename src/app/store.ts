@@ -20,6 +20,7 @@ export function createStore( apiClient: ApiClient ) {
 	} );
 }
 
+// These provide richer TypeScript typings for these core parts of the Redux store.
 type AppStore = ReturnType< typeof createStore >;
 export type AppDispatch = AppStore[ 'dispatch' ];
 export type RootState = ReturnType< AppStore[ 'getState' ] >;

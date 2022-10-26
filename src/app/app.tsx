@@ -13,9 +13,9 @@ export function App() {
 	const dispatch = useAppDispatch();
 
 	const reportingConfigLoadStatus = useAppSelector( selectReportingConfigLoadStatus );
+
 	const normalizedReportingConfig = useAppSelector( selectNormalizedReportingConfig );
 	const indexedReportingConfig = useAppSelector( selectIndexedReportingConfig );
-
 	const debugData = {
 		normalizedReportingConfig,
 		indexedReportingConfig,

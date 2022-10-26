@@ -1,4 +1,4 @@
-import { ReportingConfigApiResponse, ApiClient } from '../types';
+import { ReportingConfigApiResponse, ApiClient } from './types';
 import localReportingConfigJson from './local-reporting-config-response.json';
 
 /**

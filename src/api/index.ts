@@ -1,3 +1,3 @@
 export * from './types';
-export * from './local';
-export * from './use';
+export * from './local-api-client';
+export * from './production-api-client';

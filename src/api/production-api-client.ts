@@ -1,4 +1,4 @@
-import { ApiClient } from '../types';
+import { ApiClient } from './types';
 
 /**
  * Placeholder for the "real" API client for making real HTTP calls to the backend REST API.
