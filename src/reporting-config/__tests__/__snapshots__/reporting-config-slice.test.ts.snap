@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`[createReportingConfig] Normalized Reporting Config Creates the expected normalized reporting config 1`] = `
+exports[`[reportingConfigSlice] Normalize Reporting Config Reducer Creates the expected normalized reporting config 1`] = `
 Object {
   "featureGroups": Object {
     "FakeProduct__FakeFeatureGroup": Object {

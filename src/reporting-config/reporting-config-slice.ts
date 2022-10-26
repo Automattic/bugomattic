@@ -1,12 +1,22 @@
-import { IndexedReportingConfig, NormalizedReportingConfig, ReportingConfig } from '.';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import type { RootState } from '../app/store';
 import { ReportingConfigApiResponse } from '../api';
+import { IndexedReportingConfig, NormalizedReportingConfig, ReportingConfigState } from './types';
 
-export function createReportingConfig( response: ReportingConfigApiResponse ): ReportingConfig {
-	return {
-		normalized: normalizeReportingConfig( response ),
-		indexed: indexReportingConfig( response ),
-	};
-}
+const initialNormalizedReportingConfig: NormalizedReportingConfig = {
+	products: {},
+	featureGroups: {},
+	features: {},
+};
+
+const initialIndexedReportingConfig: IndexedReportingConfig = {
+	foo: 'bar',
+};
+
+const initialState: ReportingConfigState = {
+	normalized: initialNormalizedReportingConfig,
+	indexed: initialIndexedReportingConfig,
+};
 
 function normalizeReportingConfig(
 	response: ReportingConfigApiResponse
@@ -89,4 +99,33 @@ function indexReportingConfig( _response: ReportingConfigApiResponse ): IndexedR
 	return {
 		foo: 'bar',
 	};
+}
+
+export const reportingConfigSlice = createSlice( {
+	name: 'reportingConfig',
+	initialState,
+	reducers: {
+		createFromApiResponse: ( state, action: PayloadAction< ReportingConfigApiResponse > ) => {
+			state = {
+				normalized: normalizeReportingConfig( action.payload ),
+				indexed: indexReportingConfig( action.payload ),
+			};
+			return state;
+		},
+	},
+} );
+
+export const { createFromApiResponse } = reportingConfigSlice.actions;
+export const reportingConfigReducer = reportingConfigSlice.reducer;
+
+export function selectReportingConfig( state: RootState ) {
+	return state.reportingConfig;
+}
+
+export function selectNormalizedReportingConfig( state: RootState ) {
+	return state.reportingConfig.normalized;
+}
+
+export function selectIndexedReportingConfig( state: RootState ) {
+	return state.reportingConfig.indexed;
 }

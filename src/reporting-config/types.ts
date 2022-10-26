@@ -2,7 +2,7 @@
  * The operation-focused, client representation of the issue reporting config.
  * We take the backend JSON and normalize it and index it to make it more usable by the client.
  */
-export interface ReportingConfig {
+export interface ReportingConfigState {
 	normalized: NormalizedReportingConfig;
 	indexed: IndexedReportingConfig;
 }

@@ -1,5 +1,5 @@
 import { ReportingConfigApiResponse } from '../../api';
-import { createReportingConfig } from '../create-reporting-config';
+import { reportingConfigSlice, reportingConfigReducer, createFromApiResponse } from '..';
 
 function createFakeResponse(): ReportingConfigApiResponse {
 	return {
@@ -70,10 +70,14 @@ function createFakeResponse(): ReportingConfigApiResponse {
 	};
 }
 
-describe( '[createReportingConfig]', () => {
-	describe( 'Normalized Reporting Config', () => {
+describe( '[reportingConfigSlice]', () => {
+	describe( 'Normalize Reporting Config Reducer', () => {
 		test( 'Creates the expected normalized reporting config', () => {
-			const { normalized } = createReportingConfig( createFakeResponse() );
+			const initialState = reportingConfigSlice.getInitialState();
+			const { normalized } = reportingConfigReducer(
+				initialState,
+				createFromApiResponse( createFakeResponse() )
+			);
 			expect( normalized ).toMatchSnapshot();
 		} );
 	} );
