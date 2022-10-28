@@ -17,7 +17,7 @@
 								"subdomain": "fse"
 							}
 						],
-						"tasks": {
+						"taskMapping": {
 							"bug": [
 								{
 									"link": {
@@ -63,7 +63,7 @@
 					"Gutenberg": {
 						"keywords": [ "editor", "blocks" ],
 						"description": "The integration of the Gutenberg editor on DotCom.",
-						"tasks": {
+						"taskMapping": {
 							"bug": [
 								{
 									"instructions": "Test the bug on Core WordPress to see if it is reproducible apart from DotCom."
@@ -138,7 +138,7 @@
 						"subdomain": "expand"
 					}
 				],
-				"tasks": {
+				"taskMapping": {
 					"bug": [
 						{
 							"link": {
@@ -193,7 +193,7 @@
 				"href": "https://jetpack.com"
 			}
 		],
-		"tasks": {
+		"taskMapping": {
 			"bug": [
 				{
 					"instructions": "Use Jurassic Ninja to test issue on Core WordPress + Jetpack"
@@ -215,7 +215,7 @@
 						"subdomain": "owningteamp2"
 					}
 				],
-				"tasks": {
+				"taskMapping": {
 					"bug": [
 						{
 							"link": {
