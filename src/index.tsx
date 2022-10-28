@@ -1,12 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './components/app';
+import { App, setupStore } from './app';
+import { Provider } from 'react-redux';
+import { localApiClient } from './api';
 
 const root = ReactDOM.createRoot( document.getElementById( 'root' ) as HTMLElement );
+const store = setupStore( localApiClient );
 root.render(
 	<React.StrictMode>
-		<App />
+		<Provider store={ store }>
+			<App />
+		</Provider>
 	</React.StrictMode>
 );
 

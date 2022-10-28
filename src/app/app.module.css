@@ -1,7 +1,3 @@
-.app {
-	text-align: center;
-}
-
 .appHeader {
 	background-color: #282c34;
 	min-height: 4rem;
@@ -11,4 +7,10 @@
 	justify-content: center;
 	font-size: 2rem;
 	color: white;
+}
+
+.content {
+	max-width: 960px;
+	margin-left: auto;
+	margin-right: auto;
 }
