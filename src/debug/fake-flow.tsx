@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect } from 'react';
-import { selectActiveTasks, setNewTasks } from '../active-tasks';
+import React, { useCallback } from 'react';
+import { selectActiveTasks, setNewTasks, SourcedTask } from '../active-tasks';
 import { useAppDispatch, useAppSelector } from '../app';
 import { IssueType, selectIssueDetails, setIssueFeature, setIssueType } from '../issue-details';
 import { selectNormalizedReportingConfig, selectRelevantTasks } from '../reporting-config';
@@ -60,7 +60,26 @@ export function FakeFlow() {
 				<button onClick={ generateActiveTasks }>Generate Active Tasks</button>
 			</div>
 			<DebugView data={ relevantTasks } header="Relevant Tasks"></DebugView>
-			<DebugView data={ activeTasks } header="Active Tasks"></DebugView>
+			<DebugView data={ activeTasks } header="Active Tasks (Manually Generated)"></DebugView>
+			<TaskList tasks={ relevantTasks }></TaskList>
 		</div>
+	);
+}
+
+interface TaskListProps {
+	tasks: SourcedTask[];
+}
+
+function TaskList( { tasks }: TaskListProps ) {
+	const activeTasks = tasks.map( ( task ) => {
+		return {
+			...task,
+			completed: false,
+		};
+	} );
+	console.log( 'Rerender' );
+
+	return (
+		<DebugView header="Active Tasks (Component/Prop Generated)" data={ activeTasks }></DebugView>
 	);
 }
