@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { DebugView } from '../debug/debug-view';
+import { FakeFlow } from '../debug/fake-flow';
 import {
 	loadReportingConfig,
 	selectIndexedReportingConfig,
@@ -34,7 +35,8 @@ export function App() {
 			</header>
 			<main className={ styles.content }>
 				{ reportingConfigLoadStatus === 'loading' && <p>Reporting config is loading...</p> }
-				<DebugView data={ debugData }></DebugView>
+				<FakeFlow></FakeFlow>
+				<DebugView data={ debugData } header="Reporting Config"></DebugView>
 			</main>
 		</div>
 	);

@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { RootState } from '../app';
 import { FeatureId, IssueDetails, IssueType } from './types';
 
 const initialState: IssueDetails = {
@@ -27,3 +28,7 @@ export const issueDetailsSlice = createSlice( {
 
 export const issueDetailsReducer = issueDetailsSlice.reducer;
 export const { setIssueType, setIssueFeature } = issueDetailsSlice.actions;
+
+export function selectIssueDetails( state: RootState ): IssueDetails {
+	return state.issueDetails;
+}

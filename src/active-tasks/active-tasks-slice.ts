@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ActiveTask, TaskIndex } from './types';
+import { RootState } from '../app';
+import { ActiveTask, SourcedTask, TaskIndex } from './types';
 
 const initialState: ActiveTask[] = [];
 
@@ -13,11 +14,21 @@ export const activeTasksSlice = createSlice( {
 			newState[ taskIndex ].completed === ! state[ taskIndex ].completed;
 			return newState;
 		},
-		setNewTasks( _, action: PayloadAction< ActiveTask[] > ) {
-			return action.payload;
+		setNewTasks( _, action: PayloadAction< SourcedTask[] > ) {
+			const newTasks: ActiveTask[] = action.payload.map( ( task ) => {
+				return {
+					...task,
+					completed: false,
+				};
+			} );
+			return newTasks;
 		},
 	},
 } );
 
 export const activeTasksReducer = activeTasksSlice.reducer;
-export const { toggleTask } = activeTasksSlice.actions;
+export const { toggleTask, setNewTasks } = activeTasksSlice.actions;
+
+export function selectActiveTasks( state: RootState ): ActiveTask[] {
+	return state.activeTasks;
+}
