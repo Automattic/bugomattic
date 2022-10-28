@@ -77,7 +77,6 @@ function TaskList( { tasks }: TaskListProps ) {
 			completed: false,
 		};
 	} );
-	console.log( 'Rerender' );
 
 	return (
 		<DebugView header="Active Tasks (Component/Prop Generated)" data={ activeTasks }></DebugView>
