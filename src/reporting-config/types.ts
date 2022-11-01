@@ -16,6 +16,7 @@ export interface NormalizedReportingConfig {
 	features: Features;
 	featureGroups: FeatureGroups;
 	products: Products;
+	tasks: Tasks;
 }
 
 /**
@@ -25,6 +26,9 @@ export interface NormalizedReportingConfig {
 export interface IndexedReportingConfig {
 	foo: string; // TODO: figure out what indices we need.
 }
+
+type FeatureParentEntityType = 'product' | 'featureGroup';
+type TaskParentEntityType = FeatureParentEntityType | 'feature';
 
 interface Features {
 	[ featureId: string ]: Feature;
@@ -37,8 +41,8 @@ interface Feature {
 	description?: string;
 	learnMoreLinks?: LearnMoreLink[];
 	taskMapping?: TaskMapping;
-	featureGroup?: string;
-	product?: string;
+	parentType: FeatureParentEntityType;
+	parentId: string;
 }
 
 interface FeatureGroups {
@@ -51,7 +55,7 @@ interface FeatureGroup {
 	description?: string;
 	learnMoreLinks?: LearnMoreLink[];
 	taskMapping?: TaskMapping;
-	product: string;
+	productId: string;
 }
 
 interface Products {
@@ -64,6 +68,15 @@ interface Product {
 	description?: string;
 	learnMoreLinks?: LearnMoreLink[];
 	taskMapping?: TaskMapping;
+}
+
+export interface Task extends TaskDetails {
+	parentType: TaskParentEntityType;
+	parentId: string;
+}
+
+export interface Tasks {
+	[ taskId: string ]: Task;
 }
 
 export interface SlackLink {
@@ -94,7 +107,7 @@ export type LearnMoreLink = SlackLink | P2Link | GeneralLink;
 
 export type TaskLink = LearnMoreLink | NewGitHubIssueLink;
 
-export interface Task {
+export interface TaskDetails {
 	instructions?: string;
 	link?: TaskLink;
 }
@@ -105,7 +118,7 @@ export interface LearnMore {
 }
 
 export interface TaskMapping {
-	bug: Task[];
-	featureRequest: Task[];
-	blocker: Task[];
+	bug: string[];
+	featureRequest: string[];
+	blocker: string[];
 }

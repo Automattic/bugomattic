@@ -10,7 +10,7 @@ export function createFakeReportingConfigResponse(): ReportingConfigApiResponse 
 					channel: 'product-channel',
 				},
 			],
-			taskMapping: {
+			tasks: {
 				bug: [ { instructions: 'Product bug task' } ],
 				featureRequest: [ { instructions: 'Product feature request task' } ],
 				blocker: [ { instructions: 'Product show stopper task' } ],
@@ -24,7 +24,7 @@ export function createFakeReportingConfigResponse(): ReportingConfigApiResponse 
 							subdomain: 'feature-group',
 						},
 					],
-					taskMapping: {
+					tasks: {
 						bug: [ { instructions: 'Feature group bug task' } ],
 						featureRequest: [ { instructions: 'Feature group request task' } ],
 						blocker: [ { instructions: 'Feature group show stopper task' } ],
@@ -39,10 +39,19 @@ export function createFakeReportingConfigResponse(): ReportingConfigApiResponse 
 									channel: 'feature-group-feature',
 								},
 							],
-							taskMapping: {
-								bug: [ { instructions: 'Feature nested under group bug task' } ],
-								featureRequest: [ { instructions: 'Feature nested under group request task' } ],
-								blocker: [ { instructions: 'Feature nested under group show stopper task' } ],
+							tasks: {
+								bug: [
+									{ instructions: 'Feature nested under group bug task index 0' },
+									{ instructions: 'Feature nested under group bug task index 1' },
+								],
+								featureRequest: [
+									{ instructions: 'Feature nested under group request task index 0' },
+									{ instructions: 'Feature nested under group request task index 1' },
+								],
+								blocker: [
+									{ instructions: 'Feature nested under group show stopper task index 0' },
+									{ instructions: 'Feature nested under group show stopper task index 1' },
+								],
 							},
 						},
 					},
@@ -58,7 +67,7 @@ export function createFakeReportingConfigResponse(): ReportingConfigApiResponse 
 							channel: 'product-feature',
 						},
 					],
-					taskMapping: {
+					tasks: {
 						bug: [ { instructions: 'Feature nested under product bug task' } ],
 						featureRequest: [ { instructions: 'Feature nested under product request task' } ],
 						blocker: [ { instructions: 'Feature nested under product show stopper task' } ],

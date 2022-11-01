@@ -13,22 +13,16 @@ Object {
         },
       ],
       "name": "FakeFeatureGroup",
-      "product": "FakeProduct",
+      "productId": "FakeProduct",
       "taskMapping": Object {
+        "blocker": Array [
+          "FakeProduct__FakeFeatureGroup__blocker__0",
+        ],
         "bug": Array [
-          Object {
-            "instructions": "Feature group bug task",
-          },
+          "FakeProduct__FakeFeatureGroup__bug__0",
         ],
         "featureRequest": Array [
-          Object {
-            "instructions": "Feature group request task",
-          },
-        ],
-        "showStopper": Array [
-          Object {
-            "instructions": "Feature group show stopper task",
-          },
+          "FakeProduct__FakeFeatureGroup__featureRequest__0",
         ],
       },
     },
@@ -36,7 +30,6 @@ Object {
   "features": Object {
     "FakeProduct__FakeFeatureGroup__GroupNestedFeature": Object {
       "description": "Fake feature nested under feature group",
-      "featureGroup": "FakeProduct__FakeFeatureGroup",
       "id": "FakeProduct__FakeFeatureGroup__GroupNestedFeature",
       "keywords": Array [
         "foo",
@@ -48,21 +41,20 @@ Object {
         },
       ],
       "name": "GroupNestedFeature",
+      "parentId": "FakeProduct__FakeFeatureGroup",
+      "parentType": "featureGroup",
       "taskMapping": Object {
+        "blocker": Array [
+          "FakeProduct__FakeFeatureGroup__GroupNestedFeature__blocker__0",
+          "FakeProduct__FakeFeatureGroup__GroupNestedFeature__blocker__1",
+        ],
         "bug": Array [
-          Object {
-            "instructions": "Feature nested under group bug task",
-          },
+          "FakeProduct__FakeFeatureGroup__GroupNestedFeature__bug__0",
+          "FakeProduct__FakeFeatureGroup__GroupNestedFeature__bug__1",
         ],
         "featureRequest": Array [
-          Object {
-            "instructions": "Feature nested under group request task",
-          },
-        ],
-        "showStopper": Array [
-          Object {
-            "instructions": "Feature nested under group show stopper task",
-          },
+          "FakeProduct__FakeFeatureGroup__GroupNestedFeature__featureRequest__0",
+          "FakeProduct__FakeFeatureGroup__GroupNestedFeature__featureRequest__1",
         ],
       },
     },
@@ -79,22 +71,17 @@ Object {
         },
       ],
       "name": "ProductNestedFeature",
-      "product": "FakeProduct",
+      "parentId": "FakeProduct",
+      "parentType": "product",
       "taskMapping": Object {
+        "blocker": Array [
+          "FakeProduct__ProductNestedFeature__blocker__0",
+        ],
         "bug": Array [
-          Object {
-            "instructions": "Feature nested under product bug task",
-          },
+          "FakeProduct__ProductNestedFeature__bug__0",
         ],
         "featureRequest": Array [
-          Object {
-            "instructions": "Feature nested under product request task",
-          },
-        ],
-        "showStopper": Array [
-          Object {
-            "instructions": "Feature nested under product show stopper task",
-          },
+          "FakeProduct__ProductNestedFeature__featureRequest__0",
         ],
       },
     },
@@ -111,22 +98,93 @@ Object {
       ],
       "name": "FakeProduct",
       "taskMapping": Object {
+        "blocker": Array [
+          "FakeProduct__blocker__0",
+        ],
         "bug": Array [
-          Object {
-            "instructions": "Product bug task",
-          },
+          "FakeProduct__bug__0",
         ],
         "featureRequest": Array [
-          Object {
-            "instructions": "Product feature request task",
-          },
-        ],
-        "showStopper": Array [
-          Object {
-            "instructions": "Product show stopper task",
-          },
+          "FakeProduct__featureRequest__0",
         ],
       },
+    },
+  },
+  "tasks": Object {
+    "FakeProduct__FakeFeatureGroup__GroupNestedFeature__blocker__0": Object {
+      "instructions": "Feature nested under group show stopper task index 0",
+      "parentId": "FakeProduct__FakeFeatureGroup__GroupNestedFeature",
+      "parentType": "feature",
+    },
+    "FakeProduct__FakeFeatureGroup__GroupNestedFeature__blocker__1": Object {
+      "instructions": "Feature nested under group show stopper task index 1",
+      "parentId": "FakeProduct__FakeFeatureGroup__GroupNestedFeature",
+      "parentType": "feature",
+    },
+    "FakeProduct__FakeFeatureGroup__GroupNestedFeature__bug__0": Object {
+      "instructions": "Feature nested under group bug task index 0",
+      "parentId": "FakeProduct__FakeFeatureGroup__GroupNestedFeature",
+      "parentType": "feature",
+    },
+    "FakeProduct__FakeFeatureGroup__GroupNestedFeature__bug__1": Object {
+      "instructions": "Feature nested under group bug task index 1",
+      "parentId": "FakeProduct__FakeFeatureGroup__GroupNestedFeature",
+      "parentType": "feature",
+    },
+    "FakeProduct__FakeFeatureGroup__GroupNestedFeature__featureRequest__0": Object {
+      "instructions": "Feature nested under group bug task index 0",
+      "parentId": "FakeProduct__FakeFeatureGroup__GroupNestedFeature",
+      "parentType": "feature",
+    },
+    "FakeProduct__FakeFeatureGroup__GroupNestedFeature__featureRequest__1": Object {
+      "instructions": "Feature nested under group bug task index 1",
+      "parentId": "FakeProduct__FakeFeatureGroup__GroupNestedFeature",
+      "parentType": "feature",
+    },
+    "FakeProduct__FakeFeatureGroup__blocker__0": Object {
+      "instructions": "Feature group show stopper task",
+      "parentId": "FakeProduct__FakeFeatureGroup",
+      "parentType": "featureGroup",
+    },
+    "FakeProduct__FakeFeatureGroup__bug__0": Object {
+      "instructions": "Feature group bug task",
+      "parentId": "FakeProduct__FakeFeatureGroup",
+      "parentType": "featureGroup",
+    },
+    "FakeProduct__FakeFeatureGroup__featureRequest__0": Object {
+      "instructions": "Feature group bug task",
+      "parentId": "FakeProduct__FakeFeatureGroup",
+      "parentType": "featureGroup",
+    },
+    "FakeProduct__ProductNestedFeature__blocker__0": Object {
+      "instructions": "Feature nested under product show stopper task",
+      "parentId": "FakeProduct__ProductNestedFeature",
+      "parentType": "feature",
+    },
+    "FakeProduct__ProductNestedFeature__bug__0": Object {
+      "instructions": "Feature nested under product bug task",
+      "parentId": "FakeProduct__ProductNestedFeature",
+      "parentType": "feature",
+    },
+    "FakeProduct__ProductNestedFeature__featureRequest__0": Object {
+      "instructions": "Feature nested under product bug task",
+      "parentId": "FakeProduct__ProductNestedFeature",
+      "parentType": "feature",
+    },
+    "FakeProduct__blocker__0": Object {
+      "instructions": "Product show stopper task",
+      "parentId": "FakeProduct",
+      "parentType": "product",
+    },
+    "FakeProduct__bug__0": Object {
+      "instructions": "Product bug task",
+      "parentId": "FakeProduct",
+      "parentType": "product",
+    },
+    "FakeProduct__featureRequest__0": Object {
+      "instructions": "Product bug task",
+      "parentId": "FakeProduct",
+      "parentType": "product",
     },
   },
 }

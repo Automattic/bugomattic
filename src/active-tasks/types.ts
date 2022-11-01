@@ -1,11 +1,9 @@
-import { Task } from '../reporting-config';
-
-export type EntityType = 'product' | 'featureGroup' | 'feature';
+import { TaskDetails } from '../reporting-config';
 
 export interface SourcedTask {
 	sourceId: string;
-	sourceType: EntityType;
-	details: Task;
+	sourceType: string;
+	details: TaskDetails;
 }
 
 export interface ActiveTask extends SourcedTask {

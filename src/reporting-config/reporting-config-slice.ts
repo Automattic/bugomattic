@@ -5,15 +5,16 @@ import {
 	IndexedReportingConfig,
 	NormalizedReportingConfig,
 	ReportingConfigState,
-	Task,
+	TaskDetails,
 } from './types';
 import { indexReportingConfig, normalizeReportingConfig } from './reporting-config-parsers';
-import { EntityType, SourcedTask } from '../active-tasks';
+import { SourcedTask } from '../active-tasks';
 
 const initialNormalizedReportingConfig: NormalizedReportingConfig = {
 	products: {},
 	featureGroups: {},
 	features: {},
+	tasks: {},
 };
 
 const initialIndexedReportingConfig: IndexedReportingConfig = {
@@ -142,7 +143,7 @@ function getProductIdForFeature(
 	if ( featureGroupId ) {
 		const featureGroup = normalized.featureGroups[ featureGroupId ];
 		if ( featureGroup ) {
-			return featureGroup.product;
+			return featureGroup.productId;
 		}
 	}
 
@@ -150,7 +151,7 @@ function getProductIdForFeature(
 }
 
 function makeTaskSourcer( sourceId: string, sourceType: EntityType ) {
-	return ( task: Task ) => {
+	return ( task: TaskDetails ) => {
 		return {
 			details: task,
 			sourceId: sourceId,

@@ -1,5 +1,5 @@
 import { ReportingConfigApiResponse } from '../api';
-import { IndexedReportingConfig, NormalizedReportingConfig } from './types';
+import { IndexedReportingConfig, NormalizedReportingConfig, TaskMapping } from './types';
 
 // Defining all the core logic for how we normalize and index reporting configs here.
 // We are keeping this separate from how this logic is used in reducers and thunks.
@@ -12,39 +12,152 @@ export function normalizeReportingConfig(
 		features: {},
 		featureGroups: {},
 		products: {},
+		tasks: {},
 	};
 
 	for ( const productName in response ) {
-		const { featureGroups, features, description, learnMoreLinks, taskMapping } =
-			response[ productName ];
+		const { featureGroups, features, description, learnMoreLinks, tasks } = response[ productName ];
 		const productId = productName; // We can use name as ID, as being top level, they are unique.
+
+		const productTaskMapping: TaskMapping = {
+			bug: [],
+			blocker: [],
+			featureRequest: [],
+		};
+
+		if ( tasks ) {
+			tasks.blocker.forEach( ( taskDetails, index ) => {
+				const taskId = `${ productId }__blocker__${ index }`;
+				normalizedReportingConfig.tasks[ taskId ] = {
+					...taskDetails,
+					parentType: 'product',
+					parentId: productId,
+				};
+				productTaskMapping.blocker.push( taskId );
+			} );
+
+			tasks.bug.forEach( ( taskDetails, index ) => {
+				const taskId = `${ productId }__bug__${ index }`;
+				normalizedReportingConfig.tasks[ taskId ] = {
+					...taskDetails,
+					parentType: 'product',
+					parentId: productId,
+				};
+				productTaskMapping.bug.push( taskId );
+			} );
+
+			tasks.bug.forEach( ( taskDetails, index ) => {
+				const taskId = `${ productId }__featureRequest__${ index }`;
+				normalizedReportingConfig.tasks[ taskId ] = {
+					...taskDetails,
+					parentType: 'product',
+					parentId: productId,
+				};
+				productTaskMapping.featureRequest.push( taskId );
+			} );
+		}
 
 		normalizedReportingConfig.products[ productId ] = {
 			id: productId,
 			name: productName,
 			description: description,
 			learnMoreLinks: learnMoreLinks,
-			taskMapping: taskMapping,
+			taskMapping: productTaskMapping,
 		};
 
 		if ( featureGroups ) {
 			for ( const featureGroupName in featureGroups ) {
-				const { features, description, learnMoreLinks, taskMapping } =
-					featureGroups[ featureGroupName ];
+				const { features, description, learnMoreLinks, tasks } = featureGroups[ featureGroupName ];
 				const featureGroupId = `${ productName }__${ featureGroupName }`;
+
+				const featureGroupTaskMapping: TaskMapping = {
+					bug: [],
+					blocker: [],
+					featureRequest: [],
+				};
+
+				if ( tasks ) {
+					tasks.blocker.forEach( ( taskDetails, index ) => {
+						const taskId = `${ featureGroupId }__blocker__${ index }`;
+						normalizedReportingConfig.tasks[ taskId ] = {
+							...taskDetails,
+							parentType: 'featureGroup',
+							parentId: featureGroupId,
+						};
+						featureGroupTaskMapping.blocker.push( taskId );
+					} );
+
+					tasks.bug.forEach( ( taskDetails, index ) => {
+						const taskId = `${ featureGroupId }__bug__${ index }`;
+						normalizedReportingConfig.tasks[ taskId ] = {
+							...taskDetails,
+							parentType: 'featureGroup',
+							parentId: featureGroupId,
+						};
+						featureGroupTaskMapping.bug.push( taskId );
+					} );
+
+					tasks.bug.forEach( ( taskDetails, index ) => {
+						const taskId = `${ featureGroupId }__featureRequest__${ index }`;
+						normalizedReportingConfig.tasks[ taskId ] = {
+							...taskDetails,
+							parentType: 'featureGroup',
+							parentId: featureGroupId,
+						};
+						featureGroupTaskMapping.featureRequest.push( taskId );
+					} );
+				}
 
 				normalizedReportingConfig.featureGroups[ featureGroupId ] = {
 					id: featureGroupId,
 					name: featureGroupName,
 					description: description,
 					learnMoreLinks: learnMoreLinks,
-					taskMapping: taskMapping,
-					product: productId,
+					taskMapping: featureGroupTaskMapping,
+					productId: productId,
 				};
 
 				for ( const featureName in features ) {
-					const { description, keywords, learnMoreLinks, taskMapping } = features[ featureName ];
+					const { description, keywords, learnMoreLinks, tasks } = features[ featureName ];
 					const featureId = `${ productName }__${ featureGroupName }__${ featureName }`;
+
+					const featureTaskMapping: TaskMapping = {
+						bug: [],
+						blocker: [],
+						featureRequest: [],
+					};
+
+					if ( tasks ) {
+						tasks.blocker.forEach( ( taskDetails, index ) => {
+							const taskId = `${ featureId }__blocker__${ index }`;
+							normalizedReportingConfig.tasks[ taskId ] = {
+								...taskDetails,
+								parentType: 'feature',
+								parentId: featureId,
+							};
+							featureTaskMapping.blocker.push( taskId );
+						} );
+
+						tasks.bug.forEach( ( taskDetails, index ) => {
+							const taskId = `${ featureId }__bug__${ index }`;
+							normalizedReportingConfig.tasks[ taskId ] = {
+								...taskDetails,
+								parentType: 'feature',
+								parentId: featureId,
+							};
+							featureTaskMapping.bug.push( taskId );
+						} );
+
+						tasks.bug.forEach( ( taskDetails, index ) => {
+							const taskId = `${ featureId }__featureRequest__${ index }`;
+							normalizedReportingConfig.tasks[ taskId ] = {
+								...taskDetails,
+								parentType: 'feature',
+								parentId: featureId,
+							};
+							featureTaskMapping.featureRequest.push( taskId );
+						} );
+					}
 
 					normalizedReportingConfig.features[ featureId ] = {
 						id: featureId,
@@ -52,8 +165,9 @@ export function normalizeReportingConfig(
 						description: description,
 						keywords: keywords,
 						learnMoreLinks: learnMoreLinks,
-						taskMapping: taskMapping,
-						featureGroup: featureGroupId,
+						taskMapping: featureTaskMapping,
+						parentType: 'featureGroup',
+						parentId: featureGroupId,
 					};
 				}
 			}
@@ -61,8 +175,46 @@ export function normalizeReportingConfig(
 
 		if ( features ) {
 			for ( const featureName in features ) {
-				const { description, keywords, learnMoreLinks, taskMapping } = features[ featureName ];
+				const { description, keywords, learnMoreLinks, tasks } = features[ featureName ];
 				const featureId = `${ productName }__${ featureName }`;
+
+				const featureTaskMapping: TaskMapping = {
+					bug: [],
+					blocker: [],
+					featureRequest: [],
+				};
+
+				if ( tasks ) {
+					tasks.blocker.forEach( ( taskDetails, index ) => {
+						const taskId = `${ featureId }__blocker__${ index }`;
+						normalizedReportingConfig.tasks[ taskId ] = {
+							...taskDetails,
+							parentType: 'feature',
+							parentId: featureId,
+						};
+						featureTaskMapping.blocker.push( taskId );
+					} );
+
+					tasks.bug.forEach( ( taskDetails, index ) => {
+						const taskId = `${ featureId }__bug__${ index }`;
+						normalizedReportingConfig.tasks[ taskId ] = {
+							...taskDetails,
+							parentType: 'feature',
+							parentId: featureId,
+						};
+						featureTaskMapping.bug.push( taskId );
+					} );
+
+					tasks.bug.forEach( ( taskDetails, index ) => {
+						const taskId = `${ featureId }__featureRequest__${ index }`;
+						normalizedReportingConfig.tasks[ taskId ] = {
+							...taskDetails,
+							parentType: 'feature',
+							parentId: featureId,
+						};
+						featureTaskMapping.featureRequest.push( taskId );
+					} );
+				}
 
 				normalizedReportingConfig.features[ featureId ] = {
 					id: featureId,
@@ -70,8 +222,9 @@ export function normalizeReportingConfig(
 					description: description,
 					keywords: keywords,
 					learnMoreLinks: learnMoreLinks,
-					taskMapping: taskMapping,
-					product: productId,
+					taskMapping: featureTaskMapping,
+					parentType: 'product',
+					parentId: productId,
 				};
 			}
 		}

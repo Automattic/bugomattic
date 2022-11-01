@@ -1,4 +1,4 @@
-import { LearnMoreLink, TaskMapping } from '../reporting-config';
+import { LearnMoreLink, TaskDetails } from '../reporting-config';
 
 /**
  * An interface representing an interaction with the API.
@@ -22,7 +22,7 @@ export interface ReportingConfigApiResponse {
 interface Product {
 	description?: string;
 	learnMoreLinks?: LearnMoreLink[];
-	taskMapping?: TaskMapping;
+	tasks?: Tasks;
 	featureGroups?: FeatureGroups;
 	features?: Features;
 }
@@ -34,7 +34,7 @@ interface FeatureGroups {
 interface FeatureGroup {
 	description?: string;
 	learnMoreLinks?: LearnMoreLink[];
-	taskMapping?: TaskMapping;
+	tasks?: Tasks;
 	features: Features;
 }
 
@@ -46,5 +46,11 @@ interface Feature {
 	keywords?: string[];
 	description?: string;
 	learnMoreLinks?: LearnMoreLink[];
-	taskMapping?: TaskMapping;
+	tasks?: Tasks;
+}
+
+interface Tasks {
+	bug: TaskDetails[];
+	featureRequest: TaskDetails[];
+	blocker: TaskDetails[];
 }

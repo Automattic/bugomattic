@@ -4,7 +4,7 @@ import { App } from '../app';
 import { createMockApiClient, renderWithProviders } from '../../test-utils';
 import { ApiClient } from '../../api';
 
-describe( '[app]', () => {
+describe.skip( '[app]', () => {
 	let apiClient: ApiClient;
 
 	beforeEach( () => {
