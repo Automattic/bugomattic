@@ -107,5 +107,5 @@ export interface LearnMore {
 export interface TaskMapping {
 	bug: Task[];
 	featureRequest: Task[];
-	showStopper: Task[];
+	blocker: Task[];
 }

@@ -40,7 +40,7 @@
 									}
 								}
 							],
-							"showStopper": [
+							"blocker": [
 								{
 									"link": {
 										"type": "github",
@@ -96,7 +96,7 @@
 									}
 								}
 							],
-							"showStopper": [
+							"blocker": [
 								{
 									"instructions": "Test the bug on Core WordPress to see if it is reproducible apart from DotCom."
 								},
@@ -161,7 +161,7 @@
 							}
 						}
 					],
-					"showStopper": [
+					"blocker": [
 						{
 							"instructions": "Ping the leads on Slack to let them know of the issue.",
 							"link": {
@@ -200,7 +200,7 @@
 				}
 			],
 			"featureRequest": [],
-			"showStopper": [
+			"blocker": [
 				{
 					"instructions": "Use Jurassic Ninja to test issue on Core WordPress + Jetpack"
 				}
@@ -232,7 +232,7 @@
 							}
 						}
 					],
-					"showStopper": [
+					"blocker": [
 						{
 							"link": {
 								"type": "github",

@@ -13,7 +13,7 @@ export function createFakeReportingConfigResponse(): ReportingConfigApiResponse 
 			taskMapping: {
 				bug: [ { instructions: 'Product bug task' } ],
 				featureRequest: [ { instructions: 'Product feature request task' } ],
-				showStopper: [ { instructions: 'Product show stopper task' } ],
+				blocker: [ { instructions: 'Product show stopper task' } ],
 			},
 			featureGroups: {
 				FakeFeatureGroup: {
@@ -27,7 +27,7 @@ export function createFakeReportingConfigResponse(): ReportingConfigApiResponse 
 					taskMapping: {
 						bug: [ { instructions: 'Feature group bug task' } ],
 						featureRequest: [ { instructions: 'Feature group request task' } ],
-						showStopper: [ { instructions: 'Feature group show stopper task' } ],
+						blocker: [ { instructions: 'Feature group show stopper task' } ],
 					},
 					features: {
 						GroupNestedFeature: {
@@ -42,7 +42,7 @@ export function createFakeReportingConfigResponse(): ReportingConfigApiResponse 
 							taskMapping: {
 								bug: [ { instructions: 'Feature nested under group bug task' } ],
 								featureRequest: [ { instructions: 'Feature nested under group request task' } ],
-								showStopper: [ { instructions: 'Feature nested under group show stopper task' } ],
+								blocker: [ { instructions: 'Feature nested under group show stopper task' } ],
 							},
 						},
 					},
@@ -61,7 +61,7 @@ export function createFakeReportingConfigResponse(): ReportingConfigApiResponse 
 					taskMapping: {
 						bug: [ { instructions: 'Feature nested under product bug task' } ],
 						featureRequest: [ { instructions: 'Feature nested under product request task' } ],
-						showStopper: [ { instructions: 'Feature nested under product show stopper task' } ],
+						blocker: [ { instructions: 'Feature nested under product show stopper task' } ],
 					},
 				},
 			},
