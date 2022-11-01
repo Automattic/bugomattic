@@ -4,11 +4,12 @@ import { ApiClient, ReportingConfigApiResponse } from '../api';
 import {
 	IndexedReportingConfig,
 	NormalizedReportingConfig,
+	Product,
 	ReportingConfigState,
 	TaskDetails,
+	TaskParentEntityType,
 } from './types';
 import { indexReportingConfig, normalizeReportingConfig } from './reporting-config-parsers';
-import { SourcedTask } from '../active-tasks';
 
 const initialNormalizedReportingConfig: NormalizedReportingConfig = {
 	products: {},
@@ -89,7 +90,7 @@ export function selectReportingConfigError( state: RootState ) {
 	return state.reportingConfig.error;
 }
 
-export function selectRelevantTasks( state: RootState ): SourcedTask[] {
+export function selectRelevantTasksIds( state: RootState ): string[] {
 	const { issueDetails, reportingConfig } = state;
 	const { featureId, issueType } = issueDetails;
 	const { normalized } = reportingConfig;
@@ -98,109 +99,84 @@ export function selectRelevantTasks( state: RootState ): SourcedTask[] {
 		return [];
 	}
 
-	let sourcedFeatureTasks: SourcedTask[] = [];
-	let sourcedFeatureGroupTasks: SourcedTask[] = [];
-	let sourcedProductTasks: SourcedTask[] = [];
+	const relevantTasksIds: string[] = [];
 
 	const feature = normalized.features[ featureId ];
-	const featureTasks = feature?.taskMapping?.[ issueType ];
-	if ( featureTasks ) {
-		sourcedFeatureTasks = featureTasks.map( makeTaskSourcer( featureId, 'feature' ) );
+	const featureTaskIds = feature?.taskMapping?.[ issueType ];
+	if ( featureTaskIds ) {
+		relevantTasksIds.push( ...featureTaskIds );
 	}
 
-	const featureGroupId = feature.featureGroup;
-	if ( featureGroupId ) {
-		const featureGroupTasks =
-			normalized.featureGroups[ featureGroupId ]?.taskMapping?.[ issueType ];
-		if ( featureGroupTasks ) {
-			sourcedFeatureGroupTasks = featureGroupTasks.map(
-				makeTaskSourcer( featureGroupId, 'featureGroup' )
-			);
+	if ( feature.parentType === 'featureGroup' ) {
+		const featureGroup = normalized.featureGroups[ feature.parentId ];
+		const featureGroupTaskIds = featureGroup.taskMapping?.[ issueType ];
+		if ( featureGroupTaskIds ) {
+			relevantTasksIds.push( ...featureGroupTaskIds );
 		}
 	}
 
-	const productId = getProductIdForFeature( normalized, featureId );
-	if ( productId ) {
-		const productTasks = normalized.products[ productId ]?.taskMapping?.[ issueType ];
-		if ( productTasks ) {
-			sourcedProductTasks = productTasks.map( makeTaskSourcer( productId, 'product' ) );
-		}
+	let product: Product;
+	if ( feature.parentType === 'featureGroup' ) {
+		const featureGroup = normalized.featureGroups[ feature.parentId ];
+		product = normalized.products[ featureGroup.productId ];
+	} else {
+		// directly under a product
+		product = normalized.products[ feature.parentId ];
 	}
 
-	return collapseTasks( sourcedFeatureTasks, sourcedFeatureGroupTasks, sourcedProductTasks );
-}
-
-function getProductIdForFeature(
-	normalized: NormalizedReportingConfig,
-	featureId: string
-): string | undefined {
-	const feature = normalized.features[ featureId ];
-	if ( ! feature ) {
-		return undefined;
+	const productTaskIds = product.taskMapping?.[ issueType ];
+	if ( productTaskIds ) {
+		relevantTasksIds.push( ...productTaskIds );
 	}
 
-	const featureGroupId = feature.featureGroup;
-	if ( featureGroupId ) {
-		const featureGroup = normalized.featureGroups[ featureGroupId ];
-		if ( featureGroup ) {
-			return featureGroup.productId;
-		}
-	}
-
-	return feature.product;
+	return deduplicateTasks( state, relevantTasksIds );
 }
 
-function makeTaskSourcer( sourceId: string, sourceType: EntityType ) {
-	return ( task: TaskDetails ) => {
-		return {
-			details: task,
-			sourceId: sourceId,
-			sourceType: sourceType,
-		};
-	};
-}
-
-function collapseTasks(
-	featureTasks: SourcedTask[],
-	featureGroupTasks: SourcedTask[],
-	productTasks: SourcedTask[]
-): SourcedTask[] {
-	const finalTaskList: SourcedTask[] = [];
+function deduplicateTasks( state: RootState, taskIds: string[] ): string[] {
 	const existingTaskDetails = new Set< string >();
 	const existingGitHubRepos = new Set< string >();
-
-	const addIfNotDuplicate = ( task: SourcedTask ) => {
-		const taskDetails = JSON.stringify( task.details );
-		if ( existingTaskDetails.has( taskDetails ) ) {
+	const finalTaskIds: string[] = [];
+	const addIfNotDuplicate = ( taskId: string ) => {
+		const task = state.reportingConfig.normalized.tasks[ taskId ];
+		const taskDetails: TaskDetails = { instructions: task.instructions, link: task.link };
+		const stringifiedDetails = JSON.stringify( taskDetails );
+		if ( existingTaskDetails.has( stringifiedDetails ) ) {
 			return;
 		}
 
 		// If an existing task already has a GitHub-repo-specific task, we respect that.
 		// Put another way, a feature-level GitHub task will override a product-level GitHub task
-		if ( task.details.link?.type === 'github' ) {
-			if ( existingGitHubRepos.has( task.details.link.repository ) ) {
+		if ( taskDetails.link?.type === 'github' ) {
+			const gitHubRepo = taskDetails.link.repository;
+			if ( existingGitHubRepos.has( gitHubRepo ) ) {
 				return;
 			}
-			existingTaskDetails.add( task.details.link.repository );
+			existingTaskDetails.add( gitHubRepo );
 		}
 
-		existingTaskDetails.add( taskDetails );
-		finalTaskList.push( task );
+		existingTaskDetails.add( stringifiedDetails );
+		finalTaskIds.push( taskId );
 	};
 
+	const makeParentTypeFilter = ( parentType: TaskParentEntityType ) => ( taskId: string ) =>
+		state.reportingConfig.normalized.tasks[ taskId ].parentType === parentType;
+	const featureTaskIds = taskIds.filter( makeParentTypeFilter( 'feature' ) );
+	const featureGroupTaskIds = taskIds.filter( makeParentTypeFilter( 'featureGroup' ) );
+	const productTaskIds = taskIds.filter( makeParentTypeFilter( 'product' ) );
+
 	// Feature overrides feature group which overrides product.
-	// So we add them from most important to least, and skip duplicates.
-	for ( const featureTask of featureTasks ) {
-		addIfNotDuplicate( featureTask );
+	// So we add them from most important parent type to least, and skip duplicates.
+	for ( const featureTaskId of featureTaskIds ) {
+		addIfNotDuplicate( featureTaskId );
 	}
 
-	for ( const featureGroupTask of featureGroupTasks ) {
-		addIfNotDuplicate( featureGroupTask );
+	for ( const featureGroupTaskId of featureGroupTaskIds ) {
+		addIfNotDuplicate( featureGroupTaskId );
 	}
 
-	for ( const productTask of productTasks ) {
-		addIfNotDuplicate( productTask );
+	for ( const productTaskId of productTaskIds ) {
+		addIfNotDuplicate( productTaskId );
 	}
 
-	return finalTaskList;
+	return finalTaskIds;
 }

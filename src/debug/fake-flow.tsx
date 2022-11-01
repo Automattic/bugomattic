@@ -1,11 +1,21 @@
 import React, { useCallback } from 'react';
-import { selectActiveTasks, setNewTasks, SourcedTask } from '../active-tasks';
 import { useAppDispatch, useAppSelector } from '../app';
+import { addCompletedTask, removeCompletedTask, selectCompletedTasks } from '../completed-tasks';
 import { IssueType, selectIssueDetails, setIssueFeature, setIssueType } from '../issue-details';
-import { selectNormalizedReportingConfig, selectRelevantTasks } from '../reporting-config';
-import { DebugView } from './debug-view';
+import { selectNormalizedReportingConfig, selectRelevantTasksIds } from '../reporting-config';
 
 export function FakeFlow() {
+	return (
+		<div>
+			<h2>Collect Issue Details:</h2>
+			<FakeIssueForm />
+			<h2>Tasks:</h2>
+			<FakeTaskList />
+		</div>
+	);
+}
+
+function FakeIssueForm() {
 	const issueTypes: IssueType[] = [ 'unset', 'bug', 'featureRequest', 'blocker' ];
 
 	const dispatch = useAppDispatch();
@@ -29,13 +39,6 @@ export function FakeFlow() {
 		[ features, dispatch ]
 	);
 
-	const relevantTasks = useAppSelector( selectRelevantTasks );
-	const activeTasks = useAppSelector( selectActiveTasks );
-
-	const generateActiveTasks = useCallback( () => {
-		dispatch( setNewTasks( relevantTasks ) );
-	}, [ dispatch, setNewTasks, relevantTasks ] );
-
 	return (
 		<div>
 			<div>
@@ -56,29 +59,71 @@ export function FakeFlow() {
 					) ) }
 				</select>
 			</div>
-			<div>
-				<button onClick={ generateActiveTasks }>Generate Active Tasks</button>
-			</div>
-			<DebugView data={ relevantTasks } header="Relevant Tasks"></DebugView>
-			<DebugView data={ activeTasks } header="Active Tasks (Manually Generated)"></DebugView>
-			<TaskList tasks={ relevantTasks }></TaskList>
 		</div>
 	);
 }
 
-interface TaskListProps {
-	tasks: SourcedTask[];
-}
+function FakeTaskList() {
+	const dispatch = useAppDispatch();
+	const { tasks } = useAppSelector( selectNormalizedReportingConfig );
+	const relevantTaskIds = useAppSelector( selectRelevantTasksIds );
+	const completedTaskIds = useAppSelector( selectCompletedTasks );
 
-function TaskList( { tasks }: TaskListProps ) {
-	const activeTasks = tasks.map( ( task ) => {
-		return {
-			...task,
-			completed: false,
-		};
-	} );
+	const handleCheckboxChange = useCallback(
+		( event: React.ChangeEvent< HTMLInputElement > ) => {
+			const taskId = event.target.id;
+			const wasChecked = event.target.checked;
+			if ( wasChecked ) {
+				dispatch( addCompletedTask( taskId ) );
+			} else {
+				dispatch( removeCompletedTask( taskId ) );
+			}
+		},
+		[ dispatch ]
+	);
+
+	const createTaskDisplay = ( taskId: string ) => {
+		const task = tasks[ taskId ];
+		const isChecked = completedTaskIds.includes( taskId );
+		const taskInstructions = task.instructions || '<No instructions for task>';
+		let linkText = '';
+		if ( task.link ) {
+			switch ( task.link.type ) {
+				case 'general':
+					linkText = `General link to ${ task.link.href }`;
+					break;
+				case 'github':
+					linkText = `GitHub link to ${ task.link.repository }`;
+					break;
+				case 'p2':
+					linkText = `P2 link to ${ task.link.subdomain }`;
+					break;
+				case 'slack':
+					linkText = `Slack link to #${ task.link.channel } channel`;
+					break;
+			}
+		} else {
+			linkText = '<No links for task>';
+		}
+
+		return (
+			<label>
+				<input
+					type="checkbox"
+					checked={ isChecked }
+					onChange={ handleCheckboxChange }
+					id={ taskId }
+				/>
+				{ taskInstructions } -- { linkText }
+			</label>
+		);
+	};
 
 	return (
-		<DebugView header="Active Tasks (Component/Prop Generated)" data={ activeTasks }></DebugView>
+		<div>
+			{ relevantTaskIds.map( ( taskId ) => (
+				<div key={ taskId }>{ createTaskDisplay( taskId ) }</div>
+			) ) }
+		</div>
 	);
 }
