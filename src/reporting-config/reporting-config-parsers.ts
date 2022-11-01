@@ -1,7 +1,5 @@
-import { ApiFeature, ApiTasks, ReportingConfigApiResponse } from '../api';
+import { ApiTasks, ReportingConfigApiResponse } from '../api';
 import {
-	Feature,
-	FeatureParentEntityType,
 	IndexedReportingConfig,
 	NormalizedReportingConfig,
 	TaskMapping,
@@ -169,49 +167,6 @@ function normalizeTasks(
 	} );
 
 	return { normalizedTasks, taskMapping };
-}
-
-function normalizeFeature(
-	feature: ApiFeature,
-	{
-		featureId,
-		featureName,
-		parentId,
-		parentType,
-	}: {
-		featureId: string;
-		featureName: string;
-		parentId: string;
-		parentType: FeatureParentEntityType;
-	}
-): {
-	normalizedTasks: Tasks;
-	normalizedFeature: Feature;
-} {
-	const { description, keywords, learnMoreLinks, tasks } = feature;
-	let featureTaskMapping: TaskMapping | undefined;
-	let normalizedTasksFromFeature: Tasks = {};
-	if ( tasks ) {
-		const { normalizedTasks, taskMapping } = normalizeTasks( tasks, {
-			parentId: featureId,
-			parentType: 'feature',
-		} );
-		featureTaskMapping = taskMapping;
-		normalizedTasksFromFeature = normalizedTasks;
-	}
-
-	const normalizedFeature: Feature = {
-		id: featureId,
-		name: featureName,
-		description: description,
-		keywords: keywords,
-		learnMoreLinks: learnMoreLinks,
-		taskMapping: featureTaskMapping,
-		parentType: parentType,
-		parentId: parentId,
-	};
-
-	return { normalizedTasks: normalizedTasksFromFeature, normalizedFeature };
 }
 
 export function indexReportingConfig(
