@@ -11,9 +11,9 @@ export function createFakeReportingConfigResponse(): ReportingConfigApiResponse 
 				},
 			],
 			tasks: {
-				bug: [ { instructions: 'Product bug task' } ],
-				featureRequest: [ { instructions: 'Product feature request task' } ],
-				blocker: [ { instructions: 'Product show stopper task' } ],
+				bug: [ { instructions: 'Product | bug' } ],
+				featureRequest: [ { instructions: 'Product | feature-request' } ],
+				blocker: [ { instructions: 'Product | blocker' } ],
 			},
 			featureGroups: {
 				FakeFeatureGroup: {
@@ -25,9 +25,9 @@ export function createFakeReportingConfigResponse(): ReportingConfigApiResponse 
 						},
 					],
 					tasks: {
-						bug: [ { instructions: 'Feature group bug task' } ],
-						featureRequest: [ { instructions: 'Feature group request task' } ],
-						blocker: [ { instructions: 'Feature group show stopper task' } ],
+						bug: [ { instructions: 'Feature group | bug' } ],
+						featureRequest: [ { instructions: 'Feature group | feature request' } ],
+						blocker: [ { instructions: 'Feature group | blocker' } ],
 					},
 					features: {
 						GroupNestedFeature: {
@@ -41,16 +41,16 @@ export function createFakeReportingConfigResponse(): ReportingConfigApiResponse 
 							],
 							tasks: {
 								bug: [
-									{ instructions: 'Feature nested under group bug task index 0' },
-									{ instructions: 'Feature nested under group bug task index 1' },
+									{ instructions: 'Feature nested under group | bug | index 0' },
+									{ instructions: 'Feature nested under group | bug | index 1' },
 								],
 								featureRequest: [
-									{ instructions: 'Feature nested under group request task index 0' },
-									{ instructions: 'Feature nested under group request task index 1' },
+									{ instructions: 'Feature nested under group | feature request | index 0' },
+									{ instructions: 'Feature nested under group | feature request | index 1' },
 								],
 								blocker: [
-									{ instructions: 'Feature nested under group show stopper task index 0' },
-									{ instructions: 'Feature nested under group show stopper task index 1' },
+									{ instructions: 'Feature nested under group | blocker | index 0' },
+									{ instructions: 'Feature nested under group | blocker | index 1' },
 								],
 							},
 						},
@@ -69,8 +69,10 @@ export function createFakeReportingConfigResponse(): ReportingConfigApiResponse 
 					],
 					tasks: {
 						bug: [ { instructions: 'Feature nested under product bug task' } ],
-						featureRequest: [ { instructions: 'Feature nested under product request task' } ],
-						blocker: [ { instructions: 'Feature nested under product show stopper task' } ],
+						featureRequest: [
+							{ instructions: 'Feature nested under product feature-request task' },
+						],
+						blocker: [ { instructions: 'Feature nested under product blocker task' } ],
 					},
 				},
 			},

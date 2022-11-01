@@ -27,14 +27,14 @@ export interface IndexedReportingConfig {
 	foo: string; // TODO: figure out what indices we need.
 }
 
-type FeatureParentEntityType = 'product' | 'featureGroup';
-type TaskParentEntityType = FeatureParentEntityType | 'feature';
+export type FeatureParentEntityType = 'product' | 'featureGroup';
+export type TaskParentEntityType = FeatureParentEntityType | 'feature';
 
 interface Features {
 	[ featureId: string ]: Feature;
 }
 
-interface Feature {
+export interface Feature {
 	id: string;
 	name: string;
 	keywords?: string[];
@@ -49,7 +49,7 @@ interface FeatureGroups {
 	[ featureGroupId: string ]: FeatureGroup;
 }
 
-interface FeatureGroup {
+export interface FeatureGroup {
 	id: string;
 	name: string;
 	description?: string;
@@ -62,12 +62,18 @@ interface Products {
 	[ productId: string ]: Product;
 }
 
-interface Product {
+export interface Product {
 	id: string;
 	name: string;
 	description?: string;
 	learnMoreLinks?: LearnMoreLink[];
 	taskMapping?: TaskMapping;
+}
+
+export interface TaskMapping {
+	bug: string[];
+	featureRequest: string[];
+	blocker: string[];
 }
 
 export interface Task extends TaskDetails {
@@ -115,10 +121,4 @@ export interface TaskDetails {
 export interface LearnMore {
 	description?: string;
 	links?: LearnMoreLink[];
-}
-
-export interface TaskMapping {
-	bug: string[];
-	featureRequest: string[];
-	blocker: string[];
 }

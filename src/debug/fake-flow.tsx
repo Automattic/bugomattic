@@ -6,7 +6,7 @@ import { selectNormalizedReportingConfig, selectRelevantTasks } from '../reporti
 import { DebugView } from './debug-view';
 
 export function FakeFlow() {
-	const issueTypes: IssueType[] = [ 'unset', 'bug', 'featureRequest', 'showStopper' ];
+	const issueTypes: IssueType[] = [ 'unset', 'bug', 'featureRequest', 'blocker' ];
 
 	const dispatch = useAppDispatch();
 	const { issueType, featureId } = useAppSelector( selectIssueDetails );

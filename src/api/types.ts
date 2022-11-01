@@ -16,40 +16,40 @@ export interface ApiClient {
  * It follows a more heirarchical structure for easy reading and manual updating.
  */
 export interface ReportingConfigApiResponse {
-	[ productName: string ]: Product;
+	[ productName: string ]: ApiProduct;
 }
 
-interface Product {
+export interface ApiProduct {
 	description?: string;
 	learnMoreLinks?: LearnMoreLink[];
-	tasks?: Tasks;
-	featureGroups?: FeatureGroups;
-	features?: Features;
+	tasks?: ApiTasks;
+	featureGroups?: ApiFeatureGroups;
+	features?: ApiFeatures;
 }
 
-interface FeatureGroups {
-	[ featureGroupName: string ]: FeatureGroup;
+interface ApiFeatureGroups {
+	[ featureGroupName: string ]: ApiFeatureGroup;
 }
 
-interface FeatureGroup {
+export interface ApiFeatureGroup {
 	description?: string;
 	learnMoreLinks?: LearnMoreLink[];
-	tasks?: Tasks;
-	features: Features;
+	tasks?: ApiTasks;
+	features: ApiFeatures;
 }
 
-interface Features {
-	[ featureName: string ]: Feature;
+interface ApiFeatures {
+	[ featureName: string ]: ApiFeature;
 }
 
-interface Feature {
+export interface ApiFeature {
 	keywords?: string[];
 	description?: string;
 	learnMoreLinks?: LearnMoreLink[];
-	tasks?: Tasks;
+	tasks?: ApiTasks;
 }
 
-interface Tasks {
+export interface ApiTasks {
 	bug: TaskDetails[];
 	featureRequest: TaskDetails[];
 	blocker: TaskDetails[];
