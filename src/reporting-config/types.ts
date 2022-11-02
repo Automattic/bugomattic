@@ -30,7 +30,7 @@ export interface IndexedReportingConfig {
 export type FeatureParentEntityType = 'product' | 'featureGroup';
 export type TaskParentEntityType = FeatureParentEntityType | 'feature';
 
-interface Features {
+export interface Features {
 	[ featureId: string ]: Feature;
 }
 
@@ -45,7 +45,7 @@ export interface Feature {
 	parentId: string;
 }
 
-interface FeatureGroups {
+export interface FeatureGroups {
 	[ featureGroupId: string ]: FeatureGroup;
 }
 
@@ -58,7 +58,7 @@ export interface FeatureGroup {
 	productId: string;
 }
 
-interface Products {
+export interface Products {
 	[ productId: string ]: Product;
 }
 
