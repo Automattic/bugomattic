@@ -17,6 +17,7 @@ export function FakeFlow() {
 
 function FakeIssueForm() {
 	const issueTypes: IssueType[] = [ 'unset', 'bug', 'featureRequest', 'blocker' ];
+	const noFeatureSelected = '(No feature selected)';
 
 	const dispatch = useAppDispatch();
 	const { issueType, featureId } = useAppSelector( selectIssueDetails );
@@ -34,7 +35,11 @@ function FakeIssueForm() {
 	const handleFeatureIdChange = useCallback(
 		( event: React.ChangeEvent< HTMLSelectElement > ) => {
 			const featureId = event.currentTarget.value;
-			dispatch( setIssueFeature( featureId ) );
+			if ( featureId === noFeatureSelected ) {
+				dispatch( setIssueFeature( null ) );
+			} else {
+				dispatch( setIssueFeature( featureId ) );
+			}
 		},
 		[ features, dispatch ]
 	);
@@ -51,7 +56,10 @@ function FakeIssueForm() {
 				</select>
 			</div>
 			<div>
-				<select value={ featureId || undefined } onChange={ handleFeatureIdChange }>
+				<select value={ featureId || noFeatureSelected } onChange={ handleFeatureIdChange }>
+					<option key={ noFeatureSelected } value={ noFeatureSelected }>
+						{ noFeatureSelected }
+					</option>
 					{ allFeatureIds.map( ( featureId ) => (
 						<option key={ featureId } value={ featureId }>
 							{ featureId }
