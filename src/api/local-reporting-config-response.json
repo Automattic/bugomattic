@@ -89,8 +89,8 @@
 					]
 				},
 				"features": {
-					"Feature Under Feature Group": {
-						"description": "Feature Under Feature Group description",
+					"Feature (Under Feature Group)": {
+						"description": "Feature (Under Feature Group) description",
 						"keywords": [ "foo", "bar" ],
 						"learnMoreLinks": [
 							{
@@ -109,7 +109,7 @@
 						"tasks": {
 							"bug": [
 								{
-									"instructions": "Feature Under Feature Group | Bug | GitHub link",
+									"instructions": "Feature (Under Feature Group) | Bug | GitHub link",
 									"link": {
 										"type": "github",
 										"repository": "Automattic/fake-repo",
@@ -120,7 +120,7 @@
 							],
 							"featureRequest": [
 								{
-									"instructions": "Feature Under Feature Group | Feature Request | GitHub link",
+									"instructions": "Feature (Under Feature Group) | Feature Request | GitHub link",
 									"link": {
 										"type": "github",
 										"repository": "Automattic/fake-repo",
@@ -131,7 +131,7 @@
 							],
 							"blocker": [
 								{
-									"instructions": "Feature Under Feature Group | Blocker | GitHub link",
+									"instructions": "Feature (Under Feature Group) | Blocker | GitHub link",
 									"link": {
 										"type": "github",
 										"repository": "Automattic/fake-repo",
@@ -148,26 +148,28 @@
 								}
 							]
 						}
-					},
-					"Feature Directly Under Product": {
-						"description": "Feature Directly Under Product description (has no tasks of its own)",
-						"keywords": [ "baz", "qux" ],
-						"learnMoreLinks": [
-							{
-								"type": "p2",
-								"subdomain": "feature-directly-under-product"
-							},
-							{
-								"type": "slack",
-								"channel": "feature-directly-under-product"
-							},
-							{
-								"type": "general",
-								"href": "https://google.com/search?q=feature-under-feature-group"
-							}
-						]
 					}
 				}
+			}
+		},
+		"features": {
+			"Feature (Directly Under Product)": {
+				"description": "Feature (Directly Under Product) description (has no tasks of its own)",
+				"keywords": [ "baz", "qux" ],
+				"learnMoreLinks": [
+					{
+						"type": "p2",
+						"subdomain": "feature-directly-under-product"
+					},
+					{
+						"type": "slack",
+						"channel": "feature-directly-under-product"
+					},
+					{
+						"type": "general",
+						"href": "https://google.com/search?q=feature-under-feature-group"
+					}
+				]
 			}
 		}
 	},
