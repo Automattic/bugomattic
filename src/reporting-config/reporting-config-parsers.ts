@@ -212,10 +212,12 @@ interface TaskContext {
 	parentId: string;
 }
 
-function normalizeTasks(
-	apiTasks: ApiTasks,
-	context: TaskContext
-): { normalizedTasks: Tasks; taskMapping: TaskMapping } {
+interface NormalizedTaskOutput {
+	normalizedTasks: Tasks;
+	taskMapping: TaskMapping;
+}
+
+function normalizeTasks( apiTasks: ApiTasks, context: TaskContext ): NormalizedTaskOutput {
 	const taskMapping: TaskMapping = {
 		bug: [],
 		blocker: [],
