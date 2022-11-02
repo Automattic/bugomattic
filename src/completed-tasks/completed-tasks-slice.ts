@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../app';
 
+// This is just for additional clarity in the function signatures below!
 type TaskId = string;
 
 const initialState: TaskId[] = [];

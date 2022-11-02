@@ -70,10 +70,8 @@ export interface Product {
 	taskMapping?: TaskMapping;
 }
 
-export interface TaskMapping {
-	bug: string[];
-	featureRequest: string[];
-	blocker: string[];
+export interface Tasks {
+	[ taskId: string ]: Task;
 }
 
 export interface Task extends TaskDetails {
@@ -81,8 +79,10 @@ export interface Task extends TaskDetails {
 	parentId: string;
 }
 
-export interface Tasks {
-	[ taskId: string ]: Task;
+export interface TaskMapping {
+	bug: string[];
+	featureRequest: string[];
+	blocker: string[];
 }
 
 export interface SlackLink {

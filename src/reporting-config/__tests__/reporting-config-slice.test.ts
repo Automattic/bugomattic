@@ -8,7 +8,6 @@ describe( '[reportingConfigSlice]', () => {
 			// the respected normalized output. We can add more granular testing later.
 			const fakeResponse = createFakeReportingConfigResponse();
 			const normalizedReportingConfig = normalizeReportingConfig( fakeResponse );
-			console.log( normalizedReportingConfig );
 			expect( normalizedReportingConfig ).toMatchSnapshot();
 		} );
 	} );

@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '../app';
 import { addCompletedTask, removeCompletedTask, selectCompletedTasks } from '../completed-tasks';
 import { IssueType, selectIssueDetails, setIssueFeature, setIssueType } from '../issue-details';
-import { selectNormalizedReportingConfig, selectRelevantTasksIds } from '../reporting-config';
+import { selectNormalizedReportingConfig, selectRelevantTaskIds } from '../reporting-config';
 
 export function FakeFlow() {
 	return (
@@ -66,7 +66,7 @@ function FakeIssueForm() {
 function FakeTaskList() {
 	const dispatch = useAppDispatch();
 	const { tasks } = useAppSelector( selectNormalizedReportingConfig );
-	const relevantTaskIds = useAppSelector( selectRelevantTasksIds );
+	const relevantTaskIds = useAppSelector( selectRelevantTaskIds );
 	const completedTaskIds = useAppSelector( selectCompletedTasks );
 
 	const handleCheckboxChange = useCallback(

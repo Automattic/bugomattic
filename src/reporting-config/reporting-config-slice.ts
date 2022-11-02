@@ -70,6 +70,8 @@ export const reportingConfigSlice = createSlice( {
 
 export const reportingConfigReducer = reportingConfigSlice.reducer;
 
+/* Selectors */
+
 export function selectReportingConfig( state: RootState ) {
 	return state.reportingConfig;
 }
@@ -90,7 +92,7 @@ export function selectReportingConfigError( state: RootState ) {
 	return state.reportingConfig.error;
 }
 
-export function selectRelevantTasksIds( state: RootState ): string[] {
+export function selectRelevantTaskIds( state: RootState ): string[] {
 	const { issueDetails, reportingConfig } = state;
 	const { featureId, issueType } = issueDetails;
 	const { normalized } = reportingConfig;
@@ -120,7 +122,7 @@ export function selectRelevantTasksIds( state: RootState ): string[] {
 		const featureGroup = normalized.featureGroups[ feature.parentId ];
 		product = normalized.products[ featureGroup.productId ];
 	} else {
-		// directly under a product
+		// The feature is directly under a product
 		product = normalized.products[ feature.parentId ];
 	}
 
@@ -129,15 +131,17 @@ export function selectRelevantTasksIds( state: RootState ): string[] {
 		relevantTasksIds.push( ...productTaskIds );
 	}
 
-	return deduplicateTasks( state, relevantTasksIds );
+	return deduplicateTasksIds( state, relevantTasksIds );
 }
 
-function deduplicateTasks( state: RootState, taskIds: string[] ): string[] {
+// As we collect tasks across several layers, we need to make sure there's not duplicate task content.
+function deduplicateTasksIds( state: RootState, taskIds: string[] ): string[] {
+	const { tasks } = state.reportingConfig.normalized;
 	const existingTaskDetails = new Set< string >();
 	const existingGitHubRepos = new Set< string >();
 	const finalTaskIds: string[] = [];
 	const addIfNotDuplicate = ( taskId: string ) => {
-		const task = state.reportingConfig.normalized.tasks[ taskId ];
+		const task = tasks[ taskId ];
 		const taskDetails: TaskDetails = { instructions: task.instructions, link: task.link };
 		const stringifiedDetails = JSON.stringify( taskDetails );
 		if ( existingTaskDetails.has( stringifiedDetails ) ) {
@@ -159,7 +163,7 @@ function deduplicateTasks( state: RootState, taskIds: string[] ): string[] {
 	};
 
 	const makeParentTypeFilter = ( parentType: TaskParentEntityType ) => ( taskId: string ) =>
-		state.reportingConfig.normalized.tasks[ taskId ].parentType === parentType;
+		tasks[ taskId ].parentType === parentType;
 	const featureTaskIds = taskIds.filter( makeParentTypeFilter( 'feature' ) );
 	const featureGroupTaskIds = taskIds.filter( makeParentTypeFilter( 'featureGroup' ) );
 	const productTaskIds = taskIds.filter( makeParentTypeFilter( 'product' ) );
