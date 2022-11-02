@@ -231,6 +231,7 @@ function normalizeTasks( apiTasks: ApiTasks, context: TaskContext ): NormalizedT
 			const taskId = `${ context.parentId }__${ issueType }__${ index }`;
 			normalizedTasks[ taskId ] = {
 				...taskDetails,
+				id: taskId,
 				parentType: context.parentType,
 				parentId: context.parentId,
 			};

@@ -77,6 +77,7 @@ export interface Tasks {
 export interface Task extends TaskDetails {
 	parentType: TaskParentEntityType;
 	parentId: string;
+	id: string;
 }
 
 export interface TaskMapping {
