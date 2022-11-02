@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`[reportingConfigSlice] Normalizing the Reporting Config Creates the expected normalized reporting config 1`] = `
+exports[`[reporting-config-parsers] Normalizing the Reporting Config Creates the expected normalized reporting config 1`] = `
 Object {
   "featureGroups": Object {
     "FakeProduct__FakeFeatureGroup": Object {
@@ -112,76 +112,91 @@ Object {
   },
   "tasks": Object {
     "FakeProduct__FakeFeatureGroup__GroupNestedFeature__blocker__0": Object {
+      "id": "FakeProduct__FakeFeatureGroup__GroupNestedFeature__blocker__0",
       "instructions": "Feature nested under group | blocker | index 0",
       "parentId": "FakeProduct__FakeFeatureGroup__GroupNestedFeature",
       "parentType": "feature",
     },
     "FakeProduct__FakeFeatureGroup__GroupNestedFeature__blocker__1": Object {
+      "id": "FakeProduct__FakeFeatureGroup__GroupNestedFeature__blocker__1",
       "instructions": "Feature nested under group | blocker | index 1",
       "parentId": "FakeProduct__FakeFeatureGroup__GroupNestedFeature",
       "parentType": "feature",
     },
     "FakeProduct__FakeFeatureGroup__GroupNestedFeature__bug__0": Object {
+      "id": "FakeProduct__FakeFeatureGroup__GroupNestedFeature__bug__0",
       "instructions": "Feature nested under group | bug | index 0",
       "parentId": "FakeProduct__FakeFeatureGroup__GroupNestedFeature",
       "parentType": "feature",
     },
     "FakeProduct__FakeFeatureGroup__GroupNestedFeature__bug__1": Object {
+      "id": "FakeProduct__FakeFeatureGroup__GroupNestedFeature__bug__1",
       "instructions": "Feature nested under group | bug | index 1",
       "parentId": "FakeProduct__FakeFeatureGroup__GroupNestedFeature",
       "parentType": "feature",
     },
     "FakeProduct__FakeFeatureGroup__GroupNestedFeature__featureRequest__0": Object {
+      "id": "FakeProduct__FakeFeatureGroup__GroupNestedFeature__featureRequest__0",
       "instructions": "Feature nested under group | feature request | index 0",
       "parentId": "FakeProduct__FakeFeatureGroup__GroupNestedFeature",
       "parentType": "feature",
     },
     "FakeProduct__FakeFeatureGroup__GroupNestedFeature__featureRequest__1": Object {
+      "id": "FakeProduct__FakeFeatureGroup__GroupNestedFeature__featureRequest__1",
       "instructions": "Feature nested under group | feature request | index 1",
       "parentId": "FakeProduct__FakeFeatureGroup__GroupNestedFeature",
       "parentType": "feature",
     },
     "FakeProduct__FakeFeatureGroup__blocker__0": Object {
+      "id": "FakeProduct__FakeFeatureGroup__blocker__0",
       "instructions": "Feature group | blocker",
       "parentId": "FakeProduct__FakeFeatureGroup",
       "parentType": "featureGroup",
     },
     "FakeProduct__FakeFeatureGroup__bug__0": Object {
+      "id": "FakeProduct__FakeFeatureGroup__bug__0",
       "instructions": "Feature group | bug",
       "parentId": "FakeProduct__FakeFeatureGroup",
       "parentType": "featureGroup",
     },
     "FakeProduct__FakeFeatureGroup__featureRequest__0": Object {
+      "id": "FakeProduct__FakeFeatureGroup__featureRequest__0",
       "instructions": "Feature group | feature request",
       "parentId": "FakeProduct__FakeFeatureGroup",
       "parentType": "featureGroup",
     },
     "FakeProduct__ProductNestedFeature__blocker__0": Object {
+      "id": "FakeProduct__ProductNestedFeature__blocker__0",
       "instructions": "Feature nested under product blocker task",
       "parentId": "FakeProduct__ProductNestedFeature",
       "parentType": "feature",
     },
     "FakeProduct__ProductNestedFeature__bug__0": Object {
+      "id": "FakeProduct__ProductNestedFeature__bug__0",
       "instructions": "Feature nested under product bug task",
       "parentId": "FakeProduct__ProductNestedFeature",
       "parentType": "feature",
     },
     "FakeProduct__ProductNestedFeature__featureRequest__0": Object {
+      "id": "FakeProduct__ProductNestedFeature__featureRequest__0",
       "instructions": "Feature nested under product feature-request task",
       "parentId": "FakeProduct__ProductNestedFeature",
       "parentType": "feature",
     },
     "FakeProduct__blocker__0": Object {
+      "id": "FakeProduct__blocker__0",
       "instructions": "Product | blocker",
       "parentId": "FakeProduct",
       "parentType": "product",
     },
     "FakeProduct__bug__0": Object {
+      "id": "FakeProduct__bug__0",
       "instructions": "Product | bug",
       "parentId": "FakeProduct",
       "parentType": "product",
     },
     "FakeProduct__featureRequest__0": Object {
+      "id": "FakeProduct__featureRequest__0",
       "instructions": "Product | feature-request",
       "parentId": "FakeProduct",
       "parentType": "product",

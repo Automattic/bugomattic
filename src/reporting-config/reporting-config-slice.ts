@@ -155,7 +155,7 @@ function deduplicateTasksIds( state: RootState, taskIds: string[] ): string[] {
 			if ( existingGitHubRepos.has( gitHubRepo ) ) {
 				return;
 			}
-			existingTaskDetails.add( gitHubRepo );
+			existingGitHubRepos.add( gitHubRepo );
 		}
 
 		existingTaskDetails.add( stringifiedDetails );

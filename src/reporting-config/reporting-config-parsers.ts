@@ -243,6 +243,7 @@ function normalizeTasks( apiTasks: ApiTasks, context: TaskContext ): NormalizedT
 }
 
 export function indexReportingConfig(
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	_response: ReportingConfigApiResponse
 ): IndexedReportingConfig {
 	// TODO: create real implementation once we know the indices we need!
