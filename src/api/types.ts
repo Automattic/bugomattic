@@ -27,7 +27,7 @@ export interface ApiProduct {
 	features?: ApiFeatures;
 }
 
-interface ApiFeatureGroups {
+export interface ApiFeatureGroups {
 	[ featureGroupName: string ]: ApiFeatureGroup;
 }
 
@@ -38,7 +38,7 @@ export interface ApiFeatureGroup {
 	features: ApiFeatures;
 }
 
-interface ApiFeatures {
+export interface ApiFeatures {
 	[ featureName: string ]: ApiFeature;
 }
 
