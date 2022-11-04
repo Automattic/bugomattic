@@ -16,6 +16,7 @@ export interface NormalizedReportingConfig {
 	features: Features;
 	featureGroups: FeatureGroups;
 	products: Products;
+	tasks: Tasks;
 }
 
 /**
@@ -26,44 +27,63 @@ export interface IndexedReportingConfig {
 	foo: string; // TODO: figure out what indices we need.
 }
 
-interface Features {
+export type FeatureParentEntityType = 'product' | 'featureGroup';
+export type TaskParentEntityType = FeatureParentEntityType | 'feature';
+
+export interface Features {
 	[ featureId: string ]: Feature;
 }
 
-interface Feature {
+export interface Feature {
 	id: string;
 	name: string;
 	keywords?: string[];
 	description?: string;
 	learnMoreLinks?: LearnMoreLink[];
 	taskMapping?: TaskMapping;
-	featureGroup?: string;
-	product?: string;
+	parentType: FeatureParentEntityType;
+	parentId: string;
 }
 
-interface FeatureGroups {
+export interface FeatureGroups {
 	[ featureGroupId: string ]: FeatureGroup;
 }
 
-interface FeatureGroup {
+export interface FeatureGroup {
 	id: string;
 	name: string;
 	description?: string;
 	learnMoreLinks?: LearnMoreLink[];
 	taskMapping?: TaskMapping;
-	product: string;
+	productId: string;
 }
 
-interface Products {
+export interface Products {
 	[ productId: string ]: Product;
 }
 
-interface Product {
+export interface Product {
 	id: string;
 	name: string;
 	description?: string;
 	learnMoreLinks?: LearnMoreLink[];
 	taskMapping?: TaskMapping;
+}
+
+export interface Tasks {
+	[ taskId: string ]: Task;
+}
+
+export interface Task extends TaskDetails {
+	parentType: TaskParentEntityType;
+	parentId: string;
+	id: string;
+}
+
+export interface TaskMapping {
+	bug: string[];
+	featureRequest: string[];
+	blocker: string[];
 }
 
 export interface SlackLink {
@@ -94,7 +114,7 @@ export type LearnMoreLink = SlackLink | P2Link | GeneralLink;
 
 export type TaskLink = LearnMoreLink | NewGitHubIssueLink;
 
-export interface Task {
+export interface TaskDetails {
 	instructions?: string;
 	link?: TaskLink;
 }
@@ -102,10 +122,4 @@ export interface Task {
 export interface LearnMore {
 	description?: string;
 	links?: LearnMoreLink[];
-}
-
-export interface TaskMapping {
-	bug: Task[];
-	featureRequest: Task[];
-	showStopper: Task[];
 }

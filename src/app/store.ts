@@ -5,11 +5,15 @@ import {
 	combineReducers,
 	PreloadedState,
 } from '@reduxjs/toolkit';
+import { completedTasksReducer } from '../completed-tasks';
 import { ApiClient } from '../api';
+import { issueDetailsReducer } from '../issue-details';
 import { reportingConfigReducer } from '../reporting-config';
 
 const rootReducer = combineReducers( {
 	reportingConfig: reportingConfigReducer,
+	issueDetails: issueDetailsReducer,
+	completedTasks: completedTasksReducer,
 } );
 
 export function setupStore( apiClient: ApiClient, preloadedState?: PreloadedState< RootState > ) {

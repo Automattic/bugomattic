@@ -136,3 +136,11 @@ export function MyComponent( { text, children }: Props ) {
 	)
 }
 ```
+
+#### App-Specific Typed Hooks
+
+Instead of the base react-redux `useSelector` and `useDispatch`, use the re-exported hooks `useAppSelector` and `useAppDispatch`.
+
+These hooks provide app-specific typings to the core react-redux hooks and will keep your code more type-safe.
+
+For reference, check out the [Redux recommendations for TypeScript](https://redux.js.org/usage/usage-with-typescript#define-typed-hooks).

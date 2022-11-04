@@ -1,245 +1,202 @@
 {
-	"WordPress.com": {
-		"featureGroups": {
-			"Create": {
-				"features": {
-					"Full Site Editor": {
-						"keywords": [ "fse", "templates" ],
-						"description": "The extended description of the Site Editor on dotcom.",
-						"learnMoreLinks": [
-							{
-								"type": "general",
-								"displayText": "DotCom support documentation",
-								"href": "https://wordpress.com/support/full-site-editing/"
-							},
-							{
-								"type": "p2",
-								"subdomain": "fse"
-							}
-						],
-						"taskMapping": {
-							"bug": [
-								{
-									"link": {
-										"type": "github",
-										"repository": "Automattic/wp-calypso",
-										"projectSlugs": [ "Automattic/343" ],
-										"labels": [ "User Report", "FSE" ],
-										"template": "happiness-bug-report.yml"
-									}
-								}
-							],
-							"featureRequest": [
-								{
-									"link": {
-										"type": "github",
-										"repository": "Automattic/wp-calypso",
-										"projectSlugs": [ "Automattic/343" ],
-										"labels": [ "[Type] Feature Request", "FSE" ],
-										"template": "feature_request.yml"
-									}
-								}
-							],
-							"showStopper": [
-								{
-									"link": {
-										"type": "github",
-										"repository": "Automattic/wp-calypso",
-										"projectSlugs": [ "Automattic/343" ],
-										"labels": [ "User Report", "FSE", "[Pri] BLOCKER" ],
-										"template": "happiness-bug-report.yml"
-									}
-								},
-								{
-									"instructions": "After opening an issue, ping leads in the escalations channel.",
-									"link": {
-										"type": "slack",
-										"channel": "escalations"
-									}
-								}
-							]
-						}
-					},
-					"Gutenberg": {
-						"keywords": [ "editor", "blocks" ],
-						"description": "The integration of the Gutenberg editor on DotCom.",
-						"taskMapping": {
-							"bug": [
-								{
-									"instructions": "Test the bug on Core WordPress to see if it is reproducible apart from DotCom."
-								},
-								{
-									"instructions": "Report DotCom unique bugs in the wp-calypso repository.",
-									"link": {
-										"type": "github",
-										"repository": "Automattic/wp-calypso",
-										"projectSlugs": [ "Automattic/343" ],
-										"labels": [ "User Report", "Editor" ],
-										"template": "happiness-bug-report.yml"
-									}
-								},
-								{
-									"instructions": "Otherwise, report any issues affecting Core in the Gutenberg repository.",
-									"link": {
-										"type": "github",
-										"repository": "WordPress/gutenberg",
-										"template": "Bug_report.yml"
-									}
-								}
-							],
-							"featureRequest": [
-								{
-									"link": {
-										"type": "github",
-										"repository": "WordPress/gutenberg",
-										"template": "Feature_request.yml"
-									}
-								}
-							],
-							"showStopper": [
-								{
-									"instructions": "Test the bug on Core WordPress to see if it is reproducible apart from DotCom."
-								},
-								{
-									"instructions": "Report DotCom unique bugs in the wp-calypso repository.",
-									"link": {
-										"type": "github",
-										"repository": "Automattic/wp-calypso",
-										"projectSlugs": [ "Automattic/343" ],
-										"labels": [ "User Report", "Editor" ],
-										"template": "happiness-bug-report.yml"
-									}
-								},
-								{
-									"instructions": "Otherwise, report any issues affecting Core in the Gutenberg repository.",
-									"link": {
-										"type": "github",
-										"repository": "WordPress/gutenberg",
-										"template": "Bug_report.yml"
-									}
-								},
-								{
-									"instructions": "After opening an issue, ping leads in the escalations channel.",
-									"link": {
-										"type": "slack",
-										"channel": "escalations"
-									}
-								}
-							]
-						}
+	"Product": {
+		"description": "Product description",
+		"learnMoreLinks": [
+			{
+				"type": "p2",
+				"subdomain": "product"
+			},
+			{
+				"type": "slack",
+				"channel": "product"
+			},
+			{
+				"type": "general",
+				"href": "https://google.com/search?q=product"
+			}
+		],
+		"tasks": {
+			"bug": [
+				{
+					"instructions": "Product | Bug | GitHub link",
+					"link": {
+						"type": "github",
+						"repository": "Automattic/fake-repo",
+						"labels": [ "[Type] Bug" ]
 					}
 				}
-			},
-			"Expand": {
-				"description": "A description of the Expand feature group.",
+			],
+			"featureRequest": [
+				{
+					"instructions": "Product | Feature Request | P2 link",
+					"link": {
+						"type": "p2",
+						"subdomain": "product"
+					}
+				}
+			],
+			"blocker": [
+				{
+					"instructions": "Product | Blocker | Slack link",
+					"link": {
+						"type": "slack",
+						"channel": "product"
+					}
+				}
+			]
+		},
+		"featureGroups": {
+			"Feature Group": {
+				"description": "Feature Group description",
 				"learnMoreLinks": [
 					{
 						"type": "p2",
-						"subdomain": "expand"
+						"subdomain": "feature-group"
+					},
+					{
+						"type": "slack",
+						"channel": "feature-group"
+					},
+					{
+						"type": "general",
+						"href": "https://google.com/search?q=feature-group"
 					}
 				],
-				"taskMapping": {
+				"tasks": {
 					"bug": [
 						{
-							"link": {
-								"type": "github",
-								"repository": "Automattic/wp-calypso",
-								"projectSlugs": [ "Automattic/343" ],
-								"labels": [ "User Report", "Expand" ],
-								"template": "happiness-bug-report.yml"
-							}
+							"instructions": "Feature Group | Bug | Instructions only"
 						}
 					],
 					"featureRequest": [
 						{
+							"instructions": "Feature Group | Feature Request | GitHub link",
 							"link": {
 								"type": "github",
-								"repository": "Automattic/wp-calypso",
-								"projectSlugs": [ "Automattic/343" ],
-								"labels": [ "[Type] Feature Request", "Expand" ],
-								"template": "feature_request.yml"
+								"repository": "Automattic/fake-repo",
+								"labels": [ "[Type] Feature Request" ]
 							}
 						}
 					],
-					"showStopper": [
+					"blocker": [
 						{
-							"instructions": "Ping the leads on Slack to let them know of the issue.",
+							"instructions": "Duplicate Task | P2 link",
 							"link": {
-								"type": "slack",
-								"channel": "expand-escalations"
+								"type": "p2",
+								"subdomain": "duplicate"
 							}
 						}
 					]
 				},
 				"features": {
-					"Premium Blocks": {
-						"description": "Premium Blocks description.",
+					"Feature (Under Feature Group)": {
+						"description": "Feature (Under Feature Group) description",
+						"keywords": [ "foo", "bar" ],
 						"learnMoreLinks": [
 							{
+								"type": "p2",
+								"subdomain": "feature-under-feature-group"
+							},
+							{
 								"type": "slack",
-								"channel": "premium-blocks"
+								"channel": "feature-under-feature-group"
+							},
+							{
+								"type": "general",
+								"href": "https://google.com/search?q=feature-under-feature-group"
 							}
-						]
-					},
-					"Payment Blocks": {}
+						],
+						"tasks": {
+							"bug": [
+								{
+									"instructions": "Feature (Under Feature Group) | Bug | GitHub link",
+									"link": {
+										"type": "github",
+										"repository": "Automattic/fake-repo",
+										"labels": [ "[Type] Bug" ],
+										"projectSlugs": [ "[Automattic/12345]" ]
+									}
+								}
+							],
+							"featureRequest": [
+								{
+									"instructions": "Feature (Under Feature Group) | Feature Request | GitHub link",
+									"link": {
+										"type": "github",
+										"repository": "Automattic/fake-repo",
+										"labels": [ "[Type] Feature Request" ],
+										"projectSlugs": [ "[Automattic/12345]" ]
+									}
+								}
+							],
+							"blocker": [
+								{
+									"instructions": "Feature (Under Feature Group) | Blocker | GitHub link",
+									"link": {
+										"type": "github",
+										"repository": "Automattic/fake-repo",
+										"labels": [ "[Type] Bug", "[Pri] BLOCKER" ],
+										"projectSlugs": [ "[Automattic/12345]" ]
+									}
+								},
+								{
+									"instructions": "Duplicate Task | P2 link",
+									"link": {
+										"type": "p2",
+										"subdomain": "duplicate"
+									}
+								}
+							]
+						}
+					}
 				}
 			}
-		}
-	},
-	"Jetpack": {
-		"learnMoreLinks": [
-			{
-				"type": "general",
-				"href": "https://jetpack.com"
-			}
-		],
-		"taskMapping": {
-			"bug": [
-				{
-					"instructions": "Use Jurassic Ninja to test issue on Core WordPress + Jetpack"
-				}
-			],
-			"featureRequest": [],
-			"showStopper": [
-				{
-					"instructions": "Use Jurassic Ninja to test issue on Core WordPress + Jetpack"
-				}
-			]
 		},
 		"features": {
-			"Jetpack Cloud": {
-				"description": "The extended description of Jetpack Cloud.",
+			"Feature (Directly Under Product)": {
+				"description": "Feature (Directly Under Product) description (has no tasks of its own)",
+				"keywords": [ "baz", "qux" ],
 				"learnMoreLinks": [
 					{
 						"type": "p2",
-						"subdomain": "owningteamp2"
+						"subdomain": "feature-directly-under-product"
+					},
+					{
+						"type": "slack",
+						"channel": "feature-directly-under-product"
+					},
+					{
+						"type": "general",
+						"href": "https://google.com/search?q=feature-under-feature-group"
 					}
-				],
-				"taskMapping": {
-					"bug": [
-						{
-							"link": {
-								"type": "github",
-								"repository": "Automattic/jpop-issues"
-							}
+				]
+			}
+		}
+	},
+	"Alternative Product": {
+		"description": "Alternative Product (providers more bare-bones entities to search on)",
+		"featureGroups": {
+			"Alternative Feature Group": {
+				"features": {
+					"Alternative Feature": {
+						"tasks": {
+							"bug": [
+								{
+									"instructions": "Alternative Feature | Bug | Instructions only"
+								}
+							],
+							"featureRequest": [
+								{
+									"instructions": "Alternative Feature | Feature Request | Instructions only"
+								}
+							],
+							"blocker": [
+								{
+									"instructions": "Alternative Feature | Blocker | Instructions only"
+								}
+							]
 						}
-					],
-					"featureRequest": [
-						{
-							"link": {
-								"type": "github",
-								"repository": "Automattic/jpop-issues"
-							}
-						}
-					],
-					"showStopper": [
-						{
-							"link": {
-								"type": "github",
-								"repository": "Automattic/jpop-issues"
-							}
-						}
-					]
+					}
 				}
 			}
 		}
