@@ -5,6 +5,7 @@ import { FeatureId, IssueDetails, IssueType } from './types';
 const initialState: IssueDetails = {
 	featureId: null,
 	issueType: 'unset',
+	issueTitle: '',
 };
 
 export const issueDetailsSlice = createSlice( {
@@ -21,6 +22,12 @@ export const issueDetailsSlice = createSlice( {
 			return {
 				...state,
 				featureId: action.payload,
+			};
+		},
+		setIssueTitle( state, action: PayloadAction< string > ) {
+			return {
+				...state,
+				issueTitle: action.payload,
 			};
 		},
 	},
