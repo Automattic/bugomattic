@@ -4,14 +4,17 @@ import './index.css';
 import { App, setupStore } from './app';
 import { Provider } from 'react-redux';
 import { localApiClient } from './api';
+import { localMonitoringClient, MonitoringProvider } from './monitoring';
 
 const root = ReactDOM.createRoot( document.getElementById( 'root' ) as HTMLElement );
 const store = setupStore( localApiClient );
 root.render(
 	<React.StrictMode>
-		<Provider store={ store }>
-			<App />
-		</Provider>
+		<MonitoringProvider monitoringClient={ localMonitoringClient }>
+			<Provider store={ store }>
+				<App />
+			</Provider>
+		</MonitoringProvider>
 	</React.StrictMode>
 );
 
