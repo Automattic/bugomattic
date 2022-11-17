@@ -34,7 +34,7 @@ export const issueDetailsSlice = createSlice( {
 } );
 
 export const issueDetailsReducer = issueDetailsSlice.reducer;
-export const { setIssueType, setIssueFeature } = issueDetailsSlice.actions;
+export const { setIssueType, setIssueFeature, setIssueTitle } = issueDetailsSlice.actions;
 
 export function selectIssueDetails( state: RootState ): IssueDetails {
 	return state.issueDetails;
