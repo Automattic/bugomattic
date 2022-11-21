@@ -1,16 +1,27 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../app';
 import { addCompletedTask, removeCompletedTask, selectCompletedTasks } from '../completed-tasks';
 import { IssueType, selectIssueDetails, setIssueFeature, setIssueType } from '../issue-details';
+import { useMonitoring } from '../monitoring';
 import { selectNormalizedReportingConfig, selectRelevantTaskIds } from '../reporting-config';
 
 export function FakeFlow() {
+	const monitoring = useMonitoring();
+	useEffect(
+		() =>
+			monitoring.analytics.recordEvent(
+				'Page load (will fire twice due to React "Strict Mode" debugger)'
+			),
+		[ monitoring ]
+	);
 	return (
 		<div>
 			<h2>Collect Issue Details:</h2>
 			<FakeIssueForm />
 			<h2>Tasks:</h2>
 			<FakeTaskList />
+			<h2>Monitoring Tester:</h2>
+			<MonitoringTester />
 		</div>
 	);
 }
@@ -132,6 +143,34 @@ function FakeTaskList() {
 			{ relevantTaskIds.map( ( taskId ) => (
 				<div key={ taskId }>{ createTaskDisplay( taskId ) }</div>
 			) ) }
+		</div>
+	);
+}
+
+function MonitoringTester() {
+	const monitoring = useMonitoring();
+	const logDebug = useCallback(
+		() => monitoring.logger.debug( 'Debug message', { foo: 'bar' } ),
+		[ monitoring ]
+	);
+	const logInfo = useCallback(
+		() => monitoring.logger.info( 'Info message', { baz: 'qux' } ),
+		[ monitoring ]
+	);
+	const logError = useCallback( () => {
+		const fakeError = new Error( 'Fake error' );
+		monitoring.logger.error( 'Error message', fakeError );
+	}, [ monitoring ] );
+	const recordEvent = useCallback( () => {
+		monitoring.analytics.recordEvent( 'Fake event', { event_property: 'fake property value' } );
+	}, [ monitoring ] );
+
+	return (
+		<div>
+			<button onClick={ logDebug }>Log Debug Message</button>
+			<button onClick={ logInfo }>Log Info Message</button>
+			<button onClick={ logError }>Log Error Message</button>
+			<button onClick={ recordEvent }>Trigger Tracks Event</button>
 		</div>
 	);
 }
