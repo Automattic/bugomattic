@@ -4,19 +4,30 @@ import './index.css';
 import { App, setupStore } from './app';
 import { Provider } from 'react-redux';
 import { localApiClient, productionApiClient } from './api';
-import { localMonitoringClient, MonitoringProvider } from './monitoring';
+import {
+	localMonitoringClient,
+	MonitoringProvider,
+	productionMonitoringClient,
+} from './monitoring';
+
+const monitoringClient = isProduction() ? productionMonitoringClient : localMonitoringClient;
+const apiClient = isProduction() ? productionApiClient : localApiClient;
+const store = setupStore( apiClient );
 
 const root = ReactDOM.createRoot( document.getElementById( 'root' ) as HTMLElement );
-const store = setupStore( productionApiClient );
 root.render(
 	<React.StrictMode>
-		<MonitoringProvider monitoringClient={ localMonitoringClient }>
+		<MonitoringProvider monitoringClient={ monitoringClient }>
 			<Provider store={ store }>
 				<App />
 			</Provider>
 		</MonitoringProvider>
 	</React.StrictMode>
 );
+
+function isProduction() {
+	return process.env.NODE_ENV === 'production';
+}
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
