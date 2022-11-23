@@ -3,11 +3,11 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import { App, setupStore } from './app';
 import { Provider } from 'react-redux';
-import { localApiClient } from './api';
+import { localApiClient, productionApiClient } from './api';
 import { localMonitoringClient, MonitoringProvider } from './monitoring';
 
 const root = ReactDOM.createRoot( document.getElementById( 'root' ) as HTMLElement );
-const store = setupStore( localApiClient );
+const store = setupStore( productionApiClient );
 root.render(
 	<React.StrictMode>
 		<MonitoringProvider monitoringClient={ localMonitoringClient }>
