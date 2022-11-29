@@ -62,6 +62,10 @@ const modifiedCss = cssContents.replace(
 	cssRegex,
 	`sourceMappingURL=${ targetOutputCssMapFilename }`
 );
+if ( ! modifiedCss.endsWith( '/*# sourceMappingURL=bugomattic.bundle.css.map*/' ) ) {
+	console.error( 'Unable to correctly replace the CSS map reference.' );
+	process.exit( 1 );
+}
 fs.writeFileSync( path.join( targetOutputDirectory, targetOutputCssFilename ), modifiedCss );
 
 const jsContents = fs.readFileSync( path.join( targetOutputDirectory, targetOutputJsFilename ), {
@@ -70,6 +74,10 @@ const jsContents = fs.readFileSync( path.join( targetOutputDirectory, targetOutp
 const regexSafeJsMapName = jsMapFilename.replace( /\./g, '\\.' );
 const jsRegex = new RegExp( `sourceMappingURL=${ regexSafeJsMapName }`, 'm' );
 const modifiedJs = jsContents.replace( jsRegex, `sourceMappingURL=${ targetOutputJsMapFilename }` );
+if ( ! modifiedJs.endsWith( '//# sourceMappingURL=bugomattic.bundle.js.map' ) ) {
+	console.error( 'Unable to correctly replace the JS map reference.' );
+	process.exit( 1 );
+}
 fs.writeFileSync( path.join( targetOutputDirectory, targetOutputJsFilename ), modifiedJs );
 
 fs.rmSync( createReactAppOutputDirectory, { recursive: true } );
