@@ -14,7 +14,7 @@ We also need those files to have the same static name overtime for easy deployme
 Create React App includes content hashes in their build names, and outputs a more nested directory structure.
 
 So, for now, to keep the many benefits of using Create React App (namely simplicity), we'll just massage
-the output files into the structure we need with this script.
+the output files into the structure we need with this script. The tradeoff makes sense for now.
 
 In the future if we do end up needing to ditch Create React App, we can probably scrap this script in favor
 of webpack configuration.
