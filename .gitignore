@@ -10,6 +10,7 @@
 
 # production
 /build
+/dist
 
 # package logs
 npm-debug.log*

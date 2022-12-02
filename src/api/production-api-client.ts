@@ -6,6 +6,26 @@ import { ApiClient } from './types';
  */
 export const productionApiClient: ApiClient = {
 	loadReportingConfig: async () => {
-		throw new Error( 'Not implemented!' );
+		const nonce = globalThis.nonce;
+		const nonceHeaderName = globalThis.nonceHeaderName;
+
+		const request = new Request( '/wp-json/bugomattic/v1/reporting-config/', {
+			method: 'GET',
+			credentials: 'same-origin',
+			headers: new Headers( {
+				[ nonceHeaderName ]: nonce,
+			} ),
+		} );
+		const response = await fetch( request );
+
+		if ( response.ok ) {
+			return response.json();
+		} else {
+			throw new Error(
+				`Load Reporting Config web request failed with status code ${
+					response.status
+				}. Response body: ${ await response.json() }`
+			);
+		}
 	},
 };

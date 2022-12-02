@@ -14,7 +14,7 @@
 	},
 	"scripts": {
 		"start": "react-scripts start",
-		"build": "react-scripts build",
+		"build": "react-scripts build && node bin/prepare-a8c-deploy.js",
 		"test": "react-scripts test",
 		"test:once": "react-scripts test --watchAll=false",
 		"eject": "react-scripts eject",
