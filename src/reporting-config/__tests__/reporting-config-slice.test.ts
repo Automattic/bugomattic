@@ -21,6 +21,8 @@ describe( '[reporting-config-slice]', () => {
 					product_id: {
 						id: 'product_id',
 						name: 'Product',
+						featureGroupIds: [],
+						featureIds: [ 'feature_id' ],
 					},
 				},
 				featureGroups: {},
@@ -50,6 +52,7 @@ describe( '[reporting-config-slice]', () => {
 				issueDetails: {
 					issueType: 'bug',
 					featureId: null,
+					issueTitle: '',
 				},
 			};
 
@@ -71,6 +74,8 @@ describe( '[reporting-config-slice]', () => {
 					product_id: {
 						id: 'product_id',
 						name: 'Product',
+						featureGroupIds: [],
+						featureIds: [ 'feature_id' ],
 					},
 				},
 				featureGroups: {},
@@ -100,6 +105,7 @@ describe( '[reporting-config-slice]', () => {
 				issueDetails: {
 					issueType: 'unset',
 					featureId: 'feature_id',
+					issueTitle: '',
 				},
 			};
 
@@ -150,6 +156,8 @@ describe( '[reporting-config-slice]', () => {
 							featureRequest: [],
 							blocker: [],
 						},
+						featureGroupIds: [ 'feature_group_id' ],
+						featureIds: [ featureId ],
 					},
 				},
 				featureGroups: {
@@ -162,6 +170,7 @@ describe( '[reporting-config-slice]', () => {
 							featureRequest: [],
 							blocker: [],
 						},
+						featureIds: [ featureId ],
 					},
 				},
 				features: {
@@ -190,6 +199,7 @@ describe( '[reporting-config-slice]', () => {
 				issueDetails: {
 					issueType: 'bug',
 					featureId: featureId,
+					issueTitle: '',
 				},
 			};
 
@@ -245,6 +255,8 @@ describe( '[reporting-config-slice]', () => {
 							featureRequest: [ 'product_task' ],
 							blocker: [],
 						},
+						featureGroupIds: [ 'feature_group_id' ],
+						featureIds: [ featureId ],
 					},
 				},
 				featureGroups: {
@@ -257,6 +269,7 @@ describe( '[reporting-config-slice]', () => {
 							featureRequest: [ 'feature_group_task' ],
 							blocker: [],
 						},
+						featureIds: [ featureId ],
 					},
 				},
 				features: {
@@ -285,6 +298,7 @@ describe( '[reporting-config-slice]', () => {
 				issueDetails: {
 					issueType: 'featureRequest',
 					featureId: featureId,
+					issueTitle: '',
 				},
 			};
 
@@ -331,6 +345,8 @@ describe( '[reporting-config-slice]', () => {
 							featureRequest: [],
 							blocker: [ 'product_task' ],
 						},
+						featureGroupIds: [],
+						featureIds: [ featureId ],
 					},
 				},
 				featureGroups: {},
@@ -360,6 +376,7 @@ describe( '[reporting-config-slice]', () => {
 				issueDetails: {
 					issueType: 'blocker',
 					featureId: featureId,
+					issueTitle: '',
 				},
 			};
 

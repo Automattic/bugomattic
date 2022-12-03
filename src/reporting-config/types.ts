@@ -56,6 +56,7 @@ export interface FeatureGroup {
 	learnMoreLinks?: LearnMoreLink[];
 	taskMapping?: TaskMapping;
 	productId: string;
+	featureIds: string[];
 }
 
 export interface Products {
@@ -68,6 +69,8 @@ export interface Product {
 	description?: string;
 	learnMoreLinks?: LearnMoreLink[];
 	taskMapping?: TaskMapping;
+	featureGroupIds: string[];
+	featureIds: string[];
 }
 
 export interface Tasks {
@@ -123,4 +126,10 @@ export interface TaskDetails {
 export interface LearnMore {
 	description?: string;
 	links?: LearnMoreLink[];
+}
+
+export interface SearchMatch {
+	entityType: TaskParentEntityType;
+	entityId: string;
+	keywordMatch?: string;
 }
