@@ -8,6 +8,7 @@ import {
 	ReportingConfigState,
 	TaskDetails,
 	TaskParentEntityType,
+	SearchMatch,
 } from './types';
 import { indexReportingConfig, normalizeReportingConfig } from './reporting-config-parsers';
 
@@ -183,4 +184,41 @@ function deduplicateTasksIds( state: RootState, taskIds: string[] ): string[] {
 	}
 
 	return finalTaskIds;
+}
+
+function selectSearchMatches( search: string ) {
+	return ( state: RootState ) => {
+		const normalizedReportingConfig = selectNormalizedReportingConfig( state );
+
+		const matches: SearchMatch[] = [];
+
+		for ( const productId in normalizedReportingConfig.products ) {
+			const product = normalizedReportingConfig.products[ productId ];
+			if ( product.name.includes( search ) ) {
+				matches.push( { entityType: 'product', entityId: productId } );
+			}
+		}
+
+		for ( const featureGroupId in normalizedReportingConfig.featureGroups ) {
+			const featureGroup = normalizedReportingConfig.featureGroups[ featureGroupId ];
+			if ( featureGroup.name.includes( search ) ) {
+				matches.push( { entityType: 'featureGroup', entityId: featureGroupId } );
+			}
+		}
+
+		for ( const featureId in normalizedReportingConfig.features ) {
+			const feature = normalizedReportingConfig.features[ featureId ];
+			if ( feature.name.includes( search ) ) {
+				matches.push( { entityType: 'featureGroup', entityId: featureId } );
+				continue;
+			}
+
+			const keywordMatch = feature.keywords?.find( ( keyword ) => keyword.includes( search ) );
+			if ( keywordMatch ) {
+				matches.push( { entityType: 'feature', entityId: featureId, keywordMatch: keywordMatch } );
+			}
+		}
+
+		return matches;
+	};
 }
