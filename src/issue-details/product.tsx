@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { useAppSelector } from '../app';
-import { SubstringHighlighter } from '../common';
+import { sortEntityIdsByName, SubstringHighlighter } from '../common';
 import {
 	selectNormalizedReportingConfig,
 	selectReportingConfigSearchResults,
@@ -25,7 +25,7 @@ export function Product( { id }: Props ) {
 	const expandedIcon = <>&#x2C5;</>;
 	const icon = isExpanded ? expandedIcon : collapsedIcon;
 
-	const { products } = useAppSelector( selectNormalizedReportingConfig );
+	const { products, featureGroups, features } = useAppSelector( selectNormalizedReportingConfig );
 	const { name: productName, featureGroupIds, featureIds } = products[ id ];
 
 	const searchTerm = useAppSelector( selectReportingConfigSearchTerm );
@@ -39,6 +39,7 @@ export function Product( { id }: Props ) {
 			searchResults.featureGroups.has( featureGroupId )
 		);
 	}
+	const sortedFeatureGroupsToDisplay = sortEntityIdsByName( featureGroupsToDisplay, featureGroups );
 
 	let featuresToDisplay: string[];
 	if ( isExpanded ) {
@@ -48,6 +49,7 @@ export function Product( { id }: Props ) {
 			searchResults.features.has( featureId )
 		);
 	}
+	const sortedFeaturesToDisplay = sortEntityIdsByName( featuresToDisplay, features );
 
 	return (
 		<li>
@@ -61,10 +63,10 @@ export function Product( { id }: Props ) {
 				</SubstringHighlighter>
 			</button>
 			<ul>
-				{ featureGroupsToDisplay.map( ( featureGroupId ) => (
+				{ sortedFeatureGroupsToDisplay.map( ( featureGroupId ) => (
 					<FeatureGroup key={ featureGroupId } id={ featureGroupId } />
 				) ) }
-				{ featuresToDisplay.map( ( featureId ) => (
+				{ sortedFeaturesToDisplay.map( ( featureId ) => (
 					<Feature key={ featureId } id={ featureId } />
 				) ) }
 			</ul>

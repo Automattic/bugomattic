@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '../app';
+import { sortEntityIdsByName } from '../common';
 import {
 	selectNormalizedReportingConfig,
 	selectReportingConfigSearchTerm,
@@ -17,18 +18,21 @@ export function FeatureSelector() {
 		[ dispatch, setReportingConfigSearchTerm ]
 	);
 
-	const reportingConfig = useAppSelector( selectNormalizedReportingConfig );
+	const { products } = useAppSelector( selectNormalizedReportingConfig );
 	const searchTerm = useAppSelector( selectReportingConfigSearchTerm );
 	const searchResults = useAppSelector( selectReportingConfigSearchResults );
 
-	const createProductListDisplay = ( productIds: string[] ) => (
-		<ul>
-			{ productIds.map( ( productId ) => (
-				<Product key={ productId } id={ productId } />
-			) ) }
-		</ul>
-	);
-	const allProductIds = Object.keys( reportingConfig.products );
+	const createProductListDisplay = ( productIds: string[] ) => {
+		const sortedProductIds = sortEntityIdsByName( productIds, products );
+		return (
+			<ul>
+				{ sortedProductIds.map( ( productId ) => (
+					<Product key={ productId } id={ productId } />
+				) ) }
+			</ul>
+		);
+	};
+	const allProductIds = Object.keys( products );
 
 	let display: React.ReactNode;
 	if ( ! searchTerm ) {

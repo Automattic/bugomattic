@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { useAppSelector } from '../app';
-import { SubstringHighlighter } from '../common';
+import { sortEntityIdsByName, SubstringHighlighter } from '../common';
 import {
 	selectNormalizedReportingConfig,
 	selectReportingConfigSearchResults,
@@ -23,7 +23,7 @@ export function FeatureGroup( { id }: Props ) {
 	const expandedIcon = <>&#x2C5;</>;
 	const icon = isExpanded ? expandedIcon : collapsedIcon;
 
-	const { featureGroups } = useAppSelector( selectNormalizedReportingConfig );
+	const { featureGroups, features } = useAppSelector( selectNormalizedReportingConfig );
 	const { name: featureGroupName, featureIds } = featureGroups[ id ];
 
 	const searchTerm = useAppSelector( selectReportingConfigSearchTerm );
@@ -38,6 +38,8 @@ export function FeatureGroup( { id }: Props ) {
 		);
 	}
 
+	const sortedFeaturesToDisplay = sortEntityIdsByName( featuresToDisplay, features );
+
 	return (
 		<li>
 			<button onClick={ handleExpandToggle }>
@@ -50,7 +52,7 @@ export function FeatureGroup( { id }: Props ) {
 				</SubstringHighlighter>
 			</button>
 			<ul>
-				{ featuresToDisplay.map( ( featureId ) => (
+				{ sortedFeaturesToDisplay.map( ( featureId ) => (
 					<Feature key={ featureId } id={ featureId } />
 				) ) }
 			</ul>
