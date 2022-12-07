@@ -2794,6 +2794,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/path-browserify@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "@types/path-browserify@npm:1.0.0"
+  checksum: e3f98ef9638fb75dc7547c3cde5fa86bc5986e38403ec91234abcc7b911e30711af7c6abc674d617d27c4a6c09e7f8e9d77662b1cc45d00d4708d94764202b61
+  languageName: node
+  linkType: hard
+
 "@types/prettier@npm:^2.1.5":
   version: 2.7.1
   resolution: "@types/prettier@npm:2.7.1"
@@ -4104,6 +4111,7 @@ __metadata:
     "@testing-library/user-event": ^14.4.3
     "@types/jest": ^29.1.2
     "@types/node": ^16.7.13
+    "@types/path-browserify": ^1.0.0
     "@types/react": ^18.0.0
     "@types/react-dom": ^18.0.0
     "@typescript-eslint/eslint-plugin": ^5.0.0
@@ -4118,6 +4126,7 @@ __metadata:
     eslint-plugin-react: ^7.31.10
     husky: ^8.0.0
     lint-staged: ^13.0.3
+    path-browserify: ^1.0.1
     prettier: "npm:wp-prettier@latest"
     react: ^18.2.0
     react-dom: ^18.2.0
@@ -9907,6 +9916,13 @@ __metadata:
     no-case: ^3.0.4
     tslib: ^2.0.3
   checksum: ba98bfd595fc91ef3d30f4243b1aee2f6ec41c53b4546bfa3039487c367abaa182471dcfc830a1f9e1a0df00c14a370514fa2b3a1aacc68b15a460c31116873e
+  languageName: node
+  linkType: hard
+
+"path-browserify@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "path-browserify@npm:1.0.1"
+  checksum: c6d7fa376423fe35b95b2d67990060c3ee304fc815ff0a2dc1c6c3cfaff2bd0d572ee67e18f19d0ea3bbe32e8add2a05021132ac40509416459fffee35200699
   languageName: node
   linkType: hard
 
