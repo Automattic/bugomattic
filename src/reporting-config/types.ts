@@ -7,6 +7,7 @@ export interface ReportingConfigState {
 	indexed: IndexedReportingConfig;
 	status: 'empty' | 'loading' | 'loaded' | 'error';
 	error: string | null;
+	searchTerm: string;
 }
 
 /**
@@ -132,4 +133,10 @@ export interface SearchMatch {
 	entityType: TaskParentEntityType;
 	entityId: string;
 	keywordMatch?: string;
+}
+
+export interface ReportingConfigSearchResults {
+	products: Set< string >;
+	featureGroups: Set< string >;
+	features: Set< string >;
 }

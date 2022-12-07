@@ -46,6 +46,7 @@ describe( '[reporting-config-slice]', () => {
 				reportingConfig: {
 					normalized: normalized,
 					indexed: {} as any,
+					searchTerm: '',
 					status: 'loaded',
 					error: null,
 				},
@@ -99,6 +100,7 @@ describe( '[reporting-config-slice]', () => {
 				reportingConfig: {
 					normalized: normalized,
 					indexed: {} as any,
+					searchTerm: '',
 					status: 'loaded',
 					error: null,
 				},
@@ -193,6 +195,7 @@ describe( '[reporting-config-slice]', () => {
 				reportingConfig: {
 					normalized: normalized,
 					indexed: {} as any,
+					searchTerm: '',
 					status: 'loaded',
 					error: null,
 				},
@@ -291,6 +294,7 @@ describe( '[reporting-config-slice]', () => {
 				completedTasks: [],
 				reportingConfig: {
 					normalized: normalized,
+					searchTerm: '',
 					indexed: {} as any,
 					status: 'loaded',
 					error: null,
@@ -370,6 +374,7 @@ describe( '[reporting-config-slice]', () => {
 				reportingConfig: {
 					normalized: normalized,
 					indexed: {} as any,
+					searchTerm: '',
 					status: 'loaded',
 					error: null,
 				},

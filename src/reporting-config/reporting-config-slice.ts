@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '../app/store';
 import { ApiClient, ReportingConfigApiResponse } from '../api';
 import {
@@ -9,8 +9,10 @@ import {
 	TaskDetails,
 	TaskParentEntityType,
 	SearchMatch,
+	ReportingConfigSearchResults,
 } from './types';
 import { indexReportingConfig, normalizeReportingConfig } from './reporting-config-parsers';
+import { includesIgnoringCase } from '../common';
 
 const initialNormalizedReportingConfig: NormalizedReportingConfig = {
 	products: {},
@@ -28,6 +30,7 @@ const initialState: ReportingConfigState = {
 	indexed: initialIndexedReportingConfig,
 	status: 'empty',
 	error: null,
+	searchTerm: '',
 };
 
 export const loadReportingConfig = createAsyncThunk<
@@ -42,7 +45,14 @@ export const loadReportingConfig = createAsyncThunk<
 export const reportingConfigSlice = createSlice( {
 	name: 'reportingConfig',
 	initialState,
-	reducers: {},
+	reducers: {
+		setReportingConfigSearchTerm( state, action: PayloadAction< string > ) {
+			return {
+				...state,
+				searchTerm: action.payload,
+			};
+		},
+	},
 	extraReducers: ( builder ) => {
 		builder
 			.addCase( loadReportingConfig.pending, ( state ) => {
@@ -60,6 +70,7 @@ export const reportingConfigSlice = createSlice( {
 			} )
 			.addCase( loadReportingConfig.fulfilled, ( state, { payload } ) => {
 				return {
+					...state,
 					normalized: normalizeReportingConfig( payload ),
 					indexed: indexReportingConfig( payload ),
 					status: 'loaded',
@@ -70,6 +81,8 @@ export const reportingConfigSlice = createSlice( {
 } );
 
 export const reportingConfigReducer = reportingConfigSlice.reducer;
+
+export const { setReportingConfigSearchTerm } = reportingConfigSlice.actions;
 
 /* Selectors */
 
@@ -91,6 +104,10 @@ export function selectReportingConfigLoadStatus( state: RootState ) {
 
 export function selectReportingConfigError( state: RootState ) {
 	return state.reportingConfig.error;
+}
+
+export function selectReportingConfigSearchTerm( state: RootState ) {
+	return state.reportingConfig.searchTerm;
 }
 
 export function selectRelevantTaskIds( state: RootState ): string[] {
@@ -186,39 +203,54 @@ function deduplicateTasksIds( state: RootState, taskIds: string[] ): string[] {
 	return finalTaskIds;
 }
 
-function selectSearchMatches( search: string ) {
-	return ( state: RootState ) => {
-		const normalizedReportingConfig = selectNormalizedReportingConfig( state );
+export const selectReportingConfigSearchResults = createSelector(
+	[ selectReportingConfigSearchTerm, selectNormalizedReportingConfig ],
+	( searchTerm, reportingConfig ) => {
+		const { features, featureGroups, products } = reportingConfig;
+		const searchResults: ReportingConfigSearchResults = {
+			products: new Set< string >(),
+			featureGroups: new Set< string >(),
+			features: new Set< string >(),
+		};
 
-		const matches: SearchMatch[] = [];
+		if ( ! searchTerm ) {
+			return searchResults;
+		}
 
-		for ( const productId in normalizedReportingConfig.products ) {
-			const product = normalizedReportingConfig.products[ productId ];
-			if ( product.name.includes( search ) ) {
-				matches.push( { entityType: 'product', entityId: productId } );
+		for ( const productId in products ) {
+			const product = products[ productId ];
+			if ( includesIgnoringCase( product.name, searchTerm ) ) {
+				searchResults.products.add( productId );
 			}
 		}
 
-		for ( const featureGroupId in normalizedReportingConfig.featureGroups ) {
-			const featureGroup = normalizedReportingConfig.featureGroups[ featureGroupId ];
-			if ( featureGroup.name.includes( search ) ) {
-				matches.push( { entityType: 'featureGroup', entityId: featureGroupId } );
+		for ( const featureGroupId in featureGroups ) {
+			const featureGroup = featureGroups[ featureGroupId ];
+			if ( includesIgnoringCase( featureGroup.name, searchTerm ) ) {
+				searchResults.featureGroups.add( featureGroupId );
+				searchResults.products.add( featureGroup.productId );
 			}
 		}
 
-		for ( const featureId in normalizedReportingConfig.features ) {
-			const feature = normalizedReportingConfig.features[ featureId ];
-			if ( feature.name.includes( search ) ) {
-				matches.push( { entityType: 'featureGroup', entityId: featureId } );
-				continue;
-			}
+		for ( const featureId in features ) {
+			const feature = features[ featureId ];
+			const keywordsIncludeSearchTerm = () =>
+				feature.keywords?.some( ( keyword ) => includesIgnoringCase( keyword, searchTerm ) );
 
-			const keywordMatch = feature.keywords?.find( ( keyword ) => keyword.includes( search ) );
-			if ( keywordMatch ) {
-				matches.push( { entityType: 'feature', entityId: featureId, keywordMatch: keywordMatch } );
+			if ( includesIgnoringCase( feature.name, searchTerm ) || keywordsIncludeSearchTerm() ) {
+				searchResults.features.add( featureId );
+
+				const feature = features[ featureId ];
+				if ( feature.parentType === 'product' ) {
+					searchResults.products.add( feature.parentId );
+				} else {
+					searchResults.featureGroups.add( feature.parentId );
+					const parentFeatureGroup = featureGroups[ feature.parentId ];
+					searchResults.products.add( parentFeatureGroup.productId );
+				}
 			}
 		}
 
-		return matches;
-	};
-}
+		return searchResults;
+	}
+);

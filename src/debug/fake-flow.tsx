@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../app';
 import { addCompletedTask, removeCompletedTask, selectCompletedTasks } from '../completed-tasks';
-import { IssueType, selectIssueDetails, setIssueFeature, setIssueType } from '../issue-details';
+import { IssueType, selectIssueDetails, setIssueFeatureId, setIssueType } from '../issue-details';
+import { FeatureSelector } from '../issue-details/feature-selector';
 import { useMonitoring } from '../monitoring';
 import { selectNormalizedReportingConfig, selectRelevantTaskIds } from '../reporting-config';
 
@@ -16,12 +17,8 @@ export function FakeFlow() {
 	);
 	return (
 		<div>
-			<h2>Collect Issue Details:</h2>
-			<FakeIssueForm />
-			<h2>Tasks:</h2>
-			<FakeTaskList />
-			<h2>Monitoring Tester:</h2>
-			<MonitoringTester />
+			<h2>Feature Test:</h2>
+			<FeatureSelector />
 		</div>
 	);
 }
@@ -47,9 +44,9 @@ function FakeIssueForm() {
 		( event: React.ChangeEvent< HTMLSelectElement > ) => {
 			const featureId = event.currentTarget.value;
 			if ( featureId === noFeatureSelected ) {
-				dispatch( setIssueFeature( null ) );
+				dispatch( setIssueFeatureId( null ) );
 			} else {
-				dispatch( setIssueFeature( featureId ) );
+				dispatch( setIssueFeatureId( featureId ) );
 			}
 		},
 		[ features, dispatch ]

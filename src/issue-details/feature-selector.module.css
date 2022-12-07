@@ -1,0 +1,17 @@
+.selectedFeature {
+	background-color: lightblue;
+}
+
+button {
+	background: inherit;
+	border: none;
+}
+
+ul {
+	list-style: none;
+}
+
+.searchSubstringMatch {
+	font-weight: 700;
+	text-decoration: underline;
+}
