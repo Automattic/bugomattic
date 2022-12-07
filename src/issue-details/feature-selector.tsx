@@ -9,6 +9,7 @@ import {
 } from '../reporting-config';
 import { Product } from './product';
 import { Search } from './search';
+import styles from './feature-selector.module.css';
 
 export function FeatureSelector() {
 	const dispatch = useAppDispatch();
@@ -25,7 +26,7 @@ export function FeatureSelector() {
 	const createProductListDisplay = ( productIds: string[] ) => {
 		const sortedProductIds = sortEntityIdsByName( productIds, products );
 		return (
-			<ul>
+			<ul className={ styles.productList }>
 				{ sortedProductIds.map( ( productId ) => (
 					<Product key={ productId } id={ productId } />
 				) ) }
@@ -43,13 +44,16 @@ export function FeatureSelector() {
 		);
 		display = createProductListDisplay( filteredProductIds );
 	} else {
-		display = <p>No results found. Try a different search.</p>;
+		display = (
+			<p className={ styles.noResultsMessage }>No results found. Try a different search.</p>
+		);
 	}
 
 	return (
-		<div>
+		<section>
+			<h2>1. Select a Feature</h2>
 			<Search searchTerm={ searchTerm } handleSearch={ handleSearch } />
-			<div>{ display }</div>
-		</div>
+			<div className={ styles.reportingConfigTree }>{ display }</div>
+		</section>
 	);
 }

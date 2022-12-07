@@ -1,6 +1,8 @@
 import React, { useCallback, useState } from 'react';
 import { useAppSelector } from '../app';
 import { sortEntityIdsByName, SubstringHighlighter } from '../common';
+import { CollapsedIcon } from '../common/components/collapsed-icon';
+import { ExpandedIcon } from '../common/components/expanded-icon';
 import {
 	selectNormalizedReportingConfig,
 	selectReportingConfigSearchResults,
@@ -19,9 +21,12 @@ export function FeatureGroup( { id }: Props ) {
 		setIsExpanded( ! isExpanded );
 	}, [ isExpanded, setIsExpanded ] );
 
-	const collapsedIcon = <>&#x2C3;</>;
-	const expandedIcon = <>&#x2C5;</>;
-	const icon = isExpanded ? expandedIcon : collapsedIcon;
+	let icon: React.ReactNode;
+	if ( isExpanded ) {
+		icon = <ExpandedIcon className={ styles.inlineIcon } />;
+	} else {
+		icon = <CollapsedIcon className={ styles.inlineIcon } />;
+	}
 
 	const { featureGroups, features } = useAppSelector( selectNormalizedReportingConfig );
 	const { name: featureGroupName, featureIds } = featureGroups[ id ];
@@ -42,7 +47,7 @@ export function FeatureGroup( { id }: Props ) {
 
 	return (
 		<li>
-			<button onClick={ handleExpandToggle }>
+			<button className={ styles.treeNode } onClick={ handleExpandToggle }>
 				<span>{ icon }</span>
 				<SubstringHighlighter
 					substring={ searchTerm }

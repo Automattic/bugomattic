@@ -38,8 +38,11 @@ export function Feature( { id }: Props ) {
 	}
 
 	return (
-		<li className={ isSelected ? styles.selectedFeature : '' }>
-			<button onClick={ handleFeatureSelect }>
+		<li>
+			<button
+				className={ [ styles.treeNode, isSelected ? styles.selectedFeature : '' ].join( ' ' ) }
+				onClick={ handleFeatureSelect }
+			>
 				<SubstringHighlighter
 					substring={ searchTerm }
 					highlightClassName={ styles.searchSubstringMatch }
