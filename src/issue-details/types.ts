@@ -5,9 +5,3 @@ export interface IssueDetails {
 	issueType: IssueType;
 	issueTitle: string;
 }
-
-export interface FilteredResults {
-	products: Set< string >;
-	featureGroups: Set< string >;
-	features: Set< string >;
-}

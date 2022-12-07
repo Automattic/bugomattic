@@ -8,7 +8,6 @@ import {
 } from '../reporting-config';
 import { Feature } from './feature';
 import { FeatureGroup } from './feature-group';
-import { FilteredResults } from './types';
 import styles from './feature-selector.module.css';
 
 interface Props {
