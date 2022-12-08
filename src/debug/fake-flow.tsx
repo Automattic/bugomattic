@@ -13,7 +13,6 @@ export function FakeFlow() {
 	);
 	return (
 		<div>
-			<h2>Select a feature:</h2>
 			<FeatureSelector />
 		</div>
 	);

@@ -40,11 +40,16 @@
 	color: var( --color-text-light );
 }
 
-.productList {
+ul.firstLevel {
 	padding-left: 0.25rem;
 }
 
+ul.subLevel {
+	padding-left: 2.5rem;
+}
+
 .inlineIcon {
-	margin-right: 0.75rem;
-	font-size: 0.8rem;
+	margin-right: 0.25rem;
+	height: 1rem;
+	width: 1rem;
 }

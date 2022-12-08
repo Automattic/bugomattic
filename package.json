@@ -38,9 +38,11 @@
 	"packageManager": "yarn@3.2.4",
 	"dependencies": {
 		"@reduxjs/toolkit": "^1.8.6",
+		"@types/lodash.debounce": "^4.0.7",
 		"@types/node": "^16.7.13",
 		"@types/react": "^18.0.0",
 		"@types/react-dom": "^18.0.0",
+		"lodash.debounce": "^4.0.8",
 		"path-browserify": "^1.0.1",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",

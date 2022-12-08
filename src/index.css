@@ -20,6 +20,25 @@ h6 {
 	color: var( --color-text-dark );
 }
 
-code {
+input[type='text'],
+input[type='search'],
+input[type='email'] {
+	font-size: 1rem;
+	padding: 0.75rem 0.5rem;
+	width: 100%;
+	background-color: var( --color-neutral );
+	border: 2px solid transparent;
+	box-sizing: border-box;
+}
+
+input[type='text']:focus,
+input[type='search']:focus,
+input[type='email']:focus {
+	background-color: var( --color-white );
+	border: 2px solid var( --color-primary );
+	outline: none;
+}
+
+input code {
 	font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }

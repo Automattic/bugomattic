@@ -1,8 +1,8 @@
 import React, { useCallback, useState } from 'react';
 import { useAppSelector } from '../app';
 import { sortEntityIdsByName, SubstringHighlighter } from '../common';
-import { CollapsedIcon } from '../common/components/collapsed-icon';
-import { ExpandedIcon } from '../common/components/expanded-icon';
+import { ReactComponent as CollapsedIcon } from '../common/svgs/chevron-right.svg';
+import { ReactComponent as ExpandedIcon } from '../common/svgs/chevron-down.svg';
 import {
 	selectNormalizedReportingConfig,
 	selectReportingConfigSearchResults,
@@ -48,7 +48,7 @@ export function FeatureGroup( { id }: Props ) {
 	return (
 		<li>
 			<button className={ styles.treeNode } onClick={ handleExpandToggle }>
-				<span>{ icon }</span>
+				{ icon }
 				<SubstringHighlighter
 					substring={ searchTerm }
 					highlightClassName={ styles.searchSubstringMatch }
@@ -56,7 +56,7 @@ export function FeatureGroup( { id }: Props ) {
 					{ featureGroupName }
 				</SubstringHighlighter>
 			</button>
-			<ul>
+			<ul className={ styles.subLevel }>
 				{ sortedFeaturesToDisplay.map( ( featureId ) => (
 					<Feature key={ featureId } id={ featureId } />
 				) ) }

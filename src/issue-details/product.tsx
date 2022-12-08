@@ -1,8 +1,8 @@
 import React, { useCallback, useState } from 'react';
 import { useAppSelector } from '../app';
 import { sortEntityIdsByName, SubstringHighlighter } from '../common';
-import { CollapsedIcon } from '../common/components/collapsed-icon';
-import { ExpandedIcon } from '../common/components/expanded-icon';
+import { ReactComponent as CollapsedIcon } from '../common/svgs/chevron-right.svg';
+import { ReactComponent as ExpandedIcon } from '../common/svgs/chevron-down.svg';
 import {
 	selectNormalizedReportingConfig,
 	selectReportingConfigSearchResults,
@@ -67,7 +67,7 @@ export function Product( { id }: Props ) {
 					{ productName }
 				</SubstringHighlighter>
 			</button>
-			<ul>
+			<ul className={ styles.subLevel }>
 				{ sortedFeatureGroupsToDisplay.map( ( featureGroupId ) => (
 					<FeatureGroup key={ featureGroupId } id={ featureGroupId } />
 				) ) }
