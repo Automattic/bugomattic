@@ -1,5 +1,6 @@
 .wrapper {
 	position: relative;
+	display: flex;
 }
 
 /* Overriding base styles with more specificity requires including input element */
@@ -8,12 +9,20 @@ input.search {
 	padding: 0.75rem 2rem 0.75rem 0.5rem;
 }
 
-.icon {
+.button {
 	position: absolute;
+	height: 100%;
+	background: transparent;
+	border: none;
 	right: 0;
 	top: 0;
-	height: 1.5rem;
-	width: 1.5rem;
-	margin-right: 0.5rem;
-	margin-top: 0.75rem;
+	padding-left: 0.5rem;
+	padding-right: 0.5rem;
+	border: 2px solid transparent;
+}
+
+.button:hover,
+.button:focus {
+	border: 2px solid var( --color-primary );
+	outline: none;
 }

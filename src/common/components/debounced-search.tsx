@@ -19,10 +19,11 @@ export function DebouncedSearch( {
 	const [ searchTerm, setSearchTerm ] = useState( '' );
 	const debouncedCallback = useCallback( debounce( callback, debounceMs ), [ callback, debounce ] );
 
-	const handleBlur = () => debouncedCallback.flush();
+	const flushDebounce = () => debouncedCallback.flush();
+
 	const handleEnter = ( event: React.KeyboardEvent ) => {
 		if ( event.key === 'Enter' ) {
-			debouncedCallback.flush();
+			flushDebounce();
 		}
 	};
 
@@ -44,11 +45,13 @@ export function DebouncedSearch( {
 				placeholder={ placeholder }
 				type="text"
 				value={ searchTerm }
+				onBlur={ flushDebounce }
 				onChange={ handleChange }
-				onBlur={ handleBlur }
 				onKeyUp={ handleEnter }
 			/>
-			<SearchIcon className={ styles.icon }></SearchIcon>
+			<button onClick={ flushDebounce } className={ styles.button } aria-label="Search">
+				<SearchIcon aria-hidden={ true }></SearchIcon>
+			</button>
 		</div>
 	);
 }
