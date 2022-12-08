@@ -24,31 +24,24 @@ export function FeatureSelector() {
 	const searchResults = useAppSelector( selectReportingConfigSearchResults );
 
 	const productListElementId = 'product-list-id';
-	const createProductListDisplay = ( productIds: string[] ) => {
-		const sortedProductIds = sortEntityIdsByName( productIds, products );
-		return (
-			<ul id={ productListElementId } aria-label="Product list" className={ styles.firstLevel }>
-				{ sortedProductIds.map( ( productId ) => (
-					<Product key={ productId } id={ productId } />
-				) ) }
-			</ul>
-		);
-	};
+
+	const noResultsFound = searchTerm && searchResults.products.size === 0;
+	const noResultsFoundMessage = (
+		<p className={ styles.noResultsMessage } aria-live="polite">
+			No results found. Try a different search or explore manually below.
+		</p>
+	);
 
 	const allProductIds = Object.keys( products );
-	let display: React.ReactNode;
-	if ( ! searchTerm ) {
-		display = createProductListDisplay( allProductIds );
-	} else if ( searchResults.products.size > 0 ) {
-		const filteredProductIds = allProductIds.filter( ( productId ) =>
+	let productsToDisplay: string[];
+	if ( ! searchTerm || noResultsFound ) {
+		productsToDisplay = allProductIds;
+	} else {
+		productsToDisplay = allProductIds.filter( ( productId ) =>
 			searchResults.products.has( productId )
 		);
-		display = createProductListDisplay( filteredProductIds );
-	} else {
-		display = (
-			<p className={ styles.noResultsMessage }>No results found. Try a different search.</p>
-		);
 	}
+	const sortedProductsToDisplay = sortEntityIdsByName( productsToDisplay, products );
 
 	return (
 		<section>
@@ -58,7 +51,14 @@ export function FeatureSelector() {
 				callback={ handleSearch }
 				placeholder="Search for a feature"
 			/>
-			<div className={ styles.reportingConfigTree }>{ display }</div>
+			{ noResultsFound && noResultsFoundMessage }
+			<div className={ styles.reportingConfigTree }>
+				<ul id={ productListElementId } aria-label="Product list" className={ styles.firstLevel }>
+					{ sortedProductsToDisplay.map( ( productId ) => (
+						<Product key={ productId } id={ productId } />
+					) ) }
+				</ul>
+			</div>
 		</section>
 	);
 }

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAppSelector } from '../app';
 import { sortEntityIdsByName, SubstringHighlighter } from '../common';
 import { ReactComponent as CollapsedIcon } from '../common/svgs/chevron-right.svg';
@@ -35,6 +35,9 @@ export function Product( { id }: Props ) {
 
 	const searchTerm = useAppSelector( selectReportingConfigSearchTerm );
 	const searchResults = useAppSelector( selectReportingConfigSearchResults );
+
+	// Recollapse after every new search term
+	useEffect( () => setIsExpanded( false ), [ searchTerm ] );
 
 	let featureGroupsToDisplay: string[];
 	if ( isExpanded ) {
