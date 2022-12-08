@@ -32,14 +32,15 @@ export function DebouncedSearch( {
 		debouncedCallback( newSearchTerm );
 	};
 
-	const finalClassNames = [ styles.search ];
+	const classNames = [ styles.search ];
 	if ( className ) {
-		finalClassNames.push( className );
+		classNames.push( className );
 	}
+
 	return (
 		<div className={ styles.wrapper }>
 			<input
-				className={ finalClassNames.join( ' ' ) }
+				className={ classNames.join( ' ' ) }
 				placeholder={ placeholder }
 				type="text"
 				value={ searchTerm }

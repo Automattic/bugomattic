@@ -14,13 +14,14 @@ interface Props {
 
 export function Feature( { id }: Props ) {
 	const dispatch = useAppDispatch();
-	const handleFeatureSelect = useCallback(
-		() => dispatch( setIssueFeatureId( id ) ),
-		[ dispatch, setIssueFeatureId, id ]
-	);
+	const handleFeatureSelect = () => dispatch( setIssueFeatureId( id ) );
 
 	const { featureId: selectedFeatureId } = useAppSelector( selectIssueDetails );
 	const isSelected = id === selectedFeatureId;
+	const classNames = [ styles.treeNode ];
+	if ( isSelected ) {
+		classNames.push( styles.selectedFeature );
+	}
 
 	const { features } = useAppSelector( selectNormalizedReportingConfig );
 	const featureDetails = features[ id ];
@@ -39,10 +40,7 @@ export function Feature( { id }: Props ) {
 
 	return (
 		<li>
-			<button
-				className={ [ styles.treeNode, isSelected ? styles.selectedFeature : '' ].join( ' ' ) }
-				onClick={ handleFeatureSelect }
-			>
+			<button className={ classNames.join( ' ' ) } onClick={ handleFeatureSelect }>
 				<SubstringHighlighter
 					substring={ searchTerm }
 					highlightClassName={ styles.searchSubstringMatch }

@@ -4,6 +4,14 @@
 	list-style: none;
 }
 
+ul.firstLevel {
+	padding-left: 0.25rem;
+}
+
+ul.subLevel {
+	padding-left: 2.5rem;
+}
+
 .treeNode {
 	background-color: inherit;
 	border: none;
@@ -38,14 +46,6 @@
 
 .noResultsMessage {
 	color: var( --color-text-light );
-}
-
-ul.firstLevel {
-	padding-left: 0.25rem;
-}
-
-ul.subLevel {
-	padding-left: 2.5rem;
 }
 
 .inlineIcon {

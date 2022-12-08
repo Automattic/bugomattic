@@ -18,10 +18,7 @@ interface Props {
 
 export function Product( { id }: Props ) {
 	const [ isExpanded, setIsExpanded ] = useState( false );
-
-	const handleExpandToggle = useCallback( () => {
-		setIsExpanded( ! isExpanded );
-	}, [ isExpanded, setIsExpanded ] );
+	const handleCollapseExpandToggle = () => setIsExpanded( ! isExpanded );
 
 	let icon: React.ReactNode;
 	if ( isExpanded ) {
@@ -58,7 +55,7 @@ export function Product( { id }: Props ) {
 
 	return (
 		<li>
-			<button className={ styles.treeNode } onClick={ handleExpandToggle }>
+			<button className={ styles.treeNode } onClick={ handleCollapseExpandToggle }>
 				{ icon }
 				<SubstringHighlighter
 					substring={ searchTerm }

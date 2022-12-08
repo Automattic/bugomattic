@@ -33,8 +33,8 @@ export function FeatureSelector() {
 			</ul>
 		);
 	};
-	const allProductIds = Object.keys( products );
 
+	const allProductIds = Object.keys( products );
 	let display: React.ReactNode;
 	if ( ! searchTerm ) {
 		display = createProductListDisplay( allProductIds );

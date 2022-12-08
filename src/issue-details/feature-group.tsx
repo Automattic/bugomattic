@@ -17,9 +17,7 @@ interface Props {
 
 export function FeatureGroup( { id }: Props ) {
 	const [ isExpanded, setIsExpanded ] = useState( false );
-	const handleExpandToggle = useCallback( () => {
-		setIsExpanded( ! isExpanded );
-	}, [ isExpanded, setIsExpanded ] );
+	const handleCollapseExpandToggle = () => setIsExpanded( ! isExpanded );
 
 	let icon: React.ReactNode;
 	if ( isExpanded ) {
@@ -42,12 +40,11 @@ export function FeatureGroup( { id }: Props ) {
 			searchResults.features.has( featureId )
 		);
 	}
-
 	const sortedFeaturesToDisplay = sortEntityIdsByName( featuresToDisplay, features );
 
 	return (
 		<li>
-			<button className={ styles.treeNode } onClick={ handleExpandToggle }>
+			<button className={ styles.treeNode } onClick={ handleCollapseExpandToggle }>
 				{ icon }
 				<SubstringHighlighter
 					substring={ searchTerm }
