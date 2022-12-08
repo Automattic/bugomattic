@@ -17,14 +17,17 @@ interface Props {
 }
 
 export function Product( { id }: Props ) {
+	const featureGroupSublistElementId = `product-${ id }-group-sublist`;
+	const featureSublistElementId = `product-${ id }-feature-sublist`;
+
 	const [ isExpanded, setIsExpanded ] = useState( false );
 	const handleCollapseExpandToggle = () => setIsExpanded( ! isExpanded );
 
 	let icon: React.ReactNode;
 	if ( isExpanded ) {
-		icon = <ExpandedIcon className={ styles.inlineIcon } />;
+		icon = <ExpandedIcon aria-hidden={ true } className={ styles.inlineIcon } />;
 	} else {
-		icon = <CollapsedIcon className={ styles.inlineIcon } />;
+		icon = <CollapsedIcon aria-hidden={ true } className={ styles.inlineIcon } />;
 	}
 
 	const { products, featureGroups, features } = useAppSelector( selectNormalizedReportingConfig );
@@ -55,7 +58,12 @@ export function Product( { id }: Props ) {
 
 	return (
 		<li>
-			<button className={ styles.treeNode } onClick={ handleCollapseExpandToggle }>
+			<button
+				aria-expanded={ isExpanded }
+				aria-controls={ [ featureGroupSublistElementId, featureSublistElementId ].join( ' ' ) }
+				className={ styles.treeNode }
+				onClick={ handleCollapseExpandToggle }
+			>
 				{ icon }
 				<SubstringHighlighter
 					substring={ searchTerm }
@@ -64,10 +72,20 @@ export function Product( { id }: Props ) {
 					{ productName }
 				</SubstringHighlighter>
 			</button>
-			<ul className={ styles.subLevel }>
+			<ul
+				aria-label={ `List of feature groups for ${ productName }` }
+				id={ featureGroupSublistElementId }
+				className={ styles.subLevel }
+			>
 				{ sortedFeatureGroupsToDisplay.map( ( featureGroupId ) => (
 					<FeatureGroup key={ featureGroupId } id={ featureGroupId } />
 				) ) }
+			</ul>
+			<ul
+				aria-label={ `List of features for ${ productName }` }
+				id={ featureSublistElementId }
+				className={ styles.subLevel }
+			>
 				{ sortedFeaturesToDisplay.map( ( featureId ) => (
 					<Feature key={ featureId } id={ featureId } />
 				) ) }

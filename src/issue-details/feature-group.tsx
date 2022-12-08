@@ -16,14 +16,16 @@ interface Props {
 }
 
 export function FeatureGroup( { id }: Props ) {
+	const sublistElementId = `feature-group-${ id }-sublist`;
+
 	const [ isExpanded, setIsExpanded ] = useState( false );
 	const handleCollapseExpandToggle = () => setIsExpanded( ! isExpanded );
 
 	let icon: React.ReactNode;
 	if ( isExpanded ) {
-		icon = <ExpandedIcon className={ styles.inlineIcon } />;
+		icon = <ExpandedIcon aria-hidden={ true } className={ styles.inlineIcon } />;
 	} else {
-		icon = <CollapsedIcon className={ styles.inlineIcon } />;
+		icon = <CollapsedIcon aria-hidden={ true } className={ styles.inlineIcon } />;
 	}
 
 	const { featureGroups, features } = useAppSelector( selectNormalizedReportingConfig );
@@ -44,7 +46,12 @@ export function FeatureGroup( { id }: Props ) {
 
 	return (
 		<li>
-			<button className={ styles.treeNode } onClick={ handleCollapseExpandToggle }>
+			<button
+				aria-expanded={ isExpanded }
+				aria-controls={ sublistElementId }
+				className={ styles.treeNode }
+				onClick={ handleCollapseExpandToggle }
+			>
 				{ icon }
 				<SubstringHighlighter
 					substring={ searchTerm }
@@ -53,7 +60,11 @@ export function FeatureGroup( { id }: Props ) {
 					{ featureGroupName }
 				</SubstringHighlighter>
 			</button>
-			<ul className={ styles.subLevel }>
+			<ul
+				aria-label={ `List of features for ${ featureGroupName }` }
+				id={ sublistElementId }
+				className={ styles.subLevel }
+			>
 				{ sortedFeaturesToDisplay.map( ( featureId ) => (
 					<Feature key={ featureId } id={ featureId } />
 				) ) }

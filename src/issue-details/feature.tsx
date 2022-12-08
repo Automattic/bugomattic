@@ -40,7 +40,12 @@ export function Feature( { id }: Props ) {
 
 	return (
 		<li>
-			<button className={ classNames.join( ' ' ) } onClick={ handleFeatureSelect }>
+			<button
+				role="option"
+				aria-selected={ isSelected }
+				className={ classNames.join( ' ' ) }
+				onClick={ handleFeatureSelect }
+			>
 				<SubstringHighlighter
 					substring={ searchTerm }
 					highlightClassName={ styles.searchSubstringMatch }

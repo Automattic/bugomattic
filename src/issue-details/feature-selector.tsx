@@ -23,10 +23,11 @@ export function FeatureSelector() {
 	const searchTerm = useAppSelector( selectReportingConfigSearchTerm );
 	const searchResults = useAppSelector( selectReportingConfigSearchResults );
 
+	const productListElementId = 'product-list-id';
 	const createProductListDisplay = ( productIds: string[] ) => {
 		const sortedProductIds = sortEntityIdsByName( productIds, products );
 		return (
-			<ul className={ styles.firstLevel }>
+			<ul id={ productListElementId } aria-label="Product list" className={ styles.firstLevel }>
 				{ sortedProductIds.map( ( productId ) => (
 					<Product key={ productId } id={ productId } />
 				) ) }
@@ -52,7 +53,11 @@ export function FeatureSelector() {
 	return (
 		<section>
 			<h2>1. Select a Feature</h2>
-			<DebouncedSearch callback={ handleSearch } placeholder="Search for a feature" />
+			<DebouncedSearch
+				aria-controls={ productListElementId }
+				callback={ handleSearch }
+				placeholder="Search for a feature"
+			/>
 			<div className={ styles.reportingConfigTree }>{ display }</div>
 		</section>
 	);
