@@ -12,6 +12,9 @@
 /build
 /dist
 
+# mac files
+**/.DS_store
+
 # package logs
 npm-debug.log*
 yarn-debug.log*
