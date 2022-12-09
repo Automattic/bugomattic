@@ -16,7 +16,7 @@ export function sortEntityIdsByName( entityIds: string[], entityDictionary: Enti
 			return -1;
 		}
 
-		if ( nameB > nameA ) {
+		if ( nameA > nameB ) {
 			return 1;
 		}
 
