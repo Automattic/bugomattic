@@ -46,6 +46,11 @@
 .searchSubstringMatch {
 	font-weight: 700;
 	text-decoration: underline;
+	background-color: var( --color-primary-extra-light );
+}
+
+.selectedFeature .searchSubstringMatch {
+	background-color: var( --color-primary-dark );
 }
 
 .noResultsMessage {
