@@ -18,7 +18,7 @@ export function Feature( { id }: Props ) {
 
 	const { featureId: selectedFeatureId } = useAppSelector( selectIssueDetails );
 	const isSelected = id === selectedFeatureId;
-	const classNames = [ styles.treeNode ];
+	const classNames = [ styles.treeNode, styles.feature ];
 	if ( isSelected ) {
 		classNames.push( styles.selectedFeature );
 	}
@@ -39,20 +39,18 @@ export function Feature( { id }: Props ) {
 	}
 
 	return (
-		<li>
-			<button
-				role="option"
-				aria-selected={ isSelected }
-				className={ classNames.join( ' ' ) }
-				onClick={ handleFeatureSelect }
+		<button
+			role="option"
+			aria-selected={ isSelected }
+			className={ classNames.join( ' ' ) }
+			onClick={ handleFeatureSelect }
+		>
+			<SubstringHighlighter
+				substring={ searchTerm }
+				highlightClassName={ styles.searchSubstringMatch }
 			>
-				<SubstringHighlighter
-					substring={ searchTerm }
-					highlightClassName={ styles.searchSubstringMatch }
-				>
-					{ featureName }
-				</SubstringHighlighter>
-			</button>
-		</li>
+				{ featureName }
+			</SubstringHighlighter>
+		</button>
 	);
 }

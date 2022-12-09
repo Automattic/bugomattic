@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import { useAppSelector } from '../app';
 import { sortEntityIdsByName, SubstringHighlighter } from '../common';
 import { ReactComponent as CollapsedIcon } from '../common/svgs/chevron-right.svg';
@@ -49,6 +49,21 @@ export function Product( { id }: Props ) {
 	}
 	const sortedFeatureGroupsToDisplay = sortEntityIdsByName( featureGroupsToDisplay, featureGroups );
 
+	let featureGroupsOutput: ReactNode = null;
+	if ( sortedFeatureGroupsToDisplay.length > 0 ) {
+		featureGroupsOutput = (
+			<ul
+				aria-label={ `List of feature groups for ${ productName }` }
+				id={ featureGroupSublistElementId }
+				className={ styles.subLevel }
+			>
+				{ sortedFeatureGroupsToDisplay.map( ( featureGroupId ) => (
+					<FeatureGroup key={ featureGroupId } id={ featureGroupId } />
+				) ) }
+			</ul>
+		);
+	}
+
 	let featuresToDisplay: string[];
 	if ( isExpanded ) {
 		featuresToDisplay = featureIds;
@@ -59,6 +74,21 @@ export function Product( { id }: Props ) {
 	}
 	const sortedFeaturesToDisplay = sortEntityIdsByName( featuresToDisplay, features );
 
+	let featuresOutput: ReactNode = null;
+	if ( sortedFeaturesToDisplay.length > 0 ) {
+		featuresOutput = (
+			<div
+				aria-label={ `List of features for ${ productName }` }
+				id={ featureSublistElementId }
+				className={ styles.subLevel }
+				role="listbox"
+			>
+				{ sortedFeaturesToDisplay.map( ( featureId ) => (
+					<Feature key={ featureId } id={ featureId } />
+				) ) }
+			</div>
+		);
+	}
 	return (
 		<li>
 			<button
@@ -75,24 +105,8 @@ export function Product( { id }: Props ) {
 					{ productName }
 				</SubstringHighlighter>
 			</button>
-			<ul
-				aria-label={ `List of feature groups for ${ productName }` }
-				id={ featureGroupSublistElementId }
-				className={ styles.subLevel }
-			>
-				{ sortedFeatureGroupsToDisplay.map( ( featureGroupId ) => (
-					<FeatureGroup key={ featureGroupId } id={ featureGroupId } />
-				) ) }
-			</ul>
-			<ul
-				aria-label={ `List of features for ${ productName }` }
-				id={ featureSublistElementId }
-				className={ styles.subLevel }
-			>
-				{ sortedFeaturesToDisplay.map( ( featureId ) => (
-					<Feature key={ featureId } id={ featureId } />
-				) ) }
-			</ul>
+			{ featureGroupsOutput }
+			{ featuresOutput }
 		</li>
 	);
 }

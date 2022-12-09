@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import { useAppSelector } from '../app';
 import { sortEntityIdsByName, SubstringHighlighter } from '../common';
 import { ReactComponent as CollapsedIcon } from '../common/svgs/chevron-right.svg';
@@ -47,6 +47,22 @@ export function FeatureGroup( { id }: Props ) {
 	}
 	const sortedFeaturesToDisplay = sortEntityIdsByName( featuresToDisplay, features );
 
+	let featuresOutput: ReactNode = null;
+	if ( sortedFeaturesToDisplay.length > 0 ) {
+		featuresOutput = (
+			<div
+				aria-label={ `List of features for ${ featureGroupName }` }
+				id={ sublistElementId }
+				className={ styles.subLevel }
+				role="listbox"
+			>
+				{ sortedFeaturesToDisplay.map( ( featureId ) => (
+					<Feature key={ featureId } id={ featureId } />
+				) ) }
+			</div>
+		);
+	}
+
 	return (
 		<li>
 			<button
@@ -63,15 +79,7 @@ export function FeatureGroup( { id }: Props ) {
 					{ featureGroupName }
 				</SubstringHighlighter>
 			</button>
-			<ul
-				aria-label={ `List of features for ${ featureGroupName }` }
-				id={ sublistElementId }
-				className={ styles.subLevel }
-			>
-				{ sortedFeaturesToDisplay.map( ( featureId ) => (
-					<Feature key={ featureId } id={ featureId } />
-				) ) }
-			</ul>
+			{ featuresOutput }
 		</li>
 	);
 }
