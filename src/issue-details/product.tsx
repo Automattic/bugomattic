@@ -1,6 +1,6 @@
 import React, { ReactNode, useEffect, useState } from 'react';
 import { useAppSelector } from '../app';
-import { sortEntityIdsByName, SubstringHighlighter } from '../common';
+import { replaceSpaces, sortEntityIdsByName, SubstringHighlighter } from '../common';
 import { ReactComponent as CollapsedIcon } from '../common/svgs/chevron-right.svg';
 import { ReactComponent as ExpandedIcon } from '../common/svgs/chevron-down.svg';
 import {
@@ -17,8 +17,8 @@ interface Props {
 }
 
 export function Product( { id }: Props ) {
-	const featureGroupSublistElementId = `product-${ id }-group-sublist`;
-	const featureSublistElementId = `product-${ id }-feature-sublist`;
+	const featureGroupSublistElementId = `product-${ replaceSpaces( id ) }-group-sublist`;
+	const featureSublistElementId = `product-${ replaceSpaces( id ) }-feature-sublist`;
 
 	const [ isExpanded, setIsExpanded ] = useState( false );
 	const handleCollapseExpandToggle = () => setIsExpanded( ! isExpanded );

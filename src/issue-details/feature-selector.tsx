@@ -44,21 +44,19 @@ export function FeatureSelector() {
 	const sortedProductsToDisplay = sortEntityIdsByName( productsToDisplay, products );
 
 	return (
-		<section>
+		<section className={ styles.sectionWrapper }>
 			<h2>1. Select a Feature</h2>
 			<DebouncedSearch
-				aria-controls={ productListElementId }
 				callback={ handleSearch }
 				placeholder="Search for a feature"
+				inputAriaControls={ productListElementId }
 			/>
 			{ noResultsFound && noResultsFoundMessage }
-			<div className={ styles.reportingConfigTree }>
-				<ul id={ productListElementId } aria-label="Product list" className={ styles.firstLevel }>
-					{ sortedProductsToDisplay.map( ( productId ) => (
-						<Product key={ productId } id={ productId } />
-					) ) }
-				</ul>
-			</div>
+			<ul id={ productListElementId } aria-label="Product list" className={ styles.firstLevel }>
+				{ sortedProductsToDisplay.map( ( productId ) => (
+					<Product key={ productId } id={ productId } />
+				) ) }
+			</ul>
 		</section>
 	);
 }
