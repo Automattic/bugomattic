@@ -8,7 +8,6 @@ import {
 	ReportingConfigState,
 	TaskDetails,
 	TaskParentEntityType,
-	SearchMatch,
 	ReportingConfigSearchResults,
 	Tasks,
 } from './types';

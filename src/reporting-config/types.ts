@@ -129,12 +129,6 @@ export interface LearnMore {
 	links?: LearnMoreLink[];
 }
 
-export interface SearchMatch {
-	entityType: TaskParentEntityType;
-	entityId: string;
-	keywordMatch?: string;
-}
-
 export interface ReportingConfigSearchResults {
 	products: Set< string >;
 	featureGroups: Set< string >;
