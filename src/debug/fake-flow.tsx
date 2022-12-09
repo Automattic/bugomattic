@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { FeatureSelector } from '../issue-details/feature-selector';
+import { FeatureSelector } from '../issue-details';
 import { useMonitoring } from '../monitoring';
 
 export function FakeFlow() {
