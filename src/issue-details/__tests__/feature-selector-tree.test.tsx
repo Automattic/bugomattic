@@ -1,10 +1,9 @@
-import React, { ReactElement, ReactNode } from 'react';
-import { NormalizedReportingConfig, ReportingConfigState } from '../../reporting-config';
+import React, { ReactElement } from 'react';
+import { NormalizedReportingConfig } from '../../reporting-config';
 import { createMockApiClient, renderWithProviders } from '../../test-utils';
 import { FeatureSelector } from '..';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { RootState } from '../../app';
 
 describe( '[FeatureSelector -- Tree interaction]', () => {
 	/*
