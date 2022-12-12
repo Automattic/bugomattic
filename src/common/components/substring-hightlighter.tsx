@@ -37,7 +37,9 @@ export function SubstringHighlighter( {
 	return (
 		<span>
 			{ startingSlice }
-			<span className={ highlightClassName }>{ hightlightedSlice }</span>
+			<span data-testid="highlighted-substring" className={ highlightClassName }>
+				{ hightlightedSlice }
+			</span>
 			{ endingSlice }
 		</span>
 	);
