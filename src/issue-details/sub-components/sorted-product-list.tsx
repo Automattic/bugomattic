@@ -2,7 +2,7 @@ import React from 'react';
 import { useAppSelector } from '../../app';
 import { sortEntityIdsByName } from '../../common';
 import { selectNormalizedReportingConfig } from '../../reporting-config';
-import styles from './feature-selector.module.css';
+import styles from './../feature-selector.module.css';
 import { Product } from './product';
 
 interface Props {
