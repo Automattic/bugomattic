@@ -83,7 +83,7 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 	function setup( component: ReactElement ) {
 		const apiClient = createMockApiClient();
 		const user = userEvent.setup();
-		const renderOutput = renderWithProviders( component, {
+		const view = renderWithProviders( component, {
 			apiClient,
 			preloadedState: {
 				reportingConfig: {
@@ -99,7 +99,7 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 
 		return {
 			user,
-			...renderOutput,
+			...view,
 		};
 	}
 
@@ -108,21 +108,21 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 			setup( <FeatureSelector /> );
 
 			expect(
-				screen.queryByRole( 'button', {
+				screen.getByRole( 'button', {
 					expanded: false,
 					name: 'A Product',
 				} )
-			).not.toBeNull();
+			).toBeInTheDocument();
 
 			expect(
-				screen.queryByRole( 'button', {
+				screen.getByRole( 'button', {
 					expanded: false,
 					name: 'B Product',
 				} )
-			).not.toBeNull();
+			).toBeInTheDocument();
 
-			expect( screen.queryByRole( 'button', { name: /Feature Group/ } ) ).toBeNull();
-			expect( screen.queryByRole( 'option', { name: /Feature/ } ) ).toBeNull();
+			expect( screen.queryByRole( 'button', { name: /Feature Group/ } ) ).not.toBeInTheDocument();
+			expect( screen.queryByRole( 'option', { name: /Feature/ } ) ).not.toBeInTheDocument();
 		} );
 
 		test( 'Clicking on a collapsed product toggles it as expanded', async () => {
@@ -130,8 +130,8 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 
 			await user.click( screen.getByRole( 'button', { expanded: false, name: 'A Product' } ) );
 			expect(
-				screen.queryByRole( 'button', { expanded: true, name: 'A Product' } )
-			).not.toBeNull();
+				screen.getByRole( 'button', { expanded: true, name: 'A Product' } )
+			).toBeInTheDocument();
 		} );
 
 		test( 'Expanding a collapsed product shows correct nested feature groups and features', async () => {
@@ -141,19 +141,23 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 
 			// Correct feature groups are all visible
 			expect(
-				screen.queryByRole( 'button', { expanded: false, name: 'A Feature Group' } )
-			).not.toBeNull();
+				screen.getByRole( 'button', { expanded: false, name: 'A Feature Group' } )
+			).toBeInTheDocument();
 			expect(
-				screen.queryByRole( 'button', { expanded: false, name: 'B Feature Group' } )
-			).not.toBeNull();
+				screen.getByRole( 'button', { expanded: false, name: 'B Feature Group' } )
+			).toBeInTheDocument();
 
 			// Correct features under product are all visible
-			expect( screen.queryByRole( 'option', { name: 'A Feature Under Product' } ) ).not.toBeNull();
-			expect( screen.queryByRole( 'option', { name: 'B Feature Under Product' } ) ).not.toBeNull();
+			expect(
+				screen.getByRole( 'option', { name: 'A Feature Under Product' } )
+			).toBeInTheDocument();
+			expect(
+				screen.getByRole( 'option', { name: 'B Feature Under Product' } )
+			).toBeInTheDocument();
 
 			// Features under feature groups are NOT visible
-			expect( screen.queryByRole( 'option', { name: 'A Feature' } ) ).toBeNull();
-			expect( screen.queryByRole( 'option', { name: 'B Feature' } ) ).toBeNull();
+			expect( screen.queryByRole( 'option', { name: 'A Feature' } ) ).not.toBeInTheDocument();
+			expect( screen.queryByRole( 'option', { name: 'B Feature' } ) ).not.toBeInTheDocument();
 		} );
 
 		test( 'Clicking on an expanded product toggles it as collapsed', async () => {
@@ -163,8 +167,8 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 			await user.click( screen.getByRole( 'button', { expanded: true, name: 'A Product' } ) );
 
 			expect(
-				screen.queryByRole( 'button', { expanded: false, name: 'A Product' } )
-			).not.toBeNull();
+				screen.getByRole( 'button', { expanded: false, name: 'A Product' } )
+			).toBeInTheDocument();
 		} );
 
 		test( 'Collapsing an expanded product hides all records underneath it', async () => {
@@ -178,8 +182,8 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 
 			await user.click( screen.getByRole( 'button', { expanded: true, name: 'A Product' } ) );
 
-			expect( screen.queryByRole( 'button', { name: /Feature Group/ } ) ).toBeNull();
-			expect( screen.queryByRole( 'option', { name: /Feature/ } ) ).toBeNull();
+			expect( screen.queryByRole( 'button', { name: /Feature Group/ } ) ).not.toBeInTheDocument();
+			expect( screen.queryByRole( 'option', { name: /Feature/ } ) ).not.toBeInTheDocument();
 		} );
 
 		test( 'Clicking a collapsed feature group toggles it as expanded', async () => {
@@ -191,8 +195,8 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 			);
 
 			expect(
-				screen.queryByRole( 'button', { expanded: true, name: 'A Feature Group' } )
-			).not.toBeNull();
+				screen.getByRole( 'button', { expanded: true, name: 'A Feature Group' } )
+			).toBeInTheDocument();
 		} );
 
 		test( 'Expanding a collapsed feature group shows correct nested features', async () => {
@@ -203,8 +207,8 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 				screen.getByRole( 'button', { expanded: false, name: 'A Feature Group' } )
 			);
 
-			expect( screen.queryByRole( 'option', { name: 'A Feature' } ) ).not.toBeNull();
-			expect( screen.queryByRole( 'option', { name: 'B Feature' } ) ).not.toBeNull();
+			expect( screen.getByRole( 'option', { name: 'A Feature' } ) ).toBeInTheDocument();
+			expect( screen.getByRole( 'option', { name: 'B Feature' } ) ).toBeInTheDocument();
 		} );
 
 		test( 'Clicking an expanded feature group toggles it as collapsed', async () => {
@@ -217,8 +221,8 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 			await user.click( screen.getByRole( 'button', { expanded: true, name: 'A Feature Group' } ) );
 
 			expect(
-				screen.queryByRole( 'button', { expanded: false, name: 'A Feature Group' } )
-			).not.toBeNull();
+				screen.getByRole( 'button', { expanded: false, name: 'A Feature Group' } )
+			).toBeInTheDocument();
 		} );
 
 		test( 'Collapsing an expanded feature group hides the features underneath it', async () => {
@@ -230,8 +234,8 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 			);
 			await user.click( screen.getByRole( 'button', { expanded: true, name: 'A Feature Group' } ) );
 
-			expect( screen.queryByRole( 'option', { name: 'A Feature' } ) ).toBeNull();
-			expect( screen.queryByRole( 'option', { name: 'B Feature' } ) ).toBeNull();
+			expect( screen.queryByRole( 'option', { name: 'A Feature' } ) ).not.toBeInTheDocument();
+			expect( screen.queryByRole( 'option', { name: 'B Feature' } ) ).not.toBeInTheDocument();
 		} );
 	} );
 
@@ -248,8 +252,8 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 			await user.click( screen.getByRole( 'option', { selected: false, name: 'A Feature' } ) );
 
 			expect(
-				screen.queryByRole( 'option', { selected: true, name: 'A Feature' } )
-			).not.toBeNull();
+				screen.getByRole( 'option', { selected: true, name: 'A Feature' } )
+			).toBeInTheDocument();
 		} );
 
 		test( 'Clicking on a new feature unselects the old one', async () => {
@@ -268,12 +272,12 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 
 			// New one is selected
 			expect(
-				screen.queryByRole( 'option', { selected: true, name: 'B Feature Under Product' } )
-			).not.toBeNull();
+				screen.getByRole( 'option', { selected: true, name: 'B Feature Under Product' } )
+			).toBeInTheDocument();
 			// Old one is unselected
 			expect(
-				screen.queryByRole( 'option', { selected: false, name: 'A Feature' } )
-			).not.toBeNull();
+				screen.getByRole( 'option', { selected: false, name: 'A Feature' } )
+			).toBeInTheDocument();
 		} );
 	} );
 

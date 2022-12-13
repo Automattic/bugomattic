@@ -89,7 +89,7 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 	function setup( component: ReactElement ) {
 		const apiClient = createMockApiClient();
 		const user = userEvent.setup();
-		const renderOutput = renderWithProviders( component, {
+		const view = renderWithProviders( component, {
 			apiClient,
 			preloadedState: {
 				reportingConfig: {
@@ -105,7 +105,7 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 
 		return {
 			user,
-			...renderOutput,
+			...view,
 		};
 	}
 
@@ -115,13 +115,13 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 			await search( user, 'abc' );
 
 			expect(
-				screen.queryByRole( 'button', { expanded: false, name: 'ABC Product' } )
-			).not.toBeNull();
+				screen.getByRole( 'button', { expanded: false, name: 'ABC Product' } )
+			).toBeInTheDocument();
 
 			// Test important exclusions
-			expect( screen.queryByRole( 'button', { name: 'PQR Product' } ) ).toBeNull();
-			expect( screen.queryByRole( 'button', { name: /Group/ } ) ).toBeNull();
-			expect( screen.queryByRole( 'option', { name: /Feature/ } ) ).toBeNull();
+			expect( screen.queryByRole( 'button', { name: 'PQR Product' } ) ).not.toBeInTheDocument();
+			expect( screen.queryByRole( 'button', { name: /Group/ } ) ).not.toBeInTheDocument();
+			expect( screen.queryByRole( 'option', { name: /Feature/ } ) ).not.toBeInTheDocument();
 		} );
 
 		test( 'Matching a feature group filters to that feature group collapsed and its parent product', async () => {
@@ -129,49 +129,49 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 			await search( user, 'def' );
 
 			expect(
-				screen.queryByRole( 'button', { expanded: false, name: 'DEF Group' } )
-			).not.toBeNull();
+				screen.getByRole( 'button', { expanded: false, name: 'DEF Group' } )
+			).toBeInTheDocument();
 			expect(
-				screen.queryByRole( 'button', { expanded: false, name: 'ABC Product' } )
-			).not.toBeNull();
+				screen.getByRole( 'button', { expanded: false, name: 'ABC Product' } )
+			).toBeInTheDocument();
 
 			// Test important exclusions
-			expect( screen.queryByRole( 'button', { name: 'PQR Product' } ) ).toBeNull();
-			expect( screen.queryByRole( 'button', { name: 'MNO Group' } ) ).toBeNull();
-			expect( screen.queryByRole( 'option', { name: /Feature/ } ) ).toBeNull();
+			expect( screen.queryByRole( 'button', { name: 'PQR Product' } ) ).not.toBeInTheDocument();
+			expect( screen.queryByRole( 'button', { name: 'MNO Group' } ) ).not.toBeInTheDocument();
+			expect( screen.queryByRole( 'option', { name: /Feature/ } ) ).not.toBeInTheDocument();
 		} );
 
 		test( 'Matching a feature under product filters to that feature and its parent product', async () => {
 			const { user } = setup( <FeatureSelector /> );
 			await search( user, 'stu' );
 
-			expect( screen.queryByRole( 'option', { name: 'STU Feature' } ) ).not.toBeNull();
+			expect( screen.getByRole( 'option', { name: 'STU Feature' } ) ).toBeInTheDocument();
 			expect(
-				screen.queryByRole( 'button', { expanded: false, name: 'PQR Product' } )
-			).not.toBeNull();
+				screen.getByRole( 'button', { expanded: false, name: 'PQR Product' } )
+			).toBeInTheDocument();
 
 			// Test important exclusions
-			expect( screen.queryByRole( 'button', { name: 'ABC Product' } ) ).toBeNull();
-			expect( screen.queryByRole( 'button', { name: /Group/ } ) ).toBeNull();
-			expect( screen.queryByRole( 'option', { name: 'VWX Feature' } ) ).toBeNull();
+			expect( screen.queryByRole( 'button', { name: 'ABC Product' } ) ).not.toBeInTheDocument();
+			expect( screen.queryByRole( 'button', { name: /Group/ } ) ).not.toBeInTheDocument();
+			expect( screen.queryByRole( 'option', { name: 'VWX Feature' } ) ).not.toBeInTheDocument();
 		} );
 
 		test( 'Matching a feature under group filters to that feature and both parent levels', async () => {
 			const { user } = setup( <FeatureSelector /> );
 			await search( user, 'jkl' );
 
-			expect( screen.queryByRole( 'option', { name: 'JKL Feature' } ) ).not.toBeNull();
+			expect( screen.getByRole( 'option', { name: 'JKL Feature' } ) ).toBeInTheDocument();
 			expect(
-				screen.queryByRole( 'button', { expanded: false, name: 'DEF Group' } )
-			).not.toBeNull();
+				screen.getByRole( 'button', { expanded: false, name: 'DEF Group' } )
+			).toBeInTheDocument();
 			expect(
-				screen.queryByRole( 'button', { expanded: false, name: 'ABC Product' } )
-			).not.toBeNull();
+				screen.getByRole( 'button', { expanded: false, name: 'ABC Product' } )
+			).toBeInTheDocument();
 
 			// Test important exclusions
-			expect( screen.queryByRole( 'button', { name: 'PQR Product' } ) ).toBeNull();
-			expect( screen.queryByRole( 'button', { name: 'MNO Group' } ) ).toBeNull();
-			expect( screen.queryByRole( 'option', { name: 'GHI Feature' } ) ).toBeNull();
+			expect( screen.queryByRole( 'button', { name: 'PQR Product' } ) ).not.toBeInTheDocument();
+			expect( screen.queryByRole( 'button', { name: 'MNO Group' } ) ).not.toBeInTheDocument();
+			expect( screen.queryByRole( 'option', { name: 'GHI Feature' } ) ).not.toBeInTheDocument();
 		} );
 
 		test( 'Matching a feature keyword is same as matching feature, but adds keyword to name', async () => {
@@ -185,8 +185,8 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 				'VWX Feature (YZZ Keyword)'
 			);
 			expect(
-				screen.queryByRole( 'button', { expanded: false, name: 'PQR Product' } )
-			).not.toBeNull();
+				screen.getByRole( 'button', { expanded: false, name: 'PQR Product' } )
+			).toBeInTheDocument();
 		} );
 
 		test( 'If no matches are found, shows a message', async () => {
@@ -194,8 +194,8 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 			await search( user, 'asdfhjklajvhxc ygaisudsudyfiuasd' );
 
 			expect(
-				screen.queryByText( 'No results found. Try a different search or explore manually below.' )
-			).not.toBeNull();
+				screen.getByText( 'No results found. Try a different search or explore manually below.' )
+			).toBeInTheDocument();
 		} );
 
 		test( 'If no matches are found, shows the initial tree state of all products collapsed', async () => {
@@ -203,11 +203,11 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 			await search( user, 'asdfhjklajvhxc ygaisudsudyfiuasd' );
 
 			expect(
-				screen.queryByRole( 'button', { expanded: false, name: 'ABC Product' } )
-			).not.toBeNull();
+				screen.getByRole( 'button', { expanded: false, name: 'ABC Product' } )
+			).toBeInTheDocument();
 			expect(
-				screen.queryByRole( 'button', { expanded: false, name: 'PQR Product' } )
-			).not.toBeNull();
+				screen.getByRole( 'button', { expanded: false, name: 'PQR Product' } )
+			).toBeInTheDocument();
 		} );
 	} );
 
@@ -227,10 +227,10 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 			await user.click( screen.getByRole( 'button', { expanded: false, name: 'DEF Group' } ) );
 
 			expect(
-				screen.queryByRole( 'button', { expanded: true, name: 'DEF Group' } )
-			).not.toBeNull();
-			expect( screen.queryByRole( 'option', { name: 'GHI Feature' } ) ).not.toBeNull();
-			expect( screen.queryByRole( 'option', { name: 'JKL Feature' } ) ).not.toBeNull();
+				screen.getByRole( 'button', { expanded: true, name: 'DEF Group' } )
+			).toBeInTheDocument();
+			expect( screen.getByRole( 'option', { name: 'GHI Feature' } ) ).toBeInTheDocument();
+			expect( screen.getByRole( 'option', { name: 'JKL Feature' } ) ).toBeInTheDocument();
 		} );
 
 		test( 'Recollapsing an expanded parent will always only show search matches', async () => {
@@ -239,8 +239,8 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 			await user.click( screen.getByRole( 'button', { expanded: false, name: 'DEF Group' } ) );
 			await user.click( screen.getByRole( 'button', { expanded: true, name: 'DEF Group' } ) );
 
-			expect( screen.queryByRole( 'option', { name: 'GHI Feature' } ) ).not.toBeNull();
-			expect( screen.queryByRole( 'option', { name: 'JKL Feature' } ) ).toBeNull();
+			expect( screen.getByRole( 'option', { name: 'GHI Feature' } ) ).toBeInTheDocument();
+			expect( screen.queryByRole( 'option', { name: 'JKL Feature' } ) ).not.toBeInTheDocument();
 		} );
 	} );
 } );

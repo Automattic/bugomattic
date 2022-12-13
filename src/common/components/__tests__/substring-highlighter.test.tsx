@@ -6,6 +6,10 @@ describe( '[SubstringHighlighter]', () => {
 	const testId = 'highlighted-substring';
 	const highlightClassName = 'fake-class-name';
 
+	function makeExactMatchRegex( string: string ) {
+		return new RegExp( `^${ string }$` );
+	}
+
 	test( 'Correctly "highlights" a substring match at the start of a string', () => {
 		const substring = 'foo';
 		render(
@@ -14,7 +18,7 @@ describe( '[SubstringHighlighter]', () => {
 			</SubstringHighlighter>
 		);
 
-		expect( screen.getByTestId( testId ).textContent ).toBe( substring );
+		expect( screen.getByTestId( testId ) ).toHaveTextContent( makeExactMatchRegex( substring ) );
 	} );
 
 	test( 'Correctly "highlights" a substring match in the middle of a string', () => {
@@ -25,7 +29,7 @@ describe( '[SubstringHighlighter]', () => {
 			</SubstringHighlighter>
 		);
 
-		expect( screen.getByTestId( testId ).textContent ).toBe( substring );
+		expect( screen.getByTestId( testId ) ).toHaveTextContent( makeExactMatchRegex( substring ) );
 	} );
 
 	test( 'Correctly "highlights" a substring match at the end of a string', () => {
@@ -36,7 +40,7 @@ describe( '[SubstringHighlighter]', () => {
 			</SubstringHighlighter>
 		);
 
-		expect( screen.getByTestId( testId ).textContent ).toBe( substring );
+		expect( screen.getByTestId( testId ) ).toHaveTextContent( makeExactMatchRegex( substring ) );
 	} );
 
 	test( 'If the entire string is a match, "highlights" the entire string', () => {
@@ -47,7 +51,7 @@ describe( '[SubstringHighlighter]', () => {
 			</SubstringHighlighter>
 		);
 
-		expect( screen.getByTestId( testId ).textContent ).toBe( substring );
+		expect( screen.getByTestId( testId ) ).toHaveTextContent( makeExactMatchRegex( substring ) );
 	} );
 
 	test( 'If the substring is not found, does not "highlight" any part of the string', () => {
@@ -58,7 +62,7 @@ describe( '[SubstringHighlighter]', () => {
 			</SubstringHighlighter>
 		);
 
-		expect( screen.queryByTestId( testId ) ).toBeNull();
+		expect( screen.queryByTestId( testId ) ).not.toBeInTheDocument();
 	} );
 
 	test( 'If an empty substring is provided, does not "highlight" any part of the string', () => {
@@ -69,7 +73,7 @@ describe( '[SubstringHighlighter]', () => {
 			</SubstringHighlighter>
 		);
 
-		expect( screen.queryByTestId( testId ) ).toBeNull();
+		expect( screen.queryByTestId( testId ) ).not.toBeInTheDocument();
 	} );
 
 	test( 'It includes the provided classname on the "highlighted" span', () => {
@@ -95,6 +99,6 @@ describe( '[SubstringHighlighter]', () => {
 			</SubstringHighlighter>
 		);
 
-		expect( screen.queryByTestId( testId ) ).toBeNull();
+		expect( screen.queryByTestId( testId ) ).not.toBeInTheDocument();
 	} );
 } );

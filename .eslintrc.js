@@ -32,6 +32,11 @@ module.exports = {
 				],
 			},
 		},
+		{
+			// Enable eslint-plugin-testing-library rules for test files only
+			files: [ '**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[jt]s?(x)' ],
+			extends: [ 'plugin:testing-library/react', 'plugin:jest-dom/recommended' ],
+		},
 	],
 	parserOptions: {
 		ecmaVersion: 'latest',

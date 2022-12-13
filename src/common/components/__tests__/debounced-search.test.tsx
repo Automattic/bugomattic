@@ -10,7 +10,7 @@ describe( '[DebouncedSearch]', () => {
 	function setup( { debounceMs }: { debounceMs: number } ) {
 		const mockCallBack = jest.fn();
 		const user = userEvent.setup();
-		const renderOutput = render(
+		const view = render(
 			<DebouncedSearch
 				placeholder={ placeholderText }
 				debounceMs={ debounceMs }
@@ -20,7 +20,7 @@ describe( '[DebouncedSearch]', () => {
 		return {
 			mockCallBack,
 			user,
-			...renderOutput,
+			...view,
 		};
 	}
 
