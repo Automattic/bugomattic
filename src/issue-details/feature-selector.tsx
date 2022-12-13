@@ -1,14 +1,14 @@
 import React, { useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '../app';
-import { DebouncedSearch, sortEntityIdsByName } from '../common';
+import { DebouncedSearch } from '../common';
 import {
 	selectNormalizedReportingConfig,
 	selectReportingConfigSearchTerm,
 	selectReportingConfigSearchResults,
 	setReportingConfigSearchTerm,
 } from '../reporting-config';
-import { Product } from './product';
 import styles from './feature-selector.module.css';
+import { SortedProductList } from './sub-components';
 
 export function FeatureSelector() {
 	const dispatch = useAppDispatch();
@@ -16,14 +16,12 @@ export function FeatureSelector() {
 		( searchTerm: string ) => {
 			dispatch( setReportingConfigSearchTerm( searchTerm ) );
 		},
-		[ dispatch, setReportingConfigSearchTerm ]
+		[ dispatch ]
 	);
 
 	const { products } = useAppSelector( selectNormalizedReportingConfig );
 	const searchTerm = useAppSelector( selectReportingConfigSearchTerm );
 	const searchResults = useAppSelector( selectReportingConfigSearchResults );
-
-	const productListElementId = 'product-list-id';
 
 	const noResultsFound = searchTerm && searchResults.products.size === 0;
 	const noResultsFoundMessage = (
@@ -41,7 +39,8 @@ export function FeatureSelector() {
 			searchResults.products.has( productId )
 		);
 	}
-	const sortedProductsToDisplay = sortEntityIdsByName( productsToDisplay, products );
+
+	const searchControlsId = 'reporting-config-tree-id';
 
 	return (
 		<section className={ styles.sectionWrapper }>
@@ -49,14 +48,12 @@ export function FeatureSelector() {
 			<DebouncedSearch
 				callback={ handleSearch }
 				placeholder="Search for a feature"
-				inputAriaControls={ productListElementId }
+				inputAriaControls={ searchControlsId }
 			/>
-			{ noResultsFound && noResultsFoundMessage }
-			<ul id={ productListElementId } aria-label="Product list" className={ styles.firstLevel }>
-				{ sortedProductsToDisplay.map( ( productId ) => (
-					<Product key={ productId } id={ productId } />
-				) ) }
-			</ul>
+			<div id={ searchControlsId }>
+				{ noResultsFound && noResultsFoundMessage }
+				<SortedProductList productIds={ productsToDisplay } />
+			</div>
 		</section>
 	);
 }

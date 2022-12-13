@@ -10,6 +10,7 @@ module.exports = {
 		'plugin:react/recommended',
 		'plugin:prettier/recommended',
 		'plugin:md/prettier',
+		'plugin:react-hooks/recommended',
 	],
 	parser: '@typescript-eslint/parser',
 	root: true,

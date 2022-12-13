@@ -1,11 +1,11 @@
 import React from 'react';
-import { useAppDispatch, useAppSelector } from '../app';
+import { useAppDispatch, useAppSelector } from '../../app';
 import {
 	selectNormalizedReportingConfig,
 	selectReportingConfigSearchTerm,
-} from '../reporting-config';
-import { selectIssueDetails, setIssueFeatureId } from './issue-details-slice';
-import { includesIgnoringCase, SubstringHighlighter } from '../common';
+} from '../../reporting-config';
+import { selectIssueDetails, setIssueFeatureId } from '../issue-details-slice';
+import { includesIgnoringCase, SubstringHighlighter } from '../../common';
 import styles from './feature-selector.module.css';
 
 interface Props {
