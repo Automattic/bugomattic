@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import styles from './debounced-search.module.css';
 import debounce from 'lodash.debounce';
 import { ReactComponent as SearchIcon } from '../svgs/search.svg';
@@ -19,7 +19,10 @@ export function DebouncedSearch( {
 	inputAriaControls,
 }: Props ) {
 	const [ searchTerm, setSearchTerm ] = useState( '' );
-	const debouncedCallback = useCallback( debounce( callback, debounceMs ), [ callback, debounce ] );
+	const debouncedCallback = useMemo(
+		() => debounce( callback, debounceMs ),
+		[ callback, debounceMs ]
+	);
 
 	const flushDebounce = () => debouncedCallback.flush();
 
