@@ -142,7 +142,7 @@ function deduplicateTasksIds( state: RootState, taskIds: string[] ): string[] {
 	const finalTaskIds: string[] = [];
 	const addIfNotDuplicate = ( taskId: string ) => {
 		const task = tasks[ taskId ];
-		const taskDetails: TaskDetails = { instructions: task.instructions, link: task.link };
+		const taskDetails: TaskDetails = { title: task.title, details: task.details, link: task.link };
 		const stringifiedDetails = JSON.stringify( taskDetails );
 		if ( existingTaskDetails.has( stringifiedDetails ) ) {
 			return;

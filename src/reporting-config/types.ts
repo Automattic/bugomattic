@@ -115,7 +115,8 @@ export type LearnMoreLink = SlackLink | P2Link | GeneralLink;
 export type TaskLink = LearnMoreLink | NewGitHubIssueLink;
 
 export interface TaskDetails {
-	instructions?: string;
+	title?: string;
+	details?: string;
 	link?: TaskLink;
 }
 
