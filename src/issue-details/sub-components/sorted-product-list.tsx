@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useAppSelector } from '../../app';
 import { sortEntityIdsByName } from '../../common';
 import { selectNormalizedReportingConfig } from '../../reporting-config';
@@ -11,7 +11,10 @@ interface Props {
 
 export function SortedProductList( { productIds }: Props ) {
 	const { products } = useAppSelector( selectNormalizedReportingConfig );
-	const sortedProductIds = sortEntityIdsByName( productIds, products );
+	const sortedProductIds = useMemo(
+		() => sortEntityIdsByName( productIds, products ),
+		[ productIds, products ]
+	);
 
 	// Rare, but not impossible. Let's handle it!
 	if ( sortedProductIds.length === 0 ) {

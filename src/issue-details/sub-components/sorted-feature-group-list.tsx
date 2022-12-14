@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useAppSelector } from '../../app';
 import { sortEntityIdsByName } from '../../common';
 import { selectNormalizedReportingConfig } from '../../reporting-config';
@@ -12,7 +12,10 @@ interface Props {
 
 export function SortedFeatureGroupList( { featureGroupIds, parentName }: Props ) {
 	const { featureGroups } = useAppSelector( selectNormalizedReportingConfig );
-	const sortedFeatureGroupIds = sortEntityIdsByName( featureGroupIds, featureGroups );
+	const sortedFeatureGroupIds = useMemo(
+		() => sortEntityIdsByName( featureGroupIds, featureGroups ),
+		[ featureGroupIds, featureGroups ]
+	);
 
 	if ( sortedFeatureGroupIds.length === 0 ) {
 		return null;

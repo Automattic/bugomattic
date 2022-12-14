@@ -1,4 +1,4 @@
-export * from './collapsibleTreeNode';
+export * from './expandable-tree-node';
 export * from './feature';
 export * from './feature-group';
 export * from './product';
