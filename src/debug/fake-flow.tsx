@@ -104,7 +104,7 @@ function FakeTaskList() {
 	const createTaskDisplay = ( taskId: string ) => {
 		const task = tasks[ taskId ];
 		const isChecked = completedTaskIds.includes( taskId );
-		const taskInstructions = task.instructions || '<No instructions for task>';
+		const taskInstructions = task.details || '<No instructions for task>';
 		let linkText = '';
 		if ( task.link ) {
 			switch ( task.link.type ) {

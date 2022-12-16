@@ -12,9 +12,9 @@ function createFakeReportingConfigResponse(): ReportingConfigApiResponse {
 				},
 			],
 			tasks: {
-				bug: [ { instructions: 'Product | bug' } ],
-				featureRequest: [ { instructions: 'Product | feature-request' } ],
-				blocker: [ { instructions: 'Product | blocker' } ],
+				bug: [ { title: 'Product | bug' } ],
+				featureRequest: [ { title: 'Product | feature-request' } ],
+				blocker: [ { title: 'Product | blocker' } ],
 			},
 			featureGroups: {
 				FakeFeatureGroup: {
@@ -26,9 +26,9 @@ function createFakeReportingConfigResponse(): ReportingConfigApiResponse {
 						},
 					],
 					tasks: {
-						bug: [ { instructions: 'Feature group | bug' } ],
-						featureRequest: [ { instructions: 'Feature group | feature request' } ],
-						blocker: [ { instructions: 'Feature group | blocker' } ],
+						bug: [ { title: 'Feature group | bug' } ],
+						featureRequest: [ { title: 'Feature group | feature request' } ],
+						blocker: [ { title: 'Feature group | blocker' } ],
 					},
 					features: {
 						GroupNestedFeature: {
@@ -42,16 +42,16 @@ function createFakeReportingConfigResponse(): ReportingConfigApiResponse {
 							],
 							tasks: {
 								bug: [
-									{ instructions: 'Feature nested under group | bug | index 0' },
-									{ instructions: 'Feature nested under group | bug | index 1' },
+									{ title: 'Feature nested under group | bug | index 0' },
+									{ title: 'Feature nested under group | bug | index 1' },
 								],
 								featureRequest: [
-									{ instructions: 'Feature nested under group | feature request | index 0' },
-									{ instructions: 'Feature nested under group | feature request | index 1' },
+									{ title: 'Feature nested under group | feature request | index 0' },
+									{ title: 'Feature nested under group | feature request | index 1' },
 								],
 								blocker: [
-									{ instructions: 'Feature nested under group | blocker | index 0' },
-									{ instructions: 'Feature nested under group | blocker | index 1' },
+									{ title: 'Feature nested under group | blocker | index 0' },
+									{ title: 'Feature nested under group | blocker | index 1' },
 								],
 							},
 						},
@@ -69,11 +69,9 @@ function createFakeReportingConfigResponse(): ReportingConfigApiResponse {
 						},
 					],
 					tasks: {
-						bug: [ { instructions: 'Feature nested under product bug task' } ],
-						featureRequest: [
-							{ instructions: 'Feature nested under product feature-request task' },
-						],
-						blocker: [ { instructions: 'Feature nested under product blocker task' } ],
+						bug: [ { title: 'Feature nested under product bug task' } ],
+						featureRequest: [ { title: 'Feature nested under product feature-request task' } ],
+						blocker: [ { title: 'Feature nested under product blocker task' } ],
 					},
 				},
 			},

@@ -14,7 +14,7 @@ describe( '[reporting-config-slice]', () => {
 						id: 'feature_task',
 						parentType: 'feature',
 						parentId: 'feature_id',
-						instructions: 'Task instructions',
+						details: 'Task instructions',
 					},
 				},
 				products: {
@@ -64,7 +64,7 @@ describe( '[reporting-config-slice]', () => {
 						id: 'feature_task',
 						parentType: 'feature',
 						parentId: 'feature_id',
-						instructions: 'Task instructions',
+						details: 'Task instructions',
 					},
 				},
 				products: {
@@ -118,25 +118,25 @@ describe( '[reporting-config-slice]', () => {
 				tasks: {
 					[ firstFeatureTaskId ]: {
 						id: firstFeatureTaskId,
-						instructions: 'First feature task',
+						details: 'First feature task',
 						parentType: 'feature',
 						parentId: featureId,
 					},
 					[ secondFeatureTaskId ]: {
 						id: secondFeatureTaskId,
-						instructions: 'Second feature task',
+						details: 'Second feature task',
 						parentType: 'feature',
 						parentId: featureId,
 					},
 					[ featureGroupTaskId ]: {
 						id: featureGroupTaskId,
-						instructions: 'Feature group task',
+						details: 'Feature group task',
 						parentType: 'featureGroup',
 						parentId: 'feature_group_id',
 					},
 					[ productTaskId ]: {
 						id: productTaskId,
-						instructions: 'Product task',
+						details: 'Product task',
 						parentType: 'product',
 						parentId: 'product_id',
 					},
@@ -204,7 +204,8 @@ describe( '[reporting-config-slice]', () => {
 
 		test( 'Removes tasks that have duplicate details, prioritizing feature-level tasks', () => {
 			const duplicateTaskDetails: TaskDetails = {
-				instructions: 'Duplicate instructions',
+				title: 'Duplicate title',
+				details: 'Duplicate instructions',
 				link: {
 					type: 'slack',
 					channel: 'fake-channel',
@@ -302,7 +303,7 @@ describe( '[reporting-config-slice]', () => {
 						id: featureTaskId,
 						parentType: 'feature',
 						parentId: featureId,
-						instructions: 'Feature GitHub task',
+						details: 'Feature GitHub task',
 						link: {
 							type: 'github',
 							labels: [ 'priority-label' ],
@@ -313,7 +314,7 @@ describe( '[reporting-config-slice]', () => {
 						id: 'product_task',
 						parentType: 'product',
 						parentId: 'product_id',
-						instructions: 'Product GitHub task',
+						details: 'Product GitHub task',
 						link: {
 							type: 'github',
 							labels: [ 'other-label' ],
