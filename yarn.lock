@@ -2455,7 +2455,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/dom@npm:^8.19.0, @testing-library/dom@npm:^8.5.0":
+"@testing-library/dom@npm:^8.11.1, @testing-library/dom@npm:^8.19.0, @testing-library/dom@npm:^8.5.0":
   version: 8.19.0
   resolution: "@testing-library/dom@npm:8.19.0"
   dependencies:
@@ -2766,6 +2766,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/lodash.debounce@npm:^4.0.7":
+  version: 4.0.7
+  resolution: "@types/lodash.debounce@npm:4.0.7"
+  dependencies:
+    "@types/lodash": "*"
+  checksum: e873b2d77f89010876baba3437ef826b17221b98948e00b5590828334a481dea1c8f9d28543210e564adc53199584f42c3cb171f8b6c3614fefc0b4e0888679c
+  languageName: node
+  linkType: hard
+
+"@types/lodash@npm:*":
+  version: 4.14.191
+  resolution: "@types/lodash@npm:4.14.191"
+  checksum: ba0d5434e10690869f32d5ea49095250157cae502f10d57de0a723fd72229ce6c6a4979576f0f13e0aa9fbe3ce2457bfb9fa7d4ec3d6daba56730a51906d1491
+  languageName: node
+  linkType: hard
+
 "@types/mime@npm:*":
   version: 3.0.1
   resolution: "@types/mime@npm:3.0.1"
@@ -2791,6 +2807,13 @@ __metadata:
   version: 4.0.0
   resolution: "@types/parse-json@npm:4.0.0"
   checksum: fd6bce2b674b6efc3db4c7c3d336bd70c90838e8439de639b909ce22f3720d21344f52427f1d9e57b265fcb7f6c018699b99e5e0c208a1a4823014269a6bf35b
+  languageName: node
+  linkType: hard
+
+"@types/path-browserify@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "@types/path-browserify@npm:1.0.0"
+  checksum: e3f98ef9638fb75dc7547c3cde5fa86bc5986e38403ec91234abcc7b911e30711af7c6abc674d617d27c4a6c09e7f8e9d77662b1cc45d00d4708d94764202b61
   languageName: node
   linkType: hard
 
@@ -4103,7 +4126,9 @@ __metadata:
     "@testing-library/react": ^13.4.0
     "@testing-library/user-event": ^14.4.3
     "@types/jest": ^29.1.2
+    "@types/lodash.debounce": ^4.0.7
     "@types/node": ^16.7.13
+    "@types/path-browserify": ^1.0.0
     "@types/react": ^18.0.0
     "@types/react-dom": ^18.0.0
     "@typescript-eslint/eslint-plugin": ^5.0.0
@@ -4111,13 +4136,17 @@ __metadata:
     eslint: ^8.0.1
     eslint-config-prettier: ^8.5.0
     eslint-plugin-import: ^2.25.2
+    eslint-plugin-jest-dom: ^4.0.3
     eslint-plugin-md: ^1.0.19
     eslint-plugin-n: ^15.0.0
     eslint-plugin-prettier: ^4.2.1
     eslint-plugin-promise: ^6.0.0
     eslint-plugin-react: ^7.31.10
+    eslint-plugin-testing-library: ^5.9.1
     husky: ^8.0.0
     lint-staged: ^13.0.3
+    lodash.debounce: ^4.0.8
+    path-browserify: ^1.0.1
     prettier: "npm:wp-prettier@latest"
     react: ^18.2.0
     react-dom: ^18.2.0
@@ -5809,6 +5838,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"eslint-plugin-jest-dom@npm:^4.0.3":
+  version: 4.0.3
+  resolution: "eslint-plugin-jest-dom@npm:4.0.3"
+  dependencies:
+    "@babel/runtime": ^7.16.3
+    "@testing-library/dom": ^8.11.1
+    requireindex: ^1.2.0
+  peerDependencies:
+    eslint: ^6.8.0 || ^7.0.0 || ^8.0.0
+  checksum: 6bd22cdb7951a4b9ac65fe35c7bdc3e44cbe09918c79535fa698433d730392ef7a6faa55468b84d1cb0303a923266a05d45e38278d88380b0f09c8e8f57c75de
+  languageName: node
+  linkType: hard
+
 "eslint-plugin-jest@npm:^25.3.0":
   version: 25.7.0
   resolution: "eslint-plugin-jest@npm:25.7.0"
@@ -5939,7 +5981,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-testing-library@npm:^5.0.1":
+"eslint-plugin-testing-library@npm:^5.0.1, eslint-plugin-testing-library@npm:^5.9.1":
   version: 5.9.1
   resolution: "eslint-plugin-testing-library@npm:5.9.1"
   dependencies:
@@ -9910,6 +9952,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"path-browserify@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "path-browserify@npm:1.0.1"
+  checksum: c6d7fa376423fe35b95b2d67990060c3ee304fc815ff0a2dc1c6c3cfaff2bd0d572ee67e18f19d0ea3bbe32e8add2a05021132ac40509416459fffee35200699
+  languageName: node
+  linkType: hard
+
 "path-exists@npm:^3.0.0":
   version: 3.0.0
   resolution: "path-exists@npm:3.0.0"
@@ -12204,6 +12253,13 @@ __metadata:
   version: 2.0.2
   resolution: "require-from-string@npm:2.0.2"
   checksum: a03ef6895445f33a4015300c426699bc66b2b044ba7b670aa238610381b56d3f07c686251740d575e22f4c87531ba662d06937508f0f3c0f1ddc04db3130560b
+  languageName: node
+  linkType: hard
+
+"requireindex@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "requireindex@npm:1.2.0"
+  checksum: 50d8b10a1ff1fdf6aea7a1870bc7bd238b0fb1917d8d7ca17fd03afc38a65dcd7a8a4eddd031f89128b5f0065833d5c92c4fef67f2c04e8624057fe626c9cf94
   languageName: node
   linkType: hard
 

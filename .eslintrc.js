@@ -10,6 +10,7 @@ module.exports = {
 		'plugin:react/recommended',
 		'plugin:prettier/recommended',
 		'plugin:md/prettier',
+		'plugin:react-hooks/recommended',
 	],
 	parser: '@typescript-eslint/parser',
 	root: true,
@@ -31,6 +32,11 @@ module.exports = {
 					{ parser: 'markdown' },
 				],
 			},
+		},
+		{
+			// Enable eslint-plugin-testing-library rules for test files only
+			files: [ '**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[jt]s?(x)' ],
+			extends: [ 'plugin:testing-library/react', 'plugin:jest-dom/recommended' ],
 		},
 	],
 	parserOptions: {

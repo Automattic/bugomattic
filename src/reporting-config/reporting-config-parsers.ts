@@ -41,14 +41,7 @@ export function normalizeReportingConfig(
 			productTaskMapping = taskOutput.taskMapping;
 		}
 
-		normalizedProducts[ productId ] = {
-			id: productId,
-			name: productName,
-			description: description,
-			learnMoreLinks: learnMoreLinks,
-			taskMapping: productTaskMapping,
-		};
-
+		let featureGroupIds: string[] = [];
 		if ( featureGroups ) {
 			const featureGroupOutput = normalizeFeatureGroups( featureGroups, { productId: productId } );
 			normalizedTasks = {
@@ -63,8 +56,11 @@ export function normalizeReportingConfig(
 				...normalizedFeatureGroups,
 				...featureGroupOutput.normalizedFeatureGroups,
 			};
+
+			featureGroupIds = Object.keys( featureGroupOutput.normalizedFeatureGroups );
 		}
 
+		let featureIds: string[] = [];
 		if ( features ) {
 			const featureOutput = normalizeFeatures( features, {
 				parentType: 'product',
@@ -78,7 +74,19 @@ export function normalizeReportingConfig(
 				...normalizedFeatures,
 				...featureOutput.normalizedFeatures,
 			};
+
+			featureIds = Object.keys( featureOutput.normalizedFeatures );
 		}
+
+		normalizedProducts[ productId ] = {
+			id: productId,
+			name: productName,
+			description: description,
+			learnMoreLinks: learnMoreLinks,
+			taskMapping: productTaskMapping,
+			featureGroupIds: featureGroupIds,
+			featureIds: featureIds,
+		};
 	}
 
 	return {
@@ -125,15 +133,6 @@ function normalizeFeatureGroups(
 			featureGroupTaskMapping = taskOutput.taskMapping;
 		}
 
-		normalizedFeatureGroups[ featureGroupId ] = {
-			id: featureGroupId,
-			name: featureGroupName,
-			description: description,
-			learnMoreLinks: learnMoreLinks,
-			taskMapping: featureGroupTaskMapping,
-			productId: context.productId,
-		};
-
 		const featureOutput = normalizeFeatures( features, {
 			parentType: 'featureGroup',
 			parentId: featureGroupId,
@@ -145,6 +144,18 @@ function normalizeFeatureGroups(
 		normalizedTasks = {
 			...normalizedTasks,
 			...featureOutput.normalizedTasks,
+		};
+
+		const featureIds = Object.keys( featureOutput.normalizedFeatures );
+
+		normalizedFeatureGroups[ featureGroupId ] = {
+			id: featureGroupId,
+			name: featureGroupName,
+			description: description,
+			learnMoreLinks: learnMoreLinks,
+			taskMapping: featureGroupTaskMapping,
+			productId: context.productId,
+			featureIds: featureIds,
 		};
 	}
 

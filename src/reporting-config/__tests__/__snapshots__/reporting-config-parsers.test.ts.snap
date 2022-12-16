@@ -5,6 +5,9 @@ Object {
   "featureGroups": Object {
     "FakeProduct__FakeFeatureGroup": Object {
       "description": "Description for fake feature group",
+      "featureIds": Array [
+        "FakeProduct__FakeFeatureGroup__GroupNestedFeature",
+      ],
       "id": "FakeProduct__FakeFeatureGroup",
       "learnMoreLinks": Array [
         Object {
@@ -89,6 +92,12 @@ Object {
   "products": Object {
     "FakeProduct": Object {
       "description": "Description for fake product",
+      "featureGroupIds": Array [
+        "FakeProduct__FakeFeatureGroup",
+      ],
+      "featureIds": Array [
+        "FakeProduct__ProductNestedFeature",
+      ],
       "id": "FakeProduct",
       "learnMoreLinks": Array [
         Object {

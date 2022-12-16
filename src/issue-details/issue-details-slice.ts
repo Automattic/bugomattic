@@ -18,7 +18,7 @@ export const issueDetailsSlice = createSlice( {
 				issueType: action.payload,
 			};
 		},
-		setIssueFeature( state, action: PayloadAction< FeatureId > ) {
+		setIssueFeatureId( state, action: PayloadAction< FeatureId > ) {
 			return {
 				...state,
 				featureId: action.payload,
@@ -34,8 +34,12 @@ export const issueDetailsSlice = createSlice( {
 } );
 
 export const issueDetailsReducer = issueDetailsSlice.reducer;
-export const { setIssueType, setIssueFeature, setIssueTitle } = issueDetailsSlice.actions;
+export const { setIssueType, setIssueFeatureId, setIssueTitle } = issueDetailsSlice.actions;
 
 export function selectIssueDetails( state: RootState ): IssueDetails {
 	return state.issueDetails;
+}
+
+export function selectIssueFeatureId( state: RootState ): FeatureId {
+	return state.issueDetails.featureId;
 }

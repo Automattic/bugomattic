@@ -32,11 +32,26 @@ it makes the most sense to rely on the simplicity of the built-in `react-scripts
 
 - `yarn start`: Run the app locally in development mode. This mode will use faked data instead of backend APIs.
   It includes hot-reloading.
-- `yarn build`: Bundle the app for production. Bundles the application into the `build` folder.
+- `yarn build`: Bundle the app for A8c production deployment. Bundles the application into the `dist` folder.
 - `yarn test`: Run tests in watch mode (automatically retests on changes).
 - `yarn test:once`: Run tests once, without watching.
+- `yarn test:once --coverage`: See unit test coverage.
 - `yarn lint`: Lint code and markdown files. Doesn't auto-fix.
 - `yarn lint:fix`: Lint and autofix code and markdown files.
+
+### Testing Locally with Local Reporting Configs
+
+A lot of Bugomattic is driven by the "reporting config," a configuration that maps issue reporting preferences for different
+features and issue types. In production, this reporting config is delivered by the REST API. For local testing, we serve local JSON files.
+
+To test with a local reporting config, add the JSON file to `public/local-reporting-configs`,
+and then set the ENV variable `REACT_APP_REPORTING_CONFIG_NAME` to the name of the file.
+
+E.g. `REACT_APP_REPORTING_CONFIG_NAME='test' yarn start` for a file at `public/local-reporting-configs/test.json`.
+
+By default, the local app will use the `default.json` file in that directory.
+**Do not commit any other JSON files other than the default.json file, and do not commit a modified default file without an important reason.**
+There is a `.gitignore` rule that should block other reporting configs from being committed.
 
 ### Linting
 
