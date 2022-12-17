@@ -1,4 +1,10 @@
-import React, { ChangeEventHandler, FormEventHandler, useState } from 'react';
+import React, {
+	ChangeEventHandler,
+	FormEventHandler,
+	ReactNode,
+	useCallback,
+	useState,
+} from 'react';
 import { useAppDispatch, useAppSelector } from '../app';
 import { selectIssueDetails, setIssueTitle, setIssueType } from './issue-details-slice';
 import { IssueType } from './types';
@@ -11,19 +17,44 @@ export function TitleTypeForm() {
 	const { issueTitle, issueType } = useAppSelector( selectIssueDetails );
 	const [ title, setTitle ] = useState( issueTitle );
 	const [ type, setType ] = useState< IssueType >( issueType );
+	const [ submissionAttempted, setSubmissionAttempted ] = useState( false );
 
-	const handleTitleChange: ChangeEventHandler< HTMLInputElement > = ( event ) =>
-		setTitle( event.target.value );
+	// Memoize because it's passed down as a prop
+	const handleTitleChange: ChangeEventHandler< HTMLInputElement > = useCallback(
+		( event ) => setTitle( event.target.value ),
+		[]
+	);
 
 	const handleTypeChange: ChangeEventHandler< HTMLInputElement > = ( event ) => {
 		const newType: IssueType = event.target.value as IssueType;
 		setType( newType );
 	};
 
-	const readyToContinue = type !== 'unset';
+	const titleCharacterLimit = 30;
+	const titleIsInvalid = title.length > titleCharacterLimit;
+	const typeIsInvalid = type === 'unset';
+
+	const readyToContinue = ! typeIsInvalid && ! titleIsInvalid;
+	const showTitleError = submissionAttempted && titleIsInvalid;
+	const showTypeError = submissionAttempted && typeIsInvalid;
+
+	let titleErrorMessage: ReactNode = null;
+	if ( showTitleError ) {
+		titleErrorMessage = (
+			<span className={ styles.fieldErrorMessage }>Title must be under the character limit</span>
+		);
+	}
+
+	let typeErrorMessage: ReactNode = null;
+	if ( showTypeError ) {
+		typeErrorMessage = (
+			<span className={ styles.fieldErrorMessage }>You must pick an issue type</span>
+		);
+	}
 
 	const handleSubmit: FormEventHandler< HTMLFormElement > = ( event ) => {
 		event.preventDefault();
+		setSubmissionAttempted( true );
 		if ( readyToContinue ) {
 			dispatch( setIssueTitle( title ) );
 			dispatch( setIssueType( type ) );
@@ -32,13 +63,22 @@ export function TitleTypeForm() {
 
 	return (
 		<form onSubmit={ handleSubmit }>
-			<div>
-				<label>{ 'Title (Optional)' }</label>
-				<LimitedTextField value={ title } onChange={ handleTitleChange } characterLimit={ 30 } />
+			<div className={ styles.titleWrapper }>
+				<label>
+					<span className={ styles.titleLabel }>
+						<span>{ 'Title (Optional)' }</span>
+						{ titleErrorMessage }
+					</span>
+					<LimitedTextField value={ title } onChange={ handleTitleChange } characterLimit={ 30 } />
+				</label>
 			</div>
 
 			<fieldset className={ styles.typeFieldset }>
-				<legend className={ styles.radioLegend }>Type</legend>
+				<span className={ styles.typeLabel }>
+					<legend className={ styles.radioLegend }>Type</legend>
+					{ typeErrorMessage }
+				</span>
+
 				<div className={ styles.radioWrapper }>
 					<label className={ styles.radio }>
 						<input
@@ -47,7 +87,7 @@ export function TitleTypeForm() {
 							value="bug"
 							name="type"
 							onChange={ handleTypeChange }
-							required={ true }
+							aria-required={ true }
 						/>
 						Bug
 					</label>
@@ -61,7 +101,7 @@ export function TitleTypeForm() {
 							value="featureRequest"
 							name="type"
 							onChange={ handleTypeChange }
-							required={ true }
+							aria-required={ true }
 						/>
 						Feature Request
 					</label>
@@ -75,7 +115,7 @@ export function TitleTypeForm() {
 							value="blocker"
 							name="type"
 							onChange={ handleTypeChange }
-							required={ true }
+							aria-required={ true }
 						/>
 						Blocker
 					</label>

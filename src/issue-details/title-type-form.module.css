@@ -1,3 +1,5 @@
+@import '../variables.css';
+
 .typeFieldset {
 	border: none;
 	margin: 0;
@@ -16,12 +18,11 @@
 }
 
 .radioLegend {
-	margin-bottom: 0.25rem;
 	padding: 0;
 }
 
 .radioWrapper:nth-child( -n + 3 ) {
-	margin-bottom: 0.25rem;
+	margin-bottom: 0.5rem;
 }
 
 .continueWrapper {
@@ -29,4 +30,38 @@
 	justify-content: right;
 	padding-top: 0.5rem;
 	padding-bottom: 0.5rem;
+}
+
+.fieldErrorMessage {
+	font-size: 0.75rem;
+	color: var( --color-error );
+	margin-left: 0.5rem;
+}
+
+.titleLabel,
+.typeLabel {
+	display: flex;
+	align-items: flex-end;
+	flex-direction: row;
+	margin-bottom: 0.5rem;
+}
+
+.titleWrapper {
+	margin-bottom: 1.5rem;
+}
+
+@media only screen and ( min-width: 600px ) {
+}
+
+@media only screen and ( max-width: 600px ) {
+	.titleLabel,
+	.typeLabel {
+		align-items: flex-start;
+		flex-direction: column;
+	}
+
+	.fieldErrorMessage {
+		margin-left: 0;
+		margin-top: 0.25rem;
+	}
 }

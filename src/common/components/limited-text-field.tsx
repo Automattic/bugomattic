@@ -15,21 +15,25 @@ export function LimitedTextField( { value, onChange, characterLimit }: Props ) {
 	const charactersRemaining = characterLimit - value.length;
 	const isOverLimit = charactersRemaining < 0;
 
+	const inputClassName = isOverLimit ? styles.invalidInput : '';
+
+	const maxMessage = <>Maximum { characterLimit } characters</>;
+	// Having a blank space by default renders the line in the DOM and prevents layout jumping.
 	let limitMessage: ReactNode = <>&nbsp;</>;
 	if ( isOverLimit ) {
 		limitMessage = (
 			<>
-				Maximum { characterLimit } characters &#40;
+				{ maxMessage } &#40;
 				<span className={ styles.limitWarning }>{ Math.abs( charactersRemaining ) } over</span>&#41;
 			</>
 		);
 	} else if ( isFocused ) {
 		if ( value === '' ) {
-			limitMessage = <>Maximum { characterLimit } characters</>;
+			limitMessage = maxMessage;
 		} else {
 			limitMessage = (
 				<>
-					Maximum { characterLimit } characters &#40;{ charactersRemaining } remaining&#41;
+					{ maxMessage } &#40;{ charactersRemaining } remaining&#41;
 				</>
 			);
 		}
@@ -43,6 +47,7 @@ export function LimitedTextField( { value, onChange, characterLimit }: Props ) {
 				type="text"
 				value={ value }
 				onChange={ onChange }
+				className={ inputClassName }
 			/>
 			<p className={ styles.limitMessage }>{ limitMessage }</p>
 		</div>

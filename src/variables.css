@@ -15,4 +15,6 @@
 	--color-text-dark: #101517;
 	--color-text-light: #50575e;
 	--color-text-inverted: #ffffff;
+
+	--mobile-breakpoint: 600px;
 }
