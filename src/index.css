@@ -26,8 +26,9 @@ input[type='email'] {
 	font-size: 1rem;
 	padding: 0.75rem 0.5rem;
 	width: 100%;
-	background-color: var( --color-neutral );
-	border: 2px solid transparent;
+	border-radius: 4px;
+	background-color: var( --color-white );
+	border: 2px solid var( --color-border );
 	box-sizing: border-box;
 }
 
@@ -37,6 +38,16 @@ input[type='email']:focus {
 	background-color: var( --color-white );
 	border: 2px solid var( --color-primary );
 	outline: none;
+}
+
+input[type='radio'] {
+	accent-color: var( --color-primary );
+}
+
+button {
+	font-size: 1rem;
+	border: none;
+	padding: 0.75rem 1.5rem;
 }
 
 input code {

@@ -1,0 +1,20 @@
+@import '../../variables.css';
+
+button.button {
+	color: var( --color-white );
+	background-color: var( --color-primary );
+	border-radius: 4px;
+}
+
+button.button:hover {
+	background-color: var( --color-primary-dark );
+}
+
+button.button.looksDisabled {
+	color: var( --color-primary-dark );
+	background-color: var( --color-primary-extra-light );
+}
+
+button.button.looksDisabled:hover {
+	background-color: var( --color-primary-light );
+}
