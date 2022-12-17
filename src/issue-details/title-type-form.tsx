@@ -41,14 +41,18 @@ export function TitleTypeForm() {
 	let titleErrorMessage: ReactNode = null;
 	if ( showTitleError ) {
 		titleErrorMessage = (
-			<span className={ styles.fieldErrorMessage }>Title must be under the character limit</span>
+			<span aria-live="assertive" className={ styles.fieldErrorMessage }>
+				Title must be under the character limit
+			</span>
 		);
 	}
 
 	let typeErrorMessage: ReactNode = null;
 	if ( showTypeError ) {
 		typeErrorMessage = (
-			<span className={ styles.fieldErrorMessage }>You must pick an issue type</span>
+			<span aria-live="assertive" className={ styles.fieldErrorMessage }>
+				You must pick an issue type
+			</span>
 		);
 	}
 
@@ -74,10 +78,10 @@ export function TitleTypeForm() {
 			</div>
 
 			<fieldset className={ styles.typeFieldset }>
-				<span className={ styles.typeLabel }>
-					<legend className={ styles.radioLegend }>Type</legend>
+				<legend className={ styles.typeLabel }>
+					<span>Type</span>
 					{ typeErrorMessage }
-				</span>
+				</legend>
 
 				<div className={ styles.radioWrapper }>
 					<label className={ styles.radio }>
