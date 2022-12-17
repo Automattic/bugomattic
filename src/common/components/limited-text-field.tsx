@@ -48,6 +48,7 @@ export function LimitedTextField( { value, onChange, characterLimit }: Props ) {
 				value={ value }
 				onChange={ onChange }
 				className={ inputClassName }
+				aria-invalid={ isOverLimit }
 			/>
 			<p className={ styles.limitMessage }>{ limitMessage }</p>
 		</div>

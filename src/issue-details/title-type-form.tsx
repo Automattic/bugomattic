@@ -92,6 +92,7 @@ export function TitleTypeForm() {
 							name="type"
 							onChange={ handleTypeChange }
 							aria-required={ true }
+							aria-invalid={ showTypeError }
 						/>
 						Bug
 					</label>
@@ -106,6 +107,7 @@ export function TitleTypeForm() {
 							name="type"
 							onChange={ handleTypeChange }
 							aria-required={ true }
+							aria-invalid={ showTypeError }
 						/>
 						Feature Request
 					</label>
@@ -120,6 +122,7 @@ export function TitleTypeForm() {
 							name="type"
 							onChange={ handleTypeChange }
 							aria-required={ true }
+							aria-invalid={ showTypeError }
 						/>
 						Blocker
 					</label>
