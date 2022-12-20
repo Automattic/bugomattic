@@ -3,7 +3,6 @@ import userEvent from '@testing-library/user-event';
 import { screen } from '@testing-library/react';
 import { TitleTypeForm } from '../title-type-form';
 import { createMockApiClient, renderWithProviders } from '../../test-utils';
-import { notDeepEqual } from 'assert';
 
 describe( '[TitleTypeForm]', () => {
 	function setup( component: ReactElement ) {
