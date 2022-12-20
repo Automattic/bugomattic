@@ -13,7 +13,7 @@ export function LimitedTextField( { value, onChange, characterLimit, onBlur, onF
 	const charactersRemaining = characterLimit - value.length;
 	const isOverLimit = charactersRemaining < 0;
 
-	const inputClassName = isOverLimit ? styles.invalidInput : '';
+	const inputClassName = isOverLimit ? styles.invalidInput : undefined;
 
 	const baseLimitMessage = <>Maximum { characterLimit } characters</>;
 	let limitMessage: ReactNode;
