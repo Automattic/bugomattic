@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { screen } from '@testing-library/react';
 import { TitleTypeForm } from '../title-type-form';
 import { createMockApiClient, renderWithProviders } from '../../test-utils';
+import { notDeepEqual } from 'assert';
 
 describe( '[TitleTypeForm]', () => {
 	function setup( component: ReactElement ) {
@@ -139,6 +140,15 @@ describe( '[TitleTypeForm]', () => {
 			expect( await screen.findByText( expectedText ) ).toBeInTheDocument();
 		} );
 
+		test( 'Clicking "Continue" with an unselected issue type marks the radios as invalid', async () => {
+			const { user } = setup( <TitleTypeForm /> );
+			await user.click( screen.getByRole( 'button', { name: 'Continue' } ) );
+
+			expect( screen.getByRole( 'radio', { name: 'Bug' } ) ).toBeInvalid();
+			expect( screen.getByRole( 'radio', { name: 'Feature Request' } ) ).toBeInvalid();
+			expect( screen.getByRole( 'radio', { name: 'Blocker' } ) ).toBeInvalid();
+		} );
+
 		test( 'Selecting an issue type causes the form field error to disappear', async () => {
 			const { user } = setup( <TitleTypeForm /> );
 			await user.click( screen.getByRole( 'button', { name: 'Continue' } ) );
@@ -147,6 +157,16 @@ describe( '[TitleTypeForm]', () => {
 			const expectedText = 'You must pick an issue type';
 
 			expect( screen.queryByText( expectedText ) ).not.toBeInTheDocument();
+		} );
+
+		test( 'Selecting an issue type causes radios to no longer be invalid', async () => {
+			const { user } = setup( <TitleTypeForm /> );
+			await user.click( screen.getByRole( 'button', { name: 'Continue' } ) );
+			await user.click( screen.getByRole( 'radio', { name: 'Bug' } ) );
+
+			expect( screen.getByRole( 'radio', { name: 'Bug' } ) ).not.toBeInvalid();
+			expect( screen.getByRole( 'radio', { name: 'Feature Request' } ) ).not.toBeInvalid();
+			expect( screen.getByRole( 'radio', { name: 'Blocker' } ) ).not.toBeInvalid();
 		} );
 	} );
 } );

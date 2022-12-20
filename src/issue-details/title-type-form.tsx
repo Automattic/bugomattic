@@ -15,10 +15,11 @@ import styles from './title-type-form.module.css';
 export function TitleTypeForm() {
 	const dispatch = useAppDispatch();
 	const { issueTitle, issueType } = useAppSelector( selectIssueDetails );
+
 	const [ title, setTitle ] = useState( issueTitle );
 	const [ type, setType ] = useState< IssueType >( issueType );
-	const [ titleWasVisited, setTitleWasVisited ] = useState( false );
-	const [ typeWasVisited, setTypeWasVisited ] = useState( false );
+	const [ titleVisited, setTitleVisited ] = useState( false );
+	const [ typeVisited, setTypeVisited ] = useState( false );
 	const [ submissionAttempted, setSubmissionAttempted ] = useState( false );
 
 	// Memoize because it's passed down as a prop
@@ -33,36 +34,16 @@ export function TitleTypeForm() {
 	};
 
 	// Memoize because it's passed down as a prop
-	const handleTitleBlur = useCallback( () => setTitleWasVisited( true ), [] );
-	const handleTypeBlur = () => setTypeWasVisited( true );
+	const handleTitleBlur = useCallback( () => setTitleVisited( true ), [] );
+	const handleTypeBlur = () => setTypeVisited( true );
 
 	const titleCharacterLimit = 200;
 	const titleIsInvalid = title.length > titleCharacterLimit;
 	const typeIsInvalid = type === 'unset';
 
 	const readyToContinue = ! typeIsInvalid && ! titleIsInvalid;
-	const showTitleError = ( submissionAttempted || titleWasVisited ) && titleIsInvalid;
-	const showTypeError = ( submissionAttempted || typeWasVisited ) && typeIsInvalid;
-
-	let titleErrorMessage: ReactNode = null;
-	if ( showTitleError ) {
-		titleErrorMessage = (
-			<span aria-live="assertive" className={ styles.fieldErrorMessage }>
-				<ErrorIcon className={ styles.errorIcon } />
-				Title must be under the character limit
-			</span>
-		);
-	}
-
-	let typeErrorMessage: ReactNode = null;
-	if ( showTypeError ) {
-		typeErrorMessage = (
-			<span aria-live="assertive" className={ styles.fieldErrorMessage }>
-				<ErrorIcon className={ styles.errorIcon } />
-				You must pick an issue type
-			</span>
-		);
-	}
+	const showTitleError = ( submissionAttempted || titleVisited ) && titleIsInvalid;
+	const showTypeError = ( submissionAttempted || typeVisited ) && typeIsInvalid;
 
 	const handleSubmit: FormEventHandler< HTMLFormElement > = ( event ) => {
 		event.preventDefault();
@@ -72,6 +53,27 @@ export function TitleTypeForm() {
 			dispatch( setIssueType( type ) );
 		}
 	};
+
+	function FormErrorMessage( { children }: { children: string } ) {
+		return (
+			<span aria-live="assertive" className={ styles.fieldErrorMessage }>
+				<ErrorIcon className={ styles.errorIcon } />
+				{ children }
+			</span>
+		);
+	}
+
+	let titleErrorMessage: ReactNode = null;
+	if ( showTitleError ) {
+		titleErrorMessage = (
+			<FormErrorMessage>Title must be under the character limit</FormErrorMessage>
+		);
+	}
+
+	let typeErrorMessage: ReactNode = null;
+	if ( showTypeError ) {
+		typeErrorMessage = <FormErrorMessage>You must pick an issue type</FormErrorMessage>;
+	}
 
 	return (
 		<form onSubmit={ handleSubmit }>
