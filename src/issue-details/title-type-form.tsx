@@ -17,9 +17,9 @@ export function TitleTypeForm() {
 	const { issueTitle, issueType } = useAppSelector( selectIssueDetails );
 	const [ title, setTitle ] = useState( issueTitle );
 	const [ type, setType ] = useState< IssueType >( issueType );
-	const [ submissionAttempted, setSubmissionAttempted ] = useState( false );
 	const [ titleWasVisited, setTitleWasVisited ] = useState( false );
 	const [ typeWasVisited, setTypeWasVisited ] = useState( false );
+	const [ submissionAttempted, setSubmissionAttempted ] = useState( false );
 
 	// Memoize because it's passed down as a prop
 	const handleTitleChange: ChangeEventHandler< HTMLInputElement > = useCallback(
@@ -36,7 +36,7 @@ export function TitleTypeForm() {
 	const handleTitleBlur = useCallback( () => setTitleWasVisited( true ), [] );
 	const handleTypeBlur = () => setTypeWasVisited( true );
 
-	const titleCharacterLimit = 30;
+	const titleCharacterLimit = 200;
 	const titleIsInvalid = title.length > titleCharacterLimit;
 	const typeIsInvalid = type === 'unset';
 
