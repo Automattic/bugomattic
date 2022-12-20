@@ -1,6 +1,7 @@
 :root {
 	--color-primary: #0675c4; /* Automattic Blue 50 */
-	--color-primary-dark: #02395c; /* Automattic Blue 80 */
+	--color-primary-dark: #044b7a; /* Automattic Blue 70 */
+	--color-primary-extra-dark: #01283d; /* Automattic Blue 90 */
 	--color-primary-light: #bbe0fa; /* Automattic Blue 20 */
 	--color-primary-extra-light: #e9eff5; /* Automattic Blue 5 */
 	--color-accent: #c9356e; /* Automattic Pink 50 */

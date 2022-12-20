@@ -49,6 +49,25 @@ button {
 	padding: 0.75rem 1.5rem;
 }
 
+/*
+These are generic enough that it feels like overkill to make a new component just for these button styles.
+So, we'll enable a global class option. 
+*/
+
+button.primaryButton {
+	color: var( --color-white );
+	background-color: var( --color-primary );
+	border-radius: 4px;
+}
+
+button.primaryButton:hover {
+	background-color: var( --color-primary-dark );
+}
+
+button.primaryButton:active {
+	background-color: var( --color-primary-extra-dark );
+}
+
 input code {
 	font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }

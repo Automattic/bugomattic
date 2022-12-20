@@ -8,10 +8,9 @@ import React, {
 import { useAppDispatch, useAppSelector } from '../app';
 import { selectIssueDetails, setIssueTitle, setIssueType } from './issue-details-slice';
 import { IssueType } from './types';
-import styles from './title-type-form.module.css';
-import { PrimaryButton } from '../common/components/primary-button';
 import { LimitedTextField } from '../common';
 import { ReactComponent as ErrorIcon } from '../common/svgs/warning.svg';
+import styles from './title-type-form.module.css';
 
 export function TitleTypeForm() {
 	const dispatch = useAppDispatch();
@@ -146,7 +145,7 @@ export function TitleTypeForm() {
 				</div>
 			</fieldset>
 			<div className={ styles.continueWrapper }>
-				<PrimaryButton looksDisabled={ ! readyToContinue }>Continue</PrimaryButton>
+				<button className="primaryButton">Continue</button>
 			</div>
 		</form>
 	);
