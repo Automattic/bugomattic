@@ -11,6 +11,7 @@ import { IssueType } from './types';
 import styles from './title-type-form.module.css';
 import { PrimaryButton } from '../common/components/primary-button';
 import { LimitedTextField } from '../common';
+import { ReactComponent as ErrorIcon } from '../common/svgs/warning.svg';
 
 export function TitleTypeForm() {
 	const dispatch = useAppDispatch();
@@ -18,6 +19,8 @@ export function TitleTypeForm() {
 	const [ title, setTitle ] = useState( issueTitle );
 	const [ type, setType ] = useState< IssueType >( issueType );
 	const [ submissionAttempted, setSubmissionAttempted ] = useState( false );
+	const [ titleWasVisited, setTitleWasVisited ] = useState( false );
+	const [ typeWasVisited, setTypeWasVisited ] = useState( false );
 
 	// Memoize because it's passed down as a prop
 	const handleTitleChange: ChangeEventHandler< HTMLInputElement > = useCallback(
@@ -30,18 +33,23 @@ export function TitleTypeForm() {
 		setType( newType );
 	};
 
+	// Memoize because it's passed down as a prop
+	const handleTitleBlur = useCallback( () => setTitleWasVisited( true ), [] );
+	const handleTypeBlur = () => setTypeWasVisited( true );
+
 	const titleCharacterLimit = 30;
 	const titleIsInvalid = title.length > titleCharacterLimit;
 	const typeIsInvalid = type === 'unset';
 
 	const readyToContinue = ! typeIsInvalid && ! titleIsInvalid;
-	const showTitleError = submissionAttempted && titleIsInvalid;
-	const showTypeError = submissionAttempted && typeIsInvalid;
+	const showTitleError = ( submissionAttempted || titleWasVisited ) && titleIsInvalid;
+	const showTypeError = ( submissionAttempted || typeWasVisited ) && typeIsInvalid;
 
 	let titleErrorMessage: ReactNode = null;
 	if ( showTitleError ) {
 		titleErrorMessage = (
 			<span aria-live="assertive" className={ styles.fieldErrorMessage }>
+				<ErrorIcon className={ styles.errorIcon } />
 				Title must be under the character limit
 			</span>
 		);
@@ -51,6 +59,7 @@ export function TitleTypeForm() {
 	if ( showTypeError ) {
 		typeErrorMessage = (
 			<span aria-live="assertive" className={ styles.fieldErrorMessage }>
+				<ErrorIcon className={ styles.errorIcon } />
 				You must pick an issue type
 			</span>
 		);
@@ -73,7 +82,12 @@ export function TitleTypeForm() {
 						<span>{ 'Title (Optional)' }</span>
 						{ titleErrorMessage }
 					</span>
-					<LimitedTextField value={ title } onChange={ handleTitleChange } characterLimit={ 30 } />
+					<LimitedTextField
+						onBlur={ handleTitleBlur }
+						value={ title }
+						onChange={ handleTitleChange }
+						characterLimit={ titleCharacterLimit }
+					/>
 				</label>
 			</div>
 
@@ -91,6 +105,7 @@ export function TitleTypeForm() {
 							value="bug"
 							name="type"
 							onChange={ handleTypeChange }
+							onBlur={ handleTypeBlur }
 							aria-required={ true }
 							aria-invalid={ showTypeError }
 						/>
@@ -106,6 +121,7 @@ export function TitleTypeForm() {
 							value="featureRequest"
 							name="type"
 							onChange={ handleTypeChange }
+							onBlur={ handleTypeBlur }
 							aria-required={ true }
 							aria-invalid={ showTypeError }
 						/>
@@ -121,6 +137,7 @@ export function TitleTypeForm() {
 							value="blocker"
 							name="type"
 							onChange={ handleTypeChange }
+							onBlur={ handleTypeBlur }
 							aria-required={ true }
 							aria-invalid={ showTypeError }
 						/>
