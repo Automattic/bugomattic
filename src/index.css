@@ -8,7 +8,6 @@ body {
 	-moz-osx-font-smoothing: grayscale;
 	color: var( --color-text-primary );
 	font-size: 1rem;
-	line-height: 1.5rem;
 }
 
 h1,
@@ -26,8 +25,9 @@ input[type='email'] {
 	font-size: 1rem;
 	padding: 0.75rem 0.5rem;
 	width: 100%;
-	background-color: var( --color-neutral );
-	border: 2px solid transparent;
+	border-radius: 4px;
+	background-color: var( --color-white );
+	border: 2px solid var( --color-border );
 	box-sizing: border-box;
 }
 
@@ -37,6 +37,35 @@ input[type='email']:focus {
 	background-color: var( --color-white );
 	border: 2px solid var( --color-primary );
 	outline: none;
+}
+
+input[type='radio'] {
+	accent-color: var( --color-primary );
+}
+
+button {
+	font-size: 1rem;
+	border: none;
+	padding: 0.75rem 1.5rem;
+}
+
+/*
+These are generic enough that it feels like overkill to make a new component just for these button styles.
+So, we'll enable a global class option. 
+*/
+
+button.primaryButton {
+	color: var( --color-white );
+	background-color: var( --color-primary );
+	border-radius: 4px;
+}
+
+button.primaryButton:hover {
+	background-color: var( --color-primary-dark );
+}
+
+button.primaryButton:active {
+	background-color: var( --color-primary-extra-dark );
 }
 
 input code {
