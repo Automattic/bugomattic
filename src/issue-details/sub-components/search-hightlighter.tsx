@@ -2,7 +2,7 @@ import React from 'react';
 import { useAppSelector } from '../../app';
 import { SubstringHighlighter } from '../../common';
 import { selectReportingConfigSearchTerm } from '../../reporting-config';
-import styles from '../feature-selector-form.module.css';
+import styles from '../feature-selector.module.css';
 
 interface Props {
 	children: string;

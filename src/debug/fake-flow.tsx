@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { FeatureSelectorForm, TitleTypeForm } from '../issue-details';
+import { FeatureSelector, TitleTypeForm } from '../issue-details';
 import { useMonitoring } from '../monitoring';
 
 export function FakeFlow() {
@@ -17,7 +17,7 @@ export function FakeFlow() {
 				<TitleTypeForm />
 			</div>
 			<div>
-				<FeatureSelectorForm />
+				<FeatureSelector />
 			</div>
 		</div>
 	);

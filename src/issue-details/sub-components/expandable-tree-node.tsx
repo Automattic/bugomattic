@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import styles from './../feature-selector-form.module.css';
+import styles from './../feature-selector.module.css';
 import { ReactComponent as CollapsedIcon } from '../../common/svgs/chevron-right.svg';
 import { ReactComponent as ExpandedIcon } from '../../common/svgs/chevron-down.svg';
 
