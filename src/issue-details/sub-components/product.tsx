@@ -41,7 +41,11 @@ export function Product( { id }: Props ) {
 			handleToggle={ handleCollapseExpandToggle }
 		>
 			<SortedFeatureGroupList featureGroupIds={ featureGroupIdsToDisplay } parentName={ name } />
-			<SortedFeatureList featureIds={ featureIdsToDisplay } parentName={ name } />
+			<SortedFeatureList
+				featureIds={ featureIdsToDisplay }
+				parentName={ name }
+				treeLevel={ 'second' }
+			/>
 		</ExpandableTreeNode>
 	);
 }

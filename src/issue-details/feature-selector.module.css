@@ -8,8 +8,9 @@
 	padding-left: 0.25rem;
 }
 
-.subLevel {
-	padding-left: 2.5rem;
+.secondLevel,
+.thirdLevel {
+	padding-left: 0;
 }
 
 .treeNode {
@@ -22,35 +23,37 @@
 	padding: 0.75rem 0.5rem;
 	display: flex;
 	align-items: center;
-	border-top: 1px solid transparent;
-	border-bottom: 1px solid transparent;
+}
+
+.secondLevel .treeNode {
+	padding-left: 2.5rem;
+}
+
+.thirdLevel .treeNode {
+	padding-left: 5rem;
 }
 
 .treeNode:hover,
 .treeNode:focus,
 .treeNode:focus-visible {
-	border-top: 1px solid var( --color-primary );
-	border-bottom: 1px solid var( --color-primary );
-	outline: none;
+	background-color: var( --color-neutral-light );
 }
 
 .feature {
 	display: block;
 }
 
-.selectedFeature {
-	background-color: var( --color-primary );
-	color: var( --color-text-inverted );
+.selectedFeature,
+.selectedFeature:hover,
+.selectedFeature:focus,
+.selectedFeature:focus-visible {
+	background-color: var( --color-neutral );
 }
 
 .searchSubstringMatch {
 	font-weight: 700;
 	text-decoration: underline;
 	background-color: var( --color-primary-extra-light );
-}
-
-.selectedFeature .searchSubstringMatch {
-	background-color: var( --color-primary-dark );
 }
 
 .noResultsMessage {

@@ -22,7 +22,10 @@ export function SortedFeatureGroupList( { featureGroupIds, parentName }: Props )
 	}
 
 	return (
-		<ul className={ styles.subLevel } aria-label={ `List of feature groups for ${ parentName }` }>
+		<ul
+			className={ styles.secondLevel }
+			aria-label={ `List of feature groups for ${ parentName }` }
+		>
 			{ sortedFeatureGroupIds.map( ( featureGroupId ) => (
 				<FeatureGroup key={ featureGroupId } id={ featureGroupId } />
 			) ) }

@@ -33,7 +33,11 @@ export function FeatureGroup( { id }: Props ) {
 			isExpanded={ isExpanded }
 			handleToggle={ handleCollapseExpandToggle }
 		>
-			<SortedFeatureList featureIds={ featureIdsToDisplay } parentName={ name } />
+			<SortedFeatureList
+				featureIds={ featureIdsToDisplay }
+				parentName={ name }
+				treeLevel={ 'third' }
+			/>
 		</ExpandableTreeNode>
 	);
 }

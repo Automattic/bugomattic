@@ -8,14 +8,22 @@ import styles from './../feature-selector.module.css';
 interface Props {
 	featureIds: string[];
 	parentName: string;
+	treeLevel: 'second' | 'third';
 }
 
-export function SortedFeatureList( { featureIds, parentName }: Props ) {
+export function SortedFeatureList( { featureIds, parentName, treeLevel }: Props ) {
 	const { features } = useAppSelector( selectNormalizedReportingConfig );
 	const sortedFeatureIds = useMemo(
 		() => sortEntityIdsByName( featureIds, features ),
 		[ featureIds, features ]
 	);
+
+	let parentClass: string | undefined = undefined;
+	if ( treeLevel === 'second' ) {
+		parentClass = styles.secondLevel;
+	} else if ( treeLevel === 'third' ) {
+		parentClass = styles.thirdLevel;
+	}
 
 	if ( sortedFeatureIds.length === 0 ) {
 		return null;
@@ -23,7 +31,7 @@ export function SortedFeatureList( { featureIds, parentName }: Props ) {
 
 	return (
 		<div
-			className={ styles.subLevel }
+			className={ parentClass }
 			role="listbox"
 			aria-label={ `List of features for ${ parentName }` }
 		>
