@@ -24,17 +24,16 @@ export function Feature( { id }: Props ) {
 	}
 
 	const { features } = useAppSelector( selectNormalizedReportingConfig );
-	const featureDetails = features[ id ];
-	let featureName = featureDetails.name;
-	const keywords = featureDetails.keywords;
+	let { name } = features[ id ];
+	const { keywords, description } = features[ id ];
 
 	const searchTerm = useAppSelector( selectReportingConfigSearchTerm );
-	if ( searchTerm !== '' && ! includesIgnoringCase( featureName, searchTerm ) ) {
+	if ( searchTerm !== '' && ! includesIgnoringCase( name, searchTerm ) ) {
 		const matchingKeyword = keywords?.find( ( keyword ) =>
 			includesIgnoringCase( keyword, searchTerm )
 		);
 		if ( matchingKeyword ) {
-			featureName = `${ featureName } (${ matchingKeyword })`;
+			name = `${ name } (${ matchingKeyword })`;
 		}
 	}
 
@@ -44,12 +43,14 @@ export function Feature( { id }: Props ) {
 			aria-selected={ isSelected }
 			className={ classNames.join( ' ' ) }
 			onClick={ handleFeatureSelect }
+			title={ description }
+			aria-description={ description }
 		>
 			<SubstringHighlighter
 				substring={ searchTerm }
 				highlightClassName={ styles.searchSubstringMatch }
 			>
-				{ featureName }
+				{ name }
 			</SubstringHighlighter>
 		</button>
 	);

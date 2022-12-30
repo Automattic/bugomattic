@@ -16,7 +16,7 @@ interface Props {
 
 export function Product( { id }: Props ) {
 	const { products } = useAppSelector( selectNormalizedReportingConfig );
-	const { name, featureGroupIds, featureIds } = products[ id ];
+	const { name, featureGroupIds, featureIds, description } = products[ id ];
 
 	const { isExpanded, handleCollapseExpandToggle } = useExpansionWithSearch();
 
@@ -39,6 +39,7 @@ export function Product( { id }: Props ) {
 			label={ label }
 			isExpanded={ isExpanded }
 			handleToggle={ handleCollapseExpandToggle }
+			description={ description }
 		>
 			<SortedFeatureGroupList featureGroupIds={ featureGroupIdsToDisplay } parentName={ name } />
 			<SortedFeatureList

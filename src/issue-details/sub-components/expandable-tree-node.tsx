@@ -6,11 +6,18 @@ import { ReactComponent as ExpandedIcon } from '../../common/svgs/chevron-down.s
 interface Props {
 	children: ReactNode;
 	label: ReactNode;
+	description?: string;
 	isExpanded: boolean;
 	handleToggle: () => void;
 }
 
-export function ExpandableTreeNode( { label, children, isExpanded, handleToggle }: Props ) {
+export function ExpandableTreeNode( {
+	label,
+	children,
+	isExpanded,
+	handleToggle,
+	description,
+}: Props ) {
 	// We need a unique ID for setting aria-controls. This kind of random string should be plenty.
 	// If needed in the future, we can crawl the label for text content and add that.
 	const randomString = Math.random().toString( 16 ).slice( 2 );
@@ -30,6 +37,8 @@ export function ExpandableTreeNode( { label, children, isExpanded, handleToggle 
 				aria-controls={ contentId }
 				className={ styles.treeNode }
 				onClick={ handleToggle }
+				title={ description }
+				aria-description={ description }
 			>
 				{ icon }
 				{ label }

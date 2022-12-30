@@ -21,6 +21,10 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 	... with all the ids intentionally not sorted alphabetically.
 
 	We need no tasks for this set of tests.
+
+	Note -- there is a bug in the underlying library code where "option" roles that have "title"
+	attributes are miscalculating the accessible name. Because of that, we are avoiding adding descriptions here.
+	See https://github.com/eps1lon/dom-accessibility-api/issues/892.
 	*/
 	const reportingConfig: NormalizedReportingConfig = {
 		tasks: {},
