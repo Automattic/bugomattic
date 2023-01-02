@@ -42,15 +42,19 @@ export function FeatureSelectorForm() {
 
 	return (
 		<section className={ styles.sectionWrapper }>
-			<DebouncedSearch
-				callback={ handleSearch }
-				placeholder="Search for a feature"
-				inputAriaControls={ searchControlsId }
-			/>
-			<div id={ searchControlsId }>
+			<div className={ styles.searchWrapper }>
+				<DebouncedSearch
+					callback={ handleSearch }
+					placeholder="Search for a feature"
+					inputAriaControls={ searchControlsId }
+				/>
+			</div>
+
+			<div className={ styles.treeSection } id={ searchControlsId }>
 				{ noResultsFound && noResultsFoundMessage }
 				<SortedProductList productIds={ productsToDisplay } />
 			</div>
+
 			<div className={ styles.bottomPanel }>
 				<SelectedFeatureDetails />
 				<div className={ styles.continueButtonWrapper }>
