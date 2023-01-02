@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
-import { FeatureSelector, TitleTypeForm } from '../issue-details';
-import { useMonitoring } from '../monitoring';
+import { FeatureSelectorForm } from '../feature-selector-form/feature-selector-form';
+import { useMonitoring } from '../monitoring/monitoring-provider';
+import { TitleTypeForm } from '../title-type-form/title-type-form';
 
 export function FakeFlow() {
 	const monitoring = useMonitoring();
@@ -17,7 +18,7 @@ export function FakeFlow() {
 				<TitleTypeForm />
 			</div>
 			<div>
-				<FeatureSelector />
+				<FeatureSelectorForm />
 			</div>
 		</div>
 	);

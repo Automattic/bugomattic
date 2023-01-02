@@ -159,3 +159,15 @@ Instead of the base react-redux `useSelector` and `useDispatch`, use the re-expo
 These hooks provide app-specific typings to the core react-redux hooks and will keep your code more type-safe.
 
 For reference, check out the [Redux recommendations for TypeScript](https://redux.js.org/usage/usage-with-typescript#define-typed-hooks).
+
+#### Directory Structure and Indexing
+
+This project generally aims to follow [colocation](https://kentcdodds.com/blog/colocation) for its directory structure. Related code files are placed together.
+
+Specifically, we create directories for the different functional areas of the app and places all the various files related to that area
+(Redux state, components, css, tests) together under that directory.
+
+In general, you should avoid using `index` files. Because we are prioritizing colocation, and also because many Redux/React conventions export global constants,
+using `index` files can lead to over-importing and circular dependency issues.
+
+An exception to the `index` rule is when you have a subdirectory that consists of similar files (like a subdirectory with only private helper components).

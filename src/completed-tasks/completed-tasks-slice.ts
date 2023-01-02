@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState } from '../app';
+import { RootState } from '../app/store';
 
 // This is just for additional clarity in the function signatures below!
 type TaskId = string;

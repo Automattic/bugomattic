@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useAppSelector } from '../../app';
-import { selectReportingConfigSearchTerm } from '../../reporting-config';
+import { useAppSelector } from '../../app/hooks';
+import { selectFeatureSearchTerm } from '../feature-selector-form-slice';
 
 export function useExpansionWithSearch() {
 	const [ isExpanded, setIsExpanded ] = useState( false );
@@ -10,7 +10,7 @@ export function useExpansionWithSearch() {
 	);
 
 	// Recollapse if a search term changes
-	const searchTerm = useAppSelector( selectReportingConfigSearchTerm );
+	const searchTerm = useAppSelector( selectFeatureSearchTerm );
 	useEffect( () => setIsExpanded( false ), [ searchTerm ] );
 
 	return {

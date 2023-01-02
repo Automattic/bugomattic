@@ -1,26 +1,23 @@
 import React, { useCallback } from 'react';
-import { useAppDispatch, useAppSelector } from '../app';
-import { DebouncedSearch } from '../common';
-import {
-	selectNormalizedReportingConfig,
-	selectReportingConfigSearchTerm,
-	selectReportingConfigSearchResults,
-	setReportingConfigSearchTerm,
-} from '../reporting-config';
-import styles from './feature-selector.module.css';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
+import { selectReportingConfigSearchResults } from '../combined-selectors/reporting-config-search-results';
+import { DebouncedSearch } from '../common/components';
+import { selectNormalizedReportingConfig } from '../reporting-config/reporting-config-slice';
+import { selectFeatureSearchTerm, setFeatureSearchTerm } from './feature-selector-form-slice';
+import styles from './feature-selector-form.module.css';
 import { SortedProductList } from './sub-components';
 
-export function FeatureSelector() {
+export function FeatureSelectorForm() {
 	const dispatch = useAppDispatch();
 	const handleSearch = useCallback(
 		( searchTerm: string ) => {
-			dispatch( setReportingConfigSearchTerm( searchTerm ) );
+			dispatch( setFeatureSearchTerm( searchTerm ) );
 		},
 		[ dispatch ]
 	);
 
 	const { products } = useAppSelector( selectNormalizedReportingConfig );
-	const searchTerm = useAppSelector( selectReportingConfigSearchTerm );
+	const searchTerm = useAppSelector( selectFeatureSearchTerm );
 	const searchResults = useAppSelector( selectReportingConfigSearchResults );
 
 	const noResultsFound = searchTerm && searchResults.products.size === 0;

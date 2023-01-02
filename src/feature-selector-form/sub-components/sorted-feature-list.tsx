@@ -1,9 +1,9 @@
 import React, { useMemo } from 'react';
-import { useAppSelector } from '../../app';
-import { sortEntityIdsByName } from '../../common';
-import { selectNormalizedReportingConfig } from '../../reporting-config';
+import { useAppSelector } from '../../app/hooks';
+import { sortEntityIdsByName } from '../../common/lib';
+import { selectNormalizedReportingConfig } from '../../reporting-config/reporting-config-slice';
 import { Feature } from './feature';
-import styles from './../feature-selector.module.css';
+import styles from './../feature-selector-form.module.css';
 
 interface Props {
 	featureIds: string[];

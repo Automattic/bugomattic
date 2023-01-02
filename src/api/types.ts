@@ -1,4 +1,4 @@
-import { LearnMoreLink, TaskDetails } from '../reporting-config';
+import { LearnMoreLink, TaskDetails } from '../reporting-config/types';
 
 /**
  * An interface representing an interaction with the API.

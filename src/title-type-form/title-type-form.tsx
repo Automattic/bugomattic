@@ -5,11 +5,15 @@ import React, {
 	useCallback,
 	useState,
 } from 'react';
-import { useAppDispatch, useAppSelector } from '../app';
-import { selectIssueDetails, setIssueTitle, setIssueType } from './issue-details-slice';
-import { IssueType } from './types';
-import { LimitedTextField } from '../common';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
+import { LimitedTextField } from '../common/components';
 import { ReactComponent as ErrorIcon } from '../common/svgs/warning.svg';
+import {
+	selectIssueDetails,
+	setIssueTitle,
+	setIssueType,
+} from '../issue-details/issue-details-slice';
+import { IssueType } from '../issue-details/types';
 import styles from './title-type-form.module.css';
 
 export function TitleTypeForm() {

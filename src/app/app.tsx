@@ -1,6 +1,9 @@
 import React, { useEffect } from 'react';
 import { FakeFlow } from '../debug/fake-flow';
-import { loadReportingConfig, selectReportingConfigLoadStatus } from '../reporting-config';
+import {
+	loadReportingConfig,
+	selectReportingConfigLoadStatus,
+} from '../reporting-config/reporting-config-slice';
 import styles from './app.module.css';
 import { useAppDispatch, useAppSelector } from './hooks';
 

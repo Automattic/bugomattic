@@ -2,7 +2,8 @@ import React, { ReactElement } from 'react';
 import userEvent from '@testing-library/user-event';
 import { screen } from '@testing-library/react';
 import { TitleTypeForm } from '../title-type-form';
-import { createMockApiClient, renderWithProviders } from '../../test-utils';
+import { createMockApiClient } from '../../test-utils/mock-api-client';
+import { renderWithProviders } from '../../test-utils/render-with-providers';
 
 describe( '[TitleTypeForm]', () => {
 	function setup( component: ReactElement ) {

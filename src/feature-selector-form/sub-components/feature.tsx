@@ -1,12 +1,14 @@
 import React from 'react';
-import { useAppDispatch, useAppSelector } from '../../app';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { selectNormalizedReportingConfig } from '../../reporting-config/reporting-config-slice';
+import styles from './../feature-selector-form.module.css';
 import {
-	selectNormalizedReportingConfig,
-	selectReportingConfigSearchTerm,
-} from '../../reporting-config';
-import { selectIssueDetails, setIssueFeatureId } from '../issue-details-slice';
-import { includesIgnoringCase, SubstringHighlighter } from '../../common';
-import styles from './../feature-selector.module.css';
+	selectFeatureSearchTerm,
+	selectSelectedFeatureId,
+	setSelectedFeatureId,
+} from '../feature-selector-form-slice';
+import { includesIgnoringCase } from '../../common/lib';
+import { SubstringHighlighter } from '../../common/components';
 
 interface Props {
 	id: string;
@@ -14,9 +16,9 @@ interface Props {
 
 export function Feature( { id }: Props ) {
 	const dispatch = useAppDispatch();
-	const handleFeatureSelect = () => dispatch( setIssueFeatureId( id ) );
+	const handleFeatureSelect = () => dispatch( setSelectedFeatureId( id ) );
 
-	const { featureId: selectedFeatureId } = useAppSelector( selectIssueDetails );
+	const selectedFeatureId = useAppSelector( selectSelectedFeatureId );
 	const isSelected = id === selectedFeatureId;
 	const classNames = [ styles.treeNode, styles.feature ];
 	if ( isSelected ) {
@@ -27,7 +29,7 @@ export function Feature( { id }: Props ) {
 	let { name } = features[ id ];
 	const { keywords, description } = features[ id ];
 
-	const searchTerm = useAppSelector( selectReportingConfigSearchTerm );
+	const searchTerm = useAppSelector( selectFeatureSearchTerm );
 	if ( searchTerm !== '' && ! includesIgnoringCase( name, searchTerm ) ) {
 		const matchingKeyword = keywords?.find( ( keyword ) =>
 			includesIgnoringCase( keyword, searchTerm )
