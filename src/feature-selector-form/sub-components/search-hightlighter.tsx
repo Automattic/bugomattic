@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAppSelector } from '../../app';
 import { SubstringHighlighter } from '../../common';
-import { selectReportingConfigSearchTerm } from '../../reporting-config';
+import { selectFeatureSearchTerm } from '../feature-selector-form-slice';
 import styles from '../feature-selector-form.module.css';
 
 interface Props {
@@ -9,7 +9,7 @@ interface Props {
 }
 
 export function SearchHighlighter( { children }: Props ) {
-	const searchTerm = useAppSelector( selectReportingConfigSearchTerm );
+	const searchTerm = useAppSelector( selectFeatureSearchTerm );
 
 	return (
 		<SubstringHighlighter

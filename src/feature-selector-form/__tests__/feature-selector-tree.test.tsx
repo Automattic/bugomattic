@@ -96,7 +96,6 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 					indexed: {} as any,
 					status: 'loaded',
 					error: null,
-					searchTerm: '',
 				},
 			},
 		} );

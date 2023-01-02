@@ -1,13 +1,11 @@
 import React from 'react';
 import { useAppSelector } from '../../app';
-import {
-	selectNormalizedReportingConfig,
-	selectReportingConfigSearchResults,
-} from '../../reporting-config';
+import { selectNormalizedReportingConfig } from '../../reporting-config';
 import { SortedFeatureList } from './sorted-feature-list';
 import { ExpandableTreeNode } from './expandable-tree-node';
 import { SearchHighlighter } from './search-hightlighter';
 import { useExpansionWithSearch } from './use-expansion-with-search';
+import { selectReportingConfigSearchResults } from '../../combined-selectors/reporting-config-search-results';
 
 interface Props {
 	id: string;

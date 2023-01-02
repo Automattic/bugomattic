@@ -7,7 +7,6 @@ export interface ReportingConfigState {
 	indexed: IndexedReportingConfig;
 	status: 'empty' | 'loading' | 'loaded' | 'error';
 	error: string | null;
-	searchTerm: string;
 }
 
 /**
@@ -127,10 +126,4 @@ export interface TaskDetails {
 export interface LearnMore {
 	description?: string;
 	links?: LearnMoreLink[];
-}
-
-export interface ReportingConfigSearchResults {
-	products: Set< string >;
-	featureGroups: Set< string >;
-	features: Set< string >;
 }

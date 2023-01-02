@@ -9,12 +9,14 @@ import { completedTasksReducer } from '../completed-tasks';
 import { ApiClient } from '../api';
 import { issueDetailsReducer } from '../issue-details';
 import { reportingConfigReducer } from '../reporting-config';
+import { featureSelectorFormReducer } from '../feature-selector-form/feature-selector-form-slice';
 
 function createRootReducer() {
 	return combineReducers( {
 		reportingConfig: reportingConfigReducer,
 		issueDetails: issueDetailsReducer,
 		completedTasks: completedTasksReducer,
+		featureSelectorForm: featureSelectorFormReducer,
 	} );
 }
 
