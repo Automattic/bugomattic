@@ -6,6 +6,7 @@ import { selectNormalizedReportingConfig } from '../reporting-config/reporting-c
 import { selectFeatureSearchTerm, setFeatureSearchTerm } from './feature-selector-form-slice';
 import styles from './feature-selector-form.module.css';
 import { SortedProductList } from './sub-components';
+import { SelectedFeatureDetails } from './sub-components/selected-feature-details';
 
 export function FeatureSelectorForm() {
 	const dispatch = useAppDispatch();
@@ -41,7 +42,6 @@ export function FeatureSelectorForm() {
 
 	return (
 		<section className={ styles.sectionWrapper }>
-			<h2>1. Select a Feature</h2>
 			<DebouncedSearch
 				callback={ handleSearch }
 				placeholder="Search for a feature"
@@ -50,6 +50,12 @@ export function FeatureSelectorForm() {
 			<div id={ searchControlsId }>
 				{ noResultsFound && noResultsFoundMessage }
 				<SortedProductList productIds={ productsToDisplay } />
+			</div>
+			<div className={ styles.bottomPanel }>
+				<SelectedFeatureDetails />
+				<div className={ styles.continueButtonWrapper }>
+					<button className="primaryButton">Continue</button>
+				</div>
 			</div>
 		</section>
 	);
