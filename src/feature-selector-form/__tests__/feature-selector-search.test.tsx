@@ -1,9 +1,10 @@
 import React, { ReactElement } from 'react';
-import { NormalizedReportingConfig } from '../../reporting-config';
-import { createMockApiClient, renderWithProviders } from '../../test-utils';
+import { NormalizedReportingConfig } from '../../reporting-config/types';
 import userEvent from '@testing-library/user-event';
 import { screen } from '@testing-library/react';
 import { FeatureSelectorForm } from '../feature-selector-form';
+import { createMockApiClient } from '../../test-utils/mock-api-client';
+import { renderWithProviders } from '../../test-utils/render-with-providers';
 
 describe( '[FeatureSelector -- Tree interaction]', () => {
 	/*

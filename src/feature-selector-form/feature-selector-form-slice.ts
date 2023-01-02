@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState } from '../app';
+import { RootState } from '../app/store';
 import { FeatureId } from '../issue-details/types';
 import { FeatureSelectorFormState } from './types';
 

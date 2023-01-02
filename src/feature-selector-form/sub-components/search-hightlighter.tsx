@@ -1,5 +1,5 @@
 import React from 'react';
-import { useAppSelector } from '../../app';
+import { useAppSelector } from '../../app/hooks';
 import { SubstringHighlighter } from '../../common';
 import { selectFeatureSearchTerm } from '../feature-selector-form-slice';
 import styles from '../feature-selector-form.module.css';

@@ -1,5 +1,5 @@
 import { createSelector } from '@reduxjs/toolkit';
-import { IssueDetails } from '../issue-details';
+import { IssueDetails } from '../issue-details/types';
 import { selectIssueDetails } from '../issue-details/issue-details-slice';
 import { selectNormalizedReportingConfig } from '../reporting-config/reporting-config-slice';
 import {

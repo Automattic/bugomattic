@@ -1,6 +1,6 @@
 import React from 'react';
-import { useAppDispatch, useAppSelector } from '../../app';
-import { selectNormalizedReportingConfig } from '../../reporting-config';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { selectNormalizedReportingConfig } from '../../reporting-config/reporting-config-slice';
 
 import { includesIgnoringCase, SubstringHighlighter } from '../../common';
 import styles from './../feature-selector-form.module.css';

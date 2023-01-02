@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // ^^ We don't care about parts of the state tree,
 // so being able to use "any" to stub out those parts is helpful here.
-import { RootState } from '../../app';
+import { RootState } from '../../app/store';
 import { selectRelevantTaskIds } from '../relevant-task-ids';
 import { NormalizedReportingConfig, TaskDetails } from '../../reporting-config/types';
 

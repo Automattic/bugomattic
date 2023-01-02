@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useAppSelector } from '../../app';
+import { useAppSelector } from '../../app/hooks';
 import { selectFeatureSearchTerm } from '../feature-selector-form-slice';
 
 export function useExpansionWithSearch() {

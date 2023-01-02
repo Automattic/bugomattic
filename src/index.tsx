@@ -1,10 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import { App, setupStore } from './app';
 import { Provider } from 'react-redux';
 import { localApiClient, productionApiClient } from './api';
 import { localMonitoringClient, MonitoringProvider } from './monitoring';
+import { setupStore } from './app/store';
+import { App } from './app/app';
 
 // TODO: use a production monitoring client when it's actually implemented fully.
 const monitoringClient = isProduction() ? localMonitoringClient : localMonitoringClient;

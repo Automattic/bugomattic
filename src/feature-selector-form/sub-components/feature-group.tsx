@@ -1,6 +1,6 @@
 import React from 'react';
-import { useAppSelector } from '../../app';
-import { selectNormalizedReportingConfig } from '../../reporting-config';
+import { useAppSelector } from '../../app/hooks';
+import { selectNormalizedReportingConfig } from '../../reporting-config/reporting-config-slice';
 import { SortedFeatureList } from './sorted-feature-list';
 import { ExpandableTreeNode } from './expandable-tree-node';
 import { SearchHighlighter } from './search-hightlighter';

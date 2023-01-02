@@ -5,11 +5,11 @@ import {
 	combineReducers,
 	PreloadedState,
 } from '@reduxjs/toolkit';
-import { completedTasksReducer } from '../completed-tasks';
 import { ApiClient } from '../api';
-import { issueDetailsReducer } from '../issue-details';
-import { reportingConfigReducer } from '../reporting-config';
+import { reportingConfigReducer } from '../reporting-config/reporting-config-slice';
 import { featureSelectorFormReducer } from '../feature-selector-form/feature-selector-form-slice';
+import { issueDetailsReducer } from '../issue-details/issue-details-slice';
+import { completedTasksReducer } from '../completed-tasks/completed-tasks-slice';
 
 function createRootReducer() {
 	return combineReducers( {

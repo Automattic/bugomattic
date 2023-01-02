@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import type { RootState } from '../app/store';
+import { RootState } from '../app/store';
 import { ApiClient, ReportingConfigApiResponse } from '../api';
 import { IndexedReportingConfig, NormalizedReportingConfig, ReportingConfigState } from './types';
 import { indexReportingConfig, normalizeReportingConfig } from './reporting-config-parsers';
