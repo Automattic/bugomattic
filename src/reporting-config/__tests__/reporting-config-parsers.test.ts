@@ -1,4 +1,4 @@
-import { ReportingConfigApiResponse } from '../../api';
+import { ReportingConfigApiResponse } from '../../api/types';
 import { normalizeReportingConfig } from '../reporting-config-parsers';
 
 function createFakeReportingConfigResponse(): ReportingConfigApiResponse {

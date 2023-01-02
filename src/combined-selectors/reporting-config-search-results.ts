@@ -1,5 +1,5 @@
 import { createSelector } from '@reduxjs/toolkit';
-import { includesIgnoringCase } from '../common';
+import { includesIgnoringCase } from '../common/lib';
 import { selectFeatureSearchTerm } from '../feature-selector-form/feature-selector-form-slice';
 import { selectNormalizedReportingConfig } from '../reporting-config/reporting-config-slice';
 import { NormalizedReportingConfig } from '../reporting-config/types';

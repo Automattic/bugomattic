@@ -5,7 +5,7 @@ import {
 	combineReducers,
 	PreloadedState,
 } from '@reduxjs/toolkit';
-import { ApiClient } from '../api';
+import { ApiClient } from '../api/types';
 import { reportingConfigReducer } from '../reporting-config/reporting-config-slice';
 import { featureSelectorFormReducer } from '../feature-selector-form/feature-selector-form-slice';
 import { issueDetailsReducer } from '../issue-details/issue-details-slice';

@@ -1,7 +1,7 @@
 import React from 'react';
 import { screen, waitForElementToBeRemoved } from '@testing-library/react';
 import { App } from '../app';
-import { ApiClient } from '../../api';
+import { ApiClient } from '../../api/types';
 import { createMockApiClient } from '../../test-utils/mock-api-client';
 import { renderWithProviders } from '../../test-utils/render-with-providers';
 

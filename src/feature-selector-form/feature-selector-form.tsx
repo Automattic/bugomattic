@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { selectReportingConfigSearchResults } from '../combined-selectors/reporting-config-search-results';
-import { DebouncedSearch } from '../common';
+import { DebouncedSearch } from '../common/components';
 import { selectNormalizedReportingConfig } from '../reporting-config/reporting-config-slice';
 import { selectFeatureSearchTerm, setFeatureSearchTerm } from './feature-selector-form-slice';
 import styles from './feature-selector-form.module.css';

@@ -5,7 +5,7 @@ import type { PreloadedState } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 import { setupStore } from '../app/store';
 import type { AppStore, RootState } from '../app/store';
-import { ApiClient } from '../api';
+import { ApiClient } from '../api/types';
 
 // This is a common pattern for overriding React Testing Library's 'render'
 // function while hydrating in a redux store (and in our case, an API implementation).

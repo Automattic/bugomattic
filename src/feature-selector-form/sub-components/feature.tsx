@@ -1,14 +1,14 @@
 import React from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { selectNormalizedReportingConfig } from '../../reporting-config/reporting-config-slice';
-
-import { includesIgnoringCase, SubstringHighlighter } from '../../common';
 import styles from './../feature-selector-form.module.css';
 import {
 	selectFeatureSearchTerm,
 	selectSelectedFeatureId,
 	setSelectedFeatureId,
 } from '../feature-selector-form-slice';
+import { includesIgnoringCase } from '../../common/lib';
+import { SubstringHighlighter } from '../../common/components';
 
 interface Props {
 	id: string;

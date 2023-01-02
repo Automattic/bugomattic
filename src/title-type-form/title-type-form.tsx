@@ -6,7 +6,7 @@ import React, {
 	useState,
 } from 'react';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { LimitedTextField } from '../common';
+import { LimitedTextField } from '../common/components';
 import { ReactComponent as ErrorIcon } from '../common/svgs/warning.svg';
 import {
 	selectIssueDetails,
