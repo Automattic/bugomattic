@@ -6,8 +6,7 @@ import React, {
 	useState,
 } from 'react';
 import { useAppDispatch, useAppSelector } from '../app';
-import { selectIssueDetails, setIssueTitle, setIssueType } from './issue-details-slice';
-import { IssueType } from './types';
+import { selectIssueDetails, setIssueTitle, setIssueType, IssueType } from '../issue-details';
 import { LimitedTextField } from '../common';
 import { ReactComponent as ErrorIcon } from '../common/svgs/warning.svg';
 import styles from './title-type-form.module.css';

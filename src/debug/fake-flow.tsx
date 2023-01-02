@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
-import { FeatureSelectorForm, TitleTypeForm } from '../issue-details';
+import { FeatureSelectorForm } from '../feature-selector-form/feature-selector-form';
 import { useMonitoring } from '../monitoring';
+import { TitleTypeForm } from '../title-type-form/title-type-form';
 
 export function FakeFlow() {
 	const monitoring = useMonitoring();

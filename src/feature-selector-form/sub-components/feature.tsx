@@ -4,7 +4,7 @@ import {
 	selectNormalizedReportingConfig,
 	selectReportingConfigSearchTerm,
 } from '../../reporting-config';
-import { selectIssueDetails, setIssueFeatureId } from '../issue-details-slice';
+import { selectIssueDetails, setIssueFeatureId } from '../../issue-details/issue-details-slice';
 import { includesIgnoringCase, SubstringHighlighter } from '../../common';
 import styles from './../feature-selector-form.module.css';
 

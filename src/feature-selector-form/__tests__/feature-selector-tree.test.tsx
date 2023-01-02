@@ -1,9 +1,9 @@
 import React, { ReactElement } from 'react';
 import { NormalizedReportingConfig } from '../../reporting-config';
 import { createMockApiClient, renderWithProviders } from '../../test-utils';
-import { FeatureSelectorForm } from '..';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { FeatureSelectorForm } from '../feature-selector-form';
 
 describe( '[FeatureSelector -- Tree interaction]', () => {
 	/*
