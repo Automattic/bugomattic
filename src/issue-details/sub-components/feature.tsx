@@ -6,7 +6,7 @@ import {
 } from '../../reporting-config';
 import { selectIssueDetails, setIssueFeatureId } from '../issue-details-slice';
 import { includesIgnoringCase, SubstringHighlighter } from '../../common';
-import styles from './../feature-selector.module.css';
+import styles from './../feature-selector-form.module.css';
 
 interface Props {
 	id: string;

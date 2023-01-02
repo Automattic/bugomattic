@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import { NormalizedReportingConfig } from '../../reporting-config';
 import { createMockApiClient, renderWithProviders } from '../../test-utils';
-import { FeatureSelector } from '..';
+import { FeatureSelectorForm } from '..';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
@@ -109,7 +109,7 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 
 	describe( 'Tree navigation and expansion/collapsing', () => {
 		test( 'Initially only the collapsed products are visible', () => {
-			setup( <FeatureSelector /> );
+			setup( <FeatureSelectorForm /> );
 
 			expect(
 				screen.getByRole( 'button', {
@@ -130,7 +130,7 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 		} );
 
 		test( 'Clicking on a collapsed product toggles it as expanded', async () => {
-			const { user } = setup( <FeatureSelector /> );
+			const { user } = setup( <FeatureSelectorForm /> );
 
 			await user.click( screen.getByRole( 'button', { expanded: false, name: 'A Product' } ) );
 			expect(
@@ -139,7 +139,7 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 		} );
 
 		test( 'Expanding a collapsed product shows correct nested feature groups and features', async () => {
-			const { user } = setup( <FeatureSelector /> );
+			const { user } = setup( <FeatureSelectorForm /> );
 
 			await user.click( screen.getByRole( 'button', { expanded: false, name: 'A Product' } ) );
 
@@ -165,7 +165,7 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 		} );
 
 		test( 'Clicking on an expanded product toggles it as collapsed', async () => {
-			const { user } = setup( <FeatureSelector /> );
+			const { user } = setup( <FeatureSelectorForm /> );
 
 			await user.click( screen.getByRole( 'button', { expanded: false, name: 'A Product' } ) );
 			await user.click( screen.getByRole( 'button', { expanded: true, name: 'A Product' } ) );
@@ -176,7 +176,7 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 		} );
 
 		test( 'Collapsing an expanded product hides all records underneath it', async () => {
-			const { user } = setup( <FeatureSelector /> );
+			const { user } = setup( <FeatureSelectorForm /> );
 
 			await user.click( screen.getByRole( 'button', { expanded: false, name: 'A Product' } ) );
 			// Let's check those features under the feature groups too! We expand them initially.
@@ -191,7 +191,7 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 		} );
 
 		test( 'Clicking a collapsed feature group toggles it as expanded', async () => {
-			const { user } = setup( <FeatureSelector /> );
+			const { user } = setup( <FeatureSelectorForm /> );
 
 			await user.click( screen.getByRole( 'button', { expanded: false, name: 'A Product' } ) );
 			await user.click(
@@ -204,7 +204,7 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 		} );
 
 		test( 'Expanding a collapsed feature group shows correct nested features', async () => {
-			const { user } = setup( <FeatureSelector /> );
+			const { user } = setup( <FeatureSelectorForm /> );
 
 			await user.click( screen.getByRole( 'button', { expanded: false, name: 'A Product' } ) );
 			await user.click(
@@ -216,7 +216,7 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 		} );
 
 		test( 'Clicking an expanded feature group toggles it as collapsed', async () => {
-			const { user } = setup( <FeatureSelector /> );
+			const { user } = setup( <FeatureSelectorForm /> );
 
 			await user.click( screen.getByRole( 'button', { expanded: false, name: 'A Product' } ) );
 			await user.click(
@@ -230,7 +230,7 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 		} );
 
 		test( 'Collapsing an expanded feature group hides the features underneath it', async () => {
-			const { user } = setup( <FeatureSelector /> );
+			const { user } = setup( <FeatureSelectorForm /> );
 
 			await user.click( screen.getByRole( 'button', { expanded: false, name: 'A Product' } ) );
 			await user.click(
@@ -245,7 +245,7 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 
 	describe( 'Feature selecting', () => {
 		test( 'Clicking on a feature marks it as selected', async () => {
-			const { user } = setup( <FeatureSelector /> );
+			const { user } = setup( <FeatureSelectorForm /> );
 
 			// First, expand to make sure the features are visible
 			await user.click( screen.getByRole( 'button', { expanded: false, name: 'A Product' } ) );
@@ -261,7 +261,7 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 		} );
 
 		test( 'Clicking on a new feature unselects the old one', async () => {
-			const { user } = setup( <FeatureSelector /> );
+			const { user } = setup( <FeatureSelectorForm /> );
 
 			// First, expand to make sure the features are visible
 			await user.click( screen.getByRole( 'button', { expanded: false, name: 'A Product' } ) );
@@ -287,7 +287,7 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 
 	describe( 'Sorting', () => {
 		test( 'The products are sorted alphabetically', () => {
-			setup( <FeatureSelector /> );
+			setup( <FeatureSelectorForm /> );
 
 			const [ firstProduct, secondProduct ] = screen.getAllByRole( 'button', {
 				name: /Product/,
@@ -298,7 +298,7 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 		} );
 
 		test( 'The feature groups under a product are sorted alphabetically', async () => {
-			const { user } = setup( <FeatureSelector /> );
+			const { user } = setup( <FeatureSelectorForm /> );
 
 			await user.click( screen.getByRole( 'button', { expanded: false, name: 'A Product' } ) );
 
@@ -311,7 +311,7 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 		} );
 
 		test( 'The features under a product are sorted alphabetically', async () => {
-			const { user } = setup( <FeatureSelector /> );
+			const { user } = setup( <FeatureSelectorForm /> );
 
 			await user.click( screen.getByRole( 'button', { expanded: false, name: 'A Product' } ) );
 
@@ -327,7 +327,7 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 		} );
 
 		test( 'The features under a feature group are sorted alphabetically', async () => {
-			const { user } = setup( <FeatureSelector /> );
+			const { user } = setup( <FeatureSelectorForm /> );
 
 			await user.click( screen.getByRole( 'button', { expanded: false, name: 'A Product' } ) );
 			await user.click(

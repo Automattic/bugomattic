@@ -3,7 +3,7 @@ import { NormalizedReportingConfig } from '../../reporting-config';
 import { createMockApiClient, renderWithProviders } from '../../test-utils';
 import userEvent from '@testing-library/user-event';
 import { screen } from '@testing-library/react';
-import { FeatureSelector } from '../feature-selector';
+import { FeatureSelectorForm } from '../feature-selector-form';
 
 describe( '[FeatureSelector -- Tree interaction]', () => {
 	/*
@@ -111,7 +111,7 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 
 	describe( 'Search matches at different levels', () => {
 		test( 'Matching a product filters to that product collapsed', async () => {
-			const { user } = setup( <FeatureSelector /> );
+			const { user } = setup( <FeatureSelectorForm /> );
 			await search( user, 'abc' );
 
 			expect(
@@ -125,7 +125,7 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 		} );
 
 		test( 'Matching a feature group filters to that feature group collapsed and its parent product', async () => {
-			const { user } = setup( <FeatureSelector /> );
+			const { user } = setup( <FeatureSelectorForm /> );
 			await search( user, 'def' );
 
 			expect(
@@ -142,7 +142,7 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 		} );
 
 		test( 'Matching a feature under product filters to that feature and its parent product', async () => {
-			const { user } = setup( <FeatureSelector /> );
+			const { user } = setup( <FeatureSelectorForm /> );
 			await search( user, 'stu' );
 
 			expect( screen.getByRole( 'option', { name: 'STU Feature' } ) ).toBeInTheDocument();
@@ -157,7 +157,7 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 		} );
 
 		test( 'Matching a feature under group filters to that feature and both parent levels', async () => {
-			const { user } = setup( <FeatureSelector /> );
+			const { user } = setup( <FeatureSelectorForm /> );
 			await search( user, 'jkl' );
 
 			expect( screen.getByRole( 'option', { name: 'JKL Feature' } ) ).toBeInTheDocument();
@@ -175,7 +175,7 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 		} );
 
 		test( 'Matching a feature keyword is same as matching feature, but adds keyword to name', async () => {
-			const { user } = setup( <FeatureSelector /> );
+			const { user } = setup( <FeatureSelectorForm /> );
 			await search( user, 'yzz' );
 
 			// There's a weird bug somewhere in the virtual DOM or React Testing Library that is adding a space
@@ -190,7 +190,7 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 		} );
 
 		test( 'If no matches are found, shows a message', async () => {
-			const { user } = setup( <FeatureSelector /> );
+			const { user } = setup( <FeatureSelectorForm /> );
 			await search( user, 'asdfhjklajvhxc ygaisudsudyfiuasd' );
 
 			expect(
@@ -199,7 +199,7 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 		} );
 
 		test( 'If no matches are found, shows the initial tree state of all products collapsed', async () => {
-			const { user } = setup( <FeatureSelector /> );
+			const { user } = setup( <FeatureSelectorForm /> );
 			await search( user, 'asdfhjklajvhxc ygaisudsudyfiuasd' );
 
 			expect(
@@ -213,7 +213,7 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 
 	describe( 'Other search result behavior', () => {
 		test( 'Search result matches highlight the search term', async () => {
-			const { user } = setup( <FeatureSelector /> );
+			const { user } = setup( <FeatureSelectorForm /> );
 			await search( user, 'ghi' );
 
 			const highlightedMatches = screen.getAllByTestId( 'highlighted-substring' );
@@ -222,7 +222,7 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 		} );
 
 		test( 'You can expand result parents to see other non-matches', async () => {
-			const { user } = setup( <FeatureSelector /> );
+			const { user } = setup( <FeatureSelectorForm /> );
 			await search( user, 'ghi' );
 			await user.click( screen.getByRole( 'button', { expanded: false, name: 'DEF Group' } ) );
 
@@ -234,7 +234,7 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 		} );
 
 		test( 'Recollapsing an expanded parent will always only show search matches', async () => {
-			const { user } = setup( <FeatureSelector /> );
+			const { user } = setup( <FeatureSelectorForm /> );
 			await search( user, 'ghi' );
 			await user.click( screen.getByRole( 'button', { expanded: false, name: 'DEF Group' } ) );
 			await user.click( screen.getByRole( 'button', { expanded: true, name: 'DEF Group' } ) );

@@ -3,7 +3,7 @@ import { useAppSelector } from '../../app';
 import { sortEntityIdsByName } from '../../common';
 import { selectNormalizedReportingConfig } from '../../reporting-config';
 import { FeatureGroup } from './feature-group';
-import styles from './../feature-selector.module.css';
+import styles from './../feature-selector-form.module.css';
 
 interface Props {
 	featureGroupIds: string[];

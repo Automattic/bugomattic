@@ -7,10 +7,10 @@ import {
 	selectReportingConfigSearchResults,
 	setReportingConfigSearchTerm,
 } from '../reporting-config';
-import styles from './feature-selector.module.css';
+import styles from './feature-selector-form.module.css';
 import { SortedProductList } from './sub-components';
 
-export function FeatureSelector() {
+export function FeatureSelectorForm() {
 	const dispatch = useAppDispatch();
 	const handleSearch = useCallback(
 		( searchTerm: string ) => {
