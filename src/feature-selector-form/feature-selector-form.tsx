@@ -50,7 +50,7 @@ export function FeatureSelectorForm() {
 				/>
 			</div>
 
-			<div className={ styles.treeSection } id={ searchControlsId }>
+			<div className={ styles.treeWrapper } id={ searchControlsId }>
 				{ noResultsFound && noResultsFoundMessage }
 				<SortedProductList productIds={ productsToDisplay } />
 			</div>
