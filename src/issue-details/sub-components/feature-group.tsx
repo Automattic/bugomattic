@@ -15,7 +15,7 @@ interface Props {
 
 export function FeatureGroup( { id }: Props ) {
 	const { featureGroups } = useAppSelector( selectNormalizedReportingConfig );
-	const { name, featureIds } = featureGroups[ id ];
+	const { name, featureIds, description } = featureGroups[ id ];
 
 	const { isExpanded, handleCollapseExpandToggle } = useExpansionWithSearch();
 
@@ -32,8 +32,13 @@ export function FeatureGroup( { id }: Props ) {
 			label={ label }
 			isExpanded={ isExpanded }
 			handleToggle={ handleCollapseExpandToggle }
+			description={ description }
 		>
-			<SortedFeatureList featureIds={ featureIdsToDisplay } parentName={ name } />
+			<SortedFeatureList
+				featureIds={ featureIdsToDisplay }
+				parentName={ name }
+				treeLevel={ 'third' }
+			/>
 		</ExpandableTreeNode>
 	);
 }

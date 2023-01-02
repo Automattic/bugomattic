@@ -5,7 +5,8 @@
 	--color-primary-light: #bbe0fa; /* Automattic Blue 20 */
 	--color-primary-extra-light: #e9eff5; /* Automattic Blue 5 */
 	--color-accent: #c9356e; /* Automattic Pink 50 */
-	--color-neutral: #edeff0;
+	--color-neutral: #dcdcde; /* Automattic Gray 5 */
+	--color-neutral-light: #f6f7f7; /* Automattic Gray 00 */
 	--color-error: #d63638; /* Automattic Red 50 */
 	--color-success: #008a20; /* Automattic Green 50 */
 	--color-white: #ffffff;
