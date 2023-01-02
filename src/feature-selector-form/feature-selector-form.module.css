@@ -4,8 +4,20 @@
 	list-style: none;
 }
 
+.searchWrapper {
+	max-width: 480px;
+	margin-bottom: 1rem;
+}
+
+.treeSection {
+	height: 320px;
+	overflow-y: scroll;
+}
+
 .firstLevel {
 	padding-left: 0.25rem;
+	margin-top: 0;
+	margin-bottom: 0;
 }
 
 .secondLevel,
@@ -90,6 +102,7 @@
 }
 
 .bottomPanel {
+	margin-top: 1rem;
 	border-top: solid 1px var( --color-border );
 	padding-top: 1.5rem;
 	padding-bottom: 1.5rem;
