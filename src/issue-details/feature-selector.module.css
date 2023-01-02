@@ -33,9 +33,7 @@
 	padding-left: 5rem;
 }
 
-.treeNode:hover,
-.treeNode:focus,
-.treeNode:focus-visible {
+.treeNode:hover {
 	background-color: var( --color-neutral-light );
 }
 
@@ -44,9 +42,7 @@
 }
 
 .selectedFeature,
-.selectedFeature:hover,
-.selectedFeature:focus,
-.selectedFeature:focus-visible {
+.selectedFeature:hover {
 	background-color: var( --color-neutral );
 }
 
