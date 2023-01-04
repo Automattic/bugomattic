@@ -43,6 +43,7 @@ export function SelectedFeatureDetails( { featureId }: Props ) {
 
 	return (
 		<div>
+			<h3 className="screenReaderOnly">Currently selected feature:</h3>
 			<div className={ styles.selectedFeatureAncestry }>
 				<span className={ styles.ancestorEntry }>
 					{ productName } <AncestorIcon />
