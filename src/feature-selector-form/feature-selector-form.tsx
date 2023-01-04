@@ -56,7 +56,9 @@ export function FeatureSelectorForm() {
 			</div>
 
 			<div className={ styles.bottomPanel }>
-				<SelectedFeatureDetails />
+				<div>
+					<SelectedFeatureDetails />
+				</div>
 				<div className={ styles.continueButtonWrapper }>
 					<button className="primaryButton">Continue</button>
 				</div>
