@@ -10,7 +10,7 @@ export function SelectedFeatureDetails() {
 	const selectedFeatureId = useAppSelector( selectSelectedFeatureId );
 
 	if ( ! selectedFeatureId ) {
-		return <div className={ styles.selectedFeatureInfo }>{ null }</div>;
+		return null;
 	}
 
 	const { name: featureName, description, parentId, parentType } = features[ selectedFeatureId ];
