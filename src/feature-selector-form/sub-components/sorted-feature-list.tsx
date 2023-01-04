@@ -34,6 +34,7 @@ export function SortedFeatureList( { featureIds, parentName, treeLevel }: Props 
 			className={ parentClass }
 			role="listbox"
 			aria-label={ `List of features for ${ parentName }` }
+			aria-required={ true }
 		>
 			{ sortedFeatureIds.map( ( featureId ) => (
 				<Feature key={ featureId } id={ featureId } />

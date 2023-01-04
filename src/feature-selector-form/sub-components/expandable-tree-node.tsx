@@ -33,6 +33,7 @@ export function ExpandableTreeNode( {
 	return (
 		<li>
 			<button
+				type="button"
 				aria-expanded={ isExpanded }
 				aria-controls={ contentId }
 				className={ styles.treeNode }

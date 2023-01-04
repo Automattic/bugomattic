@@ -12,10 +12,12 @@
 .treeWrapper {
 	height: 320px;
 	overflow-y: scroll;
+	/* This helps preserve the focus outline */
+	padding: 1px;
 }
 
 .firstLevel {
-	padding-left: 0.25rem;
+	padding-left: 0;
 	margin-top: 0;
 	margin-bottom: 0;
 }
