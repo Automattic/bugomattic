@@ -60,6 +60,7 @@ export function FeatureSelectorForm() {
 
 	const showFormError = submissionAttempted && ! readyToContinue;
 
+	const bottomPanelDisplayId = 'feature-selector-bottom-panel';
 	let bottomPanelDisplay: ReactNode;
 	if ( showFormError ) {
 		bottomPanelDisplay = <FormErrorMessage>You must select a feature</FormErrorMessage>;
@@ -79,14 +80,18 @@ export function FeatureSelectorForm() {
 				/>
 			</div>
 
-			<form onSubmit={ handleSubmit }>
+			<form
+				onSubmit={ handleSubmit }
+				aria-label="Select a feature"
+				aria-describedby={ bottomPanelDisplayId }
+			>
 				<div className={ styles.treeWrapper } id={ searchControlsId }>
 					{ noResultsFound && noResultsFoundMessage }
 					<SortedProductList productIds={ productsToDisplay } />
 				</div>
 
 				<div className={ styles.bottomPanel }>
-					<div>{ bottomPanelDisplay }</div>
+					<div id={ bottomPanelDisplayId }>{ bottomPanelDisplay }</div>
 					<div className={ styles.continueButtonWrapper }>
 						<button className="primaryButton">Continue</button>
 					</div>

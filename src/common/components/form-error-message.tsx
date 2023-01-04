@@ -9,7 +9,7 @@ interface Props {
 export function FormErrorMessage( { children }: Props ) {
 	return (
 		<span aria-live="assertive" className={ styles.errorMessage }>
-			<ErrorIcon className={ styles.errorIcon } />
+			<ErrorIcon aria-label="Error:" className={ styles.errorIcon } />
 			{ children }
 		</span>
 	);
