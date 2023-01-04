@@ -1,19 +1,16 @@
 import React, { ReactNode } from 'react';
 import { useAppSelector } from '../../app/hooks';
 import { selectNormalizedReportingConfig } from '../../reporting-config/reporting-config-slice';
-import { selectSelectedFeatureId } from '../feature-selector-form-slice';
 import { ReactComponent as ChevronRightIcon } from '../../common/svgs/chevron-right.svg';
 import styles from '../feature-selector-form.module.css';
 
-export function SelectedFeatureDetails() {
+interface Props {
+	featureId: string;
+}
+
+export function SelectedFeatureDetails( { featureId }: Props ) {
 	const { features, featureGroups, products } = useAppSelector( selectNormalizedReportingConfig );
-	const selectedFeatureId = useAppSelector( selectSelectedFeatureId );
-
-	if ( ! selectedFeatureId ) {
-		return null;
-	}
-
-	const { name: featureName, description, parentId, parentType } = features[ selectedFeatureId ];
+	const { name: featureName, description, parentId, parentType } = features[ featureId ];
 
 	let productName: string;
 	let featureGroupName: string | null = null;
