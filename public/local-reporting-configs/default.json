@@ -18,7 +18,7 @@
 		"tasks": {
 			"bug": [
 				{
-					"instructions": "Product | Bug | GitHub link",
+					"details": "Product | Bug | GitHub link",
 					"link": {
 						"type": "github",
 						"repository": "Automattic/fake-repo",
@@ -28,7 +28,7 @@
 			],
 			"featureRequest": [
 				{
-					"instructions": "Product | Feature Request | P2 link",
+					"details": "Product | Feature Request | P2 link",
 					"link": {
 						"type": "p2",
 						"subdomain": "product"
@@ -37,7 +37,7 @@
 			],
 			"blocker": [
 				{
-					"instructions": "Product | Blocker | Slack link",
+					"details": "Product | Blocker | Slack link",
 					"link": {
 						"type": "slack",
 						"channel": "product"
@@ -65,12 +65,12 @@
 				"tasks": {
 					"bug": [
 						{
-							"instructions": "Feature Group | Bug | Instructions only"
+							"details": "Feature Group | Bug | details only"
 						}
 					],
 					"featureRequest": [
 						{
-							"instructions": "Feature Group | Feature Request | GitHub link",
+							"details": "Feature Group | Feature Request | GitHub link",
 							"link": {
 								"type": "github",
 								"repository": "Automattic/fake-repo",
@@ -80,7 +80,7 @@
 					],
 					"blocker": [
 						{
-							"instructions": "Duplicate Task | P2 link",
+							"details": "Duplicate Task | P2 link",
 							"link": {
 								"type": "p2",
 								"subdomain": "duplicate"
@@ -109,7 +109,7 @@
 						"tasks": {
 							"bug": [
 								{
-									"instructions": "Feature (Under Feature Group) | Bug | GitHub link",
+									"details": "Feature (Under Feature Group) | Bug | GitHub link",
 									"link": {
 										"type": "github",
 										"repository": "Automattic/fake-repo",
@@ -120,7 +120,7 @@
 							],
 							"featureRequest": [
 								{
-									"instructions": "Feature (Under Feature Group) | Feature Request | GitHub link",
+									"details": "Feature (Under Feature Group) | Feature Request | GitHub link",
 									"link": {
 										"type": "github",
 										"repository": "Automattic/fake-repo",
@@ -131,7 +131,7 @@
 							],
 							"blocker": [
 								{
-									"instructions": "Feature (Under Feature Group) | Blocker | GitHub link",
+									"details": "Feature (Under Feature Group) | Blocker | GitHub link",
 									"link": {
 										"type": "github",
 										"repository": "Automattic/fake-repo",
@@ -140,7 +140,7 @@
 									}
 								},
 								{
-									"instructions": "Duplicate Task | P2 link",
+									"details": "Duplicate Task | P2 link",
 									"link": {
 										"type": "p2",
 										"subdomain": "duplicate"
@@ -182,17 +182,17 @@
 						"tasks": {
 							"bug": [
 								{
-									"instructions": "Alternative Feature | Bug | Instructions only"
+									"details": "Alternative Feature | Bug | details only"
 								}
 							],
 							"featureRequest": [
 								{
-									"instructions": "Alternative Feature | Feature Request | Instructions only"
+									"details": "Alternative Feature | Feature Request | details only"
 								}
 							],
 							"blocker": [
 								{
-									"instructions": "Alternative Feature | Blocker | Instructions only"
+									"details": "Alternative Feature | Blocker | details only"
 								}
 							]
 						}

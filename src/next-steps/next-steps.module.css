@@ -1,0 +1,54 @@
+@import '../variables.css';
+
+.taskList {
+	list-style: none;
+	padding-left: 0;
+}
+
+.task {
+	display: flex;
+	align-items: flex-start;
+}
+
+.task:nth-child( n + 1 ) {
+	margin-top: 2rem;
+}
+
+.taskTitle {
+	color: var( --color-text-dark );
+	font-weight: 600;
+}
+
+input[type='checkbox'].taskCheckbox {
+	height: 1rem;
+	width: 1rem;
+	margin: 0.125rem 1rem 0 0;
+}
+
+a.taskTitle {
+	display: flex;
+	align-items: center;
+	text-decoration: none;
+}
+
+a.taskTitle:hover {
+	color: var( --color-primary-dark );
+	text-decoration: underline;
+}
+
+.appIcon {
+	height: 1rem;
+	width: 1rem;
+	margin-right: 0.5rem;
+}
+
+.linkIcon {
+	height: 1rem;
+	width: 1rem;
+	margin-left: 0.5rem;
+}
+
+.taskDetails {
+	font-size: 0.8rem;
+	margin: 0.5rem 0 0 0;
+}

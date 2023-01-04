@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { FeatureSelectorForm } from '../feature-selector-form/feature-selector-form';
 import { useMonitoring } from '../monitoring/monitoring-provider';
+import { NextSteps } from '../next-steps/next-steps';
 import { TitleTypeForm } from '../title-type-form/title-type-form';
 
 export function FakeFlow() {
@@ -19,6 +20,9 @@ export function FakeFlow() {
 			</div>
 			<div>
 				<FeatureSelectorForm />
+			</div>
+			<div>
+				<NextSteps />
 			</div>
 		</div>
 	);
