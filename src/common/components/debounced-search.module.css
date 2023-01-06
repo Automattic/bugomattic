@@ -16,8 +16,7 @@ input.search {
 	border: none;
 	right: 0;
 	top: 0;
-	padding-left: 0.5rem;
-	padding-right: 0.5rem;
+	padding: 0 0.5rem;
 	border: 2px solid transparent;
 }
 

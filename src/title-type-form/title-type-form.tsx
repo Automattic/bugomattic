@@ -6,8 +6,7 @@ import React, {
 	useState,
 } from 'react';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { LimitedTextField } from '../common/components';
-import { ReactComponent as ErrorIcon } from '../common/svgs/warning.svg';
+import { FormErrorMessage, LimitedTextField } from '../common/components';
 import {
 	selectIssueDetails,
 	setIssueTitle,
@@ -58,25 +57,22 @@ export function TitleTypeForm() {
 		}
 	};
 
-	function FormErrorMessage( { children }: { children: string } ) {
-		return (
-			<span aria-live="assertive" className={ styles.fieldErrorMessage }>
-				<ErrorIcon className={ styles.errorIcon } />
-				{ children }
-			</span>
-		);
-	}
-
 	let titleErrorMessage: ReactNode = null;
 	if ( showTitleError ) {
 		titleErrorMessage = (
-			<FormErrorMessage>Title must be under the character limit</FormErrorMessage>
+			<span className={ styles.formErrorWrapper }>
+				<FormErrorMessage>Title must be under the character limit</FormErrorMessage>
+			</span>
 		);
 	}
 
 	let typeErrorMessage: ReactNode = null;
 	if ( showTypeError ) {
-		typeErrorMessage = <FormErrorMessage>You must pick an issue type</FormErrorMessage>;
+		typeErrorMessage = (
+			<span className={ styles.formErrorWrapper }>
+				<FormErrorMessage>You must pick an issue type</FormErrorMessage>
+			</span>
+		);
 	}
 
 	return (

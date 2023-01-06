@@ -17,7 +17,7 @@ export function FakeFlow() {
 			<div>
 				<TitleTypeForm />
 			</div>
-			<div>
+			<div style={ { marginTop: '48px' } }>
 				<FeatureSelectorForm />
 			</div>
 		</div>

@@ -42,6 +42,7 @@ export function Feature( { id }: Props ) {
 	return (
 		<button
 			role="option"
+			type="button"
 			aria-selected={ isSelected }
 			className={ classNames.join( ' ' ) }
 			onClick={ handleFeatureSelect }
