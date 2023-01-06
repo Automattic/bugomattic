@@ -63,7 +63,11 @@ export function FeatureSelectorForm() {
 	const bottomPanelDisplayId = 'feature-selector-bottom-panel';
 	let bottomPanelDisplay: ReactNode;
 	if ( showFormError ) {
-		bottomPanelDisplay = <FormErrorMessage>You must select a feature</FormErrorMessage>;
+		bottomPanelDisplay = (
+			<div className={ styles.formErrorWrapper }>
+				<FormErrorMessage>You must select a feature</FormErrorMessage>
+			</div>
+		);
 	} else if ( selectedFeatureId ) {
 		bottomPanelDisplay = <SelectedFeatureDetails featureId={ selectedFeatureId } />;
 	} else {
@@ -91,7 +95,9 @@ export function FeatureSelectorForm() {
 				</div>
 
 				<div className={ styles.bottomPanel }>
-					<div id={ bottomPanelDisplayId }>{ bottomPanelDisplay }</div>
+					<div id={ bottomPanelDisplayId } className={ styles.bottomPanelContent }>
+						{ bottomPanelDisplay }
+					</div>
 					<div className={ styles.continueButtonWrapper }>
 						<button className="primaryButton">Continue</button>
 					</div>
