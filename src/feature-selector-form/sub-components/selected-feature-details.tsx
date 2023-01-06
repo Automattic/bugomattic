@@ -1,14 +1,16 @@
-import React, { ReactNode } from 'react';
-import { useAppSelector } from '../../app/hooks';
+import React from 'react';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { selectNormalizedReportingConfig } from '../../reporting-config/reporting-config-slice';
 import { ReactComponent as ChevronRightIcon } from '../../common/svgs/chevron-right.svg';
 import styles from '../feature-selector-form.module.css';
+import { setSelectedFeatureId } from '../feature-selector-form-slice';
 
 interface Props {
 	featureId: string;
 }
 
 export function SelectedFeatureDetails( { featureId }: Props ) {
+	const dispatch = useAppDispatch();
 	const { features, featureGroups, products } = useAppSelector( selectNormalizedReportingConfig );
 	const { name: featureName, description, parentId, parentType } = features[ featureId ];
 
@@ -23,35 +25,44 @@ export function SelectedFeatureDetails( { featureId }: Props ) {
 		productName = products[ featureGroup.productId ].name;
 	}
 
-	const AncestorIcon = () => <ChevronRightIcon className={ styles.ancestorIcon } />;
+	const BreadcrumbIcon = () => (
+		<ChevronRightIcon aria-label="Is a parent of" className={ styles.breadcrumbIcon } />
+	);
 
-	let featureGroupDisplay: ReactNode = null;
-	if ( featureGroupName ) {
-		featureGroupDisplay = (
-			<span className={ styles.ancestorEntry }>
-				{ featureGroupName } <AncestorIcon />
-			</span>
-		);
-	}
-
-	let featureDescriptionDisplay: ReactNode = null;
-	if ( description ) {
-		featureDescriptionDisplay = (
-			<p className={ styles.selectedFeatureDescription }>{ description }</p>
-		);
-	}
+	const handleClearClick = () => {
+		dispatch( setSelectedFeatureId( null ) );
+	};
 
 	return (
 		<div>
 			<h3 className="screenReaderOnly">Currently selected feature:</h3>
-			<div className={ styles.selectedFeatureAncestry }>
-				<span className={ styles.ancestorEntry }>
-					{ productName } <AncestorIcon />
-				</span>
-				{ featureGroupDisplay }
-				<span>{ featureName }</span>
+
+			<div>
+				<span className={ styles.selectedFeatureName }>{ featureName }</span>
+				<button
+					type="button"
+					className={ styles.clearButton }
+					aria-label="Clear currently selected feature"
+					onClick={ handleClearClick }
+				>
+					Clear
+				</button>
 			</div>
-			{ featureDescriptionDisplay }
+
+			{ description && <p className={ styles.selectedFeatureDescription }>{ description }</p> }
+
+			<h4 className="screenReaderOnly">Breadcrumb for currently selected feature:</h4>
+			<div className={ styles.selectedFeatureBreadcrumb }>
+				{ productName }
+				<BreadcrumbIcon />
+				{ featureGroupName && (
+					<>
+						{ featureGroupName }
+						<BreadcrumbIcon />
+					</>
+				) }
+				{ featureName }
+			</div>
 		</div>
 	);
 }

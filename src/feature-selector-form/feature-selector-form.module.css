@@ -76,31 +76,49 @@
 	width: 1rem;
 }
 
-.ancestorIcon {
+.selectedFeatureName {
+	font-size: 1.25rem;
+	font-weight: 600;
+	margin-right: 0.5rem;
+}
+
+button.clearButton {
+	color: var( --color-primary );
+	background-color: transparent;
+	border: none;
+	padding: 0.125rem 0.5rem;
+}
+
+button.clearButton:hover {
+	color: var( --color-primary-dark );
+	background-color: var( --color-neutral-light );
+}
+
+button.clearButton:active {
+	color: var( --color-primary-dark );
+	background-color: var( --color-neutral );
+}
+
+.selectedFeatureBreadcrumb {
+	color: var( --color-text-light );
+	font-size: 1rem;
+	margin-top: 1.25rem;
+	overflow-x: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.breadcrumbIcon {
 	padding-left: 0.5rem;
 	padding-right: 0.5rem;
 	height: 1rem;
 	width: 1rem;
-}
-
-.ancestorEntry {
-	display: flex;
-	align-items: center;
-}
-
-.selectedFeatureAncestry {
-	font-weight: 700;
-	font-size: 1rem;
-	display: flex;
-	align-items: center;
-	flex-wrap: wrap;
-	row-gap: 0.25rem;
+	transform: translateY( 0.125rem );
 }
 
 .selectedFeatureDescription {
-	font-size: 0.9rem;
-	margin-top: 0.5rem;
-	margin-bottom: 0;
+	font-size: 1rem;
+	margin: 0.25rem 0 0 0;
 }
 
 .bottomPanel {
@@ -110,12 +128,17 @@
 	padding-bottom: 1.5rem;
 	min-height: 3rem;
 	display: flex;
-	align-items: center;
+	align-items: flex-end;
 	justify-content: space-between;
 }
 
+.bottomPanelContent {
+	min-width: 0;
+	max-width: 100%;
+}
+
 .continueButtonWrapper {
-	margin-left: 1rem;
+	margin-left: 1.5rem;
 }
 
 @media only screen and ( max-width: 600px ) {
@@ -129,6 +152,14 @@
 		justify-content: flex-end;
 		width: 100%;
 		margin-left: 0;
-		margin-top: 1.5rem;
+		margin-top: 2rem;
+	}
+}
+
+@media only screen and ( min-width: 600px ) {
+	.formErrorWrapper {
+		min-height: 2.5rem;
+		display: flex;
+		align-items: center;
 	}
 }
