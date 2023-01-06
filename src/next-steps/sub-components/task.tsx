@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { useAppSelector } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { selectNormalizedReportingConfig } from '../../reporting-config/reporting-config-slice';
 import { TaskLink } from '../../reporting-config/types';
 import urlJoin from 'url-join';
@@ -9,14 +9,32 @@ import { ReactComponent as P2Icon } from '../../common/svgs/p2.svg';
 import { ReactComponent as LinkIcon } from '../../common/svgs/external-link.svg';
 import { selectIssueDetails } from '../../issue-details/issue-details-slice';
 import styles from '../next-steps.module.css';
+import {
+	addCompletedTask,
+	removeCompletedTask,
+	selectCompletedTasks,
+} from '../completed-tasks-slice';
 
 interface Props {
 	taskId: string;
 }
 
 export function Task( { taskId }: Props ) {
+	const dispatch = useAppDispatch();
 	const { tasks } = useAppSelector( selectNormalizedReportingConfig );
 	const { issueTitle } = useAppSelector( selectIssueDetails );
+	const completedTaskIds = useAppSelector( selectCompletedTasks );
+
+	const isChecked = completedTaskIds.includes( taskId );
+
+	const handleCheckboxChange = () => {
+		if ( isChecked ) {
+			dispatch( removeCompletedTask( taskId ) );
+		} else {
+			dispatch( addCompletedTask( taskId ) );
+		}
+	};
+
 	const { title, details, link } = tasks[ taskId ];
 
 	let titleDisplay: ReactNode;
@@ -28,6 +46,8 @@ export function Task( { taskId }: Props ) {
 				target="_blank"
 				href={ createLinkHref( link, issueTitle ) }
 				rel="noreferrer"
+				// When they open a link, let's trigger the checkbox change too
+				onClick={ handleCheckboxChange }
 			>
 				{ getAppIcon( link ) }
 				<span>{ linkText }</span>
@@ -46,7 +66,12 @@ export function Task( { taskId }: Props ) {
 
 	return (
 		<label className={ styles.task }>
-			<input className={ styles.taskCheckbox } type="checkbox" />
+			<input
+				className={ styles.taskCheckbox }
+				onChange={ handleCheckboxChange }
+				checked={ isChecked }
+				type="checkbox"
+			/>
 			<div>
 				{ titleDisplay }
 				{ detailsDisplay }
