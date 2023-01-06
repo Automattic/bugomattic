@@ -2,7 +2,6 @@ import React, { ReactNode } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { selectNormalizedReportingConfig } from '../../reporting-config/reporting-config-slice';
 import { TaskLink } from '../../reporting-config/types';
-import urlJoin from 'url-join';
 import { ReactComponent as SlackIcon } from '../../common/svgs/slack.svg';
 import { ReactComponent as GithubIcon } from '../../common/svgs/github.svg';
 import { ReactComponent as P2Icon } from '../../common/svgs/p2.svg';
@@ -14,6 +13,12 @@ import {
 	removeCompletedTask,
 	selectCompletedTasks,
 } from '../completed-tasks-slice';
+import {
+	createGeneralHref,
+	createNewGithubIssueHref,
+	createP2Href,
+	createSlackHref,
+} from '../../common/lib';
 
 interface Props {
 	taskId: string;
@@ -96,46 +101,13 @@ function getDefaultTextForLinkType( link: TaskLink ): string {
 function createLinkHref( link: TaskLink, issueTitle?: string ): string {
 	switch ( link.type ) {
 		case 'general':
-			return new URL( link.href ).href;
-		case 'github': {
-			const url = new URL( 'https://github.com' );
-			let pathEnd = 'new';
-			if ( ! link.labels && ! link.projectSlugs && ! link.template ) {
-				// If there's no other customization, lets default to the /choose route
-				// which lets users pick a template.
-				pathEnd = 'new/choose';
-			}
-			url.pathname = urlJoin( link.repository, 'issues', pathEnd );
-
-			if ( issueTitle ) {
-				url.searchParams.append( 'title', issueTitle );
-			}
-
-			if ( link.template ) {
-				url.searchParams.append( 'template', link.template );
-			}
-
-			if ( link.projectSlugs && link.projectSlugs.length > 0 ) {
-				url.searchParams.append( 'projects', link.projectSlugs.join( ',' ) );
-			}
-
-			if ( link.labels && link.labels.length > 0 ) {
-				url.searchParams.append( 'labels', link.labels.join( ',' ) );
-			}
-
-			return url.href;
-		}
-		case 'slack': {
-			const url = new URL( 'https://slack.com/app_redirect' );
-			url.searchParams.append( 'channel', link.channel );
-			return url.href;
-		}
-		case 'p2': {
-			// TODO: we need to probably sanitize this somehow
-			const safeSubdomain = link.subdomain;
-			const url = new URL( `https://${ safeSubdomain }.wordpress.com` );
-			return url.href;
-		}
+			return createGeneralHref( link );
+		case 'github':
+			return createNewGithubIssueHref( link, issueTitle );
+		case 'slack':
+			return createSlackHref( link );
+		case 'p2':
+			return createP2Href( link );
 	}
 }
 
