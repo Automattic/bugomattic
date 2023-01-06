@@ -36,6 +36,11 @@
 		]
 	},
 	"packageManager": "yarn@3.2.4",
+	"jest": {
+		"transformIgnorePatterns": [
+			"/node_modules/(?!(url-join)/)"
+		]
+	},
 	"dependencies": {
 		"@reduxjs/toolkit": "^1.8.6",
 		"@types/lodash.debounce": "^4.0.7",

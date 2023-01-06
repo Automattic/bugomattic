@@ -101,7 +101,6 @@ export interface P2Link {
 
 export interface GeneralLink {
 	type: 'general';
-	displayText?: string;
 	href: string;
 }
 
@@ -113,15 +112,22 @@ export interface NewGitHubIssueLink {
 	labels?: string[]; // "[Pri] High" e.g.
 }
 
-export type LearnMoreLink = SlackLink | P2Link | GeneralLink;
-
-export type TaskLink = LearnMoreLink | NewGitHubIssueLink;
+export type TaskLink = SlackLink | P2Link | GeneralLink | NewGitHubIssueLink;
 
 export interface TaskDetails {
 	title?: string;
 	details?: string;
 	link?: TaskLink;
 }
+
+interface LinkWithDisplayText {
+	displayText?: string;
+}
+
+export type LearnMoreLink =
+	| ( LinkWithDisplayText & SlackLink )
+	| ( LinkWithDisplayText & P2Link )
+	| ( LinkWithDisplayText & GeneralLink );
 
 export interface LearnMore {
 	description?: string;
