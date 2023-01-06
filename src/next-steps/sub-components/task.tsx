@@ -56,7 +56,7 @@ export function Task( { taskId }: Props ) {
 			>
 				{ getAppIcon( link ) }
 				<span className={ styles.linkText }>{ linkText }</span>
-				<LinkIcon aria-ignore={ true } className={ styles.linkIcon } />
+				<LinkIcon aria-hidden={ true } className={ styles.linkIcon } />
 			</a>
 		);
 	} else {
@@ -116,10 +116,10 @@ function getAppIcon( link: TaskLink ): ReactNode {
 		case 'general':
 			return null;
 		case 'github':
-			return <GithubIcon aria-ignore={ true } className={ styles.appIcon } />;
+			return <GithubIcon aria-hidden={ true } className={ styles.appIcon } />;
 		case 'slack':
-			return <SlackIcon aria-ignore={ true } className={ styles.appIcon } />;
+			return <SlackIcon aria-hidden={ true } className={ styles.appIcon } />;
 		case 'p2':
-			return <P2Icon aria-ignore={ true } className={ styles.appIcon } />;
+			return <P2Icon aria-hidden={ true } className={ styles.appIcon } />;
 	}
 }

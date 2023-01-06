@@ -8,7 +8,7 @@ export function NextSteps() {
 	const relevantTaskIds = useAppSelector( selectRelevantTaskIds );
 
 	const taskListDisplay = (
-		<ol className={ styles.taskList }>
+		<ol aria-label="Steps to report issue" className={ styles.taskList }>
 			{ relevantTaskIds.map( ( taskId ) => (
 				<li key={ taskId }>
 					<Task taskId={ taskId } />
