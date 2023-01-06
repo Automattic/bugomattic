@@ -55,8 +55,8 @@ export function Task( { taskId }: Props ) {
 				onClick={ handleCheckboxChange }
 			>
 				{ getAppIcon( link ) }
-				<span>{ linkText }</span>
-				<LinkIcon className={ styles.linkIcon } />
+				<span className={ styles.linkText }>{ linkText }</span>
+				<LinkIcon aria-ignore={ true } className={ styles.linkIcon } />
 			</a>
 		);
 	} else {
@@ -116,10 +116,10 @@ function getAppIcon( link: TaskLink ): ReactNode {
 		case 'general':
 			return null;
 		case 'github':
-			return <GithubIcon className={ styles.appIcon } />;
+			return <GithubIcon aria-ignore={ true } className={ styles.appIcon } />;
 		case 'slack':
-			return <SlackIcon className={ styles.appIcon } />;
+			return <SlackIcon aria-ignore={ true } className={ styles.appIcon } />;
 		case 'p2':
-			return <P2Icon className={ styles.appIcon } />;
+			return <P2Icon aria-ignore={ true } className={ styles.appIcon } />;
 	}
 }
