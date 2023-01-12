@@ -14,6 +14,8 @@
 	overflow-y: scroll;
 	/* This helps preserve the focus outline */
 	padding: 1px;
+	margin: 0;
+	border: none;
 }
 
 .firstLevel {
@@ -86,17 +88,12 @@ button.clearButton {
 	color: var( --color-primary );
 	background-color: transparent;
 	border: none;
-	padding: 0.125rem 0.5rem;
+	padding: 0.25rem 0 0 0;
 }
 
-button.clearButton:hover {
-	color: var( --color-primary-dark );
-	background-color: var( --color-neutral-light );
-}
-
+button.clearButton:hover,
 button.clearButton:active {
 	color: var( --color-primary-dark );
-	background-color: var( --color-neutral );
 }
 
 .selectedFeatureBreadcrumb {
@@ -158,8 +155,8 @@ button.clearButton:active {
 
 @media only screen and ( min-width: 600px ) {
 	.formErrorWrapper {
-		min-height: 2.5rem;
+		min-height: 3rem;
 		display: flex;
-		align-items: center;
+		align-items: flex-start;
 	}
 }

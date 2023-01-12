@@ -89,15 +89,18 @@ export function FeatureSelectorForm() {
 				aria-label="Select a feature"
 				aria-describedby={ bottomPanelDisplayId }
 			>
-				<div className={ styles.treeWrapper } id={ searchControlsId }>
+				<fieldset className={ styles.treeWrapper } id={ searchControlsId }>
 					{ noResultsFound && noResultsFoundMessage }
+					<legend className="screenReaderOnly">
+						Expandable and collapsible tree with products, feature groups, and features
+					</legend>
 					<SortedProductList productIds={ productsToDisplay } />
-				</div>
+				</fieldset>
 
 				<div className={ styles.bottomPanel }>
-					<div id={ bottomPanelDisplayId } className={ styles.bottomPanelContent }>
+					<section id={ bottomPanelDisplayId } className={ styles.bottomPanelContent }>
 						{ bottomPanelDisplay }
-					</div>
+					</section>
 					<div className={ styles.continueButtonWrapper }>
 						<button className="primaryButton">Continue</button>
 					</div>
