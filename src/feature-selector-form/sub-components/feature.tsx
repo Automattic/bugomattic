@@ -9,7 +9,6 @@ import {
 } from '../feature-selector-form-slice';
 import { includesIgnoringCase } from '../../common/lib';
 import { SubstringHighlighter } from '../../common/components';
-import { selectIssueDetails, setIssueFeatureId } from '../../issue-details/issue-details-slice';
 
 interface Props {
 	id: string;
@@ -17,9 +16,9 @@ interface Props {
 
 export function Feature( { id }: Props ) {
 	const dispatch = useAppDispatch();
-	const handleFeatureSelect = () => dispatch( setIssueFeatureId( id ) );
+	const handleFeatureSelect = () => dispatch( setSelectedFeatureId( id ) );
 
-	const { featureId: selectedFeatureId } = useAppSelector( selectIssueDetails );
+	const selectedFeatureId = useAppSelector( selectSelectedFeatureId );
 	const isSelected = id === selectedFeatureId;
 	const classNames = [ styles.treeNode, styles.feature ];
 	if ( isSelected ) {
