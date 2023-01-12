@@ -136,10 +136,14 @@ function getAppIcon( link: TaskLink ): ReactNode {
 		case 'general':
 			return null;
 		case 'github':
-			return <GithubIcon aria-hidden={ true } className={ styles.appIcon } />;
+			return (
+				<GithubIcon data-testid="github-icon" aria-hidden={ true } className={ styles.appIcon } />
+			);
 		case 'slack':
-			return <SlackIcon aria-hidden={ true } className={ styles.appIcon } />;
+			return (
+				<SlackIcon data-testid="slack-icon" aria-hidden={ true } className={ styles.appIcon } />
+			);
 		case 'p2':
-			return <P2Icon aria-hidden={ true } className={ styles.appIcon } />;
+			return <P2Icon data-testid="p2-icon" aria-hidden={ true } className={ styles.appIcon } />;
 	}
 }
