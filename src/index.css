@@ -39,7 +39,8 @@ input[type='email']:focus {
 	outline: none;
 }
 
-input[type='radio'] {
+input[type='radio'],
+input[type='checkbox'] {
 	accent-color: var( --color-primary );
 }
 
