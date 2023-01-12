@@ -1,4 +1,3 @@
-import { templateSettings } from 'lodash';
 import {
 	createGeneralHref,
 	createNewGithubIssueHref,

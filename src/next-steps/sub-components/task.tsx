@@ -43,15 +43,16 @@ export function Task( { taskId }: Props ) {
 	const { title, details, link } = tasks[ taskId ];
 
 	if ( ! title && ! details && ! link ) {
+		// We have nothing to display!
 		// TODO: Maybe an FYI logging here in the future?
 		return null;
 	}
 
+	let taskIsBroken = false;
 	let titleDisplay: ReactNode;
-	let detailsDisplay: ReactNode = null;
 	if ( link ) {
 		try {
-			const linkText = title || getDefaultTextForLinkType( link );
+			const linkText = title || getDefaultTitleForLink( link );
 			const href = createLinkHref( link, issueTitle );
 			titleDisplay = (
 				<a
@@ -62,29 +63,28 @@ export function Task( { taskId }: Props ) {
 					// When they open a link, let's trigger the checkbox change too
 					onClick={ handleCheckboxChange }
 				>
-					{ getAppIcon( link ) }
+					{ getAppIconForLink( link ) }
 					<span className={ styles.linkText }>{ linkText }</span>
 					<LinkIcon aria-hidden={ true } className={ styles.linkIcon } />
 				</a>
 			);
-			if ( details ) {
-				detailsDisplay = <p className={ styles.taskDetails }>{ details }</p>;
-			}
 		} catch ( error ) {
-			// TODO: log the error
+			// TODO: log the error with our monitoring client
+			taskIsBroken = true;
 			titleDisplay = (
 				<span className={ styles.badTask }>
 					This task has broken configuration. Please notify the Bugomattic administrators.
 				</span>
 			);
-			detailsDisplay = null;
 		}
 	} else {
 		const titleText = title ? title : 'Complete the details below';
 		titleDisplay = <span className={ styles.taskTitle }>{ titleText }</span>;
-		if ( details ) {
-			detailsDisplay = <p className={ styles.taskDetails }>{ details }</p>;
-		}
+	}
+
+	let detailsDisplay: ReactNode = null;
+	if ( ! taskIsBroken && details ) {
+		detailsDisplay = <p className={ styles.taskDetails }>{ details }</p>;
 	}
 
 	return (
@@ -105,7 +105,7 @@ export function Task( { taskId }: Props ) {
 	);
 }
 
-function getDefaultTextForLinkType( link: TaskLink ): string {
+function getDefaultTitleForLink( link: TaskLink ): string {
 	switch ( link.type ) {
 		case 'general':
 			return link.href;
@@ -118,20 +118,7 @@ function getDefaultTextForLinkType( link: TaskLink ): string {
 	}
 }
 
-function createLinkHref( link: TaskLink, issueTitle?: string ): string {
-	switch ( link.type ) {
-		case 'general':
-			return createGeneralHref( link );
-		case 'github':
-			return createNewGithubIssueHref( link, issueTitle );
-		case 'slack':
-			return createSlackHref( link );
-		case 'p2':
-			return createP2Href( link );
-	}
-}
-
-function getAppIcon( link: TaskLink ): ReactNode {
+function getAppIconForLink( link: TaskLink ): ReactNode {
 	switch ( link.type ) {
 		case 'general':
 			return null;
@@ -145,5 +132,18 @@ function getAppIcon( link: TaskLink ): ReactNode {
 			);
 		case 'p2':
 			return <P2Icon data-testid="p2-icon" aria-hidden={ true } className={ styles.appIcon } />;
+	}
+}
+
+function createLinkHref( link: TaskLink, issueTitle?: string ): string {
+	switch ( link.type ) {
+		case 'general':
+			return createGeneralHref( link );
+		case 'github':
+			return createNewGithubIssueHref( link, issueTitle );
+		case 'slack':
+			return createSlackHref( link );
+		case 'p2':
+			return createP2Href( link );
 	}
 }
