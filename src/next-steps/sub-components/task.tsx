@@ -42,46 +42,66 @@ export function Task( { taskId }: Props ) {
 
 	const { title, details, link } = tasks[ taskId ];
 
+	if ( ! title && ! details && ! link ) {
+		// TODO: Maybe an FYI logging here in the future?
+		return null;
+	}
+
 	let titleDisplay: ReactNode;
+	let detailsDisplay: ReactNode = null;
 	if ( link ) {
-		const linkText = title || getDefaultTextForLinkType( link );
-		titleDisplay = (
-			<a
-				className={ styles.taskTitle }
-				target="_blank"
-				href={ createLinkHref( link, issueTitle ) }
-				rel="noreferrer"
-				// When they open a link, let's trigger the checkbox change too
-				onClick={ handleCheckboxChange }
-			>
-				{ getAppIcon( link ) }
-				<span className={ styles.linkText }>{ linkText }</span>
-				<LinkIcon aria-hidden={ true } className={ styles.linkIcon } />
-			</a>
-		);
+		try {
+			const linkText = title || getDefaultTextForLinkType( link );
+			const href = createLinkHref( link, issueTitle );
+			titleDisplay = (
+				<a
+					className={ styles.taskTitle }
+					target="_blank"
+					href={ href }
+					rel="noreferrer"
+					// When they open a link, let's trigger the checkbox change too
+					onClick={ handleCheckboxChange }
+				>
+					{ getAppIcon( link ) }
+					<span className={ styles.linkText }>{ linkText }</span>
+					<LinkIcon aria-hidden={ true } className={ styles.linkIcon } />
+				</a>
+			);
+			if ( details ) {
+				detailsDisplay = <p className={ styles.taskDetails }>{ details }</p>;
+			}
+		} catch ( error ) {
+			// TODO: log the error
+			titleDisplay = (
+				<span className={ styles.badTask }>
+					This task has broken configuration. Please notify the Bugomattic administrators.
+				</span>
+			);
+			detailsDisplay = null;
+		}
 	} else {
 		const titleText = title ? title : 'Complete the details below';
 		titleDisplay = <span className={ styles.taskTitle }>{ titleText }</span>;
-	}
-
-	let detailsDisplay: ReactNode = null;
-	if ( details ) {
-		detailsDisplay = <p className={ styles.taskDetails }>{ details }</p>;
+		if ( details ) {
+			detailsDisplay = <p className={ styles.taskDetails }>{ details }</p>;
+		}
 	}
 
 	return (
-		<label className={ styles.task }>
-			<input
-				className={ styles.taskCheckbox }
-				onChange={ handleCheckboxChange }
-				checked={ isChecked }
-				type="checkbox"
-			/>
-			<div>
-				{ titleDisplay }
-				{ detailsDisplay }
-			</div>
-		</label>
+		<li>
+			<label className={ styles.task }>
+				<input
+					className={ styles.taskCheckbox }
+					onChange={ handleCheckboxChange }
+					checked={ isChecked }
+					type="checkbox"
+				/>
+				<div>
+					{ titleDisplay }
+					{ detailsDisplay }
+				</div>
+			</label>
+		</li>
 	);
 }
 

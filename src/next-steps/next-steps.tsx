@@ -10,9 +10,7 @@ export function NextSteps() {
 	const taskListDisplay = (
 		<ol aria-label="Steps to report issue" className={ styles.taskList }>
 			{ relevantTaskIds.map( ( taskId ) => (
-				<li key={ taskId }>
-					<Task taskId={ taskId } />
-				</li>
+				<Task key={ taskId } taskId={ taskId } />
 			) ) }
 		</ol>
 	);

@@ -20,6 +20,12 @@
 	font-weight: 600;
 }
 
+.badTask {
+	font-style: italic;
+	color: var( --color-error );
+	font-size: 1.25rem;
+}
+
 input[type='checkbox'].taskCheckbox {
 	height: 1.25rem;
 	width: 1.25rem;
