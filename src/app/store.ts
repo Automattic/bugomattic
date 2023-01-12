@@ -9,7 +9,7 @@ import { ApiClient } from '../api/types';
 import { reportingConfigReducer } from '../reporting-config/reporting-config-slice';
 import { featureSelectorFormReducer } from '../feature-selector-form/feature-selector-form-slice';
 import { issueDetailsReducer } from '../issue-details/issue-details-slice';
-import { completedTasksReducer } from '../completed-tasks/completed-tasks-slice';
+import { completedTasksReducer } from '../next-steps/completed-tasks-slice';
 
 function createRootReducer() {
 	return combineReducers( {
