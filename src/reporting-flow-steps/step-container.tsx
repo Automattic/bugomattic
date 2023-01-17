@@ -48,7 +48,7 @@ export function StepContainer( {
 					</button>
 				) }
 			</div>
-			<div className={ styles.content }>{ children }</div>
+			{ children && <div className={ styles.content }>{ children }</div> }
 		</section>
 	);
 }
