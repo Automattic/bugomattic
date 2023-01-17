@@ -4,8 +4,24 @@
 	list-style: none;
 }
 
+.searchWrapper {
+	max-width: 480px;
+	margin-bottom: 1rem;
+}
+
+.treeWrapper {
+	height: 320px;
+	overflow-y: scroll;
+	/* This helps preserve the focus outline */
+	padding: 1px;
+	margin: 0;
+	border: none;
+}
+
 .firstLevel {
-	padding-left: 0.25rem;
+	padding-left: 0;
+	margin-top: 0;
+	margin-bottom: 0;
 }
 
 .secondLevel,
@@ -60,4 +76,87 @@
 	margin-right: 0.25rem;
 	height: 1rem;
 	width: 1rem;
+}
+
+.selectedFeatureName {
+	font-size: 1.25rem;
+	font-weight: 600;
+	margin-right: 0.5rem;
+}
+
+button.clearButton {
+	color: var( --color-primary );
+	background-color: transparent;
+	border: none;
+	padding: 0.25rem 0 0 0;
+}
+
+button.clearButton:hover,
+button.clearButton:active {
+	color: var( --color-primary-dark );
+}
+
+.selectedFeatureBreadcrumb {
+	color: var( --color-text-light );
+	font-size: 1rem;
+	margin-top: 1.25rem;
+	overflow-x: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.breadcrumbIcon {
+	padding-left: 0.5rem;
+	padding-right: 0.5rem;
+	height: 1rem;
+	width: 1rem;
+	transform: translateY( 0.125rem );
+}
+
+.selectedFeatureDescription {
+	font-size: 1rem;
+	margin: 0.25rem 0 0 0;
+}
+
+.bottomPanel {
+	margin-top: 1rem;
+	border-top: solid 1px var( --color-border );
+	padding-top: 1.5rem;
+	padding-bottom: 1.5rem;
+	min-height: 3rem;
+	display: flex;
+	align-items: flex-end;
+	justify-content: space-between;
+}
+
+.bottomPanelContent {
+	min-width: 0;
+	max-width: 100%;
+}
+
+.continueButtonWrapper {
+	margin-left: 1.5rem;
+}
+
+@media only screen and ( max-width: 600px ) {
+	.bottomPanel {
+		align-items: flex-start;
+		flex-direction: column;
+	}
+
+	.continueButtonWrapper {
+		display: flex;
+		justify-content: flex-end;
+		width: 100%;
+		margin-left: 0;
+		margin-top: 2rem;
+	}
+}
+
+@media only screen and ( min-width: 600px ) {
+	.formErrorWrapper {
+		min-height: 3rem;
+		display: flex;
+		align-items: flex-start;
+	}
 }

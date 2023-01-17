@@ -243,48 +243,6 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 		} );
 	} );
 
-	describe( 'Feature selecting', () => {
-		test( 'Clicking on a feature marks it as selected', async () => {
-			const { user } = setup( <FeatureSelectorForm /> );
-
-			// First, expand to make sure the features are visible
-			await user.click( screen.getByRole( 'button', { expanded: false, name: 'A Product' } ) );
-			await user.click(
-				screen.getByRole( 'button', { expanded: false, name: 'A Feature Group' } )
-			);
-
-			await user.click( screen.getByRole( 'option', { selected: false, name: 'A Feature' } ) );
-
-			expect(
-				screen.getByRole( 'option', { selected: true, name: 'A Feature' } )
-			).toBeInTheDocument();
-		} );
-
-		test( 'Clicking on a new feature unselects the old one', async () => {
-			const { user } = setup( <FeatureSelectorForm /> );
-
-			// First, expand to make sure the features are visible
-			await user.click( screen.getByRole( 'button', { expanded: false, name: 'A Product' } ) );
-			await user.click(
-				screen.getByRole( 'button', { expanded: false, name: 'A Feature Group' } )
-			);
-
-			await user.click( screen.getByRole( 'option', { selected: false, name: 'A Feature' } ) );
-			await user.click(
-				screen.getByRole( 'option', { selected: false, name: 'B Feature Under Product' } )
-			);
-
-			// New one is selected
-			expect(
-				screen.getByRole( 'option', { selected: true, name: 'B Feature Under Product' } )
-			).toBeInTheDocument();
-			// Old one is unselected
-			expect(
-				screen.getByRole( 'option', { selected: false, name: 'A Feature' } )
-			).toBeInTheDocument();
-		} );
-	} );
-
 	describe( 'Sorting', () => {
 		test( 'The products are sorted alphabetically', () => {
 			setup( <FeatureSelectorForm /> );

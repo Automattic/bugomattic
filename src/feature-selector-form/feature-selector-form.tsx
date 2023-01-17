@@ -1,13 +1,19 @@
-import React, { useCallback } from 'react';
+import React, { FormEventHandler, ReactNode, useCallback, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { selectReportingConfigSearchResults } from '../combined-selectors/reporting-config-search-results';
-import { DebouncedSearch } from '../common/components';
-import { selectNormalizedReportingConfig } from '../reporting-config/reporting-config-slice';
-import { selectFeatureSearchTerm, setFeatureSearchTerm } from './feature-selector-form-slice';
+import { DebouncedSearch, FormErrorMessage } from '../common/components';
+import { setIssueFeatureId } from '../issue-details/issue-details-slice';
+import { selectSelectedFeatureId, setFeatureSearchTerm } from './feature-selector-form-slice';
 import styles from './feature-selector-form.module.css';
-import { SortedProductList } from './sub-components';
+import { FeatureSelectorTree } from './sub-components';
+import { SelectedFeatureDetails } from './sub-components/selected-feature-details';
 
 export function FeatureSelectorForm() {
+	const selectedFeatureId = useAppSelector( selectSelectedFeatureId );
+
+	const [ submissionAttempted, setSubmissionAttempted ] = useState( false );
+
+	const readyToContinue = selectedFeatureId !== null;
+
 	const dispatch = useAppDispatch();
 	const handleSearch = useCallback(
 		( searchTerm: string ) => {
@@ -16,41 +22,58 @@ export function FeatureSelectorForm() {
 		[ dispatch ]
 	);
 
-	const { products } = useAppSelector( selectNormalizedReportingConfig );
-	const searchTerm = useAppSelector( selectFeatureSearchTerm );
-	const searchResults = useAppSelector( selectReportingConfigSearchResults );
+	const handleSubmit: FormEventHandler< HTMLFormElement > = ( event ) => {
+		event.preventDefault();
+		setSubmissionAttempted( true );
+		if ( readyToContinue ) {
+			dispatch( setIssueFeatureId( selectedFeatureId ) );
+		}
+	};
 
-	const noResultsFound = searchTerm && searchResults.products.size === 0;
-	const noResultsFoundMessage = (
-		<p className={ styles.noResultsMessage } aria-live="polite">
-			No results found. Try a different search or explore manually below.
-		</p>
-	);
+	const searchControlsId = 'feature-selector-tree-id';
 
-	const allProductIds = Object.keys( products );
-	let productsToDisplay: string[];
-	if ( ! searchTerm || noResultsFound ) {
-		productsToDisplay = allProductIds;
-	} else {
-		productsToDisplay = allProductIds.filter( ( productId ) =>
-			searchResults.products.has( productId )
+	const showFormError = submissionAttempted && ! readyToContinue;
+
+	const bottomPanelContentId = 'feature-selector-bottom-panel-content';
+	let bottomPanelDisplay: ReactNode;
+	if ( showFormError ) {
+		bottomPanelDisplay = (
+			<div className={ styles.formErrorWrapper }>
+				<FormErrorMessage>You must select a feature</FormErrorMessage>
+			</div>
 		);
+	} else if ( selectedFeatureId ) {
+		bottomPanelDisplay = <SelectedFeatureDetails featureId={ selectedFeatureId } />;
+	} else {
+		bottomPanelDisplay = null;
 	}
-
-	const searchControlsId = 'reporting-config-tree-id';
 
 	return (
 		<section className={ styles.sectionWrapper }>
-			<h2>1. Select a Feature</h2>
-			<DebouncedSearch
-				callback={ handleSearch }
-				placeholder="Search for a feature"
-				inputAriaControls={ searchControlsId }
-			/>
-			<div id={ searchControlsId }>
-				{ noResultsFound && noResultsFoundMessage }
-				<SortedProductList productIds={ productsToDisplay } />
+			<div className={ styles.searchWrapper }>
+				<DebouncedSearch
+					callback={ handleSearch }
+					placeholder="Search for a feature"
+					inputAriaControls={ searchControlsId }
+				/>
 			</div>
+
+			<form
+				onSubmit={ handleSubmit }
+				aria-label="Select a feature"
+				aria-describedby={ bottomPanelContentId }
+			>
+				<FeatureSelectorTree parentElementId={ searchControlsId } />
+
+				<div className={ styles.bottomPanel }>
+					<section id={ bottomPanelContentId } className={ styles.bottomPanelContent }>
+						{ bottomPanelDisplay }
+					</section>
+					<div className={ styles.continueButtonWrapper }>
+						<button className="primaryButton">Continue</button>
+					</div>
+				</div>
+			</form>
 		</section>
 	);
 }
