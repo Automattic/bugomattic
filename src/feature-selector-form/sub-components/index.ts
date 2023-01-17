@@ -5,3 +5,6 @@ export * from './product';
 export * from './sorted-feature-list';
 export * from './sorted-feature-group-list';
 export * from './sorted-product-list';
+export * from './feature-selector-tree';
+export * from './use-expansion-with-search';
+export * from './search-hightlighter';
