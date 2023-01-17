@@ -1,0 +1,84 @@
+@import '../variables.css';
+
+.container {
+	width: 100%;
+	border: 1px solid var( --color-border );
+	border-radius: 6px;
+}
+
+.headerRow {
+	display: flex;
+	align-items: center;
+	min-height: 2.5rem;
+	background-color: var( --color-white );
+	padding: 0.5rem 0.5rem 0.5rem 0.75rem;
+	border-radius: 4px 4px 0 0;
+	justify-content: space-between;
+}
+
+.header {
+	display: flex;
+	align-items: center;
+	margin: 0;
+}
+
+.stepNumberWrapper,
+.checkmarkWrapper {
+	border-radius: 1rem;
+	margin-right: 0.5rem;
+	width: 2rem;
+	height: 2rem;
+	text-align: center;
+}
+
+.stepNumberWrapper {
+	background-color: var( --color-neutral-dark );
+}
+
+.checkmarkWrapper {
+	background-color: var( --color-success );
+}
+
+.stepNumber,
+.checkmark {
+	display: block;
+	color: var( --color-white );
+	font-size: 1rem;
+	/* This is 0.5rem - 0.0675rem... We have to account for the font sitting low on the font line. */
+	transform: translateY( 0.4375rem );
+}
+
+.headerTitle {
+	font-size: 1rem;
+	font-weight: 600;
+}
+
+.content {
+	padding: 1rem 1.5rem;
+}
+
+button.editButton {
+	color: var( --color-primary );
+	background-color: transparent;
+	border-radius: 4px;
+	border: 2px solid var( --color-primary );
+	padding-top: 0.5rem;
+	padding-bottom: 0.5rem;
+}
+
+button.editButton:focus-visible {
+	outline-offset: 4px;
+}
+
+button.editButton:hover {
+	color: var( --color-white );
+	background-color: var( --color-primary );
+	transition-property: color, background-color;
+	transition-duration: 300ms;
+}
+
+button.editButton:active {
+	color: var( --color-white );
+	background-color: var( --color-primary-dark );
+	border-color: var( --color-primary-dark );
+}
