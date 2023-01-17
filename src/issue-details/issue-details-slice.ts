@@ -43,3 +43,11 @@ export function selectIssueDetails( state: RootState ): IssueDetails {
 export function selectIssueFeatureId( state: RootState ): FeatureId {
 	return state.issueDetails.featureId;
 }
+
+export function selectIssueTitle( state: RootState ): string {
+	return state.issueDetails.issueTitle;
+}
+
+export function selectIssueType( state: RootState ): IssueType {
+	return state.issueDetails.issueType;
+}
