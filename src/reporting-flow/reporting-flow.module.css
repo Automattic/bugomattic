@@ -1,12 +1,12 @@
 @import '../variables.css';
 
-.container {
+.stepContainer {
 	width: 100%;
 	border: 1px solid var( --color-border );
 	border-radius: 6px;
 }
 
-.headerRow {
+.stepHeaderRow {
 	display: flex;
 	align-items: center;
 	min-height: 2.5rem;
@@ -14,7 +14,7 @@
 	justify-content: space-between;
 }
 
-.header {
+.stepHeader {
 	display: flex;
 	align-items: center;
 	margin: 0;
@@ -46,13 +46,15 @@
 	transform: translateY( 0.4375rem );
 }
 
-.headerTitle {
+.stepHeaderTitle {
 	font-size: 1rem;
 	font-weight: 600;
 }
 
-.content {
+.stepContent {
 	padding: 1rem 1.5rem;
+	background-color: var( --color-shaded-background );
+	border-radius: 0 0 4px 4px;
 }
 
 button.editButton {

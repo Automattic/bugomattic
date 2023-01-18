@@ -36,11 +36,11 @@ export function StepContainer( {
 	}
 
 	return (
-		<section aria-labelledby={ headerId } className={ styles.container }>
-			<div className={ styles.headerRow }>
-				<h2 className={ styles.header } id={ headerId }>
+		<section aria-labelledby={ headerId } className={ styles.stepContainer }>
+			<div className={ styles.stepHeaderRow }>
+				<h2 className={ styles.stepHeader } id={ headerId }>
 					{ stepIconDisplay }
-					<span className={ styles.headerTitle }>{ title }</span>
+					<span className={ styles.stepHeaderTitle }>{ title }</span>
 				</h2>
 				{ showEditButton && (
 					<button className={ styles.editButton } onClick={ onEdit }>
@@ -48,7 +48,7 @@ export function StepContainer( {
 					</button>
 				) }
 			</div>
-			{ children && <div className={ styles.content }>{ children }</div> }
+			{ children && <div className={ styles.stepContent }>{ children }</div> }
 		</section>
 	);
 }
