@@ -5,6 +5,7 @@ import { IssueType } from '../issue-details/types';
 import { TitleTypeForm } from '../title-type-form/title-type-form';
 import { selectActiveStep, setActiveStep } from './active-step-slice';
 import { StepContainer } from './step-container';
+import styles from './reporting-flow.module.css';
 
 export function TitleAndTypeStep() {
 	const dispatch = useAppDispatch();
@@ -48,13 +49,13 @@ function CompletedStep( { title, type }: CompletedStepProps ) {
 	return (
 		<div>
 			{ title && (
-				<>
-					<h3>Title</h3>
-					<p>{ title }</p>
-				</>
+				<div className={ styles.completedContentWrapper }>
+					<h3 className={ styles.completedContentHeader }>Title</h3>
+					<p className={ styles.completedContentValue }>{ title }</p>
+				</div>
 			) }
-			<h3>Type</h3>
-			<p>{ getDisplayTextForType( type ) }</p>
+			<h3 className={ styles.completedContentHeader }>Type</h3>
+			<p className={ styles.completedContentValue }>{ getDisplayTextForType( type ) }</p>
 		</div>
 	);
 }

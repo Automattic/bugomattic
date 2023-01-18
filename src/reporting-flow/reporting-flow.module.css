@@ -82,3 +82,18 @@ button.editButton:active {
 	background-color: var( --color-primary-dark );
 	border-color: var( --color-primary-dark );
 }
+
+.completedContentHeader {
+	font-size: 1rem;
+	font-weight: 500;
+}
+
+.completedContentValue {
+	font-size: 0.9rem;
+	color: var( --color-text-light );
+	margin: 0;
+}
+
+.completedContentWrapper {
+	margin-bottom: 1.5rem;
+}

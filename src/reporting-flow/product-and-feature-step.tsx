@@ -5,6 +5,7 @@ import { selectNormalizedReportingConfig } from '../reporting-config/reporting-c
 import { TitleTypeForm } from '../title-type-form/title-type-form';
 import { selectActiveStep, setActiveStep } from './active-step-slice';
 import { StepContainer } from './step-container';
+import styles from './reporting-flow.module.css';
 
 export function ProductAndFeatureStep() {
 	const dispatch = useAppDispatch();
@@ -61,8 +62,8 @@ function CompletedStep( { featureId }: CompletedStepProps ) {
 
 	return (
 		<div>
-			<h3>Product and Feature</h3>
-			<p>{ breadcrumbPieces.join( ' > ' ) }</p>
+			<h3 className={ styles.completedContentHeader }>Product and Feature</h3>
+			<p className={ styles.completedContentValue }>{ breadcrumbPieces.join( ' > ' ) }</p>
 		</div>
 	);
 }
