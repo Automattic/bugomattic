@@ -11,3 +11,7 @@
 .appHeader h1 {
 	font-size: 2rem;
 }
+
+.appMain {
+	position: relative;
+}

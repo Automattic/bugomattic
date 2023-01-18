@@ -1,21 +1,35 @@
-import React, { FormEventHandler, ReactNode, useCallback, useState } from 'react';
+import React, { FormEventHandler, ReactNode, useCallback, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { DebouncedSearch, FormErrorMessage } from '../common/components';
-import { setIssueFeatureId } from '../issue-details/issue-details-slice';
+import { selectIssueFeatureId, setIssueFeatureId } from '../issue-details/issue-details-slice';
 import { setActiveStep } from '../reporting-flow/active-step-slice';
-import { selectSelectedFeatureId, setFeatureSearchTerm } from './feature-selector-form-slice';
+import {
+	selectSelectedFeatureId,
+	setFeatureSearchTerm,
+	setSelectedFeatureId,
+} from './feature-selector-form-slice';
 import styles from './feature-selector-form.module.css';
 import { FeatureSelectorTree } from './sub-components';
 import { SelectedFeatureDetails } from './sub-components/selected-feature-details';
 
 export function FeatureSelectorForm() {
+	const dispatch = useAppDispatch();
+	const issueFeatureId = useAppSelector( selectIssueFeatureId );
+
+	// On mount, we effectively should 'reset' the form state.
+	// The form feature id should be whatever was saved last.
+	// Search should always start empty.
+	useEffect( () => {
+		dispatch( setSelectedFeatureId( issueFeatureId ) );
+		dispatch( setFeatureSearchTerm( '' ) );
+	}, [ dispatch, issueFeatureId ] );
+
 	const selectedFeatureId = useAppSelector( selectSelectedFeatureId );
 
 	const [ submissionAttempted, setSubmissionAttempted ] = useState( false );
 
 	const readyToContinue = selectedFeatureId !== null;
 
-	const dispatch = useAppDispatch();
 	const handleSearch = useCallback(
 		( searchTerm: string ) => {
 			dispatch( setFeatureSearchTerm( searchTerm ) );
