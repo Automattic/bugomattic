@@ -1,1 +1,1 @@
-export type ActiveStep = 'none' | 'titleAndType' | 'productAndFeature' | 'nextSteps';
+export type ActiveStep = 'none' | 'titleAndType' | 'featureSelection' | 'nextSteps';

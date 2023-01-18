@@ -2,27 +2,24 @@ import React, { ReactNode, useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { selectIssueFeatureId } from '../issue-details/issue-details-slice';
 import { selectNormalizedReportingConfig } from '../reporting-config/reporting-config-slice';
-import { TitleTypeForm } from '../title-type-form/title-type-form';
 import { selectActiveStep, setActiveStep } from './active-step-slice';
 import { StepContainer } from './step-container';
 import styles from './reporting-flow.module.css';
+import { FeatureSelectorForm } from '../feature-selector-form/feature-selector-form';
 
 export function FeatureSelectionStep() {
 	const dispatch = useAppDispatch();
 	const activeStep = useAppSelector( selectActiveStep );
 	const issueFeatureId = useAppSelector( selectIssueFeatureId );
 
-	const onEdit = useCallback(
-		() => dispatch( setActiveStep( 'productAndFeature' ) ),
-		[ dispatch ]
-	);
+	const onEdit = useCallback( () => dispatch( setActiveStep( 'featureSelection' ) ), [ dispatch ] );
 
-	const isActive = activeStep === 'productAndFeature';
+	const isActive = activeStep === 'featureSelection';
 	const isComplete = issueFeatureId !== null && ! isActive;
 
 	let stepContentDisplay: ReactNode;
 	if ( isActive ) {
-		stepContentDisplay = <TitleTypeForm />;
+		stepContentDisplay = <FeatureSelectorForm />;
 	} else if ( isComplete ) {
 		stepContentDisplay = <CompletedStep featureId={ issueFeatureId } />;
 	} else {
