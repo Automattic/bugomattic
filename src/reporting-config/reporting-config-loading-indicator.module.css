@@ -15,6 +15,7 @@
 	animation-duration: 1500ms;
 	animation-iteration-count: infinite;
 	animation-timing-function: linear;
+	text-align: center;
 }
 
 .icon {
