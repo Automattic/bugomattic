@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { FeatureSelectorForm } from '../feature-selector-form/feature-selector-form';
 import { useMonitoring } from '../monitoring/monitoring-provider';
 import { NextSteps } from '../next-steps/next-steps';
-import { StepContainer } from '../reporting-flow-steps/step-container';
+import { StepContainer } from '../reporting-flow/step-container';
 import { TitleTypeForm } from '../title-type-form/title-type-form';
 
 function FakeStep() {
