@@ -8,8 +8,8 @@ export function ReportingFlow() {
 	return (
 		<section className={ styles.flowContainer }>
 			<h2 className="screenReaderOnly">Report a new issue</h2>
-			<TitleAndTypeStep />
 			<FeatureSelectionStep />
+			<TitleAndTypeStep />
 			<NextStepsStep />
 		</section>
 	);

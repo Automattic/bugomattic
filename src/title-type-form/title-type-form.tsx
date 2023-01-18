@@ -55,7 +55,7 @@ export function TitleTypeForm() {
 		if ( readyToContinue ) {
 			dispatch( setIssueTitle( title ) );
 			dispatch( setIssueType( type ) );
-			dispatch( setActiveStep( 'featureSelection' ) );
+			dispatch( setActiveStep( 'nextSteps' ) );
 		}
 	};
 

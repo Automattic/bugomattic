@@ -29,7 +29,7 @@ export function FeatureSelectionStep() {
 	return (
 		<StepContainer
 			title="Product and Feature"
-			stepNumber={ 2 }
+			stepNumber={ 1 }
 			isComplete={ isComplete }
 			showEditButton={ isComplete }
 			onEdit={ onEdit }

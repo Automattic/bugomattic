@@ -42,7 +42,7 @@ export function FeatureSelectorForm() {
 		setSubmissionAttempted( true );
 		if ( readyToContinue ) {
 			dispatch( setIssueFeatureId( selectedFeatureId ) );
-			dispatch( setActiveStep( 'nextSteps' ) );
+			dispatch( setActiveStep( 'titleAndType' ) );
 		}
 	};
 

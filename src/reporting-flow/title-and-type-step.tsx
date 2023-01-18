@@ -30,7 +30,7 @@ export function TitleAndTypeStep() {
 	return (
 		<StepContainer
 			title="Title and Type"
-			stepNumber={ 1 }
+			stepNumber={ 2 }
 			isComplete={ isComplete }
 			showEditButton={ ! isActive }
 			onEdit={ onEdit }

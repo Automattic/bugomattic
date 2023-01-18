@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../app/store';
 import { ActiveStep } from './types';
 
-const initialState: ActiveStep = 'titleAndType' as ActiveStep;
+const initialState: ActiveStep = 'featureSelection' as ActiveStep;
 
 export const featureSelectorFormSlice = createSlice( {
 	name: 'activeStep',
