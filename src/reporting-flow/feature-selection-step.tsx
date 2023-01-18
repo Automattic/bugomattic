@@ -7,7 +7,7 @@ import { selectActiveStep, setActiveStep } from './active-step-slice';
 import { StepContainer } from './step-container';
 import styles from './reporting-flow.module.css';
 
-export function ProductAndFeatureStep() {
+export function FeatureSelectionStep() {
 	const dispatch = useAppDispatch();
 	const activeStep = useAppSelector( selectActiveStep );
 	const issueFeatureId = useAppSelector( selectIssueFeatureId );
