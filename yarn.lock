@@ -1825,7 +1825,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jest/environment@npm:^27.5.1":
+"@jest/environment@npm:^27.4.3, @jest/environment@npm:^27.5.1":
   version: 27.5.1
   resolution: "@jest/environment@npm:27.5.1"
   dependencies:
@@ -1997,7 +1997,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jest/types@npm:^27.5.1":
+"@jest/types@npm:^27.4.3, @jest/types@npm:^27.5.1":
   version: 27.5.1
   resolution: "@jest/types@npm:27.5.1"
   dependencies:
@@ -4120,6 +4120,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "bugomattic@workspace:."
   dependencies:
+    "@jest/environment": ^27.4.3
+    "@jest/types": ^27.4.3
     "@reduxjs/toolkit": ^1.8.6
     "@testing-library/dom": ^8.19.0
     "@testing-library/jest-dom": ^5.16.5
@@ -4144,6 +4146,7 @@ __metadata:
     eslint-plugin-react: ^7.31.10
     eslint-plugin-testing-library: ^5.9.1
     husky: ^8.0.0
+    jest-environment-jsdom: ^27.4.3
     lint-staged: ^13.0.3
     lodash.debounce: ^4.0.8
     path-browserify: ^1.0.1
@@ -8083,7 +8086,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-environment-jsdom@npm:^27.5.1":
+"jest-environment-jsdom@npm:^27.4.3, jest-environment-jsdom@npm:^27.5.1":
   version: 27.5.1
   resolution: "jest-environment-jsdom@npm:27.5.1"
   dependencies:
