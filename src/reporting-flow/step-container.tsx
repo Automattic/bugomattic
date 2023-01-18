@@ -43,7 +43,7 @@ export function StepContainer( {
 					<span className={ styles.stepHeaderTitle }>{ title }</span>
 				</h3>
 				{ showEditButton && (
-					<button className={ styles.editButton } onClick={ onEdit }>
+					<button className={ styles.editButton } onClick={ onEdit } aria-describedby={ headerId }>
 						Edit
 					</button>
 				) }

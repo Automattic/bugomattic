@@ -78,7 +78,7 @@ export function TitleTypeForm() {
 	}
 
 	return (
-		<form onSubmit={ handleSubmit }>
+		<form onSubmit={ handleSubmit } aria-label="Set issue title and type">
 			<div className={ styles.titleWrapper }>
 				<label>
 					<span className={ styles.titleLabel }>
