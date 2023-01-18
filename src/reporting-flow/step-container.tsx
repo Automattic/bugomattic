@@ -38,10 +38,10 @@ export function StepContainer( {
 	return (
 		<section aria-labelledby={ headerId } className={ styles.stepContainer }>
 			<div className={ styles.stepHeaderRow }>
-				<h2 className={ styles.stepHeader } id={ headerId }>
+				<h3 className={ styles.stepHeader } id={ headerId }>
 					{ stepIconDisplay }
 					<span className={ styles.stepHeaderTitle }>{ title }</span>
-				</h2>
+				</h3>
 				{ showEditButton && (
 					<button className={ styles.editButton } onClick={ onEdit }>
 						Edit

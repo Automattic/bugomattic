@@ -13,6 +13,7 @@ import {
 	setIssueType,
 } from '../issue-details/issue-details-slice';
 import { IssueType } from '../issue-details/types';
+import { setActiveStep } from '../reporting-flow/active-step-slice';
 import styles from './title-type-form.module.css';
 
 export function TitleTypeForm() {
@@ -54,6 +55,7 @@ export function TitleTypeForm() {
 		if ( readyToContinue ) {
 			dispatch( setIssueTitle( title ) );
 			dispatch( setIssueType( type ) );
+			dispatch( setActiveStep( 'featureSelection' ) );
 		}
 	};
 

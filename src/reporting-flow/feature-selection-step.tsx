@@ -31,7 +31,7 @@ export function FeatureSelectionStep() {
 			title="Product and Feature"
 			stepNumber={ 2 }
 			isComplete={ isComplete }
-			showEditButton={ ! isActive }
+			showEditButton={ isComplete }
 			onEdit={ onEdit }
 		>
 			{ stepContentDisplay }
@@ -59,7 +59,7 @@ function CompletedStep( { featureId }: CompletedStepProps ) {
 
 	return (
 		<div>
-			<h3 className={ styles.completedContentHeader }>Product and Feature</h3>
+			<h4 className={ styles.completedContentHeader }>Product and Feature</h4>
 			<p className={ styles.completedContentValue }>{ breadcrumbPieces.join( ' > ' ) }</p>
 		</div>
 	);

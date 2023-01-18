@@ -2,6 +2,7 @@ import React, { FormEventHandler, ReactNode, useCallback, useState } from 'react
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { DebouncedSearch, FormErrorMessage } from '../common/components';
 import { setIssueFeatureId } from '../issue-details/issue-details-slice';
+import { setActiveStep } from '../reporting-flow/active-step-slice';
 import { selectSelectedFeatureId, setFeatureSearchTerm } from './feature-selector-form-slice';
 import styles from './feature-selector-form.module.css';
 import { FeatureSelectorTree } from './sub-components';
@@ -27,6 +28,7 @@ export function FeatureSelectorForm() {
 		setSubmissionAttempted( true );
 		if ( readyToContinue ) {
 			dispatch( setIssueFeatureId( selectedFeatureId ) );
+			dispatch( setActiveStep( 'nextSteps' ) );
 		}
 	};
 

@@ -50,11 +50,11 @@ function CompletedStep( { title, type }: CompletedStepProps ) {
 		<div>
 			{ title && (
 				<div className={ styles.completedContentWrapper }>
-					<h3 className={ styles.completedContentHeader }>Title</h3>
+					<h4 className={ styles.completedContentHeader }>Title</h4>
 					<p className={ styles.completedContentValue }>{ title }</p>
 				</div>
 			) }
-			<h3 className={ styles.completedContentHeader }>Type</h3>
+			<h4 className={ styles.completedContentHeader }>Type</h4>
 			<p className={ styles.completedContentValue }>{ getDisplayTextForType( type ) }</p>
 		</div>
 	);
