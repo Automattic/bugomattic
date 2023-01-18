@@ -32,7 +32,7 @@ export function TitleAndTypeStep() {
 			title="Title and Type"
 			stepNumber={ 2 }
 			isComplete={ isComplete }
-			showEditButton={ ! isActive }
+			showEditButton={ isComplete }
 			onEdit={ onEdit }
 		>
 			{ stepContentDisplay }
