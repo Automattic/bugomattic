@@ -3,8 +3,6 @@ import { AnimatedEllipsis } from '../common/components';
 import styles from './reporting-config-loading-indicator.module.css';
 
 export function ReportingConfigLoadingIndicator() {
-	const messageId = 'loading-message';
-
 	const messages = [
 		'Finding some loving homes for bugs.',
 		'"Hydrating config state" -- whatever that means!',
@@ -18,15 +16,15 @@ export function ReportingConfigLoadingIndicator() {
 	return (
 		<div
 			className={ styles.wrapper }
-			aria-live="assertive"
 			aria-relevant="all"
-			role="dialog"
-			aria-labelledby={ messageId }
+			role="alert"
+			// For screen readers, let's ditch the wit and just be clear.
+			aria-label="Loading issue reporting configuration"
 		>
-			<span id={ messageId } className={ styles.message }>
+			<span aria-hidden={ true } className={ styles.message }>
 				{ message }
 			</span>
-			<AnimatedEllipsis />
+			<AnimatedEllipsis aria-hidden={ true } />
 		</div>
 	);
 }

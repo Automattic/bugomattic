@@ -13,10 +13,13 @@ import {
 	setIssueType,
 } from '../issue-details/issue-details-slice';
 import { IssueType } from '../issue-details/types';
-import { setActiveStep } from '../reporting-flow/active-step-slice';
 import styles from './title-type-form.module.css';
 
-export function TitleTypeForm() {
+interface Props {
+	onContinue?: () => void;
+}
+
+export function TitleTypeForm( { onContinue }: Props ) {
 	const dispatch = useAppDispatch();
 	const { issueTitle, issueType } = useAppSelector( selectIssueDetails );
 
@@ -55,7 +58,10 @@ export function TitleTypeForm() {
 		if ( readyToContinue ) {
 			dispatch( setIssueTitle( title ) );
 			dispatch( setIssueType( type ) );
-			dispatch( setActiveStep( 'nextSteps' ) );
+
+			if ( onContinue ) {
+				onContinue();
+			}
 		}
 	};
 

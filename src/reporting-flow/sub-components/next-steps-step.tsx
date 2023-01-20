@@ -5,7 +5,11 @@ import { selectCompletedTasks } from '../../next-steps/completed-tasks-slice';
 import { NextSteps } from '../../next-steps/next-steps';
 import { StepContainer } from './step-container';
 
-export function NextStepsStep() {
+interface Props {
+	stepNumber: number;
+}
+
+export function NextStepsStep( { stepNumber }: Props ) {
 	const relevantTaskIds = useAppSelector( selectRelevantTaskIds );
 	const completedTaskIds = useAppSelector( selectCompletedTasks );
 
@@ -38,7 +42,7 @@ export function NextStepsStep() {
 	return (
 		<StepContainer
 			title="Next Steps"
-			stepNumber={ 3 }
+			stepNumber={ stepNumber }
 			isComplete={ isComplete }
 			showEditButton={ false }
 			onEdit={ onEdit }

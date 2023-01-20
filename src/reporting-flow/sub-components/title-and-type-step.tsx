@@ -7,7 +7,12 @@ import { selectActiveStep, setActiveStep } from './../active-step-slice';
 import { StepContainer } from './step-container';
 import styles from '../reporting-flow.module.css';
 
-export function TitleAndTypeStep() {
+interface Props {
+	stepNumber: number;
+	goToNextStep: () => void;
+}
+
+export function TitleAndTypeStep( { stepNumber, goToNextStep }: Props ) {
 	const dispatch = useAppDispatch();
 	const activeStep = useAppSelector( selectActiveStep );
 	const issueTitle = useAppSelector( selectIssueTitle );
@@ -20,7 +25,7 @@ export function TitleAndTypeStep() {
 
 	let stepContentDisplay: ReactNode;
 	if ( isActive ) {
-		stepContentDisplay = <TitleTypeForm />;
+		stepContentDisplay = <TitleTypeForm onContinue={ goToNextStep } />;
 	} else if ( isComplete ) {
 		stepContentDisplay = <CompletedStep title={ issueTitle } type={ issueType } />;
 	} else {
@@ -30,7 +35,7 @@ export function TitleAndTypeStep() {
 	return (
 		<StepContainer
 			title="Title and Type"
-			stepNumber={ 2 }
+			stepNumber={ stepNumber }
 			isComplete={ isComplete }
 			showEditButton={ isComplete }
 			onEdit={ onEdit }

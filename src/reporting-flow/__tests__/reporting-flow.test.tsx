@@ -393,8 +393,10 @@ describe( '[Reporting Flow]', () => {
 		).toBeInTheDocument();
 	} );
 
-	test( 'The title and type step is active once again', async () => {
+	test( 'Does not make the title and type step active because it is already complete', async () => {
 		// It's the next step after feature selection, so we automatically go there!
-		expect( screen.getByRole( 'form', { name: 'Set issue title and type' } ) ).toBeInTheDocument();
+		expect(
+			screen.queryByRole( 'form', { name: 'Set issue title and type' } )
+		).not.toBeInTheDocument();
 	} );
 } );
