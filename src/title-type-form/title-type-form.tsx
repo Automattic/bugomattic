@@ -142,15 +142,15 @@ export function TitleTypeForm( { onContinue }: Props ) {
 					<label className={ styles.radio }>
 						<input
 							type="radio"
-							checked={ type === 'blocker' }
-							value="blocker"
+							checked={ type === 'urgent' }
+							value="urgent"
 							name="type"
 							onChange={ handleTypeChange }
 							onBlur={ handleTypeBlur }
 							aria-required={ true }
 							aria-invalid={ showTypeError }
 						/>
-						Blocker
+						{ "It's Urgent!" }
 					</label>
 				</div>
 			</fieldset>

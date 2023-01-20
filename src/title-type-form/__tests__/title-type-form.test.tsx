@@ -127,8 +127,10 @@ describe( '[TitleTypeForm]', () => {
 				screen.getByRole( 'radio', { name: 'Feature Request', checked: true } )
 			).toBeInTheDocument();
 
-			await user.click( screen.getByRole( 'radio', { name: 'Blocker' } ) );
-			expect( screen.getByRole( 'radio', { name: 'Blocker', checked: true } ) ).toBeInTheDocument();
+			await user.click( screen.getByRole( 'radio', { name: "It's Urgent!" } ) );
+			expect(
+				screen.getByRole( 'radio', { name: "It's Urgent!", checked: true } )
+			).toBeInTheDocument();
 		} );
 
 		test( 'Clicking "Continue" with an unselected issue type causes a form field error to appear', async () => {
@@ -146,7 +148,7 @@ describe( '[TitleTypeForm]', () => {
 
 			expect( screen.getByRole( 'radio', { name: 'Bug' } ) ).toBeInvalid();
 			expect( screen.getByRole( 'radio', { name: 'Feature Request' } ) ).toBeInvalid();
-			expect( screen.getByRole( 'radio', { name: 'Blocker' } ) ).toBeInvalid();
+			expect( screen.getByRole( 'radio', { name: "It's Urgent!" } ) ).toBeInvalid();
 		} );
 
 		test( 'Selecting an issue type causes the form field error to disappear', async () => {
@@ -166,7 +168,7 @@ describe( '[TitleTypeForm]', () => {
 
 			expect( screen.getByRole( 'radio', { name: 'Bug' } ) ).not.toBeInvalid();
 			expect( screen.getByRole( 'radio', { name: 'Feature Request' } ) ).not.toBeInvalid();
-			expect( screen.getByRole( 'radio', { name: 'Blocker' } ) ).not.toBeInvalid();
+			expect( screen.getByRole( 'radio', { name: "It's Urgent!" } ) ).not.toBeInvalid();
 		} );
 	} );
 } );

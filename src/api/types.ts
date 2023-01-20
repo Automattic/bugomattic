@@ -52,5 +52,5 @@ export interface ApiFeature {
 export interface ApiTasks {
 	bug: TaskDetails[];
 	featureRequest: TaskDetails[];
-	blocker: TaskDetails[];
+	urgent: TaskDetails[];
 }

@@ -14,7 +14,7 @@ function createFakeReportingConfigResponse(): ReportingConfigApiResponse {
 			tasks: {
 				bug: [ { title: 'Product | bug' } ],
 				featureRequest: [ { title: 'Product | feature-request' } ],
-				blocker: [ { title: 'Product | blocker' } ],
+				urgent: [ { title: 'Product | urgent' } ],
 			},
 			featureGroups: {
 				FakeFeatureGroup: {
@@ -28,7 +28,7 @@ function createFakeReportingConfigResponse(): ReportingConfigApiResponse {
 					tasks: {
 						bug: [ { title: 'Feature group | bug' } ],
 						featureRequest: [ { title: 'Feature group | feature request' } ],
-						blocker: [ { title: 'Feature group | blocker' } ],
+						urgent: [ { title: 'Feature group | urgent' } ],
 					},
 					features: {
 						GroupNestedFeature: {
@@ -49,9 +49,9 @@ function createFakeReportingConfigResponse(): ReportingConfigApiResponse {
 									{ title: 'Feature nested under group | feature request | index 0' },
 									{ title: 'Feature nested under group | feature request | index 1' },
 								],
-								blocker: [
-									{ title: 'Feature nested under group | blocker | index 0' },
-									{ title: 'Feature nested under group | blocker | index 1' },
+								urgent: [
+									{ title: 'Feature nested under group | urgent | index 0' },
+									{ title: 'Feature nested under group | urgent | index 1' },
 								],
 							},
 						},
@@ -71,7 +71,7 @@ function createFakeReportingConfigResponse(): ReportingConfigApiResponse {
 					tasks: {
 						bug: [ { title: 'Feature nested under product bug task' } ],
 						featureRequest: [ { title: 'Feature nested under product feature-request task' } ],
-						blocker: [ { title: 'Feature nested under product blocker task' } ],
+						urgent: [ { title: 'Feature nested under product urgent task' } ],
 					},
 				},
 			},
