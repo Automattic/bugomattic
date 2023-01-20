@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import styles from './reporting-flow.module.css';
+import styles from '../reporting-flow.module.css';
 
 interface Props {
 	onEdit: () => void;

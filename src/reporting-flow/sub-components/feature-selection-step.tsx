@@ -1,11 +1,11 @@
 import React, { ReactNode, useCallback } from 'react';
-import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { selectIssueFeatureId } from '../issue-details/issue-details-slice';
-import { selectNormalizedReportingConfig } from '../reporting-config/reporting-config-slice';
-import { selectActiveStep, setActiveStep } from './active-step-slice';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { selectIssueFeatureId } from '../../issue-details/issue-details-slice';
+import { selectNormalizedReportingConfig } from '../../reporting-config/reporting-config-slice';
+import { selectActiveStep, setActiveStep } from '../active-step-slice';
 import { StepContainer } from './step-container';
-import styles from './reporting-flow.module.css';
-import { FeatureSelectorForm } from '../feature-selector-form/feature-selector-form';
+import styles from '../reporting-flow.module.css';
+import { FeatureSelectorForm } from '../../feature-selector-form/feature-selector-form';
 
 export function FeatureSelectionStep() {
 	const dispatch = useAppDispatch();

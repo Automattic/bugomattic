@@ -1,11 +1,11 @@
 import React, { ReactNode, useCallback } from 'react';
-import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { selectIssueTitle, selectIssueType } from '../issue-details/issue-details-slice';
-import { IssueType } from '../issue-details/types';
-import { TitleTypeForm } from '../title-type-form/title-type-form';
-import { selectActiveStep, setActiveStep } from './active-step-slice';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { selectIssueTitle, selectIssueType } from '../../issue-details/issue-details-slice';
+import { IssueType } from '../../issue-details/types';
+import { TitleTypeForm } from '../../title-type-form/title-type-form';
+import { selectActiveStep, setActiveStep } from './../active-step-slice';
 import { StepContainer } from './step-container';
-import styles from './reporting-flow.module.css';
+import styles from '../reporting-flow.module.css';
 
 export function TitleAndTypeStep() {
 	const dispatch = useAppDispatch();

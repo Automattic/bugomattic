@@ -1,8 +1,8 @@
 import React, { ReactNode, useCallback } from 'react';
-import { useAppSelector } from '../app/hooks';
-import { selectRelevantTaskIds } from '../combined-selectors/relevant-task-ids';
-import { selectCompletedTasks } from '../next-steps/completed-tasks-slice';
-import { NextSteps } from '../next-steps/next-steps';
+import { useAppSelector } from '../../app/hooks';
+import { selectRelevantTaskIds } from '../../combined-selectors/relevant-task-ids';
+import { selectCompletedTasks } from '../../next-steps/completed-tasks-slice';
+import { NextSteps } from '../../next-steps/next-steps';
 import { StepContainer } from './step-container';
 
 export function NextStepsStep() {
