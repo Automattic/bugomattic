@@ -18,12 +18,10 @@ export function ReportingConfigLoadingIndicator() {
 			className={ styles.wrapper }
 			aria-relevant="all"
 			role="alert"
-			// For screen readers, let's ditch the wit and just be clear.
+			// For screen readers, let's be clear of the alert's intent.
 			aria-label="Loading issue reporting configuration"
 		>
-			<span aria-hidden={ true } className={ styles.message }>
-				{ message }
-			</span>
+			<span className={ styles.message }>{ message }</span>
 			<AnimatedEllipsis aria-hidden={ true } />
 		</div>
 	);
