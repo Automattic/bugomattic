@@ -1,4 +1,5 @@
 import React, { ReactNode } from 'react';
+import { AppHeader } from '../app-header/app-header';
 import { ReportingConfigLoadingIndicator } from '../reporting-config/reporting-config-loading-indicator';
 import { useReportingConfigLoad } from '../reporting-config/use-reporting-config';
 import { ReportingFlow } from '../reporting-flow/reporting-flow';
@@ -19,9 +20,7 @@ export function App() {
 
 	return (
 		<div className={ styles.app }>
-			<header className={ styles.appHeader }>
-				<h1>Bugomattic (Ragnarok)</h1>
-			</header>
+			<AppHeader />
 			<main className={ styles.appMain }>{ mainDisplay }</main>
 		</div>
 	);

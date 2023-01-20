@@ -1,0 +1,23 @@
+@import '../variables.css';
+
+h1.heading {
+	font-size: 3rem;
+	font-family: var( --font-serif );
+	font-weight: 400;
+	display: flex;
+	align-items: center;
+	margin: 0;
+}
+
+.wrapper {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 8rem;
+}
+
+.logo {
+	height: 3rem;
+	width: 3rem;
+	margin-right: 0.5rem;
+}
