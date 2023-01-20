@@ -18,7 +18,7 @@ describe( '[TitleTypeForm]', () => {
 	}
 
 	function getTitleInput() {
-		return screen.getByRole( 'textbox', { name: /Title/ } );
+		return screen.getByRole( 'textbox', { name: /GitHub Issue Title/ } );
 	}
 
 	describe( '[Title Input]', () => {
