@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import styles from './step-container.module.css';
+import styles from '../reporting-flow.module.css';
 
 interface Props {
 	onEdit: () => void;
@@ -36,19 +36,19 @@ export function StepContainer( {
 	}
 
 	return (
-		<section aria-labelledby={ headerId } className={ styles.container }>
-			<div className={ styles.headerRow }>
-				<h2 className={ styles.header } id={ headerId }>
+		<section aria-labelledby={ headerId } className={ styles.stepContainer }>
+			<div className={ styles.stepHeaderRow }>
+				<h3 className={ styles.stepHeader } id={ headerId }>
 					{ stepIconDisplay }
-					<span className={ styles.headerTitle }>{ title }</span>
-				</h2>
+					<span className={ styles.stepHeaderTitle }>{ title }</span>
+				</h3>
 				{ showEditButton && (
-					<button className={ styles.editButton } onClick={ onEdit }>
+					<button className={ styles.editButton } onClick={ onEdit } aria-describedby={ headerId }>
 						Edit
 					</button>
 				) }
 			</div>
-			{ children && <div className={ styles.content }>{ children }</div> }
+			{ children && <div className={ styles.stepContent }>{ children }</div> }
 		</section>
 	);
 }

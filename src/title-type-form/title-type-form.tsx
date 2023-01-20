@@ -15,7 +15,11 @@ import {
 import { IssueType } from '../issue-details/types';
 import styles from './title-type-form.module.css';
 
-export function TitleTypeForm() {
+interface Props {
+	onContinue?: () => void;
+}
+
+export function TitleTypeForm( { onContinue }: Props ) {
 	const dispatch = useAppDispatch();
 	const { issueTitle, issueType } = useAppSelector( selectIssueDetails );
 
@@ -54,6 +58,10 @@ export function TitleTypeForm() {
 		if ( readyToContinue ) {
 			dispatch( setIssueTitle( title ) );
 			dispatch( setIssueType( type ) );
+
+			if ( onContinue ) {
+				onContinue();
+			}
 		}
 	};
 
@@ -76,7 +84,7 @@ export function TitleTypeForm() {
 	}
 
 	return (
-		<form onSubmit={ handleSubmit }>
+		<form onSubmit={ handleSubmit } aria-label="Set issue title and type">
 			<div className={ styles.titleWrapper }>
 				<label>
 					<span className={ styles.titleLabel }>

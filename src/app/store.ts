@@ -10,6 +10,7 @@ import { reportingConfigReducer } from '../reporting-config/reporting-config-sli
 import { featureSelectorFormReducer } from '../feature-selector-form/feature-selector-form-slice';
 import { issueDetailsReducer } from '../issue-details/issue-details-slice';
 import { completedTasksReducer } from '../next-steps/completed-tasks-slice';
+import { activeStepReducer } from '../reporting-flow/active-step-slice';
 
 function createRootReducer() {
 	return combineReducers( {
@@ -17,6 +18,7 @@ function createRootReducer() {
 		issueDetails: issueDetailsReducer,
 		completedTasks: completedTasksReducer,
 		featureSelectorForm: featureSelectorFormReducer,
+		activeStep: activeStepReducer,
 	} );
 }
 

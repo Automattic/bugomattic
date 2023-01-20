@@ -1,0 +1,17 @@
+@import '../variables.css';
+
+.wrapper {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	min-height: 600px;
+}
+
+.message {
+	font-size: 1.625rem;
+	font-family: Georgia, Times New Roman, Times, serif;
+	color: var( --color-text );
+	display: block;
+	text-align: center;
+}

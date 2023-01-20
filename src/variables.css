@@ -6,13 +6,14 @@
 	--color-primary-extra-light: #e9eff5; /* Automattic Blue 5 */
 	--color-accent: #c9356e; /* Automattic Pink 50 */
 	--color-neutral: #dcdcde; /* Automattic Gray 5 */
-	--color-neutral-light: #f6f7f7; /* Automattic Gray 00 */
+	--color-neutral-light: #eeeeee;
 	--color-neutral-dark: #646970; /* Automattic Gray 50 */
 	--color-error: #d63638; /* Automattic Red 50 */
 	--color-success: #008a20; /* Automattic Green 50 */
 	--color-white: #ffffff;
 
 	--color-border: #c3c4c7;
+	--color-shaded-background: #fafafa;
 
 	--color-text-primary: #2c3338;
 	--color-text-dark: #101517;

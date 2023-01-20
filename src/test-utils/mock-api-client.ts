@@ -1,6 +1,4 @@
-import { ApiClient } from '../api/types';
-
-export function createMockApiClient(): ApiClient {
+export function createMockApiClient() {
 	return {
 		loadReportingConfig: jest.fn( async () => {
 			return {};

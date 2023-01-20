@@ -1,20 +1,26 @@
 @import '../variables.css';
 
-.container {
+.flowContainer {
+	max-width: 800px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.stepContainer {
 	width: 100%;
 	border: 1px solid var( --color-border );
 	border-radius: 6px;
 }
 
-.headerRow {
+.stepHeaderRow {
 	display: flex;
 	align-items: center;
 	min-height: 2.5rem;
-	padding: 0.5rem 0.5rem 0.5rem 0.75rem;
+	padding: 0.5rem 1.5rem 0.5rem 0.75rem;
 	justify-content: space-between;
 }
 
-.header {
+.stepHeader {
 	display: flex;
 	align-items: center;
 	margin: 0;
@@ -46,37 +52,41 @@
 	transform: translateY( 0.4375rem );
 }
 
-.headerTitle {
+.stepHeaderTitle {
 	font-size: 1rem;
 	font-weight: 600;
 }
 
-.content {
+.stepContent {
 	padding: 1rem 1.5rem;
+	background-color: var( --color-shaded-background );
+	border-radius: 0 0 4px 4px;
 }
 
 button.editButton {
 	color: var( --color-primary );
 	background-color: transparent;
-	border-radius: 4px;
-	border: 2px solid var( --color-primary );
-	padding-top: 0.5rem;
-	padding-bottom: 0.5rem;
+	padding: 0;
 }
 
-button.editButton:focus-visible {
-	outline-offset: 4px;
-}
-
-button.editButton:hover {
-	color: var( --color-white );
-	background-color: var( --color-primary );
-	transition-property: color, background-color;
-	transition-duration: 300ms;
-}
-
+button.editButton:hover,
 button.editButton:active {
-	color: var( --color-white );
-	background-color: var( --color-primary-dark );
-	border-color: var( --color-primary-dark );
+	color: var( --color-primary-dark );
+}
+
+.completedContentHeader {
+	font-size: 1rem;
+	font-weight: 500;
+	margin-top: 0;
+	margin-bottom: 0.25rem;
+}
+
+.completedContentValue {
+	font-size: 0.9rem;
+	color: var( --color-text-light );
+	margin: 0;
+}
+
+.completedContentWrapper {
+	margin-bottom: 1.5rem;
 }

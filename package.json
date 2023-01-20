@@ -57,6 +57,8 @@
 		"web-vitals": "^2.1.0"
 	},
 	"devDependencies": {
+		"@jest/environment": "^27.4.3",
+		"@jest/types": "^27.4.3",
 		"@testing-library/dom": "^8.19.0",
 		"@testing-library/jest-dom": "^5.16.5",
 		"@testing-library/react": "^13.4.0",
@@ -76,6 +78,7 @@
 		"eslint-plugin-react": "^7.31.10",
 		"eslint-plugin-testing-library": "^5.9.1",
 		"husky": "^8.0.0",
+		"jest-environment-jsdom": "^27.4.3",
 		"lint-staged": "^13.0.3",
 		"prettier": "npm:wp-prettier@latest",
 		"typescript": "^4.8.4"

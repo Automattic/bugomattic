@@ -88,7 +88,7 @@ export function Task( { taskId }: Props ) {
 	}
 
 	return (
-		<li>
+		<li className={ styles.taskListItem }>
 			<label className={ styles.task }>
 				<input
 					className={ styles.taskCheckbox }
