@@ -9,6 +9,7 @@
 .task {
 	display: flex;
 	align-items: flex-start;
+	width: fit-content;
 }
 
 .taskListItem:nth-child( n + 2 ) {
