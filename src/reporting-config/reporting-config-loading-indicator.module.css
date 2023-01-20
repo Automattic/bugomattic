@@ -5,43 +5,13 @@
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
+	min-height: 600px;
 }
 
 .message {
-	font-size: 2rem;
+	font-size: 1.625rem;
+	font-family: Georgia, Times New Roman, Times, serif;
 	color: var( --color-text );
 	display: block;
-	animation-name: fadeinout;
-	animation-duration: 1500ms;
-	animation-iteration-count: infinite;
-	animation-timing-function: linear;
 	text-align: center;
-}
-
-.icon {
-	height: 4rem;
-	width: 4rem;
-	animation-name: spin;
-	animation-duration: 2000ms;
-	animation-iteration-count: infinite;
-	animation-timing-function: linear;
-}
-
-@keyframes spin {
-	from {
-		transform: rotate( 0deg );
-	}
-	to {
-		transform: rotate( 360deg );
-	}
-}
-
-@keyframes fadeinout {
-	0%,
-	100% {
-		opacity: 0.75;
-	}
-	50% {
-		opacity: 1;
-	}
 }
