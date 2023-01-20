@@ -59,10 +59,10 @@ describe( '[TitleTypeForm]', () => {
 			// Need a custom matcher because the text is split by a span
 			expect(
 				screen.getByText( ( _content, element ) => {
-					if ( ! element?.className.includes( 'limitMessage' ) ) {
+					// The svgs trip up this check for some reason, so need to check for SVG first.
+					if ( element?.nodeName === 'svg' || ! element?.className.includes( 'limitMessage' ) ) {
 						return false;
 					}
-
 					return element.textContent === expectedText;
 				} )
 			).toBeInTheDocument();
