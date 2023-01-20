@@ -76,6 +76,7 @@ export function FeatureSelectorForm( { onContinue }: Props ) {
 				<DebouncedSearch
 					callback={ handleSearch }
 					placeholder="Search for a feature"
+					inputAriaLabel="Search for a feature"
 					inputAriaControls={ searchControlsId }
 				/>
 			</div>
