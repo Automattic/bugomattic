@@ -42,12 +42,19 @@ input[type='email']:focus {
 input[type='radio'],
 input[type='checkbox'] {
 	accent-color: var( --color-primary );
+	cursor: pointer;
+}
+
+label:has( input[type='radio'] ),
+label:has( input[type='checkbox'] ) {
+	cursor: pointer;
 }
 
 button {
 	font-size: 1rem;
 	border: none;
 	padding: 0.75rem 1.5rem;
+	cursor: pointer;
 }
 
 /*
