@@ -81,3 +81,71 @@ a.taskTitle:hover {
 .taskDetails {
 	margin: 0.5rem 0 0 0;
 }
+
+.moreInfoSection {
+	margin-top: 2rem;
+	border-top: 1px solid var( --color-border );
+}
+
+.moreInfoHeader {
+	margin-top: 1.5rem;
+	margin-bottom: 1.5rem;
+	font-size: 1rem;
+}
+
+.moreInfoColumns {
+	display: flex;
+	flex-direction: row;
+}
+
+.moreInfoColumn {
+	flex: 1;
+}
+
+.moreInfoColumn:nth-child( n + 2 ) {
+	margin-left: 1.5rem;
+}
+
+.moreInfoColumn ul {
+	list-style: none;
+	padding-left: 0;
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+.moreInfoColumn p {
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+.moreInfoColumn a,
+.moreInfoColumn p {
+	font-size: 0.75rem;
+}
+
+.moreInfoColumn a {
+	color: var( --color-text );
+	text-decoration: none;
+}
+
+.moreInfoColumn a:hover,
+.moreInfoColumn a:active {
+	color: var( --color-primary );
+	text-decoration: underline;
+}
+
+.moreInfoColumnHeader {
+	font-size: 0.875rem;
+	margin-top: 0;
+	margin-bottom: 0.5rem;
+}
+
+.moreInfoColumnSubheader {
+	font-size: 0.75rem;
+	margin-top: 0;
+	margin-bottom: 0.25rem;
+}
+
+.moreInfoColumnGroup:nth-child( n + 2 ) {
+	margin-top: 2rem;
+}
