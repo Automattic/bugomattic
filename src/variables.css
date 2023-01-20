@@ -22,7 +22,6 @@
 
 	--mobile-breakpoint: 600px;
 
-	--font-san-serif: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen-Sans', 'Ubuntu',
-		'Cantarell', 'Helvetica Neue', sans-serif;
-	--font-serif: 'Noto Serif', Georgia, 'Times New Roman', Times, serif;
+	--font-san-serif: -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+	--font-serif: Georgia, 'Times New Roman', Times, serif;
 }

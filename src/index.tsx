@@ -8,7 +8,6 @@ import { localMonitoringClient } from './monitoring/local-monitoring-client';
 import { productionApiClient } from './api/production-api-client';
 import { localApiClient } from './api/local-api-client';
 import { MonitoringProvider } from './monitoring/monitoring-provider';
-import { Fonts } from './fonts';
 
 // TODO: use a production monitoring client when it's actually implemented fully.
 const monitoringClient = isProduction() ? localMonitoringClient : localMonitoringClient;
@@ -20,7 +19,6 @@ root.render(
 	<React.StrictMode>
 		<MonitoringProvider monitoringClient={ monitoringClient }>
 			<Provider store={ store }>
-				<Fonts />
 				<App />
 			</Provider>
 		</MonitoringProvider>
