@@ -55,7 +55,8 @@ describe( '[DebouncedSearch]', () => {
 		// Shouldn't be called yet -- we are debouncing
 		expect( mockCallBack ).not.toHaveBeenCalledWith( searchText );
 
-		await user.click( screen.getByRole( 'button', { name: 'Search' } ) );
+		// This is the search button
+		await user.click( screen.getByRole( 'button', { hidden: true } ) );
 		// Should now be called on the next event loop, skipping debounce
 		expect( mockCallBack ).toHaveBeenLastCalledWith( searchText );
 	} );

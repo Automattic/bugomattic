@@ -81,7 +81,7 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 	};
 
 	async function search( user: ReturnType< typeof userEvent.setup >, searchTerm: string ) {
-		await user.click( screen.getByPlaceholderText( 'Search for a feature' ) );
+		await user.click( screen.getByRole( 'textbox', { name: 'Search for a feature' } ) );
 		await user.keyboard( searchTerm );
 		// Bypass debouncing by hitting enter
 		await user.keyboard( '{Enter}' );
@@ -189,13 +189,22 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 			).toBeInTheDocument();
 		} );
 
-		test( 'If no matches are found, shows a message', async () => {
+		test( 'If no matches are found, shows a no results message', async () => {
 			const { user } = setup( <FeatureSelectorForm /> );
 			await search( user, 'asdfhjklajvhxc ygaisudsudyfiuasd' );
 
 			expect(
 				screen.getByText( 'No results found. Try a different search or explore manually below.' )
 			).toBeInTheDocument();
+		} );
+
+		test( 'If matches are found, shows a screen-reader-only results message', async () => {
+			const { user } = setup( <FeatureSelectorForm /> );
+			await search( user, 'abc' );
+
+			const message = screen.getByText( 'Results found. Search results are below.' );
+			expect( message ).toBeInTheDocument();
+			expect( message ).toHaveClass( 'screenReaderOnly' );
 		} );
 
 		test( 'If no matches are found, shows the initial tree state of all products collapsed', async () => {

@@ -9,6 +9,7 @@ interface Props {
 	placeholder?: string;
 	className?: string;
 	inputAriaControls?: string;
+	inputAriaLabel?: string;
 }
 
 export function DebouncedSearch( {
@@ -17,6 +18,7 @@ export function DebouncedSearch( {
 	placeholder = 'Search',
 	className,
 	inputAriaControls,
+	inputAriaLabel,
 }: Props ) {
 	const [ searchTerm, setSearchTerm ] = useState( '' );
 	const debouncedCallback = useMemo(
@@ -53,9 +55,15 @@ export function DebouncedSearch( {
 				onBlur={ flushDebounce }
 				onChange={ handleChange }
 				onKeyUp={ handleEnter }
+				aria-label={ inputAriaLabel }
 				aria-controls={ inputAriaControls }
 			/>
-			<button onClick={ flushDebounce } className={ styles.button } aria-label="Search">
+			<button
+				onClick={ flushDebounce }
+				className={ styles.button }
+				tabIndex={ -1 }
+				aria-hidden={ true }
+			>
 				<SearchIcon aria-hidden={ true }></SearchIcon>
 			</button>
 		</div>

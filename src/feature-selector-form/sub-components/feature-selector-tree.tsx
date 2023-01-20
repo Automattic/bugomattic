@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { useAppSelector } from '../../app/hooks';
 import { selectReportingConfigSearchResults } from '../../combined-selectors/reporting-config-search-results';
 import { selectNormalizedReportingConfig } from '../../reporting-config/reporting-config-slice';
@@ -15,16 +15,26 @@ export function FeatureSelectorTree( { parentElementId }: Props ) {
 	const searchTerm = useAppSelector( selectFeatureSearchTerm );
 	const searchResults = useAppSelector( selectReportingConfigSearchResults );
 
-	const noResultsFound = searchTerm && searchResults.products.size === 0;
-	const noResultsFoundMessage = (
-		<p className={ styles.noResultsMessage } aria-live="polite">
-			No results found. Try a different search or explore manually below.
-		</p>
-	);
+	let searchMessageDisplay: ReactNode;
+	if ( ! searchTerm ) {
+		searchMessageDisplay = null;
+	} else if ( searchResults.products.size > 0 ) {
+		searchMessageDisplay = (
+			<p className="screenReaderOnly" role="alert">
+				Results found. Search results are below.
+			</p>
+		);
+	} else {
+		searchMessageDisplay = (
+			<p className={ styles.noResultsMessage } role="alert">
+				No results found. Try a different search or explore manually below.
+			</p>
+		);
+	}
 
 	const allProductIds = Object.keys( products );
 	let productsToDisplay: string[];
-	if ( ! searchTerm || noResultsFound ) {
+	if ( ! searchTerm || searchResults.products.size === 0 ) {
 		productsToDisplay = allProductIds;
 	} else {
 		productsToDisplay = allProductIds.filter( ( productId ) =>
@@ -34,7 +44,7 @@ export function FeatureSelectorTree( { parentElementId }: Props ) {
 
 	return (
 		<fieldset className={ styles.treeWrapper } id={ parentElementId }>
-			{ noResultsFound && noResultsFoundMessage }
+			{ searchMessageDisplay }
 			<legend className="screenReaderOnly">
 				Expandable and collapsible tree with products, feature groups, and features
 			</legend>
