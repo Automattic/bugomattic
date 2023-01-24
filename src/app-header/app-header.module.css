@@ -1,0 +1,14 @@
+@import '../variables.css';
+
+h1.heading {
+	display: flex;
+	align-items: center;
+	margin: 0;
+}
+
+.wrapper {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 7rem;
+}

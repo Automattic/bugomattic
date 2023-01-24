@@ -1,17 +1,3 @@
-.appHeader {
-	min-height: 4rem;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	border-bottom: 2px solid gray;
-	margin-bottom: 3rem;
-}
-
-.appHeader h1 {
-	font-size: 2rem;
-}
-
 .appMain {
 	position: relative;
 }

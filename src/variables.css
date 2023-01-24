@@ -21,4 +21,7 @@
 	--color-text-inverted: #ffffff;
 
 	--mobile-breakpoint: 600px;
+
+	--font-san-serif: -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+	--font-serif: Georgia, 'Times New Roman', Times, serif;
 }
