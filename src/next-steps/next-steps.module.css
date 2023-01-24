@@ -104,10 +104,14 @@ a.taskTitle:hover {
 }
 
 .moreInfoColumn {
+	min-width: 0;
+	overflow-wrap: break-word;
+	word-wrap: break-word;
 }
 
 .moreInfoColumn:nth-child( n + 2 ) {
 	margin-left: 4rem;
+	margin-top: 0;
 }
 
 .moreInfoColumn ul {
@@ -155,4 +159,15 @@ a.taskTitle:hover {
 
 .moreInfoColumnGroup:nth-child( n + 2 ) {
 	margin-top: 1rem;
+}
+
+@media only screen and ( max-width: 600px ) {
+	.moreInfoColumns {
+		flex-direction: column;
+	}
+
+	.moreInfoColumn:nth-child( n + 2 ) {
+		margin-top: 3rem;
+		margin-left: 0;
+	}
 }
