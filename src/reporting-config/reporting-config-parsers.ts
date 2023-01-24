@@ -231,12 +231,12 @@ interface NormalizedTaskOutput {
 function normalizeTasks( apiTasks: ApiTasks, context: TaskContext ): NormalizedTaskOutput {
 	const taskMapping: TaskMapping = {
 		bug: [],
-		blocker: [],
+		urgent: [],
 		featureRequest: [],
 	};
 	const normalizedTasks: Tasks = {};
 
-	const issueTypes = [ 'bug', 'featureRequest', 'blocker' ] as const;
+	const issueTypes = [ 'bug', 'featureRequest', 'urgent' ] as const;
 	issueTypes.forEach( ( issueType ) => {
 		apiTasks[ issueType ].forEach( ( taskDetails, index ) => {
 			const taskId = `${ context.parentId }__${ issueType }__${ index }`;

@@ -21,6 +21,13 @@
 	margin-bottom: 0.5rem;
 }
 
+.infoIcon {
+	height: 1rem;
+	width: 1rem;
+	margin-left: 0.5rem;
+	cursor: help;
+}
+
 .continueWrapper {
 	display: flex;
 	justify-content: right;

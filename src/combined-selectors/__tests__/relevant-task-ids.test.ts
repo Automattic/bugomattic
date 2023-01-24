@@ -34,7 +34,7 @@ describe( '[selectRelevantTaskIds]', () => {
 					taskMapping: {
 						bug: [ 'feature_task' ],
 						featureRequest: [],
-						blocker: [],
+						urgent: [],
 					},
 				},
 			},
@@ -88,7 +88,7 @@ describe( '[selectRelevantTaskIds]', () => {
 					taskMapping: {
 						bug: [ 'feature_task' ],
 						featureRequest: [],
-						blocker: [],
+						urgent: [],
 					},
 				},
 			},
@@ -155,7 +155,7 @@ describe( '[selectRelevantTaskIds]', () => {
 					taskMapping: {
 						bug: [ productTaskId ],
 						featureRequest: [],
-						blocker: [],
+						urgent: [],
 					},
 					featureGroupIds: [ 'feature_group_id' ],
 					featureIds: [ featureId ],
@@ -169,7 +169,7 @@ describe( '[selectRelevantTaskIds]', () => {
 					taskMapping: {
 						bug: [ featureGroupTaskId ],
 						featureRequest: [],
-						blocker: [],
+						urgent: [],
 					},
 					featureIds: [ featureId ],
 				},
@@ -183,7 +183,7 @@ describe( '[selectRelevantTaskIds]', () => {
 					taskMapping: {
 						bug: [ firstFeatureTaskId, secondFeatureTaskId ],
 						featureRequest: [],
-						blocker: [],
+						urgent: [],
 					},
 				},
 			},
@@ -255,7 +255,7 @@ describe( '[selectRelevantTaskIds]', () => {
 					taskMapping: {
 						bug: [],
 						featureRequest: [ 'product_task' ],
-						blocker: [],
+						urgent: [],
 					},
 					featureGroupIds: [ 'feature_group_id' ],
 					featureIds: [ featureId ],
@@ -269,7 +269,7 @@ describe( '[selectRelevantTaskIds]', () => {
 					taskMapping: {
 						bug: [],
 						featureRequest: [ 'feature_group_task' ],
-						blocker: [],
+						urgent: [],
 					},
 					featureIds: [ featureId ],
 				},
@@ -283,7 +283,7 @@ describe( '[selectRelevantTaskIds]', () => {
 					taskMapping: {
 						bug: [],
 						featureRequest: [ featureTaskId ],
-						blocker: [],
+						urgent: [],
 					},
 				},
 			},
@@ -346,7 +346,7 @@ describe( '[selectRelevantTaskIds]', () => {
 					taskMapping: {
 						bug: [],
 						featureRequest: [],
-						blocker: [ 'product_task' ],
+						urgent: [ 'product_task' ],
 					},
 					featureGroupIds: [],
 					featureIds: [ featureId ],
@@ -362,7 +362,7 @@ describe( '[selectRelevantTaskIds]', () => {
 					taskMapping: {
 						bug: [],
 						featureRequest: [],
-						blocker: [ featureTaskId ],
+						urgent: [ featureTaskId ],
 					},
 				},
 			},
@@ -378,7 +378,7 @@ describe( '[selectRelevantTaskIds]', () => {
 				error: null,
 			},
 			issueDetails: {
-				issueType: 'blocker',
+				issueType: 'urgent',
 				featureId: featureId,
 				issueTitle: '',
 			},

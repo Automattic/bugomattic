@@ -35,9 +35,9 @@
 					}
 				}
 			],
-			"blocker": [
+			"urgent": [
 				{
-					"details": "Product | Blocker | Slack link",
+					"details": "Product | Urgent | Slack link",
 					"link": {
 						"type": "slack",
 						"channel": "product"
@@ -78,7 +78,7 @@
 							}
 						}
 					],
-					"blocker": [
+					"urgent": [
 						{
 							"details": "Duplicate Task | P2 link",
 							"link": {
@@ -130,9 +130,9 @@
 									}
 								}
 							],
-							"blocker": [
+							"urgent": [
 								{
-									"details": "Feature (Under Feature Group) | Blocker | GitHub link",
+									"details": "Feature (Under Feature Group) | Urgent | GitHub link",
 									"link": {
 										"type": "github",
 										"repository": "Automattic/fake-repo",
@@ -191,9 +191,9 @@
 									"details": "Alternative Feature | Feature Request | details only"
 								}
 							],
-							"blocker": [
+							"urgent": [
 								{
-									"details": "Alternative Feature | Blocker | details only"
+									"details": "Alternative Feature | Urgent | details only"
 								}
 							]
 						}

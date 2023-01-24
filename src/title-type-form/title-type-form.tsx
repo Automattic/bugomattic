@@ -13,6 +13,7 @@ import {
 	setIssueType,
 } from '../issue-details/issue-details-slice';
 import { IssueType } from '../issue-details/types';
+import { ReactComponent as InfoIcon } from '../common/svgs/info.svg';
 import styles from './title-type-form.module.css';
 
 interface Props {
@@ -64,6 +65,11 @@ export function TitleTypeForm( { onContinue }: Props ) {
 			}
 		}
 	};
+
+	const urgentTooltipId = 'urgent-info-icon';
+	const urgentDescription =
+		'For when you need to escalate something urgently to a product team. ' +
+		'This should usually be reserved for widespread, critical issues such as outages or broken core workflows.';
 
 	let titleErrorMessage: ReactNode = null;
 	if ( showTitleError ) {
@@ -142,16 +148,25 @@ export function TitleTypeForm( { onContinue }: Props ) {
 					<label className={ styles.radio }>
 						<input
 							type="radio"
-							checked={ type === 'blocker' }
-							value="blocker"
+							checked={ type === 'urgent' }
+							value="urgent"
 							name="type"
 							onChange={ handleTypeChange }
 							onBlur={ handleTypeBlur }
 							aria-required={ true }
 							aria-invalid={ showTypeError }
+							aria-describedby={ urgentTooltipId }
 						/>
-						Blocker
+						{ "It's Urgent!" }
+						<InfoIcon
+							aria-hidden={ true }
+							className={ styles.infoIcon }
+							title={ urgentDescription }
+						/>
 					</label>
+					<span className="screenReaderOnly" id={ urgentTooltipId } role="tooltip">
+						{ urgentDescription }
+					</span>
 				</div>
 			</fieldset>
 			<div className={ styles.continueWrapper }>

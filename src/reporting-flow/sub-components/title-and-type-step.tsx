@@ -67,8 +67,8 @@ function CompletedStep( { title, type }: CompletedStepProps ) {
 
 function getDisplayTextForType( type: IssueType ) {
 	switch ( type ) {
-		case 'blocker':
-			return 'Blocker';
+		case 'urgent':
+			return "It's Urgent!";
 		case 'bug':
 			return 'Bug';
 		case 'featureRequest':

@@ -29,7 +29,7 @@ describe( '[Reporting Flow]', () => {
 		parentType: 'featureGroup',
 		parentId: 'feature_group',
 		taskMapping: {
-			blocker: [],
+			urgent: [],
 			featureRequest: [ 'task_a_featureRequest' ],
 			bug: [ 'task_a_bug' ],
 		},
@@ -41,7 +41,7 @@ describe( '[Reporting Flow]', () => {
 		parentType: 'featureGroup',
 		parentId: 'feature_group',
 		taskMapping: {
-			blocker: [],
+			urgent: [],
 			featureRequest: [],
 			bug: [ 'task_b_bug' ],
 		},

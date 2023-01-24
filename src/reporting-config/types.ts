@@ -86,7 +86,7 @@ export interface Task extends TaskDetails {
 export interface TaskMapping {
 	bug: string[];
 	featureRequest: string[];
-	blocker: string[];
+	urgent: string[];
 }
 
 export interface SlackLink {
