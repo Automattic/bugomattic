@@ -56,6 +56,7 @@ export function NextSteps() {
 		<section ref={ sectionRef } className={ styles.sectionWrapper }>
 			{ showConfetti && (
 				<Confetti
+					aria-hidden={ true }
 					data-testid="confetti"
 					height={ sectionHeight }
 					width={ sectionWidth }
