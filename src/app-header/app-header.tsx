@@ -1,13 +1,12 @@
 import React from 'react';
 import styles from './app-header.module.css';
-import { ReactComponent as BugLogo } from '../common/svgs/bug-logo.svg';
+import { ReactComponent as HeaderLogo } from './header-logo.svg';
 
 export function AppHeader() {
 	return (
 		<header className={ styles.wrapper }>
 			<h1 className={ styles.heading }>
-				<BugLogo className={ styles.logo } />
-				Bugomattic
+				<HeaderLogo role="img" />
 			</h1>
 		</header>
 	);
