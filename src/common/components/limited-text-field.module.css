@@ -1,15 +1,15 @@
 @import '../../variables.css';
 
 .limitMessage {
-	font-size: 0.75rem;
-	font-weight: 400;
+	font-size: 0.8125rem;
+	font-weight: 300;
 	margin-top: 0.5rem;
 	margin-bottom: 0.5rem;
 }
 
 .limitWarning {
 	color: var( --color-error );
-	font-weight: 700;
+	font-weight: 500;
 }
 
 input.invalidInput,
