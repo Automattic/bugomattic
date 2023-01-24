@@ -47,7 +47,7 @@ export function MoreInfo() {
 
 	return (
 		<section className={ styles.moreInfoSection }>
-			<h4 className={ styles.moreInfoHeader }>More Info</h4>
+			<h4 className={ styles.moreInfoHeader }>More Information</h4>
 			<div className={ styles.moreInfoColumns }>
 				{ entityHasInfo( product ) && <EntityInfo entity={ product } /> }
 				{ featureGroup && entityHasInfo( featureGroup ) && <EntityInfo entity={ featureGroup } /> }

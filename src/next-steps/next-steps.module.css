@@ -91,6 +91,7 @@ a.taskTitle:hover {
 	margin-top: 1.5rem;
 	margin-bottom: 1.5rem;
 	font-size: 1rem;
+	font-weight: 500;
 }
 
 .moreInfoColumns {
@@ -99,11 +100,10 @@ a.taskTitle:hover {
 }
 
 .moreInfoColumn {
-	flex: 1;
 }
 
 .moreInfoColumn:nth-child( n + 2 ) {
-	margin-left: 1.5rem;
+	margin-left: 4rem;
 }
 
 .moreInfoColumn ul {
@@ -120,7 +120,8 @@ a.taskTitle:hover {
 
 .moreInfoColumn a,
 .moreInfoColumn p {
-	font-size: 0.75rem;
+	font-size: 0.8125rem;
+	font-weight: 300;
 }
 
 .moreInfoColumn a {
@@ -135,17 +136,19 @@ a.taskTitle:hover {
 }
 
 .moreInfoColumnHeader {
-	font-size: 0.875rem;
+	font-size: 0.8125rem;
+	font-weight: 500;
 	margin-top: 0;
-	margin-bottom: 0.5rem;
+	margin-bottom: 0.75rem;
 }
 
 .moreInfoColumnSubheader {
-	font-size: 0.75rem;
+	font-size: 0.8125rem;
+	font-weight: 400;
 	margin-top: 0;
 	margin-bottom: 0.25rem;
 }
 
 .moreInfoColumnGroup:nth-child( n + 2 ) {
-	margin-top: 2rem;
+	margin-top: 1rem;
 }
