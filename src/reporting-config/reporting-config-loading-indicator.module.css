@@ -10,7 +10,7 @@
 
 .message {
 	font-size: 1.625rem;
-	font-family: var( --font-serif );
+	font-family: var( --font-san-serif );
 	color: var( --color-text );
 	display: block;
 	text-align: center;
