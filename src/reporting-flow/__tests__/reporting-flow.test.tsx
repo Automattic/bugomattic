@@ -230,6 +230,10 @@ describe( '[Reporting Flow]', () => {
 		);
 	} );
 
+	test( 'Confetti appears', async () => {
+		expect( await screen.findByTestId( 'confetti' ) ).toBeInTheDocument();
+	} );
+
 	test( 'The next steps step is marked as complete', async () => {
 		expect(
 			screen.getByRole( 'heading', { name: 'Completed step: Next Steps' } )

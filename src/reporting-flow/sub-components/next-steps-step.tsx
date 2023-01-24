@@ -1,7 +1,7 @@
 import React, { ReactNode, useCallback } from 'react';
 import { useAppSelector } from '../../app/hooks';
+import { selectAllTasksAreComplete } from '../../combined-selectors/all-tasks-are-complete';
 import { selectRelevantTaskIds } from '../../combined-selectors/relevant-task-ids';
-import { selectCompletedTasks } from '../../next-steps/completed-tasks-slice';
 import { NextSteps } from '../../next-steps/next-steps';
 import { StepContainer } from './step-container';
 
@@ -11,7 +11,7 @@ interface Props {
 
 export function NextStepsStep( { stepNumber }: Props ) {
 	const relevantTaskIds = useAppSelector( selectRelevantTaskIds );
-	const completedTaskIds = useAppSelector( selectCompletedTasks );
+	const allTasksAreComplete = useAppSelector( selectAllTasksAreComplete );
 
 	// It's a no-op since we don't use the edit button in this step!
 	const onEdit = useCallback( () => {
@@ -20,17 +20,7 @@ export function NextStepsStep( { stepNumber }: Props ) {
 
 	const tasksExist = relevantTaskIds.length > 0;
 
-	const allTasksAreComplete = () => {
-		const completedTaskIdsSet = new Set( completedTaskIds );
-		for ( const taskId of relevantTaskIds ) {
-			if ( ! completedTaskIdsSet.has( taskId ) ) {
-				return false;
-			}
-		}
-		return true;
-	};
-
-	const isComplete = tasksExist && allTasksAreComplete();
+	const isComplete = tasksExist && allTasksAreComplete;
 
 	let stepContentDisplay: ReactNode;
 	if ( tasksExist ) {
