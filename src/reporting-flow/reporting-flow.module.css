@@ -16,7 +16,7 @@
 	display: flex;
 	align-items: center;
 	min-height: 2.5rem;
-	padding: 0.5rem 1.5rem 0.5rem 0.75rem;
+	padding: 0.5rem 1.5rem 0.5rem 1rem;
 	justify-content: space-between;
 }
 
@@ -30,8 +30,8 @@
 .checkmarkWrapper {
 	border-radius: 1rem;
 	margin-right: 0.5rem;
-	width: 2rem;
-	height: 2rem;
+	width: 1.5rem;
+	height: 1.5rem;
 	text-align: center;
 }
 
@@ -48,13 +48,14 @@
 	display: block;
 	color: var( --color-white );
 	font-size: 1rem;
-	/* This is 0.5rem - 0.0675rem... We have to account for the font sitting low on the font line. */
-	transform: translateY( 0.4375rem );
+	transform: translateY( 0.15625rem );
+	font-weight: 400;
 }
 
 .stepHeaderTitle {
 	font-size: 1rem;
-	font-weight: 600;
+	color: var( --color-text-primary );
+	font-weight: 700;
 }
 
 .stepContent {
@@ -75,15 +76,15 @@ button.editButton:active {
 }
 
 .completedContentHeader {
-	font-size: 1rem;
-	font-weight: 500;
+	font-size: 0.8125rem;
+	font-weight: 400;
 	margin-top: 0;
 	margin-bottom: 0.25rem;
 }
 
 .completedContentValue {
-	font-size: 0.9rem;
-	color: var( --color-text-light );
+	font-size: 0.8125rem;
+	font-weight: 300;
 	margin: 0;
 }
 

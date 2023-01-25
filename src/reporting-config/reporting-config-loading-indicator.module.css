@@ -9,7 +9,7 @@
 }
 
 .message {
-	font-size: 1.625rem;
+	font-size: 1.5rem;
 	font-family: var( --font-san-serif );
 	color: var( --color-text );
 	display: block;

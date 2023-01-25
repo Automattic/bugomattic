@@ -17,20 +17,20 @@
 }
 
 .taskTitle {
-	color: var( --color-text-dark );
-	font-size: 1.25rem;
-	font-weight: 600;
+	font-size: 1rem;
+	font-weight: 500;
+	color: var( --color-text-primary );
 }
 
 .badTask {
 	font-style: italic;
 	color: var( --color-error );
-	font-size: 1.25rem;
+	font-size: 1rem;
 }
 
 input[type='checkbox'].taskCheckbox {
-	height: 1.25rem;
-	width: 1.25rem;
+	height: 1rem;
+	width: 1rem;
 	margin: 0.125rem 1rem 0 0;
 	position: relative;
 	flex-shrink: 0;
@@ -45,7 +45,7 @@ input[type='checkbox'].taskCheckbox:checked::after {
 	left: -3px;
 	right: -3px;
 	border-radius: 4px;
-	border: 1px solid var( --color-primary );
+	border: 1px solid var( --color-border-dark );
 }
 
 a.taskTitle {
@@ -59,8 +59,8 @@ a.taskTitle:hover {
 
 .appIcon,
 .linkIcon {
-	height: 1.25rem;
-	width: 1.25rem;
+	height: 1rem;
+	width: 1rem;
 }
 
 .appIcon {
@@ -70,7 +70,7 @@ a.taskTitle:hover {
 
 .linkIcon {
 	position: relative;
-	top: 0.1875rem;
+	top: 0.125rem;
 }
 
 .appIcon,
@@ -79,6 +79,6 @@ a.taskTitle:hover {
 }
 
 .taskDetails {
-	font-size: 1rem;
+	font-size: 0.8125rem;
 	margin: 0.5rem 0 0 0;
 }
