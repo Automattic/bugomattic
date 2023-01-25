@@ -12,12 +12,13 @@
 	--color-success: #008a20; /* Automattic Green 50 */
 	--color-white: #ffffff;
 
-	--color-border: #cccccc;
-	--color-border-dark: #757575;
+	--color-border: #c3c4c7;
 	--color-shaded-background: #fafafa;
 
-	--color-text-primary: #1e1e1e;
-	--color-text-light: #2c2c2c;
+	--color-text-primary: #2c3338;
+	--color-text-dark: #101517;
+	--color-text-light: #50575e;
+	--color-text-inverted: #ffffff;
 
 	--mobile-breakpoint: 600px;
 

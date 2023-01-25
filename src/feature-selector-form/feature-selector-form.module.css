@@ -32,7 +32,7 @@
 .treeNode {
 	background-color: inherit;
 	border: none;
-	font-size: 0.8125rem;
+	font-size: 1rem;
 	color: var( --color-text-primary );
 	width: 100%;
 	text-align: left;
@@ -70,18 +70,17 @@
 
 .noResultsMessage {
 	color: var( --color-text-light );
-	font-weight: 300;
 }
 
 .inlineIcon {
 	margin-right: 0.25rem;
-	height: 0.8125rem;
-	width: 0.8125rem;
+	height: 1rem;
+	width: 1rem;
 }
 
 .selectedFeatureName {
-	font-size: 1rem;
-	font-weight: 500;
+	font-size: 1.25rem;
+	font-weight: 600;
 	margin-right: 0.5rem;
 }
 
@@ -99,8 +98,7 @@ button.clearButton:active {
 
 .selectedFeatureBreadcrumb {
 	color: var( --color-text-light );
-	font-weight: 300;
-	font-size: 0.8125rem;
+	font-size: 1rem;
 	margin-top: 1.25rem;
 	overflow-x: hidden;
 	white-space: nowrap;
@@ -112,13 +110,12 @@ button.clearButton:active {
 	padding-right: 0.5rem;
 	height: 1rem;
 	width: 1rem;
-	transform: translateY( 0.21875rem );
+	transform: translateY( 0.125rem );
 }
 
 .selectedFeatureDescription {
-	font-size: 0.8125rem;
-	color: var( --color-text-light );
-	margin: 0.5rem 0 0 0;
+	font-size: 1rem;
+	margin: 0.25rem 0 0 0;
 }
 
 .bottomPanel {

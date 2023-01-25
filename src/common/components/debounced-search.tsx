@@ -64,7 +64,7 @@ export function DebouncedSearch( {
 				tabIndex={ -1 }
 				aria-hidden={ true }
 			>
-				<SearchIcon aria-hidden={ true } className={ styles.searchIcon }></SearchIcon>
+				<SearchIcon aria-hidden={ true }></SearchIcon>
 			</button>
 		</div>
 	);
