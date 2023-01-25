@@ -126,6 +126,10 @@ a.taskTitle:hover {
 	margin-bottom: 0;
 }
 
+.moreInfoListItem:nth-child( n + 2 ) {
+	margin-top: 0.25rem;
+}
+
 .moreInfoColumn a,
 .moreInfoColumn p {
 	font-size: 0.8125rem;
@@ -133,7 +137,7 @@ a.taskTitle:hover {
 }
 
 .moreInfoColumn a {
-	color: var( --color-text );
+	color: var( --color-primary );
 	text-decoration: none;
 }
 

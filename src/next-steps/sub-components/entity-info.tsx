@@ -18,7 +18,10 @@ export function EntityInfo( { entity }: Props ) {
 		return (
 			<ul>
 				{ links.map( ( link, index ) => (
-					<li key={ `${ entity.id }_${ link.type }_${ index }` }>
+					<li
+						className={ styles.moreInfoListItem }
+						key={ `${ entity.id }_${ link.type }_${ index }` }
+					>
 						<a href={ createLinkHref( link ) }>
 							{ link.displayText || getDefaultLinkText( link ) }
 						</a>
