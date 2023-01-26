@@ -20,8 +20,16 @@ export function NextSteps() {
 
 	const updateSizes = () => {
 		if ( sectionRef.current ) {
-			setSectionWidth( sectionRef.current.clientWidth );
-			setSectionHeight( sectionRef.current.clientHeight );
+			// If available, we want to calculate the width and height of the parent element,
+			// which will the step container wrapping this section.
+			// That lets us make the whole step feel like it has confetti!
+			// If that's not available, let's fall back to the width and height of just this section.
+			setSectionWidth(
+				sectionRef.current.parentElement?.clientWidth ?? sectionRef.current.clientWidth
+			);
+			setSectionHeight(
+				sectionRef.current.parentElement?.clientHeight ?? sectionRef.current.clientHeight
+			);
 		}
 	};
 
@@ -53,7 +61,7 @@ export function NextSteps() {
 	}, [] );
 
 	return (
-		<section ref={ sectionRef } className={ styles.sectionWrapper }>
+		<section ref={ sectionRef }>
 			{ showConfetti && (
 				<Confetti
 					aria-hidden={ true }
@@ -61,7 +69,7 @@ export function NextSteps() {
 					height={ sectionHeight }
 					width={ sectionWidth }
 					recycle={ false }
-					initialVelocityY={ { min: 0, max: 20 } }
+					initialVelocityY={ { min: 0, max: 15 } }
 					onConfettiComplete={ handleConfettiComplete }
 				/>
 			) }

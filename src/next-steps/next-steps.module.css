@@ -1,9 +1,5 @@
 @import '../variables.css';
 
-.sectionWrapper {
-	position: relative;
-}
-
 .taskList {
 	list-style: none;
 	padding-left: 0;
