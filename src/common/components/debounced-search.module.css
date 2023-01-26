@@ -5,7 +5,6 @@
 
 /* Overriding base styles with more specificity requires including input element */
 input.search {
-	font-size: 1rem;
 	padding: 0.75rem 2rem 0.75rem 0.5rem;
 }
 
@@ -24,4 +23,9 @@ input.search {
 .button:focus {
 	border: 2px solid var( --color-primary );
 	outline: none;
+}
+
+.searchIcon {
+	height: 1.25rem;
+	width: 1.25rem;
 }

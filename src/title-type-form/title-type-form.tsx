@@ -94,7 +94,7 @@ export function TitleTypeForm( { onContinue }: Props ) {
 			<div className={ styles.titleWrapper }>
 				<label>
 					<span className={ styles.titleLabel }>
-						<span>{ 'Title (Optional)' }</span>
+						<span>{ 'GitHub Issue Title (Optional)' }</span>
 						{ titleErrorMessage }
 					</span>
 					<LimitedTextField

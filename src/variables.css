@@ -12,16 +12,20 @@
 	--color-success: #008a20; /* Automattic Green 50 */
 	--color-white: #ffffff;
 
-	--color-border: #c3c4c7;
+	--color-border: #cccccc;
+	--color-border-dark: #757575;
 	--color-shaded-background: #fafafa;
 
-	--color-text-primary: #2c3338;
-	--color-text-dark: #101517;
-	--color-text-light: #50575e;
-	--color-text-inverted: #ffffff;
+	--color-text-primary: #1e1e1e;
+	--color-text-light: #2c2c2c;
 
 	--mobile-breakpoint: 600px;
 
-	--font-san-serif: -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+	--font-san-serif: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, sans-serif;
 	--font-serif: Georgia, 'Times New Roman', Times, serif;
+
+	--font-header: 1.25rem;
+	--font-body: 1rem;
+	--font-body-small: 0.875rem;
+	--font-body-extra-small: 0.75rem;
 }
