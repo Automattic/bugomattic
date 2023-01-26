@@ -80,7 +80,7 @@
 }
 
 .selectedFeatureName {
-	font-size: var( --font-header-small );
+	font-size: var( --font-header );
 	font-weight: 500;
 	margin-right: 0.5rem;
 }

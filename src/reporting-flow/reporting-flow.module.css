@@ -48,14 +48,14 @@
 	display: block;
 	color: var( --color-white );
 	font-size: var( --font-header );
-	transform: translateY( 0.125rem );
+	transform: translateY( 0.25rem );
 	font-weight: 400;
 }
 
 .stepHeaderTitle {
 	font-size: var( --font-header );
 	color: var( --color-text-primary );
-	font-weight: 500;
+	font-weight: 700;
 }
 
 .stepContent {

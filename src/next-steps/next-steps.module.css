@@ -17,7 +17,7 @@
 }
 
 .taskTitle {
-	font-size: var( --font-header-small );
+	font-size: var( --font-header );
 	font-weight: 500;
 	color: var( --color-text-primary );
 }
@@ -25,7 +25,7 @@
 .badTask {
 	font-style: italic;
 	color: var( --color-error );
-	font-size: var( --font-header-small );
+	font-size: var( --font-header );
 }
 
 input[type='checkbox'].taskCheckbox {
