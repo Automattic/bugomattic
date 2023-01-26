@@ -55,7 +55,7 @@
 .stepHeaderTitle {
 	font-size: var( --font-header );
 	color: var( --color-text-primary );
-	font-weight: 700;
+	font-weight: 500;
 }
 
 .stepContent {
