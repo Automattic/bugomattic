@@ -81,3 +81,93 @@ a.taskTitle:hover {
 .taskDetails {
 	margin: 0.5rem 0 0 0;
 }
+
+.moreInfoSection {
+	margin-top: 2rem;
+	border-top: 1px solid var( --color-border );
+}
+
+.moreInfoHeader {
+	margin-top: 1.5rem;
+	margin-bottom: 1.5rem;
+	font-size: var( --font-header );
+	font-weight: 500;
+}
+
+.moreInfoColumns {
+	display: flex;
+	flex-direction: row;
+}
+
+.moreInfoColumn {
+	min-width: 0;
+	overflow-wrap: break-word;
+	word-wrap: break-word;
+}
+
+.moreInfoColumn:nth-child( n + 2 ) {
+	margin-left: 4rem;
+	margin-top: 0;
+}
+
+.moreInfoColumn ul {
+	list-style: none;
+	padding-left: 0;
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+.moreInfoColumn p {
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+.moreInfoListItem:nth-child( n + 2 ) {
+	margin-top: 0.25rem;
+}
+
+.moreInfoColumn a,
+.moreInfoColumn p {
+	font-size: var( --font-body-small );
+	font-weight: 300;
+}
+
+.moreInfoColumn a {
+	color: var( --color-primary );
+	text-decoration: none;
+}
+
+.moreInfoColumn a:hover,
+.moreInfoColumn a:active {
+	color: var( --color-primary );
+	text-decoration: underline;
+}
+
+.moreInfoColumnHeader {
+	font-size: var( --font-body );
+	font-weight: 500;
+	margin-top: 0;
+	margin-bottom: 0.25rem;
+}
+
+.moreInfoColumnSubheader {
+	font-size: var( --font-body-small );
+	font-weight: 400;
+	margin-top: 0;
+	margin-bottom: 0.25rem;
+}
+
+.moreInfoColumnGroup:nth-child( n + 2 ) {
+	margin-top: 1rem;
+}
+
+@media only screen and ( max-width: 600px ) {
+	.moreInfoColumns {
+		flex-direction: column;
+	}
+
+	.moreInfoColumn:nth-child( n + 2 ) {
+		margin-top: 3rem;
+		margin-left: 0;
+	}
+}
