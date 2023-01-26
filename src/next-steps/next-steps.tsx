@@ -61,7 +61,7 @@ export function NextSteps() {
 					height={ sectionHeight }
 					width={ sectionWidth }
 					recycle={ false }
-					initialVelocityY={ { min: -4, max: 8 } }
+					initialVelocityY={ { min: 0, max: 20 } }
 					onConfettiComplete={ handleConfettiComplete }
 				/>
 			) }
