@@ -4,8 +4,8 @@ import {
 	EventName,
 	EventProperties,
 	LoggerClient,
-	LoggingApiClient as LoggerApiClient,
-	LoggingPayload,
+	LoggerApiClient,
+	LogPayload,
 	MonitoringClient,
 } from './types';
 
@@ -15,10 +15,10 @@ class ProducutionLoggerClient implements LoggerClient {
 		this.client = client;
 	}
 
-	private logFailureToConsole( error: Error, originalLogPayload: LoggingPayload ): void {
+	private logFailureToConsole( error: Error, originalLogPayload: LogPayload ): void {
 		const logError = console.error || console.log;
 		logError( `Logging failed with error: ${ error.message }` );
-		logError( 'Original log payload: ', originalLogPayload );
+		console.log( 'Original log payload: ', originalLogPayload );
 	}
 
 	debug( message: string, additionalDetails?: AdditionalLogDetails ): void {
@@ -32,7 +32,7 @@ class ProducutionLoggerClient implements LoggerClient {
 	}
 
 	info( message: string, additionalDetails?: AdditionalLogDetails ): void {
-		const logPayload: LoggingPayload = {
+		const logPayload: LogPayload = {
 			feature: 'bugomattic_client',
 			severity: 'info',
 			message,
@@ -44,7 +44,7 @@ class ProducutionLoggerClient implements LoggerClient {
 	}
 
 	error( message: string, additionalDetails?: AdditionalLogDetails ): void {
-		const logPayload: LoggingPayload = {
+		const logPayload: LogPayload = {
 			feature: 'bugomattic_client',
 			severity: 'error',
 			message,

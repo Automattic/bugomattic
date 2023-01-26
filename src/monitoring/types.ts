@@ -39,13 +39,13 @@ export type EventName =
 	| 'task_link_click'
 	| 'more_info_link_click';
 
-export interface LoggingPayload {
+export interface LogPayload {
 	feature: 'bugomattic_client';
 	severity: 'info' | 'error';
 	message: string;
 	properties?: AdditionalLogDetails;
 }
 
-export interface LoggingApiClient {
-	log( payload: LoggingPayload ): Promise< void >;
+export interface LoggerApiClient {
+	log( payload: LogPayload ): Promise< void >;
 }

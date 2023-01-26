@@ -15,6 +15,9 @@ describe( '[ProductionMonitoringClient]', () => {
 			debug: jest.spyOn( console, 'debug' ).mockImplementation( () => {
 				return;
 			} ),
+			log: jest.spyOn( console, 'log' ).mockImplementation( () => {
+				return;
+			} ),
 			error: jest.spyOn( console, 'error' ).mockImplementation( () => {
 				return;
 			} ),
@@ -72,7 +75,7 @@ describe( '[ProductionMonitoringClient]', () => {
 			} );
 		} );
 
-		test( 'If the logging API fails for info(), it should log to console.error', async () => {
+		test( 'If the logging API fails for info(), it should log the error and original log', async () => {
 			const { productionMonitoringClient, mockLoggingApiClient, mockConsole } = setup();
 
 			let resolveErrorCallPromise = () => {
@@ -98,7 +101,7 @@ describe( '[ProductionMonitoringClient]', () => {
 			expect( mockConsole.error ).toHaveBeenCalledWith(
 				`Logging failed with error: ${ errorMessage }`
 			);
-			expect( mockConsole.error ).toHaveBeenCalledWith( 'Original log payload: ', {
+			expect( mockConsole.log ).toHaveBeenCalledWith( 'Original log payload: ', {
 				feature: 'bugomattic_client',
 				severity: 'info',
 				message,
@@ -120,7 +123,7 @@ describe( '[ProductionMonitoringClient]', () => {
 			} );
 		} );
 
-		test( 'If the logging API fails for error(), it should log to console.error', async () => {
+		test( 'If the logging API fails for error(), it should log the error and original log', async () => {
 			const { productionMonitoringClient, mockLoggingApiClient, mockConsole } = setup();
 
 			let resolveErrorCallPromise = () => {
@@ -146,7 +149,7 @@ describe( '[ProductionMonitoringClient]', () => {
 			expect( mockConsole.error ).toHaveBeenCalledWith(
 				`Logging failed with error: ${ errorMessage }`
 			);
-			expect( mockConsole.error ).toHaveBeenCalledWith( 'Original log payload: ', {
+			expect( mockConsole.log ).toHaveBeenCalledWith( 'Original log payload: ', {
 				feature: 'bugomattic_client',
 				severity: 'error',
 				message,
