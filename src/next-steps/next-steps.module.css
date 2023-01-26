@@ -17,7 +17,7 @@
 }
 
 .taskTitle {
-	font-size: 1rem;
+	font-size: var( --font-header-small );
 	font-weight: 500;
 	color: var( --color-text-primary );
 }
@@ -25,12 +25,12 @@
 .badTask {
 	font-style: italic;
 	color: var( --color-error );
-	font-size: 1rem;
+	font-size: var( --font-header-small );
 }
 
 input[type='checkbox'].taskCheckbox {
-	height: 1rem;
-	width: 1rem;
+	height: 1.25rem;
+	width: 1.25rem;
 	margin: 0.125rem 1rem 0 0;
 	position: relative;
 	flex-shrink: 0;
@@ -59,8 +59,8 @@ a.taskTitle:hover {
 
 .appIcon,
 .linkIcon {
-	height: 1rem;
-	width: 1rem;
+	height: 1.25rem;
+	width: 1.25rem;
 }
 
 .appIcon {
@@ -70,7 +70,7 @@ a.taskTitle:hover {
 
 .linkIcon {
 	position: relative;
-	top: 0.125rem;
+	top: 0.1875rem;
 }
 
 .appIcon,
@@ -79,6 +79,5 @@ a.taskTitle:hover {
 }
 
 .taskDetails {
-	font-size: 0.8125rem;
 	margin: 0.5rem 0 0 0;
 }

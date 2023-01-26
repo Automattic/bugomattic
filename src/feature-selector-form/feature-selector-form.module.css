@@ -32,7 +32,7 @@
 .treeNode {
 	background-color: inherit;
 	border: none;
-	font-size: 0.8125rem;
+	font-size: var( --font-body );
 	color: var( --color-text-primary );
 	width: 100%;
 	text-align: left;
@@ -80,7 +80,7 @@
 }
 
 .selectedFeatureName {
-	font-size: 1rem;
+	font-size: var( --font-header-small );
 	font-weight: 500;
 	margin-right: 0.5rem;
 }
@@ -100,7 +100,7 @@ button.clearButton:active {
 .selectedFeatureBreadcrumb {
 	color: var( --color-text-light );
 	font-weight: 300;
-	font-size: 0.8125rem;
+	font-size: var( --font-body-small );
 	margin-top: 1.25rem;
 	overflow-x: hidden;
 	white-space: nowrap;
@@ -116,7 +116,7 @@ button.clearButton:active {
 }
 
 .selectedFeatureDescription {
-	font-size: 0.8125rem;
+	font-size: var( --font-body );
 	color: var( --color-text-light );
 	margin: 0.5rem 0 0 0;
 }

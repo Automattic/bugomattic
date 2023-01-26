@@ -1,5 +1,5 @@
 .errorMessage {
-	font-size: 0.75rem;
+	font-size: var( --font-body-small );
 	color: var( --color-error );
 	display: flex;
 	align-items: center;
