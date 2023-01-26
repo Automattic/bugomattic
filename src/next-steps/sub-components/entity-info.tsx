@@ -37,7 +37,6 @@ export function EntityInfo( { entity }: Props ) {
 			<div>
 				{ description && (
 					<div className={ styles.moreInfoColumnGroup }>
-						<h6 className={ styles.moreInfoColumnSubheader }>Description</h6>
 						<p>{ description }</p>
 					</div>
 				) }

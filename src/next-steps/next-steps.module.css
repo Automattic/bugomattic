@@ -151,7 +151,7 @@ a.taskTitle:hover {
 	font-size: var( --font-body );
 	font-weight: 500;
 	margin-top: 0;
-	margin-bottom: 0.75rem;
+	margin-bottom: 0.25rem;
 }
 
 .moreInfoColumnSubheader {
