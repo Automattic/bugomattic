@@ -6,6 +6,9 @@ import { Provider } from 'react-redux';
 import { setupStore } from '../app/store';
 import type { AppStore, RootState } from '../app/store';
 import { ApiClient } from '../api/types';
+import { MonitoringClient } from '../monitoring/types';
+import { createMockMonitoringClient } from './mock-monitoring-client';
+import { MonitoringProvider } from '../monitoring/monitoring-provider';
 
 // This is a common pattern for overriding React Testing Library's 'render'
 // function while hydrating in a redux store (and in our case, an API implementation).
@@ -15,6 +18,7 @@ import { ApiClient } from '../api/types';
 // as allows the user to specify other things such as initialState, store.
 interface ExtendedRenderOptions extends Omit< RenderOptions, 'queries' > {
 	apiClient: ApiClient;
+	monitoringClient?: MonitoringClient;
 	preloadedState?: PreloadedState< RootState >;
 	store?: AppStore;
 }
@@ -30,13 +34,18 @@ export function renderWithProviders(
 	component: ReactElement,
 	{
 		apiClient,
+		monitoringClient = createMockMonitoringClient(),
 		preloadedState = {},
 		store = setupStore( apiClient, preloadedState ),
 		...renderOptions
 	}: ExtendedRenderOptions
 ) {
 	function Wrapper( { children }: PropsWithChildren< {} > ): JSX.Element {
-		return <Provider store={ store }>{ children }</Provider>;
+		return (
+			<MonitoringProvider monitoringClient={ monitoringClient }>
+				<Provider store={ store }>{ children }</Provider>
+			</MonitoringProvider>
+		);
 	}
 
 	return { store, ...render( component, { wrapper: Wrapper, ...renderOptions } ) };
