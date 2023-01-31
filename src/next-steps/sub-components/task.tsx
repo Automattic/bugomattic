@@ -19,6 +19,7 @@ import {
 	createP2Href,
 	createSlackHref,
 } from '../../common/lib';
+import { useMonitoring } from '../../monitoring/monitoring-provider';
 
 interface Props {
 	taskId: string;
@@ -26,6 +27,7 @@ interface Props {
 
 export function Task( { taskId }: Props ) {
 	const dispatch = useAppDispatch();
+	const monitoringClient = useMonitoring();
 	const { tasks } = useAppSelector( selectNormalizedReportingConfig );
 	const { issueTitle } = useAppSelector( selectIssueDetails );
 	const completedTaskIds = useAppSelector( selectCompletedTasks );
@@ -68,8 +70,13 @@ export function Task( { taskId }: Props ) {
 					<LinkIcon aria-hidden={ true } className={ styles.linkIcon } />
 				</a>
 			);
-		} catch ( error ) {
-			// TODO: log the error with our monitoring client
+		} catch ( err ) {
+			const error = err as Error;
+			monitoringClient.logger.error( 'Task link has broken configuration', {
+				task_id: taskId,
+				error: error.message,
+			} );
+
 			taskIsBroken = true;
 			titleDisplay = (
 				<span className={ styles.badTask }>
