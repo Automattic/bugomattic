@@ -1,5 +1,6 @@
 /* eslint-disable testing-library/no-debugging-utils */
 import { createProductionMonitoringClient } from '../production-monitoring-client';
+import { EventName } from '../types';
 
 describe( '[ProductionMonitoringClient]', () => {
 	const userRole = 'Code Wrangling';
@@ -155,6 +156,30 @@ describe( '[ProductionMonitoringClient]', () => {
 				message,
 				properties,
 			} );
+		} );
+	} );
+
+	describe( 'Analytics', () => {
+		test( 'calling recordEvent without properties pushes to the Tracks queue and adds the correct user role', () => {
+			const { productionMonitoringClient } = setup();
+
+			const eventName: EventName = 'feature_save';
+			productionMonitoringClient.analytics.recordEvent( eventName );
+
+			expect( globalThis._tkq ).toEqual( [
+				[ 'recordEvent', eventName, { user_role: userRole } ],
+			] );
+		} );
+
+		test( 'calling recordEvent with properties pushes to the Tracks queue and adds the correct user role', () => {
+			const { productionMonitoringClient } = setup();
+
+			const eventName: EventName = 'feature_save';
+			const properties = { foo: 'bar' };
+			productionMonitoringClient.analytics.recordEvent( eventName, properties );
+
+			const expectedProperties = { ...properties, user_role: userRole };
+			expect( globalThis._tkq ).toEqual( [ [ 'recordEvent', eventName, expectedProperties ] ] );
 		} );
 	} );
 } );
