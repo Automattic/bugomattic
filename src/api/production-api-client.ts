@@ -1,19 +1,21 @@
-import { ApiClient } from './types';
+import { LoggerApiClient, LogPayload } from '../monitoring/types';
+import { ApiClient, ReportingConfigApiResponse } from './types';
 
-/**
- * Placeholder for the "real" API client for making real HTTP calls to the backend REST API.
- * This will ultimately become a more complicated class that handles auth, etc.
- */
-export const productionApiClient: ApiClient = {
-	loadReportingConfig: async () => {
-		const nonce = globalThis.nonce;
-		const nonceHeaderName = globalThis.nonceHeaderName;
+export class ProductionApiClient implements ApiClient, LoggerApiClient {
+	private nonce: string;
+	private nonceHeaderName: string;
 
+	constructor() {
+		this.nonce = globalThis.nonce;
+		this.nonceHeaderName = globalThis.nonceHeaderName;
+	}
+
+	async loadReportingConfig(): Promise< ReportingConfigApiResponse > {
 		const request = new Request( '/wp-json/bugomattic/v1/reporting-config/', {
 			method: 'GET',
 			credentials: 'same-origin',
 			headers: new Headers( {
-				[ nonceHeaderName ]: nonce,
+				[ this.nonceHeaderName ]: this.nonce,
 			} ),
 		} );
 		const response = await fetch( request );
@@ -27,5 +29,26 @@ export const productionApiClient: ApiClient = {
 				}. Response body: ${ await response.json() }`
 			);
 		}
-	},
-};
+	}
+
+	async log( payload: LogPayload ) {
+		const request = new Request( '/wp-json/bugomattic/v1/logs/', {
+			method: 'POST',
+			credentials: 'same-origin',
+			headers: new Headers( {
+				'Content-Type': 'application/json',
+				[ this.nonceHeaderName ]: this.nonce,
+			} ),
+			body: JSON.stringify( payload ),
+		} );
+		const response = await fetch( request );
+
+		if ( ! response.ok ) {
+			throw new Error(
+				`Log web request failed with status code ${
+					response.status
+				}. Response body: ${ await response.json() }`
+			);
+		}
+	}
+}
