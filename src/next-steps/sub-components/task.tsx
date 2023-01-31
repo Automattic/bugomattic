@@ -73,7 +73,7 @@ export function Task( { taskId }: Props ) {
 		} catch ( err ) {
 			const error = err as Error;
 			monitoringClient.logger.error( 'Task link has broken configuration', {
-				task_id: taskId,
+				taskId,
 				error: error.message,
 			} );
 

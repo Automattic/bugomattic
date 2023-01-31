@@ -9,7 +9,6 @@ import { selectIssueFeatureId } from '../issue-details/issue-details-slice';
 import { selectAllTasksAreComplete } from '../combined-selectors/all-tasks-are-complete';
 import { useMonitoring } from '../monitoring/monitoring-provider';
 import { selectNormalizedReportingConfig } from '../reporting-config/reporting-config-slice';
-import { TaskParentEntityType } from '../reporting-config/types';
 
 export function NextSteps() {
 	const monitoringClient = useMonitoring();
@@ -25,12 +24,8 @@ export function NextSteps() {
 	const allTasksAreComplete = useAppSelector( selectAllTasksAreComplete );
 
 	useEffect( () => {
-		const taskSources: {
-			[ taskId: string ]: { parentType: TaskParentEntityType; parentId: string };
-		} = {};
-
-		relevantTaskIds.forEach( ( taskId ) => {
-			taskSources[ taskId ] = {
+		const sourcesInOrder = relevantTaskIds.map( ( taskId ) => {
+			return {
 				parentType: tasks[ taskId ].parentType,
 				parentId: tasks[ taskId ].parentId,
 			};
@@ -38,7 +33,7 @@ export function NextSteps() {
 
 		monitoringClient.logger.debug(
 			'Relevant tasks calculated for issue type and feature. See additional details for sourcing.',
-			{ sources: taskSources }
+			{ sourcesInOrder }
 		);
 	}, [ relevantTaskIds, tasks, monitoringClient.logger ] );
 
