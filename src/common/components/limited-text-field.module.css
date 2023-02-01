@@ -12,7 +12,7 @@
 	font-weight: 500;
 }
 
-input.invalidInput,
-input.invalidInput:focus {
+input[type='text'].invalidInput,
+input[type='text'].invalidInput:focus {
 	border: 2px solid var( --color-error );
 }

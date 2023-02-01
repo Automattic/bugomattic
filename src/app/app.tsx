@@ -19,7 +19,7 @@ export function App() {
 	}
 
 	return (
-		<div className={ styles.app }>
+		<div className={ styles.appMain }>
 			<AppHeader />
 			<main className={ styles.appMain }>{ mainDisplay }</main>
 		</div>
