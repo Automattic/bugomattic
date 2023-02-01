@@ -82,6 +82,7 @@
 		"husky": "^8.0.0",
 		"jest-environment-jsdom": "^27.4.3",
 		"lint-staged": "^13.0.3",
+		"miragejs": "^0.1.47",
 		"prettier": "npm:wp-prettier@latest",
 		"typescript": "^4.8.4"
 	}

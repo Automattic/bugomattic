@@ -26,7 +26,7 @@ export class ProductionApiClient implements ApiClient, LoggerApiClient {
 			throw new Error(
 				`Load Reporting Config web request failed with status code ${
 					response.status
-				}. Response body: ${ await response.json() }`
+				}. Response body: ${ JSON.stringify( await response.json() ) }`
 			);
 		}
 	}
@@ -47,7 +47,7 @@ export class ProductionApiClient implements ApiClient, LoggerApiClient {
 			throw new Error(
 				`Log web request failed with status code ${
 					response.status
-				}. Response body: ${ await response.json() }`
+				}. Response body: ${ JSON.stringify( await response.json() ) }`
 			);
 		}
 	}
