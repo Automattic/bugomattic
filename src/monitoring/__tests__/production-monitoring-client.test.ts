@@ -167,7 +167,7 @@ describe( '[ProductionMonitoringClient]', () => {
 			productionMonitoringClient.analytics.recordEvent( eventName );
 
 			expect( globalThis._tkq ).toEqual( [
-				[ 'recordEvent', eventName, { user_role: userRole } ],
+				[ 'recordEvent', `mc_bugomattic_new_${ eventName }`, { user_role: userRole } ],
 			] );
 		} );
 
@@ -179,7 +179,9 @@ describe( '[ProductionMonitoringClient]', () => {
 			productionMonitoringClient.analytics.recordEvent( eventName, properties );
 
 			const expectedProperties = { ...properties, user_role: userRole };
-			expect( globalThis._tkq ).toEqual( [ [ 'recordEvent', eventName, expectedProperties ] ] );
+			expect( globalThis._tkq ).toEqual( [
+				[ 'recordEvent', `mc_bugomattic_new_${ eventName }`, expectedProperties ],
+			] );
 		} );
 	} );
 } );

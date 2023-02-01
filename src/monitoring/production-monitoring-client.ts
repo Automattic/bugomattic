@@ -64,11 +64,12 @@ class ProductionAnalyticsClient implements AnalyticsClient {
 	}
 
 	recordEvent( eventName: EventName, properties?: EventProperties ): void {
+		const prefix = 'mc_bugomattic_new';
 		if ( ! properties ) {
 			properties = {};
 		}
 		properties.user_role = this.userRole;
-		globalThis._tkq?.push( [ 'recordEvent', eventName, properties ] );
+		globalThis._tkq?.push( [ 'recordEvent', `${ prefix }_${ eventName }`, properties ] );
 	}
 }
 
