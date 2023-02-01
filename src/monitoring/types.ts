@@ -28,6 +28,8 @@ export interface AnalyticsClient {
 
 export type EventName =
 	| 'page_view'
+	| 'feature_select'
+	| 'feature_clear'
 	| 'feature_search'
 	| 'feature_save'
 	| 'title_save'
