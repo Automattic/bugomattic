@@ -29,7 +29,7 @@
 	padding-left: 0;
 }
 
-.treeNode {
+button.treeNode {
 	background-color: inherit;
 	border: none;
 	font-size: var( --font-body );

@@ -2,6 +2,9 @@
 
 body {
 	margin: 0;
+}
+
+.root {
 	font-family: var( --font-san-serif );
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
@@ -9,19 +12,24 @@ body {
 	font-size: var( --font-body );
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+.root li,
+.root p {
+	line-height: initial;
+}
+
+.root h1,
+.root h2,
+.root h3,
+.root h4,
+.root h5,
+.root h6 {
 	color: var( --color-text-primary );
 	font-weight: 700;
 }
 
-input[type='text'],
-input[type='search'],
-input[type='email'] {
+.root input[type='text'],
+.root input[type='search'],
+.root input[type='email'] {
 	font-size: var( --font-body );
 	font-family: var( --font-san-serif );
 	padding: 0.75rem 0.5rem;
@@ -32,24 +40,36 @@ input[type='email'] {
 	box-sizing: border-box;
 }
 
-input[type='text']:focus,
-input[type='search']:focus,
-input[type='email']:focus {
+.root input[type='text']:focus,
+.root input[type='search']:focus,
+.root input[type='email']:focus {
 	background-color: var( --color-white );
 	border: 2px solid var( --color-primary );
 	outline: none;
 }
 
-input[type='radio'],
-input[type='checkbox'] {
+.root input[type='radio'],
+.root input[type='checkbox'] {
 	accent-color: var( --color-primary );
 }
 
-button {
+.root button {
 	font-size: var( --font-body );
 	border: none;
 	padding: 0.75rem 1.5rem;
 	font-family: var( --font-san-serif );
+
+	/* These are overrides of conflicting production CSS collisions */
+	-webkit-box-shadow: initial;
+	box-shadow: initial;
+	border-radius: initial;
+	-webkit-border-radius: initial;
+	height: inherit;
+	line-height: initial;
+	font-weight: initial;
+	zoom: initial;
+	vertical-align: initial;
+	text-align: initial;
 }
 
 /*
@@ -57,22 +77,22 @@ These are generic enough that it feels like overkill to make a new component jus
 So, we'll enable a global class option. 
 */
 
-button.primaryButton {
+.root button.primaryButton {
 	color: var( --color-white );
 	background-color: var( --color-primary );
 	font-weight: 500;
 	border-radius: 4px;
 }
 
-button.primaryButton:hover {
+.root button.primaryButton:hover {
 	background-color: var( --color-primary-dark );
 }
 
-button.primaryButton:active {
+.root button.primaryButton:active {
 	background-color: var( --color-primary-extra-dark );
 }
 
-input code {
+.root input code {
 	font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
