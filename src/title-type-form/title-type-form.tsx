@@ -7,20 +7,18 @@ import React, {
 } from 'react';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { FormErrorMessage, LimitedTextField } from '../common/components';
-import {
-	selectIssueDetails,
-	setIssueTitle,
-	setIssueType,
-} from '../issue-details/issue-details-slice';
+import { selectIssueDetails } from '../issue-details/issue-details-slice';
 import { IssueType } from '../issue-details/types';
 import { ReactComponent as InfoIcon } from '../common/svgs/info.svg';
 import styles from './title-type-form.module.css';
+import { completeTitleAndTypeStep } from '../reporting-flow/navigation-actions';
+import { ActiveStep } from '../reporting-flow/types';
 
 interface Props {
-	onContinue?: () => void;
+	nextStep?: ActiveStep;
 }
 
-export function TitleTypeForm( { onContinue }: Props ) {
+export function TitleTypeForm( { nextStep }: Props ) {
 	const dispatch = useAppDispatch();
 	const { issueTitle, issueType } = useAppSelector( selectIssueDetails );
 
@@ -57,12 +55,13 @@ export function TitleTypeForm( { onContinue }: Props ) {
 		event.preventDefault();
 		setSubmissionAttempted( true );
 		if ( readyToContinue ) {
-			dispatch( setIssueTitle( title ) );
-			dispatch( setIssueType( type ) );
-
-			if ( onContinue ) {
-				onContinue();
-			}
+			dispatch(
+				completeTitleAndTypeStep( {
+					title,
+					type,
+					nextStep,
+				} )
+			);
 		}
 	};
 

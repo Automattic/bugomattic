@@ -6,13 +6,14 @@ import { selectActiveStep, setActiveStep } from '../active-step-slice';
 import { StepContainer } from './step-container';
 import styles from '../reporting-flow.module.css';
 import { FeatureSelectorForm } from '../../feature-selector-form/feature-selector-form';
+import { ActiveStep } from '../types';
 
 interface Props {
 	stepNumber: number;
-	goToNextStep: () => void;
+	nextStep: ActiveStep;
 }
 
-export function FeatureSelectionStep( { stepNumber, goToNextStep }: Props ) {
+export function FeatureSelectionStep( { stepNumber, nextStep }: Props ) {
 	const dispatch = useAppDispatch();
 	const activeStep = useAppSelector( selectActiveStep );
 	const issueFeatureId = useAppSelector( selectIssueFeatureId );
@@ -24,7 +25,7 @@ export function FeatureSelectionStep( { stepNumber, goToNextStep }: Props ) {
 
 	let stepContentDisplay: ReactNode;
 	if ( isActive ) {
-		stepContentDisplay = <FeatureSelectorForm onContinue={ goToNextStep } />;
+		stepContentDisplay = <FeatureSelectorForm nextStep={ nextStep } />;
 	} else if ( isComplete ) {
 		stepContentDisplay = <CompletedStep featureId={ issueFeatureId } />;
 	} else {

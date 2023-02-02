@@ -6,13 +6,14 @@ import { TitleTypeForm } from '../../title-type-form/title-type-form';
 import { selectActiveStep, setActiveStep } from './../active-step-slice';
 import { StepContainer } from './step-container';
 import styles from '../reporting-flow.module.css';
+import { ActiveStep } from '../types';
 
 interface Props {
 	stepNumber: number;
-	goToNextStep: () => void;
+	nextStep: ActiveStep;
 }
 
-export function TitleAndTypeStep( { stepNumber, goToNextStep }: Props ) {
+export function TitleAndTypeStep( { stepNumber, nextStep }: Props ) {
 	const dispatch = useAppDispatch();
 	const activeStep = useAppSelector( selectActiveStep );
 	const issueTitle = useAppSelector( selectIssueTitle );
@@ -25,7 +26,7 @@ export function TitleAndTypeStep( { stepNumber, goToNextStep }: Props ) {
 
 	let stepContentDisplay: ReactNode;
 	if ( isActive ) {
-		stepContentDisplay = <TitleTypeForm onContinue={ goToNextStep } />;
+		stepContentDisplay = <TitleTypeForm nextStep={ nextStep } />;
 	} else if ( isComplete ) {
 		stepContentDisplay = <CompletedStep title={ issueTitle } type={ issueType } />;
 	} else {

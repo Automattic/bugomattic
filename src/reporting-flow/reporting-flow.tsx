@@ -1,32 +1,27 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { FeatureSelectionStep } from './sub-components/feature-selection-step';
 import { NextStepsStep } from './sub-components/next-steps-step';
 import { TitleAndTypeStep } from './sub-components/title-and-type-step';
 import styles from './reporting-flow.module.css';
-import { useAppDispatch, useAppSelector } from '../app/hooks';
+import { useAppSelector } from '../app/hooks';
 import { selectIssueType } from '../issue-details/issue-details-slice';
 import { ActiveStep } from './types';
-import { setActiveStep } from './active-step-slice';
 
 export function ReportingFlow() {
-	const dispatch = useAppDispatch();
 	const issueType = useAppSelector( selectIssueType );
 
-	const handleFeatureSelectionNextStep = useCallback( () => {
-		const titleTypeStepIsComplete = issueType !== 'unset';
-		const nextStep: ActiveStep = titleTypeStepIsComplete ? 'nextSteps' : 'titleAndType';
-		dispatch( setActiveStep( nextStep ) );
-	}, [ dispatch, issueType ] );
+	const titleTypeStepIsComplete = issueType !== 'unset';
+	const featureSelectionNextStep: ActiveStep = titleTypeStepIsComplete
+		? 'nextSteps'
+		: 'titleAndType';
 
-	const handleTitleAndTypeNextStep = useCallback( () => {
-		dispatch( setActiveStep( 'nextSteps' ) );
-	}, [ dispatch ] );
+	const titleAndTypeNextStep: ActiveStep = 'nextSteps';
 
 	return (
 		<section className={ styles.flowContainer }>
 			<h2 className="screenReaderOnly">Report a new issue</h2>
-			<FeatureSelectionStep stepNumber={ 1 } goToNextStep={ handleFeatureSelectionNextStep } />
-			<TitleAndTypeStep stepNumber={ 2 } goToNextStep={ handleTitleAndTypeNextStep } />
+			<FeatureSelectionStep stepNumber={ 1 } nextStep={ featureSelectionNextStep } />
+			<TitleAndTypeStep stepNumber={ 2 } nextStep={ titleAndTypeNextStep } />
 			<NextStepsStep stepNumber={ 3 } />
 		</section>
 	);

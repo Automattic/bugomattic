@@ -15,7 +15,7 @@ import {
 	getInitialStateFromHistory,
 	urlHistoryMiddleware,
 	registerHistoryListener,
-} from '../url-history/url-history';
+} from '../url-history/redux-handlers';
 
 function createRootReducer() {
 	return combineReducers( {
@@ -31,6 +31,7 @@ export function setupStore( apiClient: ApiClient, preloadedState?: PreloadedStat
 	if ( ! preloadedState ) {
 		preloadedState = getInitialStateFromHistory();
 	}
+
 	const store = configureStore( {
 		reducer: createRootReducer(),
 		// This is where the app dependency injection of the ApiClient happens.
@@ -46,7 +47,7 @@ export function setupStore( apiClient: ApiClient, preloadedState?: PreloadedStat
 		preloadedState,
 	} );
 
-	registerHistoryListener( store.dispatch, store.getState );
+	registerHistoryListener( store.dispatch );
 
 	return store;
 }

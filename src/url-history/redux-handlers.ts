@@ -1,16 +1,16 @@
 import { Middleware } from 'redux';
 import history from 'history/browser';
 import { AppDispatch, RootState } from '../app/store';
-import {
-	setIssueType,
-	setIssueFeatureId,
-	setIssueTitle,
-} from '../issue-details/issue-details-slice';
 import { setActiveStep } from '../reporting-flow/active-step-slice';
 import { addCompletedTask, removeCompletedTask } from '../next-steps/completed-tasks-slice';
 import { UrlTrackedState } from './types';
 import { ActiveStep } from '../reporting-flow/types';
 import { IssueType } from '../issue-details/types';
+import {
+	completeFeatureSelectionStep,
+	completeTitleAndTypeStep,
+} from '../reporting-flow/navigation-actions';
+import { updateStateFromHistory } from './actions';
 
 export const urlHistoryMiddleware: Middleware< {}, RootState > =
 	( store ) => ( next ) => ( action ) => {
@@ -18,16 +18,15 @@ export const urlHistoryMiddleware: Middleware< {}, RootState > =
 		const result = next( action );
 		const newState = store.getState();
 
-		const actionAllowlist: Set< string > = new Set( [
+		const actionAllowList: Set< string > = new Set( [
+			completeFeatureSelectionStep.type,
+			completeTitleAndTypeStep.type,
 			setActiveStep.type,
-			setIssueFeatureId.type,
-			setIssueType.type,
-			setIssueTitle.type,
 			addCompletedTask.type,
 			removeCompletedTask.type,
 		] );
 
-		if ( ! actionAllowlist.has( action.type ) ) {
+		if ( ! actionAllowList.has( action.type ) ) {
 			return result;
 		}
 
@@ -39,19 +38,15 @@ export const urlHistoryMiddleware: Middleware< {}, RootState > =
 		}
 
 		history.push( `?${ newStateQuery }` );
+
 		return result;
 	};
 
-export function registerHistoryListener( dispatch: AppDispatch, getState: () => RootState ) {
-	history.listen( ( { location, action } ) => {
-		if ( action === 'PUSH' ) {
-			return;
-		}
-
+export function registerHistoryListener( dispatch: AppDispatch ) {
+	history.listen( ( { location } ) => {
 		const stateParams = location.search;
-		const oldState = getState();
-		const newState = queryToState( stateParams );
-		updateState( oldState, newState, dispatch );
+		const stateFromParams = queryToState( stateParams );
+		dispatch( updateStateFromHistory( stateFromParams ) );
 	} );
 }
 
@@ -107,45 +102,4 @@ function queryToState( query: string ): UrlTrackedState {
 	};
 
 	return state;
-}
-
-function updateState( oldState: RootState, newState: UrlTrackedState, dispatch: AppDispatch ) {
-	if ( newState.activeStep !== oldState.activeStep ) {
-		dispatch( setActiveStep( newState.activeStep ) );
-	}
-
-	if ( newState.issueDetails.featureId !== oldState.issueDetails.featureId ) {
-		dispatch( setIssueFeatureId( newState.issueDetails.featureId ) );
-	}
-
-	if ( newState.issueDetails.issueTitle !== oldState.issueDetails.issueTitle ) {
-		dispatch( setIssueTitle( newState.issueDetails.issueTitle ) );
-	}
-
-	if ( newState.issueDetails.issueType !== oldState.issueDetails.issueType ) {
-		dispatch( setIssueType( newState.issueDetails.issueType ) );
-	}
-
-	// TODO: use Sets to make more efficient
-	if ( ! arrayValuesAreEqual( newState.completedTasks, oldState.completedTasks ) ) {
-		for ( const newCompletedTask of newState.completedTasks ) {
-			if ( ! oldState.completedTasks.includes( newCompletedTask ) ) {
-				dispatch( addCompletedTask( newCompletedTask ) );
-			}
-		}
-
-		for ( const oldCompletedTask of oldState.completedTasks ) {
-			if ( ! newState.completedTasks.includes( oldCompletedTask ) ) {
-				dispatch( removeCompletedTask( oldCompletedTask ) );
-			}
-		}
-	}
-}
-
-function arrayValuesAreEqual( array1: string[], array2: string[] ) {
-	if ( array1.length !== array2.length ) {
-		return false;
-	}
-
-	return array1.every( ( value ) => array2.includes( value ) );
 }
