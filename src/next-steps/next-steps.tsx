@@ -7,16 +7,35 @@ import { MoreInfo } from './sub-components/more-info';
 import Confetti from 'react-confetti';
 import { selectIssueFeatureId } from '../issue-details/issue-details-slice';
 import { selectAllTasksAreComplete } from '../combined-selectors/all-tasks-are-complete';
+import { useMonitoring } from '../monitoring/monitoring-provider';
+import { selectNormalizedReportingConfig } from '../reporting-config/reporting-config-slice';
 
 export function NextSteps() {
+	const monitoringClient = useMonitoring();
+
 	const sectionRef = useRef< HTMLElement >( null );
 	const [ sectionWidth, setSectionWidth ] = useState( 0 );
 	const [ sectionHeight, setSectionHeight ] = useState( 0 );
 	const [ showConfetti, setShowConfetti ] = useState( false );
 
+	const { tasks } = useAppSelector( selectNormalizedReportingConfig );
 	const issueFeatureId = useAppSelector( selectIssueFeatureId );
 	const relevantTaskIds = useAppSelector( selectRelevantTaskIds );
 	const allTasksAreComplete = useAppSelector( selectAllTasksAreComplete );
+
+	useEffect( () => {
+		const sourcesInOrder = relevantTaskIds.map( ( taskId ) => {
+			return {
+				parentType: tasks[ taskId ].parentType,
+				parentId: tasks[ taskId ].parentId,
+			};
+		} );
+
+		monitoringClient.logger.debug(
+			'Relevant tasks calculated for issue type and feature. See additional details for sourcing.',
+			{ sourcesInOrder }
+		);
+	}, [ relevantTaskIds, tasks, monitoringClient.logger ] );
 
 	const updateSizes = () => {
 		if ( sectionRef.current ) {
