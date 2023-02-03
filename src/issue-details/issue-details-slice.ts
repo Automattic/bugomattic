@@ -35,7 +35,8 @@ export const issueDetailsSlice = createSlice( {
 	extraReducers: ( builder ) => {
 		builder.addCase( updateStateFromHistory, ( state, action ) => {
 			const issueDetails = action.payload.issueDetails;
-			if ( ! issueDetails ) {
+			console.log( issueDetails );
+			if ( ! issueDetails || typeof issueDetails !== 'object' ) {
 				return { ...initialState };
 			}
 
