@@ -26,6 +26,7 @@ export function queryToState( query: string ): Partial< RootState > {
 	const queryObject = qs.parse( query, {
 		ignoreQueryPrefix: true,
 		// Adding the ability to store and read booleans/nulls/undefineds.
+		// For now, we'll parse numbers as strings. We don't really use numbers in our state.
 		// See discussion here: https://github.com/ljharb/qs/issues/91
 		decoder( value ) {
 			const keywords = {
@@ -52,6 +53,7 @@ export function queryToState( query: string ): Partial< RootState > {
 	const state: Partial< RootState > = {};
 	// We only copy the keys we are tracking to be safe.
 	// But we defer the actual validation and fallback values to the reducer.
+	// That keeps this parser dynamic and flexible to new keys without modification.
 	// That helps keep with the "Open Closed Principle."
 	for ( const key of trackedStateKeys ) {
 		// TODO: can we cast the type here properly
