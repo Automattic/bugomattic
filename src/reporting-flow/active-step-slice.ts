@@ -14,7 +14,22 @@ export const featureSelectorFormSlice = createSlice( {
 		},
 	},
 	extraReducers: ( builder ) => {
-		builder.addCase( updateStateFromHistory, ( _state, action ) => {
+		builder.addCase( updateStateFromHistory, ( state, action ) => {
+			const activeStep = action.payload.activeStep;
+			if ( ! activeStep ) {
+				return initialState;
+			}
+
+			const validActiveSteps = new Set< ActiveStep >( [
+				'featureSelection',
+				'titleAndType',
+				'nextSteps',
+			] );
+
+			if ( ! validActiveSteps.has( activeStep ) ) {
+				return initialState;
+			}
+
 			return action.payload.activeStep;
 		} );
 	},

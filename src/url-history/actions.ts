@@ -1,6 +1,7 @@
 import { createAction } from '@reduxjs/toolkit';
-import { UrlTrackedState } from './types';
+import { RootState } from '../app/store';
 
-export const updateStateFromHistory = createAction< UrlTrackedState >( 'updateStateFromHistory' );
+export const updateStateFromHistory =
+	createAction< Partial< RootState > >( 'updateStateFromHistory' );
 
 export const updateHistoryWithState = createAction< void >( 'updateHistoryFromState' );

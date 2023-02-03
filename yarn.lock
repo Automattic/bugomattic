@@ -4199,6 +4199,7 @@ __metadata:
     miragejs: ^0.1.47
     path-browserify: ^1.0.1
     prettier: "npm:wp-prettier@latest"
+    qs: ^6.11.0
     react: ^18.2.0
     react-confetti: ^6.1.0
     react-dom: ^18.2.0
@@ -11486,7 +11487,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"qs@npm:6.11.0":
+"qs@npm:6.11.0, qs@npm:^6.11.0":
   version: 6.11.0
   resolution: "qs@npm:6.11.0"
   dependencies:

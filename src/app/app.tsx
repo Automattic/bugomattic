@@ -4,11 +4,13 @@ import { useMonitoring } from '../monitoring/monitoring-provider';
 import { ReportingConfigLoadingIndicator } from '../reporting-config/reporting-config-loading-indicator';
 import { useReportingConfigLoad } from '../reporting-config/use-reporting-config';
 import { ReportingFlow } from '../reporting-flow/reporting-flow';
+import { useInitialStateFromUrl } from '../url-history/hooks';
 import styles from './app.module.css';
 
 export function App() {
 	const reportingConfigLoadStatus = useReportingConfigLoad();
 	const monitoringClient = useMonitoring();
+	useInitialStateFromUrl();
 
 	useEffect( () => {
 		monitoringClient.analytics.recordEvent( 'page_view' );

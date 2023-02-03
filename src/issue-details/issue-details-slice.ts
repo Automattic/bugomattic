@@ -33,8 +33,26 @@ export const issueDetailsSlice = createSlice( {
 		},
 	},
 	extraReducers: ( builder ) => {
-		builder.addCase( updateStateFromHistory, ( _state, action ) => {
-			return { ...action.payload.issueDetails };
+		builder.addCase( updateStateFromHistory, ( state, action ) => {
+			const issueDetails = action.payload.issueDetails;
+			if ( ! issueDetails ) {
+				return { ...initialState };
+			}
+
+			// Validate the payload from history, and fall back to the initial state if invalid.
+			const validIssueTypes = new Set< IssueType >( [
+				'unset',
+				'bug',
+				'featureRequest',
+				'urgent',
+			] );
+			const issueType = validIssueTypes.has( issueDetails.issueType )
+				? issueDetails.issueType
+				: initialState.issueType;
+			const issueTitle = issueDetails.issueTitle ?? initialState.issueTitle;
+			const featureId = issueDetails.featureId || initialState.featureId;
+
+			return { featureId, issueType, issueTitle };
 		} );
 	},
 } );

@@ -28,8 +28,16 @@ export const completedTasksSlice = createSlice( {
 		},
 	},
 	extraReducers: ( builder ) => {
-		builder.addCase( updateStateFromHistory, ( _state, action ) => {
-			return [ ...action.payload.completedTasks ];
+		builder.addCase( updateStateFromHistory, ( state, action ) => {
+			const completedTasks = action.payload.completedTasks;
+			if ( ! completedTasks ) {
+				return [ ...initialState ];
+			}
+
+			const filteredCompletedTasks = completedTasks.filter(
+				( taskId ) => typeof taskId === 'string'
+			);
+			return [ ...filteredCompletedTasks ];
 		} );
 	},
 } );

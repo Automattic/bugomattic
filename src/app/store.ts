@@ -11,11 +11,7 @@ import { featureSelectorFormReducer } from '../feature-selector-form/feature-sel
 import { issueDetailsReducer } from '../issue-details/issue-details-slice';
 import { completedTasksReducer } from '../next-steps/completed-tasks-slice';
 import { activeStepReducer } from '../reporting-flow/active-step-slice';
-import {
-	getInitialStateFromHistory,
-	urlHistoryMiddleware,
-	registerHistoryListener,
-} from '../url-history/redux-handlers';
+import { urlHistoryMiddleware, registerHistoryListener } from '../url-history/redux-handlers';
 
 function createRootReducer() {
 	return combineReducers( {
@@ -28,10 +24,6 @@ function createRootReducer() {
 }
 
 export function setupStore( apiClient: ApiClient, preloadedState?: PreloadedState< RootState > ) {
-	if ( ! preloadedState ) {
-		preloadedState = getInitialStateFromHistory();
-	}
-
 	const store = configureStore( {
 		reducer: createRootReducer(),
 		// This is where the app dependency injection of the ApiClient happens.
