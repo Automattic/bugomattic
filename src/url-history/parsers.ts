@@ -2,6 +2,8 @@ import { EmptyObject } from 'redux';
 import { RootState } from '../app/store';
 import qs from 'qs';
 
+// Redux includes this weird readonly symbol iterator on the RootState type.
+// That's not a real key, so we need to strip it here.
 type KeyableRootState = Omit< RootState, keyof EmptyObject >;
 
 // If you want any redux state to be tracked in the URL, add the top level key here.
@@ -12,10 +14,12 @@ const trackedStateKeys: ( keyof KeyableRootState )[] = [
 ];
 
 export function stateToQuery( state: RootState ) {
-	const stateToSerialize: RootState = {} as RootState;
+	// For some reason, TypeScript doesn't like how we're copying keys over.
+	// We are still safe because the keys are typed, and we're just stringifying anyway!
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	const stateToSerialize: any = {};
 	for ( const key of trackedStateKeys ) {
-		// TODO: we can fix this typing, I swear!
-		stateToSerialize[ key ] = state[ key ] as any;
+		stateToSerialize[ key ] = state[ key ];
 	}
 	const query = qs.stringify( stateToSerialize );
 
@@ -56,7 +60,7 @@ export function queryToState( query: string ): Partial< RootState > {
 	// That keeps this parser dynamic and flexible to new keys without modification.
 	// That helps keep with the "Open Closed Principle."
 	for ( const key of trackedStateKeys ) {
-		// TODO: can we cast the type here properly
+		// We do the validation later, so we just cast to any here.
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		state[ key ] = queryObject[ key ] as any;
 	}
