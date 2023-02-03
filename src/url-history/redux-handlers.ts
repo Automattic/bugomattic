@@ -10,25 +10,17 @@ import {
 	completeFeatureSelectionStep,
 	completeTitleAndTypeStep,
 } from '../reporting-flow/navigation-actions';
-import { updateStateFromHistory } from './actions';
+import { updateHistoryWithState, updateStateFromHistory } from './actions';
 
 export const urlHistoryMiddleware: Middleware< {}, RootState > =
 	( store ) => ( next ) => ( action ) => {
+		if ( action.type !== updateHistoryWithState.type ) {
+			return next( action );
+		}
+
 		const previousState = store.getState();
 		const result = next( action );
 		const newState = store.getState();
-
-		const actionAllowList: Set< string > = new Set( [
-			completeFeatureSelectionStep.type,
-			completeTitleAndTypeStep.type,
-			setActiveStep.type,
-			addCompletedTask.type,
-			removeCompletedTask.type,
-		] );
-
-		if ( ! actionAllowList.has( action.type ) ) {
-			return result;
-		}
 
 		const previousStateQuery = stateToQuery( previousState );
 		const newStateQuery = stateToQuery( newState );
@@ -44,6 +36,7 @@ export const urlHistoryMiddleware: Middleware< {}, RootState > =
 
 export function registerHistoryListener( dispatch: AppDispatch ) {
 	history.listen( ( { location } ) => {
+		// TODO: check for just pops? Or ignore pushes?
 		const stateParams = location.search;
 		const stateFromParams = queryToState( stateParams );
 		dispatch( updateStateFromHistory( stateFromParams ) );
