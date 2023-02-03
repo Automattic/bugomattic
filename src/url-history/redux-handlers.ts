@@ -4,6 +4,8 @@ import { AppDispatch, RootState } from '../app/store';
 import { updateHistoryWithState, updateStateFromHistory } from './actions';
 import { queryToState, stateToQuery } from './parsers';
 
+// We use query parameters to track state to support our production deployment limitations.
+
 export const urlHistoryMiddleware: Middleware< {}, RootState > =
 	( store ) => ( next ) => ( action ) => {
 		if ( action.type !== updateHistoryWithState.type ) {
