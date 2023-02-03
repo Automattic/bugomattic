@@ -1,9 +1,5 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../app/store';
-import {
-	completeFeatureSelectionStep,
-	completeTitleAndTypeStep,
-} from '../reporting-flow/navigation-actions';
 import { updateStateFromHistory } from '../url-history/actions';
 import { FeatureId, IssueDetails, IssueType } from './types';
 
@@ -16,29 +12,35 @@ const initialState: IssueDetails = {
 export const issueDetailsSlice = createSlice( {
 	name: 'issueDetails',
 	initialState: initialState,
-	reducers: {},
+	reducers: {
+		setIssueType( state, action: PayloadAction< IssueType > ) {
+			return {
+				...state,
+				issueType: action.payload,
+			};
+		},
+		setIssueFeatureId( state, action: PayloadAction< FeatureId > ) {
+			return {
+				...state,
+				featureId: action.payload,
+			};
+		},
+		setIssueTitle( state, action: PayloadAction< string > ) {
+			return {
+				...state,
+				issueTitle: action.payload,
+			};
+		},
+	},
 	extraReducers: ( builder ) => {
-		builder
-			.addCase( completeFeatureSelectionStep, ( state, action ) => {
-				return {
-					...state,
-					featureId: action.payload.featureId,
-				};
-			} )
-			.addCase( completeTitleAndTypeStep, ( state, action ) => {
-				return {
-					...state,
-					issueTitle: action.payload.title,
-					issueType: action.payload.type,
-				};
-			} )
-			.addCase( updateStateFromHistory, ( _state, action ) => {
-				return { ...action.payload.issueDetails };
-			} );
+		builder.addCase( updateStateFromHistory, ( _state, action ) => {
+			return { ...action.payload.issueDetails };
+		} );
 	},
 } );
 
 export const issueDetailsReducer = issueDetailsSlice.reducer;
+export const { setIssueType, setIssueFeatureId, setIssueTitle } = issueDetailsSlice.actions;
 
 export function selectIssueDetails( state: RootState ): IssueDetails {
 	return state.issueDetails;

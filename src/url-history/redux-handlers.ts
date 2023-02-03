@@ -1,15 +1,9 @@
 import { Middleware } from 'redux';
 import history from 'history/browser';
 import { AppDispatch, RootState } from '../app/store';
-import { setActiveStep } from '../reporting-flow/active-step-slice';
-import { addCompletedTask, removeCompletedTask } from '../next-steps/completed-tasks-slice';
 import { UrlTrackedState } from './types';
 import { ActiveStep } from '../reporting-flow/types';
 import { IssueType } from '../issue-details/types';
-import {
-	completeFeatureSelectionStep,
-	completeTitleAndTypeStep,
-} from '../reporting-flow/navigation-actions';
 import { updateHistoryWithState, updateStateFromHistory } from './actions';
 
 export const urlHistoryMiddleware: Middleware< {}, RootState > =
@@ -18,25 +12,27 @@ export const urlHistoryMiddleware: Middleware< {}, RootState > =
 			return next( action );
 		}
 
-		const previousState = store.getState();
 		const result = next( action );
 		const newState = store.getState();
 
-		const previousStateQuery = stateToQuery( previousState );
+		const currentStateQuery = history.location.search;
 		const newStateQuery = stateToQuery( newState );
 
-		if ( previousStateQuery === newStateQuery ) {
-			return result;
+		// We only want to push a state query history entry if it's new.
+		// Otherwise, navigating back can feel like it does nothing.
+		if ( currentStateQuery !== newStateQuery ) {
+			history.push( `?${ newStateQuery }` );
 		}
-
-		history.push( `?${ newStateQuery }` );
 
 		return result;
 	};
 
 export function registerHistoryListener( dispatch: AppDispatch ) {
-	history.listen( ( { location } ) => {
-		// TODO: check for just pops? Or ignore pushes?
+	history.listen( ( { location, action } ) => {
+		if ( action === 'PUSH' ) {
+			// Acting on PUSHes are pointless -- we're the ones triggering them!
+			return;
+		}
 		const stateParams = location.search;
 		const stateFromParams = queryToState( stateParams );
 		dispatch( updateStateFromHistory( stateFromParams ) );

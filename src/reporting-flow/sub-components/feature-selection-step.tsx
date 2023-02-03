@@ -6,26 +6,29 @@ import { selectActiveStep, setActiveStep } from '../active-step-slice';
 import { StepContainer } from './step-container';
 import styles from '../reporting-flow.module.css';
 import { FeatureSelectorForm } from '../../feature-selector-form/feature-selector-form';
-import { ActiveStep } from '../types';
+import { updateHistoryWithState } from '../../url-history/actions';
 
 interface Props {
 	stepNumber: number;
-	nextStep: ActiveStep;
+	goToNextStep: () => void;
 }
 
-export function FeatureSelectionStep( { stepNumber, nextStep }: Props ) {
+export function FeatureSelectionStep( { stepNumber, goToNextStep }: Props ) {
 	const dispatch = useAppDispatch();
 	const activeStep = useAppSelector( selectActiveStep );
 	const issueFeatureId = useAppSelector( selectIssueFeatureId );
 
-	const onEdit = useCallback( () => dispatch( setActiveStep( 'featureSelection' ) ), [ dispatch ] );
+	const onEdit = useCallback( () => {
+		dispatch( setActiveStep( 'featureSelection' ) );
+		dispatch( updateHistoryWithState() );
+	}, [ dispatch ] );
 
 	const isActive = activeStep === 'featureSelection';
 	const isComplete = issueFeatureId !== null && ! isActive;
 
 	let stepContentDisplay: ReactNode;
 	if ( isActive ) {
-		stepContentDisplay = <FeatureSelectorForm nextStep={ nextStep } />;
+		stepContentDisplay = <FeatureSelectorForm onContinue={ goToNextStep } />;
 	} else if ( isComplete ) {
 		stepContentDisplay = <CompletedStep featureId={ issueFeatureId } />;
 	} else {

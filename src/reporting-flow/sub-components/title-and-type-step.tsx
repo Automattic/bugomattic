@@ -6,27 +6,30 @@ import { TitleTypeForm } from '../../title-type-form/title-type-form';
 import { selectActiveStep, setActiveStep } from './../active-step-slice';
 import { StepContainer } from './step-container';
 import styles from '../reporting-flow.module.css';
-import { ActiveStep } from '../types';
+import { updateHistoryWithState } from '../../url-history/actions';
 
 interface Props {
 	stepNumber: number;
-	nextStep: ActiveStep;
+	goToNextStep: () => void;
 }
 
-export function TitleAndTypeStep( { stepNumber, nextStep }: Props ) {
+export function TitleAndTypeStep( { stepNumber, goToNextStep }: Props ) {
 	const dispatch = useAppDispatch();
 	const activeStep = useAppSelector( selectActiveStep );
 	const issueTitle = useAppSelector( selectIssueTitle );
 	const issueType = useAppSelector( selectIssueType );
 
-	const onEdit = useCallback( () => dispatch( setActiveStep( 'titleAndType' ) ), [ dispatch ] );
+	const onEdit = useCallback( () => {
+		dispatch( setActiveStep( 'titleAndType' ) );
+		dispatch( updateHistoryWithState() );
+	}, [ dispatch ] );
 
 	const isActive = activeStep === 'titleAndType';
 	const isComplete = issueType !== 'unset' && ! isActive;
 
 	let stepContentDisplay: ReactNode;
 	if ( isActive ) {
-		stepContentDisplay = <TitleTypeForm nextStep={ nextStep } />;
+		stepContentDisplay = <TitleTypeForm onContinue={ goToNextStep } />;
 	} else if ( isComplete ) {
 		stepContentDisplay = <CompletedStep title={ issueTitle } type={ issueType } />;
 	} else {

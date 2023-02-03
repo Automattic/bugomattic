@@ -1,9 +1,7 @@
 import React, { FormEventHandler, ReactNode, useCallback, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { DebouncedSearch, FormErrorMessage } from '../common/components';
-import { selectIssueFeatureId } from '../issue-details/issue-details-slice';
-import { completeFeatureSelectionStep } from '../reporting-flow/navigation-actions';
-import { ActiveStep } from '../reporting-flow/types';
+import { selectIssueFeatureId, setIssueFeatureId } from '../issue-details/issue-details-slice';
 import {
 	selectSelectedFeatureId,
 	setFeatureSearchTerm,
@@ -14,10 +12,10 @@ import { FeatureSelectorTree } from './sub-components';
 import { SelectedFeatureDetails } from './sub-components/selected-feature-details';
 
 interface Props {
-	nextStep?: ActiveStep;
+	onContinue?: () => void;
 }
 
-export function FeatureSelectorForm( { nextStep }: Props ) {
+export function FeatureSelectorForm( { onContinue }: Props ) {
 	const dispatch = useAppDispatch();
 	const issueFeatureId = useAppSelector( selectIssueFeatureId );
 
@@ -46,7 +44,11 @@ export function FeatureSelectorForm( { nextStep }: Props ) {
 		event.preventDefault();
 		setSubmissionAttempted( true );
 		if ( readyToContinue ) {
-			dispatch( completeFeatureSelectionStep( { featureId: selectedFeatureId, nextStep } ) );
+			dispatch( setIssueFeatureId( selectedFeatureId ) );
+
+			if ( onContinue ) {
+				onContinue();
+			}
 		}
 	};
 
