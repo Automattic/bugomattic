@@ -39,6 +39,15 @@
 	"jest": {
 		"transformIgnorePatterns": [
 			"/node_modules/(?!(url-join|history)/)"
+		],
+		"coveragePathIgnorePatterns": [
+			"/node_modules/",
+			"<rootDir>/src/setupTests.ts",
+			"<rootDir>/src/index.tsx",
+			"<rootDir>/src/test-utils",
+			"<rootDir>/src/monitoring/report-web-vitals.ts",
+			"<rootDir>/src/monitoring/local-monitoring-client.ts",
+			"<rootDir>/src/api/local-api-client.ts"
 		]
 	},
 	"dependencies": {
