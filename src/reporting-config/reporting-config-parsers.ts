@@ -24,6 +24,13 @@ export function normalizeReportingConfig(
 	const normalizedProducts: Products = {};
 
 	for ( const productName in apiResponse ) {
+		const productDetails = apiResponse[ productName ];
+		if ( ! productDetails || typeof productDetails !== 'object' ) {
+			throw new Error(
+				`Invalid reporting config. Product "${ productName }" is not a valid product.`
+			);
+		}
+
 		const { featureGroups, features, description, learnMoreLinks, tasks } =
 			apiResponse[ productName ];
 		const productId = productName; // We can use name as ID, as being top level, they are unique.

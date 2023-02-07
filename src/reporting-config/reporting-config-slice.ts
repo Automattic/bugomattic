@@ -47,14 +47,29 @@ export const reportingConfigSlice = createSlice( {
 				return {
 					...state,
 					status: 'error',
-					error: `${ error.name }: ${ error.message }}`,
+					error: `${ error.name }: ${ error.message }`,
 				};
 			} )
 			.addCase( loadReportingConfig.fulfilled, ( state, { payload } ) => {
+				let normalized: NormalizedReportingConfig;
+				let indexed: IndexedReportingConfig;
+
+				try {
+					normalized = normalizeReportingConfig( payload );
+					indexed = indexReportingConfig( payload );
+				} catch ( err ) {
+					const error = err as Error;
+					return {
+						...state,
+						status: 'error',
+						error: `Failed to normalize reporting config. ${ error.name }: ${ error.message }`,
+					};
+				}
+
 				return {
 					...state,
-					normalized: normalizeReportingConfig( payload ),
-					indexed: indexReportingConfig( payload ),
+					normalized: normalized,
+					indexed: indexed,
 					status: 'loaded',
 					error: null,
 				};

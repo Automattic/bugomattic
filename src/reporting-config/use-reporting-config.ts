@@ -1,17 +1,22 @@
 import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { loadReportingConfig, selectReportingConfigLoadStatus } from './reporting-config-slice';
+import {
+	loadReportingConfig,
+	selectReportingConfigError,
+	selectReportingConfigLoadStatus,
+} from './reporting-config-slice';
 import { useEffect } from 'react';
 
 export function useReportingConfigLoad() {
 	const dispatch = useAppDispatch();
 
-	const reportingConfigLoadStatus = useAppSelector( selectReportingConfigLoadStatus );
+	const loadStatus = useAppSelector( selectReportingConfigLoadStatus );
+	const error = useAppSelector( selectReportingConfigError );
 
 	useEffect( () => {
-		if ( reportingConfigLoadStatus === 'empty' ) {
+		if ( loadStatus === 'empty' ) {
 			dispatch( loadReportingConfig() );
 		}
-	}, [ reportingConfigLoadStatus, dispatch ] );
+	}, [ loadStatus, dispatch ] );
 
-	return reportingConfigLoadStatus;
+	return { loadStatus, error };
 }
