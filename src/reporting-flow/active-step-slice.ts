@@ -15,9 +15,8 @@ export const featureSelectorFormSlice = createSlice( {
 	name: 'activeStep',
 	initialState: initialState,
 	reducers: {
-		setActiveStep( state, action: PayloadAction< ActiveStep > ) {
-			const activeStep = validActiveSteps.has( action.payload ) ? action.payload : state;
-			return activeStep;
+		setActiveStep( _state, action: PayloadAction< ActiveStep > ) {
+			return action.payload;
 		},
 	},
 	extraReducers: ( builder ) => {

@@ -17,30 +17,15 @@ export const issueDetailsSlice = createSlice( {
 	initialState: initialState,
 	reducers: {
 		setIssueType( state, action: PayloadAction< IssueType > ) {
-			const issueType = validIssueTypes.has( action.payload ) ? action.payload : state.issueType;
 			return {
 				...state,
-				issueType: issueType,
+				issueType: action.payload,
 			};
 		},
 		setIssueFeatureId( state, action: PayloadAction< FeatureId > ) {
-			const actionWithReportingConfig = action as PayloadAction<
-				FeatureId,
-				string,
-				NormalizedReportingConfig
-			>;
-			const { features } = actionWithReportingConfig.meta;
-
-			let newFeatureId: FeatureId;
-			if ( action.payload === null || features[ action.payload ] ) {
-				newFeatureId = action.payload;
-			} else {
-				newFeatureId = state.featureId;
-			}
-
 			return {
 				...state,
-				featureId: newFeatureId,
+				featureId: action.payload,
 			};
 		},
 		setIssueTitle( state, action: PayloadAction< string > ) {

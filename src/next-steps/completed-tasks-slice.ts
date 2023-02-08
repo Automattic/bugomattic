@@ -18,17 +18,6 @@ export const completedTasksSlice = createSlice( {
 				return [ ...state ];
 			}
 
-			const actionWithReportingConfig = action as PayloadAction<
-				TaskId,
-				string,
-				NormalizedReportingConfig
-			>;
-			const { tasks } = actionWithReportingConfig.meta;
-
-			if ( ! tasks[ completedTaskId ] ) {
-				return [ ...state ];
-			}
-
 			return [ ...state, completedTaskId ];
 		},
 		removeCompletedTask( state, action: PayloadAction< TaskId > ) {
