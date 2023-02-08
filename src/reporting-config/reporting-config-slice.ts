@@ -101,6 +101,12 @@ export function selectReportingConfigError( state: RootState ) {
 	return state.reportingConfig.error;
 }
 
+/**
+ * This middleware adds a pointer to the normalized reporting config all actions' meta.
+ * For simplicity, we've opted to keep the reporting config in the redux store, rather than in a separate context.
+ * However, our "duck" pattern for redux slices means that we often can't access the reporting config in reducers.
+ * This middleware solves that, so if any validation needs to happen based on the reporting config, it can.
+ */
 export const surfaceReportingConfigMiddleware: Middleware< {}, RootState > =
 	( store ) => ( next ) => ( action: AnyAction ) => {
 		const reportingConfig = selectNormalizedReportingConfig( store.getState() );
