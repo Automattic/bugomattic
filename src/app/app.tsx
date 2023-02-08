@@ -1,13 +1,13 @@
 import React, { ReactNode, useEffect } from 'react';
 import { AppHeader } from '../app-header/app-header';
-import { AppError } from '../errors/app-error';
+import { AppErrorDisplay } from '../errors/app-error-display';
 import { useMonitoring } from '../monitoring/monitoring-provider';
 import { ReportingConfigLoadingIndicator } from '../reporting-config/reporting-config-loading-indicator';
 import { useReportingConfigLoad } from '../reporting-config/use-reporting-config';
 import { ReportingFlow } from '../reporting-flow/reporting-flow';
 import { useInitialStateFromUrl } from '../url-history/hooks';
-import { ErrorBoundary } from 'react-error-boundary';
 import styles from './app.module.css';
+import { AppErrorBoundary } from '../errors/app-error-boundary';
 
 export function App() {
 	const { loadStatus, error } = useReportingConfigLoad();
@@ -27,22 +27,15 @@ export function App() {
 		monitoringClient.logger.error( 'Error occurred when loading the reporting config', {
 			error: error,
 		} );
-		mainDisplay = <AppError />;
+		mainDisplay = <AppErrorDisplay />;
 	}
-
-	const handleAppError = ( error: Error, info: { componentStack: string } ) => {
-		monitoringClient.logger.error( 'Unexpected app error occurred', {
-			error: error,
-			componentStack: info.componentStack,
-		} );
-	};
 
 	return (
 		<div className={ styles.appMain }>
 			<AppHeader />
-			<ErrorBoundary FallbackComponent={ AppError } onError={ handleAppError }>
+			<AppErrorBoundary>
 				<main className={ styles.appMain }>{ mainDisplay }</main>
-			</ErrorBoundary>
+			</AppErrorBoundary>
 		</div>
 	);
 }

@@ -2,7 +2,7 @@ import React from 'react';
 import { ReactComponent as ErrorIcon } from '../common/svgs/warning.svg';
 import styles from './app-error.module.css';
 
-export function AppError() {
+export function AppErrorDisplay() {
 	const headerId = 'app-error-header';
 	return (
 		<section aria-labelledby={ headerId } className={ styles.wrapper } role="alert">
