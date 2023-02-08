@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ReportingConfigApiResponse } from '../../api/types';
 import { normalizeReportingConfig } from '../reporting-config-parsers';
 
@@ -87,6 +88,133 @@ describe( '[reporting-config-parsers]', () => {
 			const fakeResponse = createFakeReportingConfigResponse();
 			const normalizedReportingConfig = normalizeReportingConfig( fakeResponse );
 			expect( normalizedReportingConfig ).toMatchSnapshot();
+		} );
+	} );
+
+	describe( 'Invalid Reporting Config API responses that should throw errors...', () => {
+		const expectedBaseMessage = 'Invalid reporting config:';
+		test( 'Invalid root reporting config dictionary ', () => {
+			const fakeResponse = 'a string';
+			expect( () => normalizeReportingConfig( fakeResponse as any ) ).toThrowError(
+				`${ expectedBaseMessage } Invalid root reporting config dictionary`
+			);
+		} );
+
+		test( 'Product that is not a dictionary', () => {
+			const fakeResponse = {
+				FakeProduct: [ 'an', 'array' ],
+			};
+			expect( () => normalizeReportingConfig( fakeResponse as any ) ).toThrowError(
+				`${ expectedBaseMessage } Invalid product "FakeProduct"`
+			);
+		} );
+
+		test( 'Product that has feature groups that are not a dictionary', () => {
+			const fakeResponse = {
+				FakeProduct: {
+					featureGroups: 1337,
+				},
+			};
+			expect( () => normalizeReportingConfig( fakeResponse as any ) ).toThrowError(
+				`${ expectedBaseMessage } Invalid feature groups (for product "FakeProduct")`
+			);
+		} );
+
+		test( 'Feature group that is not a dictionary', () => {
+			const fakeResponse = {
+				FakeProduct: {
+					featureGroups: {
+						FakeFeatureGroup: null,
+					},
+				},
+			};
+			expect( () => normalizeReportingConfig( fakeResponse as any ) ).toThrowError(
+				`${ expectedBaseMessage } Invalid feature group "FakeFeatureGroup" (for product "FakeProduct")`
+			);
+		} );
+
+		test( 'Feature group that has features that are not a dictionary', () => {
+			const fakeResponse = {
+				FakeProduct: {
+					featureGroups: {
+						FakeFeatureGroup: {
+							features: 'a string',
+						},
+					},
+				},
+			};
+			expect( () => normalizeReportingConfig( fakeResponse as any ) ).toThrowError(
+				`${ expectedBaseMessage } Invalid features (for featureGroup "FakeProduct__FakeFeatureGroup")`
+			);
+		} );
+
+		test( 'Feature that is not a dictionary', () => {
+			const fakeResponse = {
+				FakeProduct: {
+					featureGroups: {
+						FakeFeatureGroup: {
+							features: {
+								FakeFeature: [ 1, 2, 3 ],
+							},
+						},
+					},
+				},
+			};
+			expect( () => normalizeReportingConfig( fakeResponse as any ) ).toThrowError(
+				`${ expectedBaseMessage } Invalid feature "FakeFeature" (for featureGroup "FakeProduct__FakeFeatureGroup")`
+			);
+		} );
+
+		test( 'Feature that has tasks that are not a dictionary', () => {
+			const fakeResponse = {
+				FakeProduct: {
+					featureGroups: {
+						FakeFeatureGroup: {
+							features: {
+								FakeFeature: {
+									tasks: 'a string',
+								},
+							},
+						},
+					},
+				},
+			};
+			expect( () => normalizeReportingConfig( fakeResponse as any ) ).toThrowError(
+				`${ expectedBaseMessage } Invalid tasks (for feature "FakeProduct__FakeFeatureGroup__FakeFeature")`
+			);
+		} );
+
+		test( 'Task list that is not an array', () => {
+			const fakeResponse = {
+				FakeProduct: {
+					tasks: {
+						bug: { foo: 'bar' },
+					},
+				},
+			};
+			expect( () => normalizeReportingConfig( fakeResponse as any ) ).toThrowError(
+				`${ expectedBaseMessage } Invalid bug tasks (for product "FakeProduct")`
+			);
+		} );
+
+		test( 'Task that is not a dictionary', () => {
+			const fakeResponse = {
+				FakeProduct: {
+					featureGroups: {
+						FakeFeatureGroup: {
+							tasks: {
+								bug: [ 'an', 'array' ],
+							},
+							features: {
+								FakeFeature: {},
+							},
+						},
+					},
+				},
+			};
+			expect( () => normalizeReportingConfig( fakeResponse as any ) ).toThrowError(
+				`${ expectedBaseMessage } Invalid bug task at index 0 (for featureGroup "FakeProduct__FakeFeatureGroup")`
+			);
 		} );
 	} );
 } );

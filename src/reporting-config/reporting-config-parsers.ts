@@ -18,6 +18,10 @@ import {
 export function normalizeReportingConfig(
 	apiResponse: ReportingConfigApiResponse
 ): NormalizedReportingConfig {
+	if ( ! isValidDictionary( apiResponse ) ) {
+		throwReportingConfigError( 'Invalid root reporting config dictionary' );
+	}
+
 	let normalizedTasks: Tasks = {};
 	let normalizedFeatures: Features = {};
 	let normalizedFeatureGroups: FeatureGroups = {};
@@ -25,10 +29,8 @@ export function normalizeReportingConfig(
 
 	for ( const productName in apiResponse ) {
 		const productDetails = apiResponse[ productName ];
-		if ( ! productDetails || typeof productDetails !== 'object' ) {
-			throw new Error(
-				`Invalid reporting config. Product "${ productName }" is not a valid product.`
-			);
+		if ( ! isValidDictionary( productDetails ) ) {
+			throwReportingConfigError( `Invalid product "${ productName }"` );
 		}
 
 		const { featureGroups, features, description, learnMoreLinks, tasks } =
@@ -118,12 +120,21 @@ function normalizeFeatureGroups(
 	apiFeatureGroups: ApiFeatureGroups,
 	context: FeatureGroupContext
 ): NormalizedFeatureGroupOutput {
+	if ( ! isValidDictionary( apiFeatureGroups ) ) {
+		throwReportingConfigError( `Invalid feature groups (for product "${ context.productId }")` );
+	}
 	let normalizedTasks: Tasks = {};
 	let normalizedFeatures: Features = {};
 	const normalizedFeatureGroups: FeatureGroups = {};
 
 	for ( const featureGroupName in apiFeatureGroups ) {
-		const { features, description, learnMoreLinks, tasks } = apiFeatureGroups[ featureGroupName ];
+		const featureGroupDetails = apiFeatureGroups[ featureGroupName ];
+		if ( ! isValidDictionary( featureGroupDetails ) || ! featureGroupDetails.features ) {
+			throwReportingConfigError(
+				`Invalid feature group "${ featureGroupName }" (for product "${ context.productId }")`
+			);
+		}
+		const { features, description, learnMoreLinks, tasks } = featureGroupDetails;
 		const featureGroupId = `${ context.productId }__${ featureGroupName }`;
 
 		let featureGroupTaskMapping: TaskMapping | undefined;
@@ -187,10 +198,22 @@ function normalizeFeatures(
 	apiFeatures: ApiFeatures,
 	context: FeatureContext
 ): NormalizedFeatureOutput {
+	if ( ! isValidDictionary( apiFeatures ) ) {
+		throwReportingConfigError(
+			`Invalid features (for ${ context.parentType } "${ context.parentId }")`
+		);
+	}
+
 	let normalizedTasks: Tasks = {};
 	const normalizedFeatures: Features = {};
 	for ( const featureName in apiFeatures ) {
-		const { description, keywords, learnMoreLinks, tasks } = apiFeatures[ featureName ];
+		const featureDetails = apiFeatures[ featureName ];
+		if ( ! isValidDictionary( featureDetails ) ) {
+			throwReportingConfigError(
+				`Invalid feature "${ featureName }" (for ${ context.parentType } "${ context.parentId }")`
+			);
+		}
+		const { description, keywords, learnMoreLinks, tasks } = featureDetails;
 		const featureId = `${ context.parentId }__${ featureName }`;
 
 		let featureTaskMapping: TaskMapping | undefined;
@@ -236,6 +259,12 @@ interface NormalizedTaskOutput {
 }
 
 function normalizeTasks( apiTasks: ApiTasks, context: TaskContext ): NormalizedTaskOutput {
+	if ( ! isValidDictionary( apiTasks ) ) {
+		throwReportingConfigError(
+			`Invalid tasks (for ${ context.parentType } "${ context.parentId }")`
+		);
+	}
+
 	const taskMapping: TaskMapping = {
 		bug: [],
 		urgent: [],
@@ -245,10 +274,24 @@ function normalizeTasks( apiTasks: ApiTasks, context: TaskContext ): NormalizedT
 
 	const issueTypes = [ 'bug', 'featureRequest', 'urgent' ] as const;
 	issueTypes.forEach( ( issueType ) => {
-		apiTasks[ issueType ].forEach( ( taskDetails, index ) => {
+		const tasksForType = apiTasks[ issueType ];
+		if ( ! Array.isArray( tasksForType ) ) {
+			throwReportingConfigError(
+				`Invalid ${ issueType } tasks (for ${ context.parentType } "${ context.parentId }")`
+			);
+		}
+
+		tasksForType.forEach( ( taskDetails, index ) => {
+			if ( ! isValidDictionary( taskDetails ) ) {
+				throwReportingConfigError(
+					`Invalid ${ issueType } task at index ${ index } (for ${ context.parentType } "${ context.parentId }")`
+				);
+			}
 			const taskId = `${ context.parentId }__${ issueType }__${ index }`;
 			normalizedTasks[ taskId ] = {
-				...taskDetails,
+				title: taskDetails.title,
+				details: taskDetails.details,
+				link: taskDetails.link,
 				id: taskId,
 				parentType: context.parentType,
 				parentId: context.parentId,
@@ -258,6 +301,14 @@ function normalizeTasks( apiTasks: ApiTasks, context: TaskContext ): NormalizedT
 	} );
 
 	return { normalizedTasks, taskMapping };
+}
+
+function isValidDictionary( object: unknown ): boolean {
+	return object !== null && typeof object === 'object' && ! Array.isArray( object );
+}
+
+function throwReportingConfigError( message: string ): never {
+	throw new Error( `Invalid reporting config: ${ message }` );
 }
 
 export function indexReportingConfig(
