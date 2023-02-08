@@ -9,14 +9,17 @@ const initialState: IssueDetails = {
 	issueTitle: '',
 };
 
+const validIssueTypes = new Set< IssueType >( [ 'unset', 'bug', 'featureRequest', 'urgent' ] );
+
 export const issueDetailsSlice = createSlice( {
 	name: 'issueDetails',
 	initialState: initialState,
 	reducers: {
 		setIssueType( state, action: PayloadAction< IssueType > ) {
+			const issueType = validIssueTypes.has( action.payload ) ? action.payload : state.issueType;
 			return {
 				...state,
-				issueType: action.payload,
+				issueType: issueType,
 			};
 		},
 		setIssueFeatureId( state, action: PayloadAction< FeatureId > ) {
@@ -40,12 +43,6 @@ export const issueDetailsSlice = createSlice( {
 			}
 
 			// Validate the payload from history, and fall back to the initial state if invalid.
-			const validIssueTypes = new Set< IssueType >( [
-				'unset',
-				'bug',
-				'featureRequest',
-				'urgent',
-			] );
 			const issueType = validIssueTypes.has( issueDetails.issueType )
 				? issueDetails.issueType
 				: initialState.issueType;
