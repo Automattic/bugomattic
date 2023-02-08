@@ -15,6 +15,7 @@ import {
 import { IssueType } from '../issue-details/types';
 import { ReactComponent as InfoIcon } from '../common/svgs/info.svg';
 import styles from './title-type-form.module.css';
+import { useMonitoring } from '../monitoring/monitoring-provider';
 
 interface Props {
 	onContinue?: () => void;
@@ -22,6 +23,7 @@ interface Props {
 
 export function TitleTypeForm( { onContinue }: Props ) {
 	const dispatch = useAppDispatch();
+	const monitoringClient = useMonitoring();
 	const { issueTitle, issueType } = useAppSelector( selectIssueDetails );
 
 	const [ title, setTitle ] = useState( issueTitle );
@@ -59,6 +61,11 @@ export function TitleTypeForm( { onContinue }: Props ) {
 		if ( readyToContinue ) {
 			dispatch( setIssueTitle( title ) );
 			dispatch( setIssueType( type ) );
+
+			monitoringClient.analytics.recordEvent( 'type_save', { issueType: type } );
+			if ( title ) {
+				monitoringClient.analytics.recordEvent( 'title_save' );
+			}
 
 			if ( onContinue ) {
 				onContinue();

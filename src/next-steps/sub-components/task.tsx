@@ -43,6 +43,7 @@ export function Task( { taskId }: Props ) {
 			dispatch( removeCompletedTask( taskId ) );
 		} else {
 			dispatch( addCompletedTask( taskId ) );
+			monitoringClient.analytics.recordEvent( 'task_complete' );
 		}
 		dispatch( updateHistoryWithState() );
 	};
@@ -57,6 +58,11 @@ export function Task( { taskId }: Props ) {
 	let taskIsBroken = false;
 	let titleDisplay: ReactNode;
 	if ( link ) {
+		const handleLinkClick = () => {
+			monitoringClient.analytics.recordEvent( 'task_link_click', { linkType: link.type } );
+			handleCheckboxChange();
+		};
+
 		try {
 			const linkText = title || getDefaultTitleForLink( link );
 			const href = createLinkHref( link, issueTitle );
@@ -67,7 +73,7 @@ export function Task( { taskId }: Props ) {
 					href={ href }
 					rel="noreferrer"
 					// When they open a link, let's trigger the checkbox change too
-					onClick={ handleCheckboxChange }
+					onClick={ handleLinkClick }
 				>
 					{ getAppIconForLink( link ) }
 					<span className={ styles.linkText }>{ linkText }</span>

@@ -3,6 +3,7 @@ import { RootState } from '../app/store';
 import { ApiClient, ReportingConfigApiResponse } from '../api/types';
 import { IndexedReportingConfig, NormalizedReportingConfig, ReportingConfigState } from './types';
 import { indexReportingConfig, normalizeReportingConfig } from './reporting-config-parsers';
+import { FeatureId } from '../issue-details/types';
 
 const initialNormalizedReportingConfig: NormalizedReportingConfig = {
 	products: {},
@@ -118,3 +119,19 @@ export const surfaceReportingConfigMiddleware: Middleware< {}, RootState > =
 
 		return next( action );
 	};
+
+export function selectProductIdForFeature( featureId: FeatureId ) {
+	return ( state: RootState ) => {
+		if ( ! featureId ) {
+			return null;
+		}
+
+		const feature = state.reportingConfig.normalized.features[ featureId ];
+		if ( feature.parentType === 'product' ) {
+			return feature.parentId;
+		}
+
+		const featureGroup = state.reportingConfig.normalized.featureGroups[ feature.parentId ];
+		return featureGroup.productId;
+	};
+}

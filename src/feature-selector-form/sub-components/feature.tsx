@@ -9,6 +9,7 @@ import {
 } from '../feature-selector-form-slice';
 import { includesIgnoringCase } from '../../common/lib';
 import { SubstringHighlighter } from '../../common/components';
+import { useMonitoring } from '../../monitoring/monitoring-provider';
 
 interface Props {
 	id: string;
@@ -16,7 +17,11 @@ interface Props {
 
 export function Feature( { id }: Props ) {
 	const dispatch = useAppDispatch();
-	const handleFeatureSelect = () => dispatch( setSelectedFeatureId( id ) );
+	const monitoringClient = useMonitoring();
+	const handleFeatureSelect = () => {
+		dispatch( setSelectedFeatureId( id ) );
+		monitoringClient.analytics.recordEvent( 'feature_select' );
+	};
 
 	const selectedFeatureId = useAppSelector( selectSelectedFeatureId );
 	const isSelected = id === selectedFeatureId;

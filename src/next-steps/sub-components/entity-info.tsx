@@ -1,5 +1,6 @@
 import React from 'react';
 import { createGeneralHref, createP2Href, createSlackHref } from '../../common/lib';
+import { useMonitoring } from '../../monitoring/monitoring-provider';
 import { Feature, FeatureGroup, LearnMoreLink, Product } from '../../reporting-config/types';
 import styles from '../next-steps.module.css';
 
@@ -8,6 +9,7 @@ interface Props {
 }
 
 export function EntityInfo( { entity }: Props ) {
+	const monitoringClient = useMonitoring();
 	const { name, description, learnMoreLinks } = entity;
 
 	const slackLinks = learnMoreLinks?.filter( ( link ) => link.type === 'slack' );
@@ -17,16 +19,28 @@ export function EntityInfo( { entity }: Props ) {
 	function LinkList( { links }: { links: LearnMoreLink[] } ) {
 		return (
 			<ul>
-				{ links.map( ( link, index ) => (
-					<li
-						className={ styles.moreInfoListItem }
-						key={ `${ entity.id }_${ link.type }_${ index }` }
-					>
-						<a href={ createLinkHref( link ) }>
-							{ link.displayText || getDefaultLinkText( link ) }
-						</a>
-					</li>
-				) ) }
+				{ links.map( ( link, index ) => {
+					const handleClick = () => {
+						monitoringClient.analytics.recordEvent( 'more_info_link_click', {
+							linkType: link.type,
+						} );
+					};
+					return (
+						<li
+							className={ styles.moreInfoListItem }
+							key={ `${ entity.id }_${ link.type }_${ index }` }
+						>
+							<a
+								target="_blank"
+								href={ createLinkHref( link ) }
+								onClick={ handleClick }
+								rel="noreferrer"
+							>
+								{ link.displayText || getDefaultLinkText( link ) }
+							</a>
+						</li>
+					);
+				} ) }
 			</ul>
 		);
 	}

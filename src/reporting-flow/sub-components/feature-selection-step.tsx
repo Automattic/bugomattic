@@ -7,6 +7,7 @@ import { StepContainer } from './step-container';
 import styles from '../reporting-flow.module.css';
 import { FeatureSelectorForm } from '../../feature-selector-form/feature-selector-form';
 import { updateHistoryWithState } from '../../url-history/actions';
+import { useMonitoring } from '../../monitoring/monitoring-provider';
 
 interface Props {
 	stepNumber: number;
@@ -15,13 +16,15 @@ interface Props {
 
 export function FeatureSelectionStep( { stepNumber, goToNextStep }: Props ) {
 	const dispatch = useAppDispatch();
+	const monitoringClient = useMonitoring();
 	const activeStep = useAppSelector( selectActiveStep );
 	const issueFeatureId = useAppSelector( selectIssueFeatureId );
 
 	const onEdit = useCallback( () => {
 		dispatch( setActiveStep( 'featureSelection' ) );
 		dispatch( updateHistoryWithState() );
-	}, [ dispatch ] );
+		monitoringClient.analytics.recordEvent( 'feature_step_edit' );
+	}, [ dispatch, monitoringClient.analytics ] );
 
 	const isActive = activeStep === 'featureSelection';
 	const isComplete = issueFeatureId !== null && ! isActive;

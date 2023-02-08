@@ -7,6 +7,7 @@ import { selectActiveStep, setActiveStep } from './../active-step-slice';
 import { StepContainer } from './step-container';
 import styles from '../reporting-flow.module.css';
 import { updateHistoryWithState } from '../../url-history/actions';
+import { useMonitoring } from '../../monitoring/monitoring-provider';
 
 interface Props {
 	stepNumber: number;
@@ -15,6 +16,7 @@ interface Props {
 
 export function TitleAndTypeStep( { stepNumber, goToNextStep }: Props ) {
 	const dispatch = useAppDispatch();
+	const monitoringClient = useMonitoring();
 	const activeStep = useAppSelector( selectActiveStep );
 	const issueTitle = useAppSelector( selectIssueTitle );
 	const issueType = useAppSelector( selectIssueType );
@@ -22,7 +24,8 @@ export function TitleAndTypeStep( { stepNumber, goToNextStep }: Props ) {
 	const onEdit = useCallback( () => {
 		dispatch( setActiveStep( 'titleAndType' ) );
 		dispatch( updateHistoryWithState() );
-	}, [ dispatch ] );
+		monitoringClient.analytics.recordEvent( 'type_step_edit' );
+	}, [ dispatch, monitoringClient.analytics ] );
 
 	const isActive = activeStep === 'titleAndType';
 	const isComplete = issueType !== 'unset' && ! isActive;

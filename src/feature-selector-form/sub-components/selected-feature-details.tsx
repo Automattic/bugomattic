@@ -4,6 +4,7 @@ import { selectNormalizedReportingConfig } from '../../reporting-config/reportin
 import { ReactComponent as ChevronRightIcon } from '../../common/svgs/chevron-right.svg';
 import styles from '../feature-selector-form.module.css';
 import { setSelectedFeatureId } from '../feature-selector-form-slice';
+import { useMonitoring } from '../../monitoring/monitoring-provider';
 
 interface Props {
 	featureId: string;
@@ -11,6 +12,7 @@ interface Props {
 
 export function SelectedFeatureDetails( { featureId }: Props ) {
 	const dispatch = useAppDispatch();
+	const monitoringClient = useMonitoring();
 	const { features, featureGroups, products } = useAppSelector( selectNormalizedReportingConfig );
 	const { name: featureName, description, parentId, parentType } = features[ featureId ];
 
@@ -31,6 +33,7 @@ export function SelectedFeatureDetails( { featureId }: Props ) {
 
 	const handleClearClick = () => {
 		dispatch( setSelectedFeatureId( null ) );
+		monitoringClient.analytics.recordEvent( 'feature_clear' );
 	};
 
 	return (
