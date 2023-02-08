@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../app/store';
+import { NormalizedReportingConfig } from '../reporting-config/types';
 import { updateStateFromHistory } from '../url-history/actions';
 
 // This is just for additional clarity in the function signatures below!
@@ -14,14 +15,26 @@ export const completedTasksSlice = createSlice( {
 		addCompletedTask( state, action: PayloadAction< TaskId > ) {
 			const completedTaskId = action.payload;
 			if ( state.includes( completedTaskId ) ) {
-				return state;
+				return [ ...state ];
 			}
+
+			const actionWithReportingConfig = action as PayloadAction<
+				TaskId,
+				string,
+				NormalizedReportingConfig
+			>;
+			const { tasks } = actionWithReportingConfig.meta;
+
+			if ( ! tasks[ completedTaskId ] ) {
+				return [ ...state ];
+			}
+
 			return [ ...state, completedTaskId ];
 		},
 		removeCompletedTask( state, action: PayloadAction< TaskId > ) {
 			const taskIdToRemove = action.payload;
 			if ( ! state.includes( taskIdToRemove ) ) {
-				return state;
+				return [ ...state ];
 			}
 
 			return state.filter( ( taskId ) => taskId !== taskIdToRemove );
@@ -34,8 +47,15 @@ export const completedTasksSlice = createSlice( {
 				return [ ...initialState ];
 			}
 
+			const actionWithReportingConfig = action as PayloadAction<
+				TaskId,
+				string,
+				NormalizedReportingConfig
+			>;
+			const { tasks } = actionWithReportingConfig.meta;
+
 			const filteredCompletedTasks = completedTasks.filter(
-				( taskId ) => typeof taskId === 'string'
+				( taskId ) => typeof taskId === 'string' && !! tasks[ taskId ]
 			);
 			return [ ...filteredCompletedTasks ];
 		} );

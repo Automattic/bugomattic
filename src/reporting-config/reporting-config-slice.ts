@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { AnyAction, createAsyncThunk, createSlice, Middleware } from '@reduxjs/toolkit';
 import { RootState } from '../app/store';
 import { ApiClient, ReportingConfigApiResponse } from '../api/types';
 import { IndexedReportingConfig, NormalizedReportingConfig, ReportingConfigState } from './types';
@@ -100,3 +100,15 @@ export function selectReportingConfigLoadStatus( state: RootState ) {
 export function selectReportingConfigError( state: RootState ) {
 	return state.reportingConfig.error;
 }
+
+export const surfaceReportingConfigMiddleware: Middleware< {}, RootState > =
+	( store ) => ( next ) => ( action: AnyAction ) => {
+		const reportingConfig = selectNormalizedReportingConfig( store.getState() );
+
+		action = {
+			...action,
+			meta: reportingConfig,
+		};
+
+		return next( action );
+	};

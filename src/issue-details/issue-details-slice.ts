@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../app/store';
+import { NormalizedReportingConfig } from '../reporting-config/types';
 import { updateStateFromHistory } from '../url-history/actions';
 import { FeatureId, IssueDetails, IssueType } from './types';
 
@@ -23,9 +24,23 @@ export const issueDetailsSlice = createSlice( {
 			};
 		},
 		setIssueFeatureId( state, action: PayloadAction< FeatureId > ) {
+			const actionWithReportingConfig = action as PayloadAction<
+				FeatureId,
+				string,
+				NormalizedReportingConfig
+			>;
+			const { features } = actionWithReportingConfig.meta;
+
+			let newFeatureId: FeatureId;
+			if ( action.payload === null || features[ action.payload ] ) {
+				newFeatureId = action.payload;
+			} else {
+				newFeatureId = state.featureId;
+			}
+
 			return {
 				...state,
-				featureId: action.payload,
+				featureId: newFeatureId,
 			};
 		},
 		setIssueTitle( state, action: PayloadAction< string > ) {
@@ -43,11 +58,27 @@ export const issueDetailsSlice = createSlice( {
 			}
 
 			// Validate the payload from history, and fall back to the initial state if invalid.
+
 			const issueType = validIssueTypes.has( issueDetails.issueType )
 				? issueDetails.issueType
 				: initialState.issueType;
+
 			const issueTitle = issueDetails.issueTitle ?? initialState.issueTitle;
-			const featureId = issueDetails.featureId || initialState.featureId;
+
+			const actionWithReportingConfig = action as PayloadAction<
+				FeatureId,
+				string,
+				NormalizedReportingConfig
+			>;
+			const { features } = actionWithReportingConfig.meta;
+			let featureId: FeatureId;
+			if ( issueDetails.featureId === null || features[ issueDetails.featureId ] ) {
+				featureId = issueDetails.featureId;
+			} else {
+				// This may seem silly because the initial state is currently null
+				// but it future proofs in we change the initial state.
+				featureId = initialState.featureId;
+			}
 
 			return { featureId, issueType, issueTitle };
 		} );

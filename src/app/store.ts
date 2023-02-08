@@ -6,7 +6,10 @@ import {
 	PreloadedState,
 } from '@reduxjs/toolkit';
 import { ApiClient } from '../api/types';
-import { reportingConfigReducer } from '../reporting-config/reporting-config-slice';
+import {
+	reportingConfigReducer,
+	surfaceReportingConfigMiddleware,
+} from '../reporting-config/reporting-config-slice';
 import { featureSelectorFormReducer } from '../feature-selector-form/feature-selector-form-slice';
 import { issueDetailsReducer } from '../issue-details/issue-details-slice';
 import { completedTasksReducer } from '../next-steps/completed-tasks-slice';
@@ -35,7 +38,7 @@ export function setupStore( apiClient: ApiClient, preloadedState?: PreloadedStat
 				thunk: {
 					extraArgument: { apiClient },
 				},
-			} ).concat( urlHistoryMiddleware ),
+			} ).concat( surfaceReportingConfigMiddleware, urlHistoryMiddleware ),
 		preloadedState,
 	} );
 

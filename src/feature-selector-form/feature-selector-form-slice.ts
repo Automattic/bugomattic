@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../app/store';
 import { FeatureId } from '../issue-details/types';
+import { NormalizedReportingConfig } from '../reporting-config/types';
 import { FeatureSelectorFormState } from './types';
 
 const initialState: FeatureSelectorFormState = {
@@ -19,9 +20,23 @@ export const featureSelectorFormSlice = createSlice( {
 			};
 		},
 		setSelectedFeatureId( state, action: PayloadAction< FeatureId > ) {
+			const actionWithReportingConfig = action as PayloadAction<
+				FeatureId,
+				string,
+				NormalizedReportingConfig
+			>;
+			const { features } = actionWithReportingConfig.meta;
+
+			let newSelectedFeatureId: FeatureId;
+			if ( action.payload === null || features[ action.payload ] ) {
+				newSelectedFeatureId = action.payload;
+			} else {
+				newSelectedFeatureId = state.selectedFeatureId;
+			}
+
 			return {
 				...state,
-				selectedFeatureId: action.payload,
+				selectedFeatureId: newSelectedFeatureId,
 			};
 		},
 	},
