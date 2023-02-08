@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../app/store';
+import { updateStateFromHistory } from '../url-history/actions';
 
 // This is just for additional clarity in the function signatures below!
 type TaskId = string;
@@ -25,6 +26,19 @@ export const completedTasksSlice = createSlice( {
 
 			return state.filter( ( taskId ) => taskId !== taskIdToRemove );
 		},
+	},
+	extraReducers: ( builder ) => {
+		builder.addCase( updateStateFromHistory, ( state, action ) => {
+			const completedTasks = action.payload.completedTasks;
+			if ( ! completedTasks ) {
+				return [ ...initialState ];
+			}
+
+			const filteredCompletedTasks = completedTasks.filter(
+				( taskId ) => typeof taskId === 'string'
+			);
+			return [ ...filteredCompletedTasks ];
+		} );
 	},
 } );
 

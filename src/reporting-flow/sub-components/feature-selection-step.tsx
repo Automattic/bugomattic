@@ -6,6 +6,7 @@ import { selectActiveStep, setActiveStep } from '../active-step-slice';
 import { StepContainer } from './step-container';
 import styles from '../reporting-flow.module.css';
 import { FeatureSelectorForm } from '../../feature-selector-form/feature-selector-form';
+import { updateHistoryWithState } from '../../url-history/actions';
 
 interface Props {
 	stepNumber: number;
@@ -17,7 +18,10 @@ export function FeatureSelectionStep( { stepNumber, goToNextStep }: Props ) {
 	const activeStep = useAppSelector( selectActiveStep );
 	const issueFeatureId = useAppSelector( selectIssueFeatureId );
 
-	const onEdit = useCallback( () => dispatch( setActiveStep( 'featureSelection' ) ), [ dispatch ] );
+	const onEdit = useCallback( () => {
+		dispatch( setActiveStep( 'featureSelection' ) );
+		dispatch( updateHistoryWithState() );
+	}, [ dispatch ] );
 
 	const isActive = activeStep === 'featureSelection';
 	const isComplete = issueFeatureId !== null && ! isActive;

@@ -20,6 +20,7 @@ import {
 	createSlackHref,
 } from '../../common/lib';
 import { useMonitoring } from '../../monitoring/monitoring-provider';
+import { updateHistoryWithState } from '../../url-history/actions';
 
 interface Props {
 	taskId: string;
@@ -40,6 +41,7 @@ export function Task( { taskId }: Props ) {
 		} else {
 			dispatch( addCompletedTask( taskId ) );
 		}
+		dispatch( updateHistoryWithState() );
 	};
 
 	const { title, details, link } = tasks[ taskId ];

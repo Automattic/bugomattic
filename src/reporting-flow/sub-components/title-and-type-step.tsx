@@ -6,6 +6,7 @@ import { TitleTypeForm } from '../../title-type-form/title-type-form';
 import { selectActiveStep, setActiveStep } from './../active-step-slice';
 import { StepContainer } from './step-container';
 import styles from '../reporting-flow.module.css';
+import { updateHistoryWithState } from '../../url-history/actions';
 
 interface Props {
 	stepNumber: number;
@@ -18,7 +19,10 @@ export function TitleAndTypeStep( { stepNumber, goToNextStep }: Props ) {
 	const issueTitle = useAppSelector( selectIssueTitle );
 	const issueType = useAppSelector( selectIssueType );
 
-	const onEdit = useCallback( () => dispatch( setActiveStep( 'titleAndType' ) ), [ dispatch ] );
+	const onEdit = useCallback( () => {
+		dispatch( setActiveStep( 'titleAndType' ) );
+		dispatch( updateHistoryWithState() );
+	}, [ dispatch ] );
 
 	const isActive = activeStep === 'titleAndType';
 	const isComplete = issueType !== 'unset' && ! isActive;

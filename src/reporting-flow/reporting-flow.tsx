@@ -7,6 +7,7 @@ import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { selectIssueType } from '../issue-details/issue-details-slice';
 import { ActiveStep } from './types';
 import { setActiveStep } from './active-step-slice';
+import { updateHistoryWithState } from '../url-history/actions';
 
 export function ReportingFlow() {
 	const dispatch = useAppDispatch();
@@ -16,10 +17,12 @@ export function ReportingFlow() {
 		const titleTypeStepIsComplete = issueType !== 'unset';
 		const nextStep: ActiveStep = titleTypeStepIsComplete ? 'nextSteps' : 'titleAndType';
 		dispatch( setActiveStep( nextStep ) );
+		dispatch( updateHistoryWithState() );
 	}, [ dispatch, issueType ] );
 
 	const handleTitleAndTypeNextStep = useCallback( () => {
 		dispatch( setActiveStep( 'nextSteps' ) );
+		dispatch( updateHistoryWithState() );
 	}, [ dispatch ] );
 
 	return (

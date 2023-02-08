@@ -5,9 +5,11 @@ import { ReactComponent as HeaderLogo } from './header-logo.svg';
 export function AppHeader() {
 	return (
 		<header className={ styles.wrapper }>
-			<h1 className={ styles.heading }>
-				<HeaderLogo role="img" />
-			</h1>
+			<a href={ globalThis.location.pathname }>
+				<h1 className={ styles.heading }>
+					<HeaderLogo role="img" />
+				</h1>
+			</a>
 		</header>
 	);
 }

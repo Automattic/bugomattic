@@ -11,6 +11,7 @@ import { featureSelectorFormReducer } from '../feature-selector-form/feature-sel
 import { issueDetailsReducer } from '../issue-details/issue-details-slice';
 import { completedTasksReducer } from '../next-steps/completed-tasks-slice';
 import { activeStepReducer } from '../reporting-flow/active-step-slice';
+import { urlHistoryMiddleware, registerHistoryListener } from '../url-history/redux-handlers';
 
 function createRootReducer() {
 	return combineReducers( {
@@ -23,7 +24,7 @@ function createRootReducer() {
 }
 
 export function setupStore( apiClient: ApiClient, preloadedState?: PreloadedState< RootState > ) {
-	return configureStore( {
+	const store = configureStore( {
 		reducer: createRootReducer(),
 		// This is where the app dependency injection of the ApiClient happens.
 		// We are providing an instance of the ApiClient to all thunks created
@@ -34,9 +35,13 @@ export function setupStore( apiClient: ApiClient, preloadedState?: PreloadedStat
 				thunk: {
 					extraArgument: { apiClient },
 				},
-			} ),
+			} ).concat( urlHistoryMiddleware ),
 		preloadedState,
 	} );
+
+	registerHistoryListener( store.dispatch );
+
+	return store;
 }
 
 // These provide richer TypeScript typings for these core parts of the Redux store.

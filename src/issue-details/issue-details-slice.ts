@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../app/store';
+import { updateStateFromHistory } from '../url-history/actions';
 import { FeatureId, IssueDetails, IssueType } from './types';
 
 const initialState: IssueDetails = {
@@ -30,6 +31,29 @@ export const issueDetailsSlice = createSlice( {
 				issueTitle: action.payload,
 			};
 		},
+	},
+	extraReducers: ( builder ) => {
+		builder.addCase( updateStateFromHistory, ( state, action ) => {
+			const issueDetails = action.payload.issueDetails;
+			if ( ! issueDetails || typeof issueDetails !== 'object' ) {
+				return { ...initialState };
+			}
+
+			// Validate the payload from history, and fall back to the initial state if invalid.
+			const validIssueTypes = new Set< IssueType >( [
+				'unset',
+				'bug',
+				'featureRequest',
+				'urgent',
+			] );
+			const issueType = validIssueTypes.has( issueDetails.issueType )
+				? issueDetails.issueType
+				: initialState.issueType;
+			const issueTitle = issueDetails.issueTitle ?? initialState.issueTitle;
+			const featureId = issueDetails.featureId || initialState.featureId;
+
+			return { featureId, issueType, issueTitle };
+		} );
 	},
 } );
 
