@@ -30,6 +30,8 @@
 	width: 1rem;
 	margin-left: 0.5rem;
 	cursor: help;
+	position: relative;
+	top: 0.0625rem;
 }
 
 .continueWrapper {
@@ -49,6 +51,15 @@
 	align-items: flex-end;
 	flex-direction: row;
 	margin-bottom: 0.5rem;
+}
+
+.titleWithIcon {
+	display: flex;
+	align-items: center;
+}
+
+.titleLabel .formErrorWrapper {
+	transform: translateY( -0.03125rem );
 }
 
 .typeLabel {

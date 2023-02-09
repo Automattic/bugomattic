@@ -170,12 +170,14 @@ export function TypeTitleForm( { onContinue }: Props ) {
 			<div className={ styles.titleWrapper }>
 				<label>
 					<span className={ styles.titleLabel }>
-						<span>{ 'Title (Optional)' }</span>
-						<InfoIcon
-							aria-hidden={ true }
-							className={ styles.infoIcon }
-							title={ titleDescription }
-						/>
+						<span className={ styles.titleWithIcon }>
+							<span>{ 'Title (Optional)' }</span>
+							<InfoIcon
+								aria-hidden={ true }
+								className={ styles.infoIcon }
+								title={ titleDescription }
+							/>
+						</span>
 						{ titleErrorMessage }
 					</span>
 					<LimitedTextField
