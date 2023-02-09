@@ -30,24 +30,28 @@ export const completedTasksSlice = createSlice( {
 		},
 	},
 	extraReducers: ( builder ) => {
-		builder.addCase( updateStateFromHistory, ( state, action ) => {
-			const completedTasks = action.payload.completedTasks;
-			if ( ! completedTasks ) {
+		builder
+			.addCase( updateStateFromHistory, ( state, action ) => {
+				const completedTasks = action.payload.completedTasks;
+				if ( ! completedTasks ) {
+					return [ ...initialState ];
+				}
+
+				const actionWithReportingConfig = action as PayloadAction<
+					TaskId,
+					string,
+					NormalizedReportingConfig
+				>;
+				const { tasks } = actionWithReportingConfig.meta;
+
+				const filteredCompletedTasks = completedTasks.filter(
+					( taskId ) => typeof taskId === 'string' && !! tasks[ taskId ]
+				);
+				return [ ...filteredCompletedTasks ];
+			} )
+			.addCase( 'startOver', () => {
 				return [ ...initialState ];
-			}
-
-			const actionWithReportingConfig = action as PayloadAction<
-				TaskId,
-				string,
-				NormalizedReportingConfig
-			>;
-			const { tasks } = actionWithReportingConfig.meta;
-
-			const filteredCompletedTasks = completedTasks.filter(
-				( taskId ) => typeof taskId === 'string' && !! tasks[ taskId ]
-			);
-			return [ ...filteredCompletedTasks ];
-		} );
+			} );
 	},
 } );
 

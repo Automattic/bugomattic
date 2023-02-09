@@ -214,7 +214,7 @@ describe( '[Reporting Flow]', () => {
 		).toBeInTheDocument();
 	} );
 
-	test( 'The feature selection form is replaced with details about issue title and type', async () => {
+	test( 'The type and title form is replaced with details about issue title and type', async () => {
 		expect(
 			screen.queryByRole( 'form', { name: 'Set issue type and title' } )
 		).not.toBeInTheDocument();
@@ -418,5 +418,29 @@ describe( '[Reporting Flow]', () => {
 		expect(
 			screen.queryByRole( 'form', { name: 'Set issue type and title' } )
 		).not.toBeInTheDocument();
+	} );
+
+	test( 'Click the Start Over button', async () => {
+		await user.click( screen.getByRole( 'button', { name: 'Start Over' } ) );
+	} );
+
+	test( 'Everything resets to its initial state', async () => {
+		// First step is expanded
+		expect( screen.getByRole( 'form', { name: 'Select a feature' } ) ).toBeInTheDocument();
+		expect(
+			screen.queryByRole( 'form', { name: 'Set issue title and type' } )
+		).not.toBeInTheDocument();
+		expect(
+			screen.queryByRole( 'list', { name: 'Steps to report issue' } )
+		).not.toBeInTheDocument();
+
+		// No feature is selected
+		expect(
+			screen.queryByRole( 'button', { name: 'Clear currently selected feature' } )
+		).not.toBeInTheDocument();
+
+		// No saved type and title visible
+		expect( screen.queryByText( 'Feature Request' ) ).not.toBeInTheDocument();
+		expect( screen.queryByText( issueTitle ) ).not.toBeInTheDocument();
 	} );
 } );

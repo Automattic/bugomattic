@@ -25,6 +25,13 @@ export const featureSelectorFormSlice = createSlice( {
 			};
 		},
 	},
+	extraReducers: ( builder ) => {
+		builder.addCase( 'startOver', () => {
+			return {
+				...initialState,
+			};
+		} );
+	},
 } );
 
 export const featureSelectorFormReducer = featureSelectorFormSlice.reducer;

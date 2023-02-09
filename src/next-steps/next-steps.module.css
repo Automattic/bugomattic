@@ -82,6 +82,12 @@ a.taskTitle:hover {
 	margin: 0.5rem 0 0 0;
 }
 
+.startOverButtonWrapper {
+	display: flex;
+	justify-content: end;
+	margin-top: 1.5rem;
+}
+
 .moreInfoSection {
 	margin-top: 2rem;
 	border-top: 1px solid var( --color-border );
