@@ -60,14 +60,16 @@ interface CompletedStepProps {
 function CompletedStep( { title, type }: CompletedStepProps ) {
 	return (
 		<div>
+			<div className={ styles.completedContentWrapper }>
+				<h4 className={ styles.completedContentHeader }>Type</h4>
+				<p className={ styles.completedContentValue }>{ getDisplayTextForType( type ) }</p>
+			</div>
 			{ title && (
 				<div className={ styles.completedContentWrapper }>
 					<h4 className={ styles.completedContentHeader }>Title</h4>
 					<p className={ styles.completedContentValue }>{ title }</p>
 				</div>
 			) }
-			<h4 className={ styles.completedContentHeader }>Type</h4>
-			<p className={ styles.completedContentValue }>{ getDisplayTextForType( type ) }</p>
 		</div>
 	);
 }

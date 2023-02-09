@@ -98,21 +98,6 @@ export function TitleTypeForm( { onContinue }: Props ) {
 
 	return (
 		<form onSubmit={ handleSubmit } aria-label="Set issue title and type">
-			<div className={ styles.titleWrapper }>
-				<label>
-					<span className={ styles.titleLabel }>
-						<span>{ 'GitHub Issue Title (Optional)' }</span>
-						{ titleErrorMessage }
-					</span>
-					<LimitedTextField
-						onBlur={ handleTitleBlur }
-						value={ title }
-						onChange={ handleTitleChange }
-						characterLimit={ titleCharacterLimit }
-					/>
-				</label>
-			</div>
-
 			<fieldset className={ styles.typeFieldset }>
 				<legend className={ styles.typeLabel }>
 					<span>Type</span>
@@ -176,6 +161,22 @@ export function TitleTypeForm( { onContinue }: Props ) {
 					</span>
 				</div>
 			</fieldset>
+
+			<div className={ styles.titleWrapper }>
+				<label>
+					<span className={ styles.titleLabel }>
+						<span>{ 'GitHub Issue Title (Optional)' }</span>
+						{ titleErrorMessage }
+					</span>
+					<LimitedTextField
+						onBlur={ handleTitleBlur }
+						value={ title }
+						onChange={ handleTitleChange }
+						characterLimit={ titleCharacterLimit }
+					/>
+				</label>
+			</div>
+
 			<div className={ styles.continueWrapper }>
 				<button className="primaryButton">Continue</button>
 			</div>

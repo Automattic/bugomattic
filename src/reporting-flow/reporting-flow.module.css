@@ -89,6 +89,6 @@ button.editButton:active {
 	margin: 0;
 }
 
-.completedContentWrapper {
-	margin-bottom: 1.5rem;
+.completedContentWrapper:nth-child( n + 2 ) {
+	margin-top: 1.5rem;
 }
