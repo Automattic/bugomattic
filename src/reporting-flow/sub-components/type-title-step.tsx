@@ -2,8 +2,8 @@ import React, { ReactNode, useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { selectIssueTitle, selectIssueType } from '../../issue-details/issue-details-slice';
 import { IssueType } from '../../issue-details/types';
-import { TitleTypeForm } from '../../title-type-form/title-type-form';
-import { selectActiveStep, setActiveStep } from './../active-step-slice';
+import { TypeTitleForm } from '../../type-title-form/type-title-form';
+import { selectActiveStep, setActiveStep } from '../active-step-slice';
 import { StepContainer } from './step-container';
 import styles from '../reporting-flow.module.css';
 import { updateHistoryWithState } from '../../url-history/actions';
@@ -14,7 +14,7 @@ interface Props {
 	goToNextStep: () => void;
 }
 
-export function TitleAndTypeStep( { stepNumber, goToNextStep }: Props ) {
+export function TypeTitleStep( { stepNumber, goToNextStep }: Props ) {
 	const dispatch = useAppDispatch();
 	const monitoringClient = useMonitoring();
 	const activeStep = useAppSelector( selectActiveStep );
@@ -32,7 +32,7 @@ export function TitleAndTypeStep( { stepNumber, goToNextStep }: Props ) {
 
 	let stepContentDisplay: ReactNode;
 	if ( isActive ) {
-		stepContentDisplay = <TitleTypeForm onContinue={ goToNextStep } />;
+		stepContentDisplay = <TypeTitleForm onContinue={ goToNextStep } />;
 	} else if ( isComplete ) {
 		stepContentDisplay = <CompletedStep title={ issueTitle } type={ issueType } />;
 	} else {

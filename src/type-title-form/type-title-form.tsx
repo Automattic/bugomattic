@@ -14,14 +14,14 @@ import {
 } from '../issue-details/issue-details-slice';
 import { IssueType } from '../issue-details/types';
 import { ReactComponent as InfoIcon } from '../common/svgs/info.svg';
-import styles from './title-type-form.module.css';
 import { useMonitoring } from '../monitoring/monitoring-provider';
+import styles from './type-title-form.module.css';
 
 interface Props {
 	onContinue?: () => void;
 }
 
-export function TitleTypeForm( { onContinue }: Props ) {
+export function TypeTitleForm( { onContinue }: Props ) {
 	const dispatch = useAppDispatch();
 	const monitoringClient = useMonitoring();
 	const { issueTitle, issueType } = useAppSelector( selectIssueDetails );

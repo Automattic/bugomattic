@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { FeatureSelectionStep } from './sub-components/feature-selection-step';
 import { NextStepsStep } from './sub-components/next-steps-step';
-import { TitleAndTypeStep } from './sub-components/title-and-type-step';
+import { TypeTitleStep } from './sub-components/type-title-step';
 import styles from './reporting-flow.module.css';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { selectIssueType } from '../issue-details/issue-details-slice';
@@ -29,7 +29,7 @@ export function ReportingFlow() {
 		<section className={ styles.flowContainer }>
 			<h2 className="screenReaderOnly">Report a new issue</h2>
 			<FeatureSelectionStep stepNumber={ 1 } goToNextStep={ handleFeatureSelectionNextStep } />
-			<TitleAndTypeStep stepNumber={ 2 } goToNextStep={ handleTitleAndTypeNextStep } />
+			<TypeTitleStep stepNumber={ 2 } goToNextStep={ handleTitleAndTypeNextStep } />
 			<NextStepsStep stepNumber={ 3 } />
 		</section>
 	);
