@@ -8,15 +8,14 @@ import { createMockMonitoringClient } from '../../test-utils/mock-monitoring-cli
 import { MonitoringClient } from '../../monitoring/types';
 
 describe( '[app]', () => {
-	function setup(
-		component: ReactElement,
-		apiClient: ApiClient,
-		monitoringClient?: MonitoringClient
-	) {
+	function setup( component: ReactElement, apiClient: ApiClient ) {
+		const monitoringClient = createMockMonitoringClient();
 		renderWithProviders( component, {
 			apiClient,
 			monitoringClient,
 		} );
+
+		return { monitoringClient };
 	}
 
 	test( 'App shows loading indicator until reporting config is loaded, then the reporting flow', async () => {
@@ -56,12 +55,11 @@ describe( '[app]', () => {
 
 	test( 'If the web request to load the reporting config fails, shows app error component and logs error', async () => {
 		const apiClient = createMockApiClient();
-		const monitoringClient = createMockMonitoringClient();
 		const apiErrorMessage = 'Request failed with status code 500';
 		const apiError = new Error( apiErrorMessage );
 		apiClient.loadReportingConfig.mockRejectedValue( apiError );
 
-		setup( <App />, apiClient, monitoringClient );
+		const { monitoringClient } = setup( <App />, apiClient );
 
 		await waitForElementToBeRemoved( () =>
 			screen.queryByRole( 'alert', { name: 'Loading issue reporting configuration' } )
@@ -79,11 +77,10 @@ describe( '[app]', () => {
 
 	test( 'If parsing the reporting config fails, shows app error component and logs error', async () => {
 		const apiClient = createMockApiClient();
-		const monitoringClient = createMockMonitoringClient();
 		const reportingConfigToCauseError = { foo: 'bar' };
 		apiClient.loadReportingConfig.mockResolvedValue( reportingConfigToCauseError );
 
-		setup( <App />, apiClient, monitoringClient );
+		const { monitoringClient } = setup( <App />, apiClient );
 
 		await waitForElementToBeRemoved( () =>
 			screen.queryByRole( 'alert', { name: 'Loading issue reporting configuration' } )

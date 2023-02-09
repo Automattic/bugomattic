@@ -1,6 +1,5 @@
 import React from 'react';
 import { ReactElement } from 'react';
-import { MonitoringClient } from '../../monitoring/types';
 import { createMockApiClient } from '../../test-utils/mock-api-client';
 import { renderWithProviders } from '../../test-utils/render-with-providers';
 import { AppErrorBoundary } from '../app-error-boundary';
@@ -8,11 +7,14 @@ import { screen } from '@testing-library/react';
 import { createMockMonitoringClient } from '../../test-utils/mock-monitoring-client';
 
 describe( '[AppErrorBoundary]', () => {
-	function setup( component: ReactElement, monitoringClient?: MonitoringClient ) {
+	function setup( component: ReactElement ) {
+		const monitoringClient = createMockMonitoringClient();
 		renderWithProviders( component, {
 			apiClient: createMockApiClient(),
 			monitoringClient,
 		} );
+
+		return { monitoringClient };
 	}
 
 	// JSDOM and React always dump errors to the console, even if handled!
@@ -51,16 +53,13 @@ describe( '[AppErrorBoundary]', () => {
 
 		const ComponentThatWontDisplay = () => <button>Foo</button>;
 
-		const monitoringClient = createMockMonitoringClient();
-
 		setup(
 			<AppErrorBoundary>
 				<>
 					<ErroredComponent />
 					<ComponentThatWontDisplay />
 				</>
-			</AppErrorBoundary>,
-			monitoringClient
+			</AppErrorBoundary>
 		);
 
 		expect( screen.queryByRole( 'button', { name: 'Foo' } ) ).not.toBeInTheDocument();
@@ -75,13 +74,10 @@ describe( '[AppErrorBoundary]', () => {
 			throw error;
 		};
 
-		const monitoringClient = createMockMonitoringClient();
-
-		setup(
+		const { monitoringClient } = setup(
 			<AppErrorBoundary>
 				<ErroredComponent />
-			</AppErrorBoundary>,
-			monitoringClient
+			</AppErrorBoundary>
 		);
 
 		expect( monitoringClient.logger.error ).toHaveBeenCalledWith( 'Unexpected app error occurred', {
