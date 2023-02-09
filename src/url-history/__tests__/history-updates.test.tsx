@@ -98,7 +98,7 @@ describe( 'history updates', () => {
 			).toBeInTheDocument();
 
 			expect(
-				screen.getByRole( 'heading', { name: 'Completed step: Title and Type' } )
+				screen.getByRole( 'heading', { name: 'Completed step: Type and Title' } )
 			).toBeInTheDocument();
 			expect( screen.getByText( issueTitle ) ).toBeInTheDocument();
 			expect( screen.getByText( 'Feature Request' ) ).toBeInTheDocument();
@@ -111,7 +111,7 @@ describe( 'history updates', () => {
 				screen.getByRole( 'heading', { name: 'Completed step: Product and Feature' } )
 			).toBeInTheDocument();
 			expect(
-				screen.getByRole( 'heading', { name: 'Completed step: Title and Type' } )
+				screen.getByRole( 'heading', { name: 'Completed step: Type and Title' } )
 			).toBeInTheDocument();
 
 			expect(
@@ -124,7 +124,7 @@ describe( 'history updates', () => {
 				screen.getByRole( 'heading', { name: 'Completed step: Product and Feature' } )
 			).toBeInTheDocument();
 			expect(
-				screen.getByRole( 'heading', { name: 'Completed step: Title and Type' } )
+				screen.getByRole( 'heading', { name: 'Completed step: Type and Title' } )
 			).toBeInTheDocument();
 
 			expect(
@@ -139,7 +139,7 @@ describe( 'history updates', () => {
 			).toBeInTheDocument(); // The current feature should still be selected
 
 			expect(
-				screen.getByRole( 'heading', { name: 'Completed step: Title and Type' } )
+				screen.getByRole( 'heading', { name: 'Completed step: Type and Title' } )
 			).toBeInTheDocument();
 
 			expect( screen.getByRole( 'list', { name: 'Steps to report issue' } ) ).toBeInTheDocument();
@@ -259,7 +259,7 @@ describe( 'history updates', () => {
 			await user.click(
 				screen.getByRole( 'button', {
 					name: 'Edit',
-					description: /Title and Type/,
+					description: /Type and Title/,
 				} )
 			);
 

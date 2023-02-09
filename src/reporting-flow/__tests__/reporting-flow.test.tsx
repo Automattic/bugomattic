@@ -132,7 +132,7 @@ describe( '[Reporting Flow]', () => {
 			screen.getByRole( 'heading', { name: 'Step number 1: Product and Feature' } )
 		).toBeInTheDocument();
 		expect(
-			screen.getByRole( 'heading', { name: 'Step number 2: Title and Type' } )
+			screen.getByRole( 'heading', { name: 'Step number 2: Type and Title' } )
 		).toBeInTheDocument();
 		expect(
 			screen.getByRole( 'heading', { name: 'Step number 3: Next Steps' } )
@@ -201,7 +201,7 @@ describe( '[Reporting Flow]', () => {
 
 	test( 'The title and type step is marked as complete', async () => {
 		expect(
-			screen.getByRole( 'heading', { name: 'Completed step: Title and Type' } )
+			screen.getByRole( 'heading', { name: 'Completed step: Type and Title' } )
 		).toBeInTheDocument();
 	} );
 
@@ -209,7 +209,7 @@ describe( '[Reporting Flow]', () => {
 		expect(
 			screen.getByRole( 'button', {
 				name: 'Edit',
-				description: /Title and Type/,
+				description: /Type and Title/,
 			} )
 		).toBeInTheDocument();
 	} );
@@ -252,7 +252,7 @@ describe( '[Reporting Flow]', () => {
 		await user.click(
 			screen.getByRole( 'button', {
 				name: 'Edit',
-				description: /Title and Type/,
+				description: /Type and Title/,
 			} )
 		);
 	} );
@@ -260,7 +260,7 @@ describe( '[Reporting Flow]', () => {
 	test( 'The title and type step is not marked as complete because it is active', async () => {
 		// It reverts to its numerical heading;
 		expect(
-			screen.getByRole( 'heading', { name: 'Step number 2: Title and Type' } )
+			screen.getByRole( 'heading', { name: 'Step number 2: Type and Title' } )
 		).toBeInTheDocument();
 	} );
 
@@ -269,7 +269,7 @@ describe( '[Reporting Flow]', () => {
 		expect(
 			screen.queryByRole( 'button', {
 				name: 'Edit',
-				description: /Title and Type/,
+				description: /Type and Title/,
 			} )
 		).not.toBeInTheDocument();
 	} );
@@ -299,14 +299,14 @@ describe( '[Reporting Flow]', () => {
 	test( 'The title and type form returns to its completed state', async () => {
 		// Heading
 		expect(
-			screen.getByRole( 'heading', { name: 'Completed step: Title and Type' } )
+			screen.getByRole( 'heading', { name: 'Completed step: Type and Title' } )
 		).toBeInTheDocument();
 
 		// Edit button
 		expect(
 			screen.getByRole( 'button', {
 				name: 'Edit',
-				description: /Title and Type/,
+				description: /Type and Title/,
 			} )
 		).toBeInTheDocument();
 

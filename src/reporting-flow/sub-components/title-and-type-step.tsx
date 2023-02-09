@@ -41,7 +41,7 @@ export function TitleAndTypeStep( { stepNumber, goToNextStep }: Props ) {
 
 	return (
 		<StepContainer
-			title="Title and Type"
+			title="Type and Title"
 			stepNumber={ stepNumber }
 			isComplete={ isComplete }
 			showEditButton={ isComplete }
