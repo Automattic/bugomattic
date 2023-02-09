@@ -96,4 +96,15 @@ describe( '[app]', () => {
 			}
 		);
 	} );
+
+	test( 'On loading, records the "page_view" event', async () => {
+		const apiClient = createMockApiClient();
+
+		const { monitoringClient } = setup( <App />, apiClient );
+
+		await waitForElementToBeRemoved( () =>
+			screen.queryByRole( 'alert', { name: 'Loading issue reporting configuration' } )
+		);
+		expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'page_view' );
+	} );
 } );
