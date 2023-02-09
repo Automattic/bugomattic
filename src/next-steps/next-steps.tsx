@@ -55,7 +55,6 @@ export function NextSteps() {
 	useEffect( () => {
 		if ( allTasksAreComplete ) {
 			setShowConfetti( true );
-			monitoringClient.analytics.recordEvent( 'task_complete_all' );
 		} else {
 			setShowConfetti( false );
 		}
