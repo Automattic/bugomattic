@@ -78,6 +78,11 @@ export function TypeTitleForm( { onContinue }: Props ) {
 		'For when you need to escalate something urgently to a product team. ' +
 		'This should usually be reserved for widespread, critical issues such as outages or broken core workflows.';
 
+	const titleTooltipId = 'title-info-icon';
+	const titleDescription =
+		'If interested, you can add a brief title for your issue. ' +
+		'We will seed this title in issue forms (like GitHub) where possible.';
+
 	let titleErrorMessage: ReactNode = null;
 	if ( showTitleError ) {
 		titleErrorMessage = (
@@ -156,7 +161,7 @@ export function TypeTitleForm( { onContinue }: Props ) {
 							title={ urgentDescription }
 						/>
 					</label>
-					<span className="screenReaderOnly" id={ urgentTooltipId } role="tooltip">
+					<span hidden={ true } id={ urgentTooltipId } role="tooltip">
 						{ urgentDescription }
 					</span>
 				</div>
@@ -165,7 +170,12 @@ export function TypeTitleForm( { onContinue }: Props ) {
 			<div className={ styles.titleWrapper }>
 				<label>
 					<span className={ styles.titleLabel }>
-						<span>{ 'GitHub Issue Title (Optional)' }</span>
+						<span>{ 'Title (Optional)' }</span>
+						<InfoIcon
+							aria-hidden={ true }
+							className={ styles.infoIcon }
+							title={ titleDescription }
+						/>
 						{ titleErrorMessage }
 					</span>
 					<LimitedTextField
@@ -173,8 +183,12 @@ export function TypeTitleForm( { onContinue }: Props ) {
 						value={ title }
 						onChange={ handleTitleChange }
 						characterLimit={ titleCharacterLimit }
+						ariaDescribedBy={ titleTooltipId }
 					/>
 				</label>
+				<span hidden={ true } id={ titleTooltipId } role="tooltip">
+					{ titleDescription }
+				</span>
 			</div>
 
 			<div className={ styles.continueWrapper }>

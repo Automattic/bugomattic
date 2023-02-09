@@ -153,7 +153,7 @@ describe( 'history updates', () => {
 			expect(
 				screen.getByRole( 'form', { name: 'Set issue title and type' } )
 			).toBeInTheDocument();
-			expect( screen.getByRole( 'textbox', { name: /GitHub Issue Title/ } ) ).toHaveValue(
+			expect( screen.getByRole( 'textbox', { name: /Title \(Optional\)/ } ) ).toHaveValue(
 				issueTitle
 			);
 			expect(
@@ -203,7 +203,7 @@ describe( 'history updates', () => {
 		} );
 
 		test( 'onTitleAndTypeComplete', async () => {
-			await user.click( screen.getByRole( 'textbox', { name: /GitHub Issue Title/ } ) );
+			await user.click( screen.getByRole( 'textbox', { name: /Title \(Optional\)/ } ) );
 			await user.keyboard( issueTitle );
 			await user.click( screen.getByRole( 'radio', { name: 'Feature Request' } ) );
 			await user.click( screen.getByRole( 'button', { name: 'Continue' } ) );
