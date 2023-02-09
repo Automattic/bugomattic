@@ -5,7 +5,6 @@ import { ApiClient, ReportingConfigApiResponse } from '../../api/types';
 import { createMockApiClient } from '../../test-utils/mock-api-client';
 import { renderWithProviders } from '../../test-utils/render-with-providers';
 import { createMockMonitoringClient } from '../../test-utils/mock-monitoring-client';
-import { MonitoringClient } from '../../monitoring/types';
 
 describe( '[app]', () => {
 	function setup( component: ReactElement, apiClient: ApiClient ) {
