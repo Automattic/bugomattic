@@ -22,12 +22,12 @@ export function TitleAndTypeStep( { stepNumber, goToNextStep }: Props ) {
 	const issueType = useAppSelector( selectIssueType );
 
 	const onEdit = useCallback( () => {
-		dispatch( setActiveStep( 'titleAndType' ) );
+		dispatch( setActiveStep( 'typeTitle' ) );
 		dispatch( updateHistoryWithState() );
 		monitoringClient.analytics.recordEvent( 'type_step_edit' );
 	}, [ dispatch, monitoringClient.analytics ] );
 
-	const isActive = activeStep === 'titleAndType';
+	const isActive = activeStep === 'typeTitle';
 	const isComplete = issueType !== 'unset' && ! isActive;
 
 	let stepContentDisplay: ReactNode;

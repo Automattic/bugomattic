@@ -1,1 +1,1 @@
-export type ActiveStep = 'titleAndType' | 'featureSelection' | 'nextSteps';
+export type ActiveStep = 'typeTitle' | 'featureSelection' | 'nextSteps';

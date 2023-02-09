@@ -5,11 +5,7 @@ import { ActiveStep } from './types';
 
 const initialState: ActiveStep = 'featureSelection' as ActiveStep;
 
-const validActiveSteps = new Set< ActiveStep >( [
-	'featureSelection',
-	'titleAndType',
-	'nextSteps',
-] );
+const validActiveSteps = new Set< ActiveStep >( [ 'featureSelection', 'typeTitle', 'nextSteps' ] );
 
 export const featureSelectorFormSlice = createSlice( {
 	name: 'activeStep',

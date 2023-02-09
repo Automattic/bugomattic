@@ -15,7 +15,7 @@ export function ReportingFlow() {
 
 	const handleFeatureSelectionNextStep = useCallback( () => {
 		const titleTypeStepIsComplete = issueType !== 'unset';
-		const nextStep: ActiveStep = titleTypeStepIsComplete ? 'nextSteps' : 'titleAndType';
+		const nextStep: ActiveStep = titleTypeStepIsComplete ? 'nextSteps' : 'typeTitle';
 		dispatch( setActiveStep( nextStep ) );
 		dispatch( updateHistoryWithState() );
 	}, [ dispatch, issueType ] );
