@@ -24,10 +24,12 @@ export function Feature( { id }: Props ) {
 	const { features, products } = useAppSelector( selectNormalizedReportingConfig );
 	const productId = useAppSelector( selectProductIdForFeature( id ) );
 	const productName = productId ? products[ productId ].name : 'Unknown';
+	let { name: featureName } = features[ id ];
+	const { keywords, description } = features[ id ];
 
 	const handleFeatureSelect = () => {
 		dispatch( setSelectedFeatureId( id ) );
-		monitoringClient.analytics.recordEvent( 'feature_select', { productName } );
+		monitoringClient.analytics.recordEvent( 'feature_select', { productName, featureName } );
 	};
 
 	const selectedFeatureId = useAppSelector( selectSelectedFeatureId );
@@ -37,16 +39,13 @@ export function Feature( { id }: Props ) {
 		classNames.push( styles.selectedFeature );
 	}
 
-	let { name } = features[ id ];
-	const { keywords, description } = features[ id ];
-
 	const searchTerm = useAppSelector( selectFeatureSearchTerm );
-	if ( searchTerm !== '' && ! includesIgnoringCase( name, searchTerm ) ) {
+	if ( searchTerm !== '' && ! includesIgnoringCase( featureName, searchTerm ) ) {
 		const matchingKeyword = keywords?.find( ( keyword ) =>
 			includesIgnoringCase( keyword, searchTerm )
 		);
 		if ( matchingKeyword ) {
-			name = `${ name } (${ matchingKeyword })`;
+			featureName = `${ featureName } (${ matchingKeyword })`;
 		}
 	}
 
@@ -64,7 +63,7 @@ export function Feature( { id }: Props ) {
 				substring={ searchTerm }
 				highlightClassName={ styles.searchSubstringMatch }
 			>
-				{ name }
+				{ featureName }
 			</SubstringHighlighter>
 		</button>
 	);

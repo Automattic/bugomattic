@@ -194,7 +194,7 @@ describe( '[FeatureSelector -- Feature Selection]', () => {
 		);
 	} );
 
-	test( 'Selecting a feature records the "feature_select" event with product name', async () => {
+	test( 'Selecting a feature records the "feature_select" event with feature and product name', async () => {
 		const { user, monitoringClient } = setup( <FeatureSelectorForm /> );
 
 		await expandAll( user );
@@ -203,7 +203,8 @@ describe( '[FeatureSelector -- Feature Selection]', () => {
 		);
 
 		expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'feature_select', {
-			productName: 'Test Product',
+			productName: product.name,
+			featureName: featureUnderGroup.name,
 		} );
 	} );
 
@@ -270,7 +271,7 @@ describe( '[FeatureSelector -- Feature Selection]', () => {
 		expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'feature_clear' );
 	} );
 
-	test( 'Clicking continue with a selected feature records the "feature_save" event with product name', async () => {
+	test( 'Clicking continue with a selected feature records the "feature_save" event with feature and product name', async () => {
 		const { user, monitoringClient } = setup( <FeatureSelectorForm /> );
 
 		await expandAll( user );
@@ -281,6 +282,7 @@ describe( '[FeatureSelector -- Feature Selection]', () => {
 
 		expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'feature_save', {
 			productName: product.name,
+			featureName: featureUnderGroup.name,
 		} );
 	} );
 } );
