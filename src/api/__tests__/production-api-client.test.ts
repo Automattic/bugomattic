@@ -1,4 +1,4 @@
-import { ProductionApiClient } from '../production-api-client';
+import { createProductionApiClient } from '../production-api-client';
 import { createServer, Request, Response } from 'miragejs';
 import { ReportingConfigApiResponse } from '../types';
 import { LogPayload } from '../../monitoring/types';
@@ -45,7 +45,7 @@ describe( '[ProductionApiClient]', () => {
 
 	describe( 'loadReportingConfig()', () => {
 		test( 'Calls the correct endpoint and returns the reporting config', async () => {
-			const apiClient = new ProductionApiClient();
+			const apiClient = createProductionApiClient();
 			const reportingConfig = await apiClient.loadReportingConfig();
 
 			// If this returns correctly, we called the correct endpoint.
@@ -53,7 +53,7 @@ describe( '[ProductionApiClient]', () => {
 		} );
 
 		test( 'The request includes the nonce in the right header', async () => {
-			const apiClient = new ProductionApiClient();
+			const apiClient = createProductionApiClient();
 			await apiClient.loadReportingConfig();
 
 			// The types are borked here, see: https://github.com/pretenderjs/pretender/pull/353
@@ -63,7 +63,7 @@ describe( '[ProductionApiClient]', () => {
 		} );
 
 		test( 'Throws an error if the request fails', async () => {
-			const apiClient = new ProductionApiClient();
+			const apiClient = createProductionApiClient();
 
 			const errorBody = {
 				error: 'Something went wrong',
@@ -89,12 +89,12 @@ describe( '[ProductionApiClient]', () => {
 		};
 
 		test( 'Calls the correct endpoint', async () => {
-			const apiClient = new ProductionApiClient();
+			const apiClient = createProductionApiClient();
 			await expect( apiClient.log( fakeLogPayload ) ).resolves.not.toThrowError();
 		} );
 
 		test( 'The request includes the nonce in the right header', async () => {
-			const apiClient = new ProductionApiClient();
+			const apiClient = createProductionApiClient();
 			await apiClient.log( fakeLogPayload );
 
 			// The types are borked here, see: https://github.com/pretenderjs/pretender/pull/353
@@ -104,7 +104,7 @@ describe( '[ProductionApiClient]', () => {
 		} );
 
 		test( 'The request includes the log payload in the body', async () => {
-			const apiClient = new ProductionApiClient();
+			const apiClient = createProductionApiClient();
 			await apiClient.log( fakeLogPayload );
 
 			// The types are borked here, see: https://github.com/pretenderjs/pretender/pull/353
@@ -114,7 +114,7 @@ describe( '[ProductionApiClient]', () => {
 		} );
 
 		test( 'Throws an error if the request fails', async () => {
-			const apiClient = new ProductionApiClient();
+			const apiClient = createProductionApiClient();
 
 			const errorBody = {
 				error: 'Invalid request',

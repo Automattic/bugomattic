@@ -1,7 +1,7 @@
 import { LoggerApiClient, LogPayload } from '../monitoring/types';
 import { ApiClient, ReportingConfigApiResponse } from './types';
 
-export class ProductionApiClient implements ApiClient, LoggerApiClient {
+class ProductionApiClient implements ApiClient, LoggerApiClient {
 	private nonce: string;
 	private nonceHeaderName: string;
 
@@ -51,4 +51,12 @@ export class ProductionApiClient implements ApiClient, LoggerApiClient {
 			);
 		}
 	}
+}
+
+export function createProductionApiClient(): ApiClient & LoggerApiClient {
+	const productionApiClient = new ProductionApiClient();
+	return {
+		loadReportingConfig: productionApiClient.loadReportingConfig.bind( productionApiClient ),
+		log: productionApiClient.log.bind( productionApiClient ),
+	};
 }
