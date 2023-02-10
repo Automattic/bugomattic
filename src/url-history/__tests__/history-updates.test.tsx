@@ -59,6 +59,7 @@ describe( 'history updates', () => {
 		'onFirstTaskUnComplete',
 		'onFeatureSelectionEdit',
 		'onTypeTitleEdit',
+		'onStartOver',
 	] as const;
 
 	type PointInTime = typeof pointsInTime[ number ];
@@ -162,6 +163,20 @@ describe( 'history updates', () => {
 
 			expect( screen.getByRole( 'list', { name: 'Steps to report issue' } ) ).toBeInTheDocument();
 		},
+
+		onStartOver: () => {
+			expect( screen.getByRole( 'form', { name: 'Select a feature' } ) ).toBeInTheDocument();
+			expect(
+				screen.queryByRole( 'button', { name: 'Clear currently selected feature' } )
+			).not.toBeInTheDocument();
+
+			expect(
+				screen.queryByRole( 'form', { name: 'Set issue title and type' } )
+			).not.toBeInTheDocument();
+			expect(
+				screen.queryByRole( 'list', { name: 'Steps to report issue' } )
+			).not.toBeInTheDocument();
+		},
 	};
 
 	const referenceUrlQueries: { [ key in PointInTime ]: string } = {
@@ -172,6 +187,7 @@ describe( 'history updates', () => {
 		onFirstTaskUnComplete: 'WILL BE SET IN TEST',
 		onFeatureSelectionEdit: 'WILL BE SET IN TEST',
 		onTypeTitleEdit: 'WILL BE SET IN TEST',
+		onStartOver: 'WILL BE SET IN TEST',
 	};
 
 	let user: UserEvent;
@@ -269,6 +285,15 @@ describe( 'history updates', () => {
 			expect( referenceUrlQueries.onTypeTitleEdit ).not.toBe(
 				referenceUrlQueries.onFeatureSelectionEdit
 			);
+		} );
+
+		test( 'onStartOver', async () => {
+			await user.click( screen.getByRole( 'button', { name: 'Start Over' } ) );
+
+			validations.onStartOver();
+
+			referenceUrlQueries.onStartOver = history.location.search;
+			expect( referenceUrlQueries.onStartOver ).not.toBe( referenceUrlQueries.onTypeTitleEdit );
 		} );
 	} );
 

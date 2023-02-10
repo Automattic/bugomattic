@@ -36,37 +36,43 @@ export const issueDetailsSlice = createSlice( {
 		},
 	},
 	extraReducers: ( builder ) => {
-		builder.addCase( updateStateFromHistory, ( state, action ) => {
-			const issueDetails = action.payload.issueDetails;
-			if ( ! issueDetails || typeof issueDetails !== 'object' ) {
-				return { ...initialState };
-			}
+		builder
+			.addCase( updateStateFromHistory, ( state, action ) => {
+				const issueDetails = action.payload.issueDetails;
+				if ( ! issueDetails || typeof issueDetails !== 'object' ) {
+					return { ...initialState };
+				}
 
-			// Validate the payload from history, and fall back to the initial state if invalid.
+				// Validate the payload from history, and fall back to the initial state if invalid.
 
-			const issueType = validIssueTypes.has( issueDetails.issueType )
-				? issueDetails.issueType
-				: initialState.issueType;
+				const issueType = validIssueTypes.has( issueDetails.issueType )
+					? issueDetails.issueType
+					: initialState.issueType;
 
-			const issueTitle = issueDetails.issueTitle ?? initialState.issueTitle;
+				const issueTitle = issueDetails.issueTitle ?? initialState.issueTitle;
 
-			const actionWithReportingConfig = action as PayloadAction<
-				FeatureId,
-				string,
-				NormalizedReportingConfig
-			>;
-			const { features } = actionWithReportingConfig.meta;
-			let featureId: FeatureId;
-			if ( issueDetails.featureId === null || features[ issueDetails.featureId ] ) {
-				featureId = issueDetails.featureId;
-			} else {
-				// This may seem silly because the initial state is currently null
-				// but it future proofs in we change the initial state.
-				featureId = initialState.featureId;
-			}
+				const actionWithReportingConfig = action as PayloadAction<
+					FeatureId,
+					string,
+					NormalizedReportingConfig
+				>;
+				const { features } = actionWithReportingConfig.meta;
+				let featureId: FeatureId;
+				if ( issueDetails.featureId === null || features[ issueDetails.featureId ] ) {
+					featureId = issueDetails.featureId;
+				} else {
+					// This may seem silly because the initial state is currently null
+					// but it future proofs in we change the initial state.
+					featureId = initialState.featureId;
+				}
 
-			return { featureId, issueType, issueTitle };
-		} );
+				return { featureId, issueType, issueTitle };
+			} )
+			.addCase( 'startOver', () => {
+				return {
+					...initialState,
+				};
+			} );
 	},
 } );
 

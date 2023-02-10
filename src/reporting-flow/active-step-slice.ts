@@ -16,18 +16,20 @@ export const featureSelectorFormSlice = createSlice( {
 		},
 	},
 	extraReducers: ( builder ) => {
-		builder.addCase( updateStateFromHistory, ( state, action ) => {
-			const activeStep = action.payload.activeStep;
-			if ( ! activeStep ) {
-				return initialState;
-			}
+		builder
+			.addCase( updateStateFromHistory, ( state, action ) => {
+				const activeStep = action.payload.activeStep;
+				if ( ! activeStep ) {
+					return initialState;
+				}
 
-			if ( ! validActiveSteps.has( activeStep ) ) {
-				return initialState;
-			}
+				if ( ! validActiveSteps.has( activeStep ) ) {
+					return initialState;
+				}
 
-			return action.payload.activeStep;
-		} );
+				return action.payload.activeStep;
+			} )
+			.addCase( 'startOver', () => initialState );
 	},
 } );
 
