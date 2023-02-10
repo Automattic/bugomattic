@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import userEvent from '@testing-library/user-event';
 import { screen } from '@testing-library/react';
-import { TitleTypeForm } from '../title-type-form';
+import { TypeTitleForm } from '../type-title-form';
 import { createMockApiClient } from '../../test-utils/mock-api-client';
 import { renderWithProviders } from '../../test-utils/render-with-providers';
 import { createMockMonitoringClient } from '../../test-utils/mock-monitoring-client';
@@ -21,12 +21,12 @@ describe( '[TitleTypeForm]', () => {
 	}
 
 	function getTitleInput() {
-		return screen.getByRole( 'textbox', { name: /GitHub Issue Title/ } );
+		return screen.getByRole( 'textbox', { name: /Title \(Optional\)/ } );
 	}
 
 	describe( '[Title Input]', () => {
 		test( 'Can add text to the Title input', async () => {
-			const { user } = setup( <TitleTypeForm /> );
+			const { user } = setup( <TypeTitleForm /> );
 			const text = 'This is my sample title text';
 			await user.click( getTitleInput() );
 			await user.keyboard( text );
@@ -35,13 +35,13 @@ describe( '[TitleTypeForm]', () => {
 		} );
 
 		test( 'When empty, see message of max of 200 characters remaining', async () => {
-			setup( <TitleTypeForm /> );
+			setup( <TypeTitleForm /> );
 			const expectedText = 'Maximum 200 characters';
 			expect( screen.getByText( expectedText, { exact: true } ) ).toBeInTheDocument();
 		} );
 
 		test( 'When typing a title, see message with remaining characters allowed', async () => {
-			const { user } = setup( <TitleTypeForm /> );
+			const { user } = setup( <TypeTitleForm /> );
 			const text = 'This is my sample title text';
 			await user.click( getTitleInput() );
 			await user.keyboard( text );
@@ -51,7 +51,7 @@ describe( '[TitleTypeForm]', () => {
 		} );
 
 		test( 'When you go over the limit, see message with number of characters over in warning style', async () => {
-			const { user } = setup( <TitleTypeForm /> );
+			const { user } = setup( <TypeTitleForm /> );
 			const text = 'a'.repeat( 201 );
 			await user.click( getTitleInput() );
 			await user.keyboard( text );
@@ -76,7 +76,7 @@ describe( '[TitleTypeForm]', () => {
 		} );
 
 		test( 'When you go over the limit, adds aria-invalid and invalid class to the input', async () => {
-			const { user } = setup( <TitleTypeForm /> );
+			const { user } = setup( <TypeTitleForm /> );
 			const text = 'a'.repeat( 201 );
 			await user.click( getTitleInput() );
 			await user.keyboard( text );
@@ -86,7 +86,7 @@ describe( '[TitleTypeForm]', () => {
 		} );
 
 		test( 'If over the limit, see form field error message when you blur the input', async () => {
-			const { user } = setup( <TitleTypeForm /> );
+			const { user } = setup( <TypeTitleForm /> );
 			const text = 'a'.repeat( 201 );
 			await user.click( getTitleInput() );
 			await user.keyboard( text );
@@ -103,7 +103,7 @@ describe( '[TitleTypeForm]', () => {
 		} );
 
 		test( 'Once you go back under the limit, the form error goes away', async () => {
-			const { user } = setup( <TitleTypeForm /> );
+			const { user } = setup( <TypeTitleForm /> );
 			const text = 'a'.repeat( 201 );
 			await user.click( getTitleInput() );
 			await user.keyboard( text );
@@ -120,7 +120,7 @@ describe( '[TitleTypeForm]', () => {
 
 	describe( '[Type Radios]', () => {
 		test( 'Can select all three issue types', async () => {
-			const { user } = setup( <TitleTypeForm /> );
+			const { user } = setup( <TypeTitleForm /> );
 
 			await user.click( screen.getByRole( 'radio', { name: 'Bug' } ) );
 			expect( screen.getByRole( 'radio', { name: 'Bug', checked: true } ) ).toBeInTheDocument();
@@ -137,7 +137,7 @@ describe( '[TitleTypeForm]', () => {
 		} );
 
 		test( 'Clicking "Continue" with an unselected issue type causes a form field error to appear', async () => {
-			const { user } = setup( <TitleTypeForm /> );
+			const { user } = setup( <TypeTitleForm /> );
 			await user.click( screen.getByRole( 'button', { name: 'Continue' } ) );
 
 			const expectedText = 'You must pick an issue type';
@@ -146,7 +146,7 @@ describe( '[TitleTypeForm]', () => {
 		} );
 
 		test( 'Clicking "Continue" with an unselected issue type marks the radios as invalid', async () => {
-			const { user } = setup( <TitleTypeForm /> );
+			const { user } = setup( <TypeTitleForm /> );
 			await user.click( screen.getByRole( 'button', { name: 'Continue' } ) );
 
 			expect( screen.getByRole( 'radio', { name: 'Bug' } ) ).toBeInvalid();
@@ -155,7 +155,7 @@ describe( '[TitleTypeForm]', () => {
 		} );
 
 		test( 'Selecting an issue type causes the form field error to disappear', async () => {
-			const { user } = setup( <TitleTypeForm /> );
+			const { user } = setup( <TypeTitleForm /> );
 			await user.click( screen.getByRole( 'button', { name: 'Continue' } ) );
 			await user.click( screen.getByRole( 'radio', { name: 'Bug' } ) );
 
@@ -165,7 +165,7 @@ describe( '[TitleTypeForm]', () => {
 		} );
 
 		test( 'Selecting an issue type causes radios to no longer be invalid', async () => {
-			const { user } = setup( <TitleTypeForm /> );
+			const { user } = setup( <TypeTitleForm /> );
 			await user.click( screen.getByRole( 'button', { name: 'Continue' } ) );
 			await user.click( screen.getByRole( 'radio', { name: 'Bug' } ) );
 
@@ -177,7 +177,7 @@ describe( '[TitleTypeForm]', () => {
 
 	describe( '[Analytics]', () => {
 		test( 'Clicking continue with only a type records the "type_save" event, but not the "title_save" event', async () => {
-			const { user, monitoringClient } = setup( <TitleTypeForm /> );
+			const { user, monitoringClient } = setup( <TypeTitleForm /> );
 			await user.click( screen.getByRole( 'radio', { name: 'Bug' } ) );
 			await user.click( screen.getByRole( 'button', { name: 'Continue' } ) );
 
@@ -188,7 +188,7 @@ describe( '[TitleTypeForm]', () => {
 		} );
 
 		test( 'Clicking continue with a type and title records both events', async () => {
-			const { user, monitoringClient } = setup( <TitleTypeForm /> );
+			const { user, monitoringClient } = setup( <TypeTitleForm /> );
 			await user.click( screen.getByRole( 'radio', { name: 'Bug' } ) );
 			await user.click( getTitleInput() );
 			await user.keyboard( 'This is a title' );

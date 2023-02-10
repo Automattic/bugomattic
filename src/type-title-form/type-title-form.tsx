@@ -14,14 +14,14 @@ import {
 } from '../issue-details/issue-details-slice';
 import { IssueType } from '../issue-details/types';
 import { ReactComponent as InfoIcon } from '../common/svgs/info.svg';
-import styles from './title-type-form.module.css';
 import { useMonitoring } from '../monitoring/monitoring-provider';
+import styles from './type-title-form.module.css';
 
 interface Props {
 	onContinue?: () => void;
 }
 
-export function TitleTypeForm( { onContinue }: Props ) {
+export function TypeTitleForm( { onContinue }: Props ) {
 	const dispatch = useAppDispatch();
 	const monitoringClient = useMonitoring();
 	const { issueTitle, issueType } = useAppSelector( selectIssueDetails );
@@ -78,6 +78,10 @@ export function TitleTypeForm( { onContinue }: Props ) {
 		'For when you need to escalate something urgently to a product team. ' +
 		'This should usually be reserved for widespread, critical issues such as outages or broken core workflows.';
 
+	const titleTooltipId = 'title-info-icon';
+	const titleDescription =
+		'We will pass along this title to issue forms (like GitHub) where possible.';
+
 	let titleErrorMessage: ReactNode = null;
 	if ( showTitleError ) {
 		titleErrorMessage = (
@@ -97,22 +101,7 @@ export function TitleTypeForm( { onContinue }: Props ) {
 	}
 
 	return (
-		<form onSubmit={ handleSubmit } aria-label="Set issue title and type">
-			<div className={ styles.titleWrapper }>
-				<label>
-					<span className={ styles.titleLabel }>
-						<span>{ 'GitHub Issue Title (Optional)' }</span>
-						{ titleErrorMessage }
-					</span>
-					<LimitedTextField
-						onBlur={ handleTitleBlur }
-						value={ title }
-						onChange={ handleTitleChange }
-						characterLimit={ titleCharacterLimit }
-					/>
-				</label>
-			</div>
-
+		<form onSubmit={ handleSubmit } aria-label="Set issue type and title">
 			<fieldset className={ styles.typeFieldset }>
 				<legend className={ styles.typeLabel }>
 					<span>Type</span>
@@ -171,11 +160,38 @@ export function TitleTypeForm( { onContinue }: Props ) {
 							title={ urgentDescription }
 						/>
 					</label>
-					<span className="screenReaderOnly" id={ urgentTooltipId } role="tooltip">
+					<span hidden={ true } id={ urgentTooltipId } role="tooltip">
 						{ urgentDescription }
 					</span>
 				</div>
 			</fieldset>
+
+			<div className={ styles.titleWrapper }>
+				<label>
+					<span className={ styles.titleLabel }>
+						<span className={ styles.titleWithIcon }>
+							<span>{ 'Title (Optional)' }</span>
+							<InfoIcon
+								aria-hidden={ true }
+								className={ styles.infoIcon }
+								title={ titleDescription }
+							/>
+						</span>
+						{ titleErrorMessage }
+					</span>
+					<LimitedTextField
+						onBlur={ handleTitleBlur }
+						value={ title }
+						onChange={ handleTitleChange }
+						characterLimit={ titleCharacterLimit }
+						ariaDescribedBy={ titleTooltipId }
+					/>
+				</label>
+				<span hidden={ true } id={ titleTooltipId } role="tooltip">
+					{ titleDescription }
+				</span>
+			</div>
+
 			<div className={ styles.continueWrapper }>
 				<button className="primaryButton">Continue</button>
 			</div>

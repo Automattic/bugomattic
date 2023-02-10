@@ -2,7 +2,7 @@
 
 .typeFieldset {
 	border: none;
-	margin: 0;
+	margin: 0 0 2.5rem 0;
 	padding: 0;
 }
 
@@ -30,6 +30,8 @@
 	width: 1rem;
 	margin-left: 0.5rem;
 	cursor: help;
+	position: relative;
+	top: 0.0625rem;
 }
 
 .continueWrapper {
@@ -51,12 +53,21 @@
 	margin-bottom: 0.5rem;
 }
 
+.titleWithIcon {
+	display: flex;
+	align-items: center;
+}
+
+.titleLabel .formErrorWrapper {
+	transform: translateY( -0.03125rem );
+}
+
 .typeLabel {
 	padding: 0;
 }
 
 .titleWrapper {
-	margin-bottom: 1.5rem;
+	margin-bottom: 0.5rem;
 }
 
 @media only screen and ( max-width: 600px ) {

@@ -85,7 +85,7 @@ describe( '[Bad URL State]', () => {
 					issueType: 'not-a-real-issue-type' as any,
 					issueTitle: '',
 				},
-				activeStep: 'titleAndType',
+				activeStep: 'typeTitle',
 			} as RootState );
 
 			await setup( urlQuery );
@@ -138,7 +138,7 @@ describe( '[Bad URL State]', () => {
 				screen.queryByRole( 'button', { name: 'Clear currently selected feature' } )
 			).not.toBeInTheDocument();
 			expect(
-				screen.getByRole( 'heading', { name: 'Step number 2: Title and Type' } )
+				screen.getByRole( 'heading', { name: 'Step number 2: Type and Title' } )
 			).toBeInTheDocument();
 			expect(
 				screen.getByRole( 'heading', { name: 'Step number 3: Next Steps' } )
@@ -162,7 +162,7 @@ describe( '[Bad URL State]', () => {
 				screen.queryByRole( 'button', { name: 'Clear currently selected feature' } )
 			).not.toBeInTheDocument();
 			expect(
-				screen.getByRole( 'heading', { name: 'Step number 2: Title and Type' } )
+				screen.getByRole( 'heading', { name: 'Step number 2: Type and Title' } )
 			).toBeInTheDocument();
 			expect(
 				screen.getByRole( 'heading', { name: 'Step number 3: Next Steps' } )
