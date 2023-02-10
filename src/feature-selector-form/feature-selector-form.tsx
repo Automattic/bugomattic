@@ -37,6 +37,9 @@ export function FeatureSelectorForm( { onContinue }: Props ) {
 
 	const { products } = useAppSelector( selectNormalizedReportingConfig );
 	const selectedFeatureProductId = useAppSelector( selectProductIdForFeature( selectedFeatureId ) );
+	const selectedFeatureProductName = selectedFeatureProductId
+		? products[ selectedFeatureProductId ].name
+		: 'Unknown';
 
 	const [ submissionAttempted, setSubmissionAttempted ] = useState( false );
 
@@ -56,10 +59,9 @@ export function FeatureSelectorForm( { onContinue }: Props ) {
 		if ( readyToContinue ) {
 			dispatch( setIssueFeatureId( selectedFeatureId ) );
 
-			if ( selectedFeatureProductId ) {
-				const productName = products[ selectedFeatureProductId ].name;
-				monitoringClient.analytics.recordEvent( 'feature_save', { productName } );
-			}
+			monitoringClient.analytics.recordEvent( 'feature_save', {
+				productName: selectedFeatureProductName,
+			} );
 
 			if ( onContinue ) {
 				onContinue();

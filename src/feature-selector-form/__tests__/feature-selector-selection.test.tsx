@@ -194,7 +194,7 @@ describe( '[FeatureSelector -- Feature Selection]', () => {
 		);
 	} );
 
-	test( 'Selecting a feature records the "feature_select" event', async () => {
+	test( 'Selecting a feature records the "feature_select" event with product name', async () => {
 		const { user, monitoringClient } = setup( <FeatureSelectorForm /> );
 
 		await expandAll( user );
@@ -202,7 +202,9 @@ describe( '[FeatureSelector -- Feature Selection]', () => {
 			screen.getByRole( 'option', { selected: false, description: featureUnderGroup.description } )
 		);
 
-		expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'feature_select' );
+		expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'feature_select', {
+			productName: 'Test Product',
+		} );
 	} );
 
 	test( 'Clicking continue before selecting a feature shows form error', async () => {

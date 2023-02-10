@@ -1,6 +1,9 @@
 import React from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { selectNormalizedReportingConfig } from '../../reporting-config/reporting-config-slice';
+import {
+	selectNormalizedReportingConfig,
+	selectProductIdForFeature,
+} from '../../reporting-config/reporting-config-slice';
 import styles from './../feature-selector-form.module.css';
 import {
 	selectFeatureSearchTerm,
@@ -18,9 +21,13 @@ interface Props {
 export function Feature( { id }: Props ) {
 	const dispatch = useAppDispatch();
 	const monitoringClient = useMonitoring();
+	const { features, products } = useAppSelector( selectNormalizedReportingConfig );
+	const productId = useAppSelector( selectProductIdForFeature( id ) );
+	const productName = productId ? products[ productId ].name : 'Unknown';
+
 	const handleFeatureSelect = () => {
 		dispatch( setSelectedFeatureId( id ) );
-		monitoringClient.analytics.recordEvent( 'feature_select' );
+		monitoringClient.analytics.recordEvent( 'feature_select', { productName } );
 	};
 
 	const selectedFeatureId = useAppSelector( selectSelectedFeatureId );
@@ -30,7 +37,6 @@ export function Feature( { id }: Props ) {
 		classNames.push( styles.selectedFeature );
 	}
 
-	const { features } = useAppSelector( selectNormalizedReportingConfig );
 	let { name } = features[ id ];
 	const { keywords, description } = features[ id ];
 
