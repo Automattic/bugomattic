@@ -58,7 +58,7 @@ export function NextSteps() {
 		} else {
 			setShowConfetti( false );
 		}
-	}, [ allTasksAreComplete ] );
+	}, [ allTasksAreComplete, monitoringClient.analytics ] );
 
 	// On mount, we want to calculate the section size for the Confetti
 	// We also want to recalculate whenever the relevant tasks change, or the selected feature

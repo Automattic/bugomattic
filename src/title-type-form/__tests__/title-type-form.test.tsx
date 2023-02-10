@@ -4,15 +4,18 @@ import { screen } from '@testing-library/react';
 import { TitleTypeForm } from '../title-type-form';
 import { createMockApiClient } from '../../test-utils/mock-api-client';
 import { renderWithProviders } from '../../test-utils/render-with-providers';
+import { createMockMonitoringClient } from '../../test-utils/mock-monitoring-client';
 
 describe( '[TitleTypeForm]', () => {
 	function setup( component: ReactElement ) {
+		const monitoringClient = createMockMonitoringClient();
 		const apiClient = createMockApiClient();
 		const user = userEvent.setup();
-		const view = renderWithProviders( component, { apiClient } );
+		const view = renderWithProviders( component, { apiClient, monitoringClient } );
 
 		return {
 			user,
+			monitoringClient,
 			...view,
 		};
 	}
@@ -169,6 +172,32 @@ describe( '[TitleTypeForm]', () => {
 			expect( screen.getByRole( 'radio', { name: 'Bug' } ) ).not.toBeInvalid();
 			expect( screen.getByRole( 'radio', { name: 'Feature Request' } ) ).not.toBeInvalid();
 			expect( screen.getByRole( 'radio', { name: "It's Urgent!" } ) ).not.toBeInvalid();
+		} );
+	} );
+
+	describe( '[Analytics]', () => {
+		test( 'Clicking continue with only a type records the "type_save" event, but not the "title_save" event', async () => {
+			const { user, monitoringClient } = setup( <TitleTypeForm /> );
+			await user.click( screen.getByRole( 'radio', { name: 'Bug' } ) );
+			await user.click( screen.getByRole( 'button', { name: 'Continue' } ) );
+
+			expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'type_save', {
+				issueType: 'bug',
+			} );
+			expect( monitoringClient.analytics.recordEvent ).not.toHaveBeenCalledWith( 'title_save' );
+		} );
+
+		test( 'Clicking continue with a type and title records both events', async () => {
+			const { user, monitoringClient } = setup( <TitleTypeForm /> );
+			await user.click( screen.getByRole( 'radio', { name: 'Bug' } ) );
+			await user.click( getTitleInput() );
+			await user.keyboard( 'This is a title' );
+			await user.click( screen.getByRole( 'button', { name: 'Continue' } ) );
+
+			expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'type_save', {
+				issueType: 'bug',
+			} );
+			expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'title_save' );
 		} );
 	} );
 } );

@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useMemo } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { selectNormalizedReportingConfig } from '../../reporting-config/reporting-config-slice';
 import { TaskLink } from '../../reporting-config/types';
@@ -22,6 +22,7 @@ import {
 import { useMonitoring } from '../../monitoring/monitoring-provider';
 import { updateHistoryWithState } from '../../url-history/actions';
 import { useLoggerWithCache } from '../../monitoring/use-logger-with-cache';
+import { makeSelectorToPredictCompletingAllTasks } from '../../combined-selectors/all-tasks-are-complete';
 
 interface Props {
 	taskId: string;
@@ -38,11 +39,30 @@ export function Task( { taskId }: Props ) {
 
 	const isChecked = completedTaskIds.includes( taskId );
 
+	// If possible, we want to tie all Tracks events to actual user actions like clicks.
+	// This prevents use from making too many misleading events from browser navigations.
+	// This is tricky for calculated state, like all tasks being completed.
+	// But, we can accurately predict if a given task completion will complete all tasks.
+	// But we also need to be careful and make sure there's a unique memoized selector for each task component.
+	// See https://react-redux.js.org/api/hooks#using-memoizing-selectors
+	const selectorToPredictCompletingAllTasks = useMemo(
+		makeSelectorToPredictCompletingAllTasks,
+		[]
+	);
+	const taskCompletionWillCompleteAll = useAppSelector( ( state ) =>
+		selectorToPredictCompletingAllTasks( state, taskId )
+	);
+
 	const handleCheckboxChange = () => {
 		if ( isChecked ) {
 			dispatch( removeCompletedTask( taskId ) );
 		} else {
 			dispatch( addCompletedTask( taskId ) );
+			monitoringClient.analytics.recordEvent( 'task_complete' );
+
+			if ( taskCompletionWillCompleteAll ) {
+				monitoringClient.analytics.recordEvent( 'task_complete_all' );
+			}
 		}
 		dispatch( updateHistoryWithState() );
 	};
@@ -57,6 +77,11 @@ export function Task( { taskId }: Props ) {
 	let taskIsBroken = false;
 	let titleDisplay: ReactNode;
 	if ( link ) {
+		const handleLinkClick = () => {
+			monitoringClient.analytics.recordEvent( 'task_link_click', { linkType: link.type } );
+			handleCheckboxChange();
+		};
+
 		try {
 			const linkText = title || getDefaultTitleForLink( link );
 			const href = createLinkHref( link, issueTitle );
@@ -67,7 +92,7 @@ export function Task( { taskId }: Props ) {
 					href={ href }
 					rel="noreferrer"
 					// When they open a link, let's trigger the checkbox change too
-					onClick={ handleCheckboxChange }
+					onClick={ handleLinkClick }
 				>
 					{ getAppIconForLink( link ) }
 					<span className={ styles.linkText }>{ linkText }</span>

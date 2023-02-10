@@ -5,10 +5,12 @@ import { createMockApiClient } from '../../../test-utils/mock-api-client';
 import { renderWithProviders } from '../../../test-utils/render-with-providers';
 import { Task as TaskComponent } from '../task';
 import { screen, fireEvent } from '@testing-library/react';
+import { createMockMonitoringClient } from '../../../test-utils/mock-monitoring-client';
 
 describe( '[Task]', () => {
 	function setup( component: ReactElement, task: Task ) {
 		const apiClient = createMockApiClient();
+		const monitoringClient = createMockMonitoringClient();
 		const user = userEvent.setup();
 		const reportingConfig: NormalizedReportingConfig = {
 			products: {},
@@ -20,6 +22,7 @@ describe( '[Task]', () => {
 		};
 		const view = renderWithProviders( component, {
 			apiClient,
+			monitoringClient,
 			preloadedState: {
 				reportingConfig: {
 					normalized: reportingConfig,
@@ -33,6 +36,7 @@ describe( '[Task]', () => {
 
 		return {
 			user,
+			monitoringClient,
 			...view,
 		};
 	}
@@ -310,6 +314,22 @@ describe( '[Task]', () => {
 			expect( screen.getByRole( 'checkbox', { name: title, checked: true } ) ).toBeInTheDocument();
 		} );
 
+		test( 'Checking a task records the "task_complete" event', async () => {
+			const title = 'Foo task';
+			const task: Task = {
+				id: 'basic',
+				parentId: 'foo',
+				parentType: 'product',
+				title: title,
+			};
+
+			const { user, monitoringClient } = setup( <TaskComponent taskId={ task.id } />, task );
+
+			await user.click( screen.getByRole( 'checkbox', { name: title, checked: false } ) );
+
+			expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'task_complete' );
+		} );
+
 		test( 'Clicking on a checked task unchecks the checkbox', async () => {
 			const title = 'Foo task';
 			const task: Task = {
@@ -348,6 +368,30 @@ describe( '[Task]', () => {
 			expect(
 				await screen.findByRole( 'checkbox', { name: title, checked: true } )
 			).toBeInTheDocument();
+		} );
+
+		test( 'Click on a link in a task records both the "task_complete" and "task_link_click" events', async () => {
+			const title = 'Foo task';
+			const task: Task = {
+				id: 'general link',
+				parentId: 'foo',
+				parentType: 'product',
+				title: title,
+				link: {
+					type: 'general',
+					href: 'https://automattic.com/',
+				},
+			};
+
+			const { monitoringClient } = setup( <TaskComponent taskId={ task.id } />, task );
+
+			// The userEvent action doesn't play well with links, so using fireEvent.
+			fireEvent.click( screen.getByRole( 'link', { name: title } ) );
+
+			expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'task_complete' );
+			expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'task_link_click', {
+				linkType: 'general',
+			} );
 		} );
 	} );
 } );

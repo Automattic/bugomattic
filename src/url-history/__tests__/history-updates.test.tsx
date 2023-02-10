@@ -1,5 +1,5 @@
 /**
- * @jest-environment ./src/test-utils/quit-early-environment.ts
+ * @jest-environment ./src/test-utils/faux-e2e-environment.ts
  */
 
 import '@testing-library/react/dont-cleanup-after-each';

@@ -4,7 +4,8 @@ import { createMockApiClient } from '../../../test-utils/mock-api-client';
 import { NormalizedReportingConfig } from '../../../reporting-config/types';
 import { renderWithProviders } from '../../../test-utils/render-with-providers';
 import { MoreInfo } from '../more-info';
-import { screen } from '@testing-library/react';
+import { fireEvent, screen } from '@testing-library/react';
+import { createMockMonitoringClient } from '../../../test-utils/mock-monitoring-client';
 
 describe( '[MoreInfo]', () => {
 	function setup(
@@ -13,9 +14,11 @@ describe( '[MoreInfo]', () => {
 		reportingConfig: NormalizedReportingConfig
 	) {
 		const apiClient = createMockApiClient();
+		const monitoringClient = createMockMonitoringClient();
 		const user = userEvent.setup();
 		const view = renderWithProviders( component, {
 			apiClient,
+			monitoringClient,
 			preloadedState: {
 				reportingConfig: {
 					normalized: reportingConfig,
@@ -34,6 +37,7 @@ describe( '[MoreInfo]', () => {
 
 		return {
 			user,
+			monitoringClient,
 			...view,
 		};
 	}
@@ -253,6 +257,44 @@ describe( '[MoreInfo]', () => {
 			setup( <MoreInfo />, featureId, reportingConfig );
 
 			expect( screen.getByText( description ) ).toBeInTheDocument();
+		} );
+	} );
+
+	describe( 'Content interaction', () => {
+		const featureId = 'featureId';
+		const reportingConfig: NormalizedReportingConfig = {
+			products: {
+				productId: {
+					id: 'productId',
+					name: 'Product',
+					featureIds: [ featureId ],
+					featureGroupIds: [],
+				},
+			},
+			featureGroups: {},
+			features: {
+				[ featureId ]: {
+					id: featureId,
+					name: 'Feature',
+					learnMoreLinks: [
+						{ type: 'general', href: 'https://automattic.com', displayText: 'Link Display' },
+					],
+					parentType: 'product',
+					parentId: 'productId',
+				},
+			},
+			tasks: {},
+		};
+
+		test( 'Click on a link records the "more_info_link_click" event with link type', () => {
+			const { monitoringClient } = setup( <MoreInfo />, featureId, reportingConfig );
+
+			fireEvent.click( screen.getByRole( 'link', { name: 'Link Display' } ) );
+
+			expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith(
+				'more_info_link_click',
+				{ linkType: 'general' }
+			);
 		} );
 	} );
 } );

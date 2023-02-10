@@ -1,5 +1,5 @@
 /**
- * @jest-environment ./src/test-utils/quit-early-environment.ts
+ * @jest-environment ./src/test-utils/faux-e2e-environment.ts
  */
 
 import React from 'react';
@@ -17,6 +17,7 @@ import { createMockApiClient } from '../../test-utils/mock-api-client';
 import { renderWithProviders } from '../../test-utils/render-with-providers';
 import { ReportingFlow } from '../reporting-flow';
 import { UserEvent } from '@testing-library/user-event/dist/types/setup/setup';
+import { createMockMonitoringClient } from '../../test-utils/mock-monitoring-client';
 
 /* To test the full flow, we write this test in an E2E testing style.
 We render the component once, and then break actions out into individual test steps.
@@ -101,14 +102,17 @@ describe( '[Reporting Flow]', () => {
 	};
 
 	let user: UserEvent;
+	let monitoringClient: ReturnType< typeof createMockMonitoringClient >;
 
 	// We're using a before all hook because this flow is styled more as an E2E like test run in memory.
 	beforeAll( () => {
 		const apiClient = createMockApiClient();
+		monitoringClient = createMockMonitoringClient();
 		user = userEvent.setup();
 		// eslint-disable-next-line testing-library/no-render-in-setup
 		renderWithProviders( <ReportingFlow />, {
 			apiClient,
+			monitoringClient,
 			preloadedState: {
 				reportingConfig: {
 					normalized: reportingConfig,
@@ -234,13 +238,17 @@ describe( '[Reporting Flow]', () => {
 		expect( await screen.findByTestId( 'confetti' ) ).toBeInTheDocument();
 	} );
 
+	test( 'The event "task_complete_all" is recorded', () => {
+		expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'task_complete_all' );
+	} );
+
 	test( 'The next steps step is marked as complete', async () => {
 		expect(
 			screen.getByRole( 'heading', { name: 'Completed step: Next Steps' } )
 		).toBeInTheDocument();
 	} );
 
-	test( 'Click the edit button for the title and type step', async () => {
+	test( 'Click the edit button for the title and type step and record "type_step_edit" event', async () => {
 		await user.click(
 			screen.getByRole( 'button', {
 				name: 'Edit',
@@ -264,6 +272,10 @@ describe( '[Reporting Flow]', () => {
 				description: /Title and Type/,
 			} )
 		).not.toBeInTheDocument();
+	} );
+
+	test( 'The event "type_step_edit" is recorded', () => {
+		expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'type_step_edit' );
 	} );
 
 	test( 'Select a new type: "Bug", but do not continue', async () => {
@@ -341,6 +353,10 @@ describe( '[Reporting Flow]', () => {
 				description: /Product and Feature/,
 			} )
 		).not.toBeInTheDocument();
+	} );
+
+	test( 'The event "feature_step_edit" is recorded', () => {
+		expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'feature_step_edit' );
 	} );
 
 	test( 'Select a new feature: Feature B', async () => {

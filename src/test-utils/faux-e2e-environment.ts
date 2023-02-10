@@ -2,10 +2,18 @@ import JsdomEnvironment from 'jest-environment-jsdom';
 import { Circus, Config } from '@jest/types';
 import { EnvironmentContext } from '@jest/environment';
 
-class QuitEarlyEnvironment extends JsdomEnvironment {
+/**
+ * This is a custom Jest environment used for more script-like tests.
+ * Think of E2E tests, but in memory with JSDOM!
+ * The key distinctions:
+ * - We don't reset mocks between tests
+ * - We quit early if a test fails
+ */
+class FauxE2eEnvironment extends JsdomEnvironment {
 	private testHasFailed = false;
 
 	constructor( config: Config.ProjectConfig, context: EnvironmentContext ) {
+		config.resetMocks = false;
 		super( config, context );
 	}
 
@@ -38,4 +46,4 @@ class QuitEarlyEnvironment extends JsdomEnvironment {
 	}
 }
 
-export default QuitEarlyEnvironment;
+export default FauxE2eEnvironment;

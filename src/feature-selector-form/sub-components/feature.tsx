@@ -1,6 +1,9 @@
 import React from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { selectNormalizedReportingConfig } from '../../reporting-config/reporting-config-slice';
+import {
+	selectNormalizedReportingConfig,
+	selectProductIdForFeature,
+} from '../../reporting-config/reporting-config-slice';
 import styles from './../feature-selector-form.module.css';
 import {
 	selectFeatureSearchTerm,
@@ -9,6 +12,7 @@ import {
 } from '../feature-selector-form-slice';
 import { includesIgnoringCase } from '../../common/lib';
 import { SubstringHighlighter } from '../../common/components';
+import { useMonitoring } from '../../monitoring/monitoring-provider';
 
 interface Props {
 	id: string;
@@ -16,7 +20,17 @@ interface Props {
 
 export function Feature( { id }: Props ) {
 	const dispatch = useAppDispatch();
-	const handleFeatureSelect = () => dispatch( setSelectedFeatureId( id ) );
+	const monitoringClient = useMonitoring();
+	const { features, products } = useAppSelector( selectNormalizedReportingConfig );
+	const productId = useAppSelector( selectProductIdForFeature( id ) );
+	const productName = productId ? products[ productId ].name : 'Unknown';
+	let { name: featureName } = features[ id ];
+	const { keywords, description } = features[ id ];
+
+	const handleFeatureSelect = () => {
+		dispatch( setSelectedFeatureId( id ) );
+		monitoringClient.analytics.recordEvent( 'feature_select', { productName, featureName } );
+	};
 
 	const selectedFeatureId = useAppSelector( selectSelectedFeatureId );
 	const isSelected = id === selectedFeatureId;
@@ -25,17 +39,13 @@ export function Feature( { id }: Props ) {
 		classNames.push( styles.selectedFeature );
 	}
 
-	const { features } = useAppSelector( selectNormalizedReportingConfig );
-	let { name } = features[ id ];
-	const { keywords, description } = features[ id ];
-
 	const searchTerm = useAppSelector( selectFeatureSearchTerm );
-	if ( searchTerm !== '' && ! includesIgnoringCase( name, searchTerm ) ) {
+	if ( searchTerm !== '' && ! includesIgnoringCase( featureName, searchTerm ) ) {
 		const matchingKeyword = keywords?.find( ( keyword ) =>
 			includesIgnoringCase( keyword, searchTerm )
 		);
 		if ( matchingKeyword ) {
-			name = `${ name } (${ matchingKeyword })`;
+			featureName = `${ featureName } (${ matchingKeyword })`;
 		}
 	}
 
@@ -53,7 +63,7 @@ export function Feature( { id }: Props ) {
 				substring={ searchTerm }
 				highlightClassName={ styles.searchSubstringMatch }
 			>
-				{ name }
+				{ featureName }
 			</SubstringHighlighter>
 		</button>
 	);

@@ -11,6 +11,7 @@ import { FeatureSelectorForm } from '../feature-selector-form';
 import { createMockApiClient } from '../../test-utils/mock-api-client';
 import { renderWithProviders } from '../../test-utils/render-with-providers';
 import { UserEvent } from '@testing-library/user-event/dist/types/setup/setup';
+import { createMockMonitoringClient } from '../../test-utils/mock-monitoring-client';
 
 describe( '[FeatureSelector -- Feature Selection]', () => {
 	// NOTE! Because we have descriptions here, we will be affected by this bug...
@@ -64,9 +65,11 @@ describe( '[FeatureSelector -- Feature Selection]', () => {
 
 	function setup( component: ReactElement ) {
 		const apiClient = createMockApiClient();
+		const monitoringClient = createMockMonitoringClient();
 		const user = userEvent.setup();
 		const view = renderWithProviders( component, {
 			apiClient,
+			monitoringClient,
 			preloadedState: {
 				reportingConfig: {
 					normalized: reportingConfig,
@@ -80,6 +83,7 @@ describe( '[FeatureSelector -- Feature Selection]', () => {
 
 		return {
 			user,
+			monitoringClient,
 			...view,
 		};
 	}
@@ -190,6 +194,20 @@ describe( '[FeatureSelector -- Feature Selection]', () => {
 		);
 	} );
 
+	test( 'Selecting a feature records the "feature_select" event with feature and product name', async () => {
+		const { user, monitoringClient } = setup( <FeatureSelectorForm /> );
+
+		await expandAll( user );
+		await user.click(
+			screen.getByRole( 'option', { selected: false, description: featureUnderGroup.description } )
+		);
+
+		expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'feature_select', {
+			productName: product.name,
+			featureName: featureUnderGroup.name,
+		} );
+	} );
+
 	test( 'Clicking continue before selecting a feature shows form error', async () => {
 		const { user } = setup( <FeatureSelectorForm /> );
 
@@ -239,5 +257,32 @@ describe( '[FeatureSelector -- Feature Selection]', () => {
 				return content === featureUnderProduct.name && element?.className === 'selectedFeatureName';
 			} )
 		).not.toBeInTheDocument();
+	} );
+
+	test( 'Clicking the clear button records the "feature_clear" event', async () => {
+		const { user, monitoringClient } = setup( <FeatureSelectorForm /> );
+
+		await expandAll( user );
+		await user.click(
+			screen.getByRole( 'option', { selected: false, description: featureUnderGroup.description } )
+		);
+		await user.click( screen.getByRole( 'button', { name: 'Clear currently selected feature' } ) );
+
+		expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'feature_clear' );
+	} );
+
+	test( 'Clicking continue with a selected feature records the "feature_save" event with feature and product name', async () => {
+		const { user, monitoringClient } = setup( <FeatureSelectorForm /> );
+
+		await expandAll( user );
+		await user.click(
+			screen.getByRole( 'option', { selected: false, description: featureUnderGroup.description } )
+		);
+		await user.click( screen.getByRole( 'button', { name: 'Continue' } ) );
+
+		expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'feature_save', {
+			productName: product.name,
+			featureName: featureUnderGroup.name,
+		} );
 	} );
 } );

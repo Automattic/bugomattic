@@ -2,6 +2,11 @@ import React, { FormEventHandler, ReactNode, useCallback, useEffect, useState } 
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { DebouncedSearch, FormErrorMessage } from '../common/components';
 import { selectIssueFeatureId, setIssueFeatureId } from '../issue-details/issue-details-slice';
+import { useMonitoring } from '../monitoring/monitoring-provider';
+import {
+	selectNormalizedReportingConfig,
+	selectProductIdForFeature,
+} from '../reporting-config/reporting-config-slice';
 import {
 	selectSelectedFeatureId,
 	setFeatureSearchTerm,
@@ -17,6 +22,7 @@ interface Props {
 
 export function FeatureSelectorForm( { onContinue }: Props ) {
 	const dispatch = useAppDispatch();
+	const monitoringClient = useMonitoring();
 	const issueFeatureId = useAppSelector( selectIssueFeatureId );
 
 	// On mount, we effectively should 'reset' the form state.
@@ -29,6 +35,13 @@ export function FeatureSelectorForm( { onContinue }: Props ) {
 
 	const selectedFeatureId = useAppSelector( selectSelectedFeatureId );
 
+	const { products, features } = useAppSelector( selectNormalizedReportingConfig );
+	const selectedFeatureProductId = useAppSelector( selectProductIdForFeature( selectedFeatureId ) );
+	const selectedFeatureProductName = selectedFeatureProductId
+		? products[ selectedFeatureProductId ].name
+		: 'Unknown';
+	const selectedFeatureName = selectedFeatureId ? features[ selectedFeatureId ].name : 'Unknown';
+
 	const [ submissionAttempted, setSubmissionAttempted ] = useState( false );
 
 	const readyToContinue = selectedFeatureId !== null;
@@ -36,8 +49,9 @@ export function FeatureSelectorForm( { onContinue }: Props ) {
 	const handleSearch = useCallback(
 		( searchTerm: string ) => {
 			dispatch( setFeatureSearchTerm( searchTerm ) );
+			monitoringClient.analytics.recordEvent( 'feature_search', { searchTerm } );
 		},
-		[ dispatch ]
+		[ dispatch, monitoringClient.analytics ]
 	);
 
 	const handleSubmit: FormEventHandler< HTMLFormElement > = ( event ) => {
@@ -45,6 +59,11 @@ export function FeatureSelectorForm( { onContinue }: Props ) {
 		setSubmissionAttempted( true );
 		if ( readyToContinue ) {
 			dispatch( setIssueFeatureId( selectedFeatureId ) );
+
+			monitoringClient.analytics.recordEvent( 'feature_save', {
+				productName: selectedFeatureProductName,
+				featureName: selectedFeatureName,
+			} );
 
 			if ( onContinue ) {
 				onContinue();
