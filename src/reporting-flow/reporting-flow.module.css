@@ -59,7 +59,7 @@
 }
 
 .stepContent {
-	padding: 1rem 1.5rem;
+	padding: 1.25rem 1.5rem;
 	background-color: var( --color-shaded-background );
 	border-radius: 0 0 4px 4px;
 	position: relative;
