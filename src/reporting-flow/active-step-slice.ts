@@ -5,11 +5,17 @@ import { ActiveStep } from './types';
 
 const initialState: ActiveStep = 'featureSelection' as ActiveStep;
 
+const validActiveSteps = new Set< ActiveStep >( [
+	'featureSelection',
+	'titleAndType',
+	'nextSteps',
+] );
+
 export const featureSelectorFormSlice = createSlice( {
 	name: 'activeStep',
 	initialState: initialState,
 	reducers: {
-		setActiveStep( state, action: PayloadAction< ActiveStep > ) {
+		setActiveStep( _state, action: PayloadAction< ActiveStep > ) {
 			return action.payload;
 		},
 	},
@@ -19,12 +25,6 @@ export const featureSelectorFormSlice = createSlice( {
 			if ( ! activeStep ) {
 				return initialState;
 			}
-
-			const validActiveSteps = new Set< ActiveStep >( [
-				'featureSelection',
-				'titleAndType',
-				'nextSteps',
-			] );
 
 			if ( ! validActiveSteps.has( activeStep ) ) {
 				return initialState;

@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { AnyAction, createAsyncThunk, createSlice, Middleware } from '@reduxjs/toolkit';
 import { RootState } from '../app/store';
 import { ApiClient, ReportingConfigApiResponse } from '../api/types';
 import { IndexedReportingConfig, NormalizedReportingConfig, ReportingConfigState } from './types';
@@ -47,14 +47,29 @@ export const reportingConfigSlice = createSlice( {
 				return {
 					...state,
 					status: 'error',
-					error: `${ error.name }: ${ error.message }}`,
+					error: `${ error.name }: ${ error.message }`,
 				};
 			} )
 			.addCase( loadReportingConfig.fulfilled, ( state, { payload } ) => {
+				let normalized: NormalizedReportingConfig;
+				let indexed: IndexedReportingConfig;
+
+				try {
+					normalized = normalizeReportingConfig( payload );
+					indexed = indexReportingConfig( payload );
+				} catch ( err ) {
+					const error = err as Error;
+					return {
+						...state,
+						status: 'error',
+						error: `Failed to normalize reporting config. ${ error.name }: ${ error.message }`,
+					};
+				}
+
 				return {
 					...state,
-					normalized: normalizeReportingConfig( payload ),
-					indexed: indexReportingConfig( payload ),
+					normalized: normalized,
+					indexed: indexed,
 					status: 'loaded',
 					error: null,
 				};
@@ -85,3 +100,21 @@ export function selectReportingConfigLoadStatus( state: RootState ) {
 export function selectReportingConfigError( state: RootState ) {
 	return state.reportingConfig.error;
 }
+
+/**
+ * This middleware adds a pointer to the normalized reporting config all actions' meta.
+ * For simplicity, we've opted to keep the reporting config in the redux store, rather than in a separate context.
+ * However, our "duck" pattern for redux slices means that we often can't access the reporting config in reducers.
+ * This middleware solves that, so if any validation needs to happen based on the reporting config, it can.
+ */
+export const surfaceReportingConfigMiddleware: Middleware< {}, RootState > =
+	( store ) => ( next ) => ( action: AnyAction ) => {
+		const reportingConfig = selectNormalizedReportingConfig( store.getState() );
+
+		action = {
+			...action,
+			meta: reportingConfig,
+		};
+
+		return next( action );
+	};

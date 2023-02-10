@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../app/store';
+import { NormalizedReportingConfig } from '../reporting-config/types';
 import { updateStateFromHistory } from '../url-history/actions';
 import { FeatureId, IssueDetails, IssueType } from './types';
 
@@ -8,6 +9,8 @@ const initialState: IssueDetails = {
 	issueType: 'unset',
 	issueTitle: '',
 };
+
+const validIssueTypes = new Set< IssueType >( [ 'unset', 'bug', 'featureRequest', 'urgent' ] );
 
 export const issueDetailsSlice = createSlice( {
 	name: 'issueDetails',
@@ -40,17 +43,27 @@ export const issueDetailsSlice = createSlice( {
 			}
 
 			// Validate the payload from history, and fall back to the initial state if invalid.
-			const validIssueTypes = new Set< IssueType >( [
-				'unset',
-				'bug',
-				'featureRequest',
-				'urgent',
-			] );
+
 			const issueType = validIssueTypes.has( issueDetails.issueType )
 				? issueDetails.issueType
 				: initialState.issueType;
+
 			const issueTitle = issueDetails.issueTitle ?? initialState.issueTitle;
-			const featureId = issueDetails.featureId || initialState.featureId;
+
+			const actionWithReportingConfig = action as PayloadAction<
+				FeatureId,
+				string,
+				NormalizedReportingConfig
+			>;
+			const { features } = actionWithReportingConfig.meta;
+			let featureId: FeatureId;
+			if ( issueDetails.featureId === null || features[ issueDetails.featureId ] ) {
+				featureId = issueDetails.featureId;
+			} else {
+				// This may seem silly because the initial state is currently null
+				// but it future proofs in we change the initial state.
+				featureId = initialState.featureId;
+			}
 
 			return { featureId, issueType, issueTitle };
 		} );

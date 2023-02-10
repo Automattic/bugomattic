@@ -21,6 +21,7 @@ import {
 } from '../../common/lib';
 import { useMonitoring } from '../../monitoring/monitoring-provider';
 import { updateHistoryWithState } from '../../url-history/actions';
+import { useLoggerWithCache } from '../../monitoring/use-logger-with-cache';
 
 interface Props {
 	taskId: string;
@@ -32,6 +33,8 @@ export function Task( { taskId }: Props ) {
 	const { tasks } = useAppSelector( selectNormalizedReportingConfig );
 	const { issueTitle } = useAppSelector( selectIssueDetails );
 	const completedTaskIds = useAppSelector( selectCompletedTasks );
+
+	const logError = useLoggerWithCache( monitoringClient.logger.error, [ taskId, tasks ] );
 
 	const isChecked = completedTaskIds.includes( taskId );
 
@@ -48,7 +51,6 @@ export function Task( { taskId }: Props ) {
 
 	if ( ! title && ! details && ! link ) {
 		// We have nothing to display!
-		// TODO: Maybe an FYI logging here in the future?
 		return null;
 	}
 
@@ -74,7 +76,7 @@ export function Task( { taskId }: Props ) {
 			);
 		} catch ( err ) {
 			const error = err as Error;
-			monitoringClient.logger.error( 'Task link has broken configuration', {
+			logError( 'Task link has broken configuration', {
 				taskId,
 				error: error.message,
 			} );
