@@ -7,7 +7,7 @@ import { App } from './app/app';
 import { localMonitoringClient } from './monitoring/local-monitoring-client';
 import { localApiClient } from './api/local-api-client';
 import { MonitoringProvider } from './monitoring/monitoring-provider';
-import { ProductionApiClient } from './api/production-api-client';
+import { createProductionApiClient } from './api/production-api-client';
 import { MonitoringClient } from './monitoring/types';
 import { ApiClient } from './api/types';
 import { createProductionMonitoringClient } from './monitoring/production-monitoring-client';
@@ -16,7 +16,7 @@ let apiClient: ApiClient;
 let monitoringClient: MonitoringClient;
 
 if ( isProduction() ) {
-	const productionApiClient = new ProductionApiClient();
+	const productionApiClient = createProductionApiClient();
 	apiClient = productionApiClient;
 	monitoringClient = createProductionMonitoringClient( productionApiClient );
 } else {

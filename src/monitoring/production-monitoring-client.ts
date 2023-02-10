@@ -76,8 +76,16 @@ class ProductionAnalyticsClient implements AnalyticsClient {
 export function createProductionMonitoringClient(
 	loggerApiClient: LoggerApiClient
 ): MonitoringClient {
+	const productionLoggerClient = new ProducutionLoggerClient( loggerApiClient );
+	const productionAnalyticsClient = new ProductionAnalyticsClient();
 	return {
-		logger: new ProducutionLoggerClient( loggerApiClient ),
-		analytics: new ProductionAnalyticsClient(),
+		logger: {
+			debug: productionLoggerClient.debug.bind( productionLoggerClient ),
+			info: productionLoggerClient.info.bind( productionLoggerClient ),
+			error: productionLoggerClient.error.bind( productionLoggerClient ),
+		},
+		analytics: {
+			recordEvent: productionAnalyticsClient.recordEvent.bind( productionAnalyticsClient ),
+		},
 	};
 }
