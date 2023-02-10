@@ -3,7 +3,7 @@ export interface AdditionalLogDetails {
 	[ key: string ]: any;
 }
 
-interface LogFunction {
+export interface LogFunction {
 	( message: string, additionalDetails?: AdditionalLogDetails ): void;
 }
 
