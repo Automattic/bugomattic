@@ -20,7 +20,7 @@ export function ReportingFlow() {
 		dispatch( updateHistoryWithState() );
 	}, [ dispatch, issueType ] );
 
-	const handleTitleAndTypeNextStep = useCallback( () => {
+	const handleTypeTitleNextStep = useCallback( () => {
 		dispatch( setActiveStep( 'nextSteps' ) );
 		dispatch( updateHistoryWithState() );
 	}, [ dispatch ] );
@@ -29,7 +29,7 @@ export function ReportingFlow() {
 		<section className={ styles.flowContainer }>
 			<h2 className="screenReaderOnly">Report a new issue</h2>
 			<FeatureSelectionStep stepNumber={ 1 } goToNextStep={ handleFeatureSelectionNextStep } />
-			<TypeTitleStep stepNumber={ 2 } goToNextStep={ handleTitleAndTypeNextStep } />
+			<TypeTitleStep stepNumber={ 2 } goToNextStep={ handleTypeTitleNextStep } />
 			<NextStepsStep stepNumber={ 3 } />
 		</section>
 	);

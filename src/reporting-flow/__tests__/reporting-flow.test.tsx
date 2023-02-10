@@ -144,7 +144,7 @@ describe( '[Reporting Flow]', () => {
 
 		// Make sure the content of the other steps is not visible
 		expect(
-			screen.queryByRole( 'form', { name: 'Set issue title and type' } )
+			screen.queryByRole( 'form', { name: 'Set issue type and title' } )
 		).not.toBeInTheDocument();
 		expect(
 			screen.queryByRole( 'list', { name: 'Steps to report issue' } )
@@ -185,7 +185,7 @@ describe( '[Reporting Flow]', () => {
 	} );
 
 	test( 'The title and type step is now active', async () => {
-		expect( screen.getByRole( 'form', { name: 'Set issue title and type' } ) ).toBeInTheDocument();
+		expect( screen.getByRole( 'form', { name: 'Set issue type and title' } ) ).toBeInTheDocument();
 	} );
 
 	test( 'Enter issue title, select "Feature Request" type, and click "Continue"', async () => {
@@ -216,7 +216,7 @@ describe( '[Reporting Flow]', () => {
 
 	test( 'The feature selection form is replaced with details about issue title and type', async () => {
 		expect(
-			screen.queryByRole( 'form', { name: 'Set issue title and type' } )
+			screen.queryByRole( 'form', { name: 'Set issue type and title' } )
 		).not.toBeInTheDocument();
 		expect( screen.getByText( issueTitle ) ).toBeInTheDocument();
 		expect( screen.getByText( 'Feature Request' ) ).toBeInTheDocument();
@@ -312,7 +312,7 @@ describe( '[Reporting Flow]', () => {
 
 		// No form
 		expect(
-			screen.queryByRole( 'form', { name: 'Set issue title and type' } )
+			screen.queryByRole( 'form', { name: 'Set issue type and title' } )
 		).not.toBeInTheDocument();
 
 		// Details
@@ -416,7 +416,7 @@ describe( '[Reporting Flow]', () => {
 	test( 'Does not make the title and type step active because it is already complete', async () => {
 		// It's the next step after feature selection, so we automatically go there!
 		expect(
-			screen.queryByRole( 'form', { name: 'Set issue title and type' } )
+			screen.queryByRole( 'form', { name: 'Set issue type and title' } )
 		).not.toBeInTheDocument();
 	} );
 } );

@@ -177,7 +177,7 @@ describe( '[TitleTypeForm]', () => {
 
 	describe( '[Analytics]', () => {
 		test( 'Clicking continue with only a type records the "type_save" event, but not the "title_save" event', async () => {
-			const { user, monitoringClient } = setup( <TitleTypeForm /> );
+			const { user, monitoringClient } = setup( <TypeTitleForm /> );
 			await user.click( screen.getByRole( 'radio', { name: 'Bug' } ) );
 			await user.click( screen.getByRole( 'button', { name: 'Continue' } ) );
 
@@ -188,7 +188,7 @@ describe( '[TitleTypeForm]', () => {
 		} );
 
 		test( 'Clicking continue with a type and title records both events', async () => {
-			const { user, monitoringClient } = setup( <TitleTypeForm /> );
+			const { user, monitoringClient } = setup( <TypeTitleForm /> );
 			await user.click( screen.getByRole( 'radio', { name: 'Bug' } ) );
 			await user.click( getTitleInput() );
 			await user.keyboard( 'This is a title' );

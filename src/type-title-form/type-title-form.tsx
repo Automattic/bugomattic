@@ -80,8 +80,7 @@ export function TypeTitleForm( { onContinue }: Props ) {
 
 	const titleTooltipId = 'title-info-icon';
 	const titleDescription =
-		'If interested, you can add a brief title for your issue. ' +
-		'We will seed this title in issue forms (like GitHub) where possible.';
+		'We will pass along this title to issue forms (like GitHub) where possible.';
 
 	let titleErrorMessage: ReactNode = null;
 	if ( showTitleError ) {
@@ -102,7 +101,7 @@ export function TypeTitleForm( { onContinue }: Props ) {
 	}
 
 	return (
-		<form onSubmit={ handleSubmit } aria-label="Set issue title and type">
+		<form onSubmit={ handleSubmit } aria-label="Set issue type and title">
 			<fieldset className={ styles.typeFieldset }>
 				<legend className={ styles.typeLabel }>
 					<span>Type</span>

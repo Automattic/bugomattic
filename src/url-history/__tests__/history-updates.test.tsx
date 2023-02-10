@@ -54,11 +54,11 @@ describe( 'history updates', () => {
 	const pointsInTime = [
 		'onStart',
 		'onFeatureSelectionComplete',
-		'onTitleAndTypeComplete',
+		'onTypeTitleComplete',
 		'onFirstTaskComplete',
 		'onFirstTaskUnComplete',
 		'onFeatureSelectionEdit',
-		'onTitleAndTypeEdit',
+		'onTypeTitleEdit',
 	] as const;
 
 	type PointInTime = typeof pointsInTime[ number ];
@@ -71,7 +71,7 @@ describe( 'history updates', () => {
 			).not.toBeInTheDocument();
 
 			expect(
-				screen.queryByRole( 'form', { name: 'Set issue title and type' } )
+				screen.queryByRole( 'form', { name: 'Set issue type and title' } )
 			).not.toBeInTheDocument();
 			expect(
 				screen.queryByRole( 'list', { name: 'Steps to report issue' } )
@@ -85,14 +85,14 @@ describe( 'history updates', () => {
 			expect( screen.getByText( `${ productName } > ${ featureName }` ) ).toBeInTheDocument();
 
 			expect(
-				screen.getByRole( 'form', { name: 'Set issue title and type' } )
+				screen.getByRole( 'form', { name: 'Set issue type and title' } )
 			).toBeInTheDocument();
 			expect(
 				screen.queryByRole( 'list', { name: 'Steps to report issue' } )
 			).not.toBeInTheDocument();
 		},
 
-		onTitleAndTypeComplete: () => {
+		onTypeTitleComplete: () => {
 			expect(
 				screen.getByRole( 'heading', { name: 'Completed step: Product and Feature' } )
 			).toBeInTheDocument();
@@ -145,13 +145,13 @@ describe( 'history updates', () => {
 			expect( screen.getByRole( 'list', { name: 'Steps to report issue' } ) ).toBeInTheDocument();
 		},
 
-		onTitleAndTypeEdit: () => {
+		onTypeTitleEdit: () => {
 			expect(
 				screen.getByRole( 'heading', { name: 'Completed step: Product and Feature' } )
 			).toBeInTheDocument();
 
 			expect(
-				screen.getByRole( 'form', { name: 'Set issue title and type' } )
+				screen.getByRole( 'form', { name: 'Set issue type and title' } )
 			).toBeInTheDocument();
 			expect( screen.getByRole( 'textbox', { name: /Title \(Optional\)/ } ) ).toHaveValue(
 				issueTitle
@@ -167,11 +167,11 @@ describe( 'history updates', () => {
 	const referenceUrlQueries: { [ key in PointInTime ]: string } = {
 		onStart: 'WILL BE SET IN TEST',
 		onFeatureSelectionComplete: 'WILL BE SET IN TEST',
-		onTitleAndTypeComplete: 'WILL BE SET IN TEST',
+		onTypeTitleComplete: 'WILL BE SET IN TEST',
 		onFirstTaskComplete: 'WILL BE SET IN TEST',
 		onFirstTaskUnComplete: 'WILL BE SET IN TEST',
 		onFeatureSelectionEdit: 'WILL BE SET IN TEST',
-		onTitleAndTypeEdit: 'WILL BE SET IN TEST',
+		onTypeTitleEdit: 'WILL BE SET IN TEST',
 	};
 
 	let user: UserEvent;
@@ -202,16 +202,16 @@ describe( 'history updates', () => {
 			);
 		} );
 
-		test( 'onTitleAndTypeComplete', async () => {
+		test( 'onTypeTitleComplete', async () => {
 			await user.click( screen.getByRole( 'textbox', { name: /Title \(Optional\)/ } ) );
 			await user.keyboard( issueTitle );
 			await user.click( screen.getByRole( 'radio', { name: 'Feature Request' } ) );
 			await user.click( screen.getByRole( 'button', { name: 'Continue' } ) );
 
-			validations.onTitleAndTypeComplete();
+			validations.onTypeTitleComplete();
 
-			referenceUrlQueries.onTitleAndTypeComplete = history.location.search;
-			expect( referenceUrlQueries.onTitleAndTypeComplete ).not.toBe(
+			referenceUrlQueries.onTypeTitleComplete = history.location.search;
+			expect( referenceUrlQueries.onTypeTitleComplete ).not.toBe(
 				referenceUrlQueries.onFeatureSelectionComplete
 			);
 		} );
@@ -224,7 +224,7 @@ describe( 'history updates', () => {
 
 			referenceUrlQueries.onFirstTaskComplete = history.location.search;
 			expect( referenceUrlQueries.onFirstTaskComplete ).not.toBe(
-				referenceUrlQueries.onTitleAndTypeComplete
+				referenceUrlQueries.onTypeTitleComplete
 			);
 		} );
 
@@ -255,7 +255,7 @@ describe( 'history updates', () => {
 			);
 		} );
 
-		test( 'onTitleAndTypeEdit', async () => {
+		test( 'onTypeTitleEdit', async () => {
 			await user.click(
 				screen.getByRole( 'button', {
 					name: 'Edit',
@@ -263,10 +263,10 @@ describe( 'history updates', () => {
 				} )
 			);
 
-			validations.onTitleAndTypeEdit();
+			validations.onTypeTitleEdit();
 
-			referenceUrlQueries.onTitleAndTypeEdit = history.location.search;
-			expect( referenceUrlQueries.onTitleAndTypeEdit ).not.toBe(
+			referenceUrlQueries.onTypeTitleEdit = history.location.search;
+			expect( referenceUrlQueries.onTypeTitleEdit ).not.toBe(
 				referenceUrlQueries.onFeatureSelectionEdit
 			);
 		} );
