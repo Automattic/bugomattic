@@ -40,9 +40,6 @@ describe( 'history updates', () => {
 							{
 								title: taskName,
 							},
-							{
-								title: 'Other task to avoid confetti',
-							},
 						],
 						urgent: [],
 					},
@@ -288,6 +285,8 @@ describe( 'history updates', () => {
 		} );
 
 		test( 'onStartOver', async () => {
+			// We have to complete all tasks to get the Start Over button to appear
+			await user.click( screen.getByRole( 'checkbox', { name: taskName, checked: false } ) );
 			await user.click( screen.getByRole( 'button', { name: 'Start Over' } ) );
 
 			validations.onStartOver();

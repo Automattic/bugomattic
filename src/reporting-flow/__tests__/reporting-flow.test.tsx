@@ -420,7 +420,17 @@ describe( '[Reporting Flow]', () => {
 		).not.toBeInTheDocument();
 	} );
 
-	test( 'Click the Start Over button', async () => {
+	test( 'The Start Over is not visible yet because tasks are not complete', () => {
+		expect( screen.queryByRole( 'button', { name: 'Start Over' } ) ).not.toBeInTheDocument();
+	} );
+
+	test( 'Complete the new tasks', async () => {
+		await user.click(
+			screen.getByRole( 'checkbox', { name: taskFor_B_bug.title, checked: false } )
+		);
+	} );
+
+	test( 'Click the Start Over button, which is now visible', async () => {
 		await user.click( screen.getByRole( 'button', { name: 'Start Over' } ) );
 	} );
 
