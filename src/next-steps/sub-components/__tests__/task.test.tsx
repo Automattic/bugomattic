@@ -208,20 +208,21 @@ describe( '[Task]', () => {
 
 		describe( 'Creates correct default titles for task types:', () => {
 			test( 'GitHub link task', () => {
+				const repo = 'Automattic/bugomattic';
 				const task: Task = {
 					id: 'github',
 					parentId: 'foo',
 					parentType: 'product',
 					link: {
 						type: 'github',
-						repository: 'Automattic/bugomattic',
+						repository: repo,
 					},
 				};
 
 				setup( <TaskComponent taskId={ task.id } />, task );
 
 				expect(
-					screen.getByRole( 'checkbox', { name: 'Open an issue in GitHub' } )
+					screen.getByRole( 'checkbox', { name: `Open an issue in the ${ repo } repo` } )
 				).toBeInTheDocument();
 			} );
 
