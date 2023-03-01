@@ -21,6 +21,7 @@ export function StartOverCard() {
 	const handleStartOverClick = () => {
 		dispatch( startOver() );
 		dispatch( updateHistoryWithState() );
+		globalThis.scrollTo( 0, 0 );
 		monitoringClient.analytics.recordEvent( 'start_over_click' );
 	};
 
