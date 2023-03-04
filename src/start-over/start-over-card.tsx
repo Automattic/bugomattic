@@ -25,7 +25,7 @@ export function StartOverCard() {
 		monitoringClient.analytics.recordEvent( 'start_over_click' );
 	};
 
-	// TODO: Scroll back up to the top on click
+	// TODO: add multiple messages that are random
 
 	return (
 		<section className={ styles.card } aria-label="Start Over">
