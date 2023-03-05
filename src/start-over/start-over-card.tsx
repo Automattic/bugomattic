@@ -25,11 +25,17 @@ export function StartOverCard() {
 		monitoringClient.analytics.recordEvent( 'start_over_click' );
 	};
 
-	// TODO: add multiple messages that are random
+	const messages = [
+		'Thank you for reporting the issue!',
+		'We appreciate your issue report! Every bit helps!',
+		'Thanks for helping improve our software!',
+	];
+	const randomIndex = Math.floor( Math.random() * messages.length );
+	const message = messages[ randomIndex ];
 
 	return (
 		<section className={ styles.card } aria-label="Start Over">
-			<p className={ styles.message }>Thank you for reporting the issue!</p>
+			<p className={ styles.message }>{ message }</p>
 			<button onClick={ handleStartOverClick } className="primaryButton">
 				Start Over
 			</button>
