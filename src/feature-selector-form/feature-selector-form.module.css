@@ -63,9 +63,8 @@ button.selectedFeature:hover {
 }
 
 .searchSubstringMatch {
-	font-weight: 700;
+	font-weight: 800;
 	text-decoration: underline;
-	background-color: var( --color-primary-extra-light );
 }
 
 .noResultsMessage {
