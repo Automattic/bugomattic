@@ -10,9 +10,10 @@ import {
 	selectSelectedFeatureId,
 	setSelectedFeatureId,
 } from '../feature-selector-form-slice';
-import { includesIgnoringCase } from '../../common/lib';
+import { includesIgnoringCase, replaceSpaces } from '../../common/lib';
 import { SubstringHighlighter } from '../../common/components';
 import { useMonitoring } from '../../monitoring/monitoring-provider';
+import { Tooltip } from 'react-tooltip';
 
 interface Props {
 	id: string;
@@ -49,22 +50,41 @@ export function Feature( { id }: Props ) {
 		}
 	}
 
+	const safeId = replaceSpaces( id );
+	const buttonId = `button_${ safeId }`;
+	const descriptionId = `description_${ safeId }`;
+
 	return (
-		<button
-			role="option"
-			type="button"
-			aria-selected={ isSelected }
-			className={ classNames.join( ' ' ) }
-			onClick={ handleFeatureSelect }
-			title={ description }
-			aria-description={ description }
-		>
-			<SubstringHighlighter
-				substring={ searchTerm }
-				highlightClassName={ styles.searchSubstringMatch }
+		<>
+			<button
+				role="option"
+				type="button"
+				aria-selected={ isSelected }
+				className={ classNames.join( ' ' ) }
+				onClick={ handleFeatureSelect }
+				id={ buttonId }
+				aria-describedby={ descriptionId }
 			>
-				{ featureName }
-			</SubstringHighlighter>
-		</button>
+				<SubstringHighlighter
+					substring={ searchTerm }
+					highlightClassName={ styles.searchSubstringMatch }
+				>
+					{ featureName }
+				</SubstringHighlighter>
+			</button>
+			<Tooltip
+				aria-hidden={ true }
+				// Can't use #ID because some characters in IDs may not be safe for that syntax.
+				anchorSelect={ `[id='${ buttonId }']` }
+				content={ description }
+				float={ true }
+				noArrow={ true }
+				delayShow={ 1000 }
+				className={ styles.tooltip }
+			/>
+			<span hidden={ true } id={ descriptionId }>
+				{ description }
+			</span>
+		</>
 	);
 }

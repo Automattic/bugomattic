@@ -52,7 +52,14 @@ export function SelectedFeatureDetails( { featureId }: Props ) {
 				</button>
 			</div>
 
-			{ description && <p className={ styles.selectedFeatureDescription }>{ description }</p> }
+			{ description && (
+				<p
+					data-testid={ 'selected-feature-description' }
+					className={ styles.selectedFeatureDescription }
+				>
+					{ description }
+				</p>
+			) }
 
 			<h4 className="screenReaderOnly">Breadcrumb for currently selected feature:</h4>
 			<div className={ styles.selectedFeatureBreadcrumb }>

@@ -143,6 +143,10 @@ button.clearButton:active {
 	margin-left: 1.5rem;
 }
 
+.tooltip {
+	max-width: 30rem;
+}
+
 @media only screen and ( max-width: 600px ) {
 	.bottomPanel {
 		align-items: flex-start;
@@ -155,6 +159,10 @@ button.clearButton:active {
 		width: 100%;
 		margin-left: 0;
 		margin-top: 2rem;
+	}
+
+	.tooltip {
+		max-width: 75vw;
 	}
 }
 

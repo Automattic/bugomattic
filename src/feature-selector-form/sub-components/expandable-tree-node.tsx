@@ -2,6 +2,7 @@ import React, { ReactNode } from 'react';
 import styles from './../feature-selector-form.module.css';
 import { ReactComponent as CollapsedIcon } from '../../common/svgs/chevron-right.svg';
 import { ReactComponent as ExpandedIcon } from '../../common/svgs/chevron-down.svg';
+import { Tooltip } from 'react-tooltip';
 
 interface Props {
 	children: ReactNode;
@@ -18,10 +19,12 @@ export function ExpandableTreeNode( {
 	handleToggle,
 	description,
 }: Props ) {
-	// We need a unique ID for setting aria-controls. This kind of random string should be plenty.
+	// We need a unique ID for setting aria-controls and tooltip anchors.
+	// This kind of random string should be plenty.
 	// If needed in the future, we can crawl the label for text content and add that.
 	const randomString = Math.random().toString( 16 ).slice( 2 );
 	const contentId = `collapsible-tree-node-content_${ randomString }`;
+	const buttonId = `collapsible-tree-node-button_${ randomString }`;
 
 	let icon: React.ReactNode;
 	if ( isExpanded ) {
@@ -38,12 +41,21 @@ export function ExpandableTreeNode( {
 				aria-controls={ contentId }
 				className={ styles.treeNode }
 				onClick={ handleToggle }
-				title={ description }
+				id={ buttonId }
 				aria-description={ description }
 			>
 				{ icon }
 				{ label }
 			</button>
+			<Tooltip
+				aria-hidden={ true }
+				anchorSelect={ `#${ buttonId }` }
+				content={ description }
+				delayShow={ 1000 }
+				float={ true }
+				noArrow={ true }
+				className={ styles.tooltip }
+			/>
 			<div id={ contentId }>{ children }</div>
 		</li>
 	);

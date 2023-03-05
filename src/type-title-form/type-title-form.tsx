@@ -15,6 +15,7 @@ import {
 import { IssueType } from '../issue-details/types';
 import { ReactComponent as InfoIcon } from '../common/svgs/info.svg';
 import { useMonitoring } from '../monitoring/monitoring-provider';
+import { Tooltip } from 'react-tooltip';
 import styles from './type-title-form.module.css';
 
 interface Props {
@@ -73,12 +74,14 @@ export function TypeTitleForm( { onContinue }: Props ) {
 		}
 	};
 
-	const urgentTooltipId = 'urgent-info-icon';
+	const urgentDescriptionId = 'urgent-description';
+	const urgentIconId = 'urgent-icon';
 	const urgentDescription =
 		'For when you need to escalate something urgently to a product team. ' +
 		'This should usually be reserved for widespread, critical issues such as outages or broken core workflows.';
 
-	const titleTooltipId = 'title-info-icon';
+	const titleDescriptionId = 'title-description';
+	const titleIconId = 'title-icon';
 	const titleDescription =
 		'We will pass along this title to issue forms (like GitHub) where possible.';
 
@@ -151,16 +154,18 @@ export function TypeTitleForm( { onContinue }: Props ) {
 							onBlur={ handleTypeBlur }
 							aria-required={ true }
 							aria-invalid={ showTypeError }
-							aria-describedby={ urgentTooltipId }
+							aria-describedby={ urgentDescriptionId }
 						/>
 						{ "It's Urgent!" }
-						<InfoIcon
-							aria-hidden={ true }
-							className={ styles.infoIcon }
-							title={ urgentDescription }
-						/>
+						<InfoIcon aria-hidden={ true } className={ styles.infoIcon } id={ urgentIconId } />
 					</label>
-					<span hidden={ true } id={ urgentTooltipId } role="tooltip">
+					<Tooltip
+						anchorSelect={ `#${ urgentIconId }` }
+						content={ urgentDescription }
+						aria-hidden={ true }
+						className={ styles.tooltip }
+					/>
+					<span hidden={ true } id={ urgentDescriptionId } role="tooltip">
 						{ urgentDescription }
 					</span>
 				</div>
@@ -171,11 +176,7 @@ export function TypeTitleForm( { onContinue }: Props ) {
 					<span className={ styles.titleLabel }>
 						<span className={ styles.titleWithIcon }>
 							<span>{ 'Title (Optional)' }</span>
-							<InfoIcon
-								aria-hidden={ true }
-								className={ styles.infoIcon }
-								title={ titleDescription }
-							/>
+							<InfoIcon aria-hidden={ true } className={ styles.infoIcon } id={ titleIconId } />
 						</span>
 						{ titleErrorMessage }
 					</span>
@@ -184,10 +185,16 @@ export function TypeTitleForm( { onContinue }: Props ) {
 						value={ title }
 						onChange={ handleTitleChange }
 						characterLimit={ titleCharacterLimit }
-						ariaDescribedBy={ titleTooltipId }
+						ariaDescribedBy={ titleDescriptionId }
 					/>
 				</label>
-				<span hidden={ true } id={ titleTooltipId } role="tooltip">
+				<Tooltip
+					anchorSelect={ `#${ titleIconId }` }
+					content={ titleDescription }
+					aria-hidden={ true }
+					className={ styles.tooltip }
+				/>
+				<span hidden={ true } id={ titleDescriptionId } role="tooltip">
 					{ titleDescription }
 				</span>
 			</div>
