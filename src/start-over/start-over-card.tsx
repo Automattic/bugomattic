@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { selectAllTasksAreComplete } from '../combined-selectors/all-tasks-are-complete';
 import { selectRelevantTaskIds } from '../combined-selectors/relevant-task-ids';
 import { useMonitoring } from '../monitoring/monitoring-provider';
-import { startOver } from './start-over-action';
+import { startOver } from './start-over-counter-slice';
 import { updateHistoryWithState } from '../url-history/actions';
 import styles from './start-over-card.module.css';
 

@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../app/store';
 import { NormalizedReportingConfig } from '../reporting-config/types';
+import { startOver } from '../start-over/start-over-counter-slice';
 import { updateStateFromHistory } from '../url-history/actions';
 import { FeatureId, IssueDetails, IssueType } from './types';
 
@@ -68,7 +69,7 @@ export const issueDetailsSlice = createSlice( {
 
 				return { featureId, issueType, issueTitle };
 			} )
-			.addCase( 'startOver', () => {
+			.addCase( startOver, () => {
 				return {
 					...initialState,
 				};

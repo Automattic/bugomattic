@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../app/store';
 import { NormalizedReportingConfig } from '../reporting-config/types';
+import { startOver } from '../start-over/start-over-counter-slice';
 import { updateStateFromHistory } from '../url-history/actions';
 
 // This is just for additional clarity in the function signatures below!
@@ -49,7 +50,7 @@ export const completedTasksSlice = createSlice( {
 				);
 				return [ ...filteredCompletedTasks ];
 			} )
-			.addCase( 'startOver', () => {
+			.addCase( startOver, () => {
 				return [ ...initialState ];
 			} );
 	},

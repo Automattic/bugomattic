@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../app/store';
 import { FeatureId } from '../issue-details/types';
+import { startOver } from '../start-over/start-over-counter-slice';
 import { FeatureSelectorFormState } from './types';
 
 const initialState: FeatureSelectorFormState = {
@@ -26,7 +27,7 @@ export const featureSelectorFormSlice = createSlice( {
 		},
 	},
 	extraReducers: ( builder ) => {
-		builder.addCase( 'startOver', () => {
+		builder.addCase( startOver, () => {
 			return {
 				...initialState,
 			};

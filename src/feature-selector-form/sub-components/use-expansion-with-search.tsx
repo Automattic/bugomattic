@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useAppSelector } from '../../app/hooks';
+import { selectStartOverCounter } from '../../start-over/start-over-counter-slice';
 import { selectFeatureSearchTerm } from '../feature-selector-form-slice';
 
 export function useExpansionWithSearch() {
@@ -9,9 +10,10 @@ export function useExpansionWithSearch() {
 		[ isExpanded, setIsExpanded ]
 	);
 
-	// Recollapse if a search term changes
+	// Recollapse if a search term changes, or we start over
 	const searchTerm = useAppSelector( selectFeatureSearchTerm );
-	useEffect( () => setIsExpanded( false ), [ searchTerm ] );
+	const startOverCounter = useAppSelector( selectStartOverCounter );
+	useEffect( () => setIsExpanded( false ), [ searchTerm, startOverCounter ] );
 
 	return {
 		isExpanded,
