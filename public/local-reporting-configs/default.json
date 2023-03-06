@@ -181,11 +181,7 @@
 				"features": {
 					"Alternative Feature": {
 						"tasks": {
-							"bug": [
-								{
-									"details": "Alternative Feature | Bug | details only"
-								}
-							],
+							"bug": [],
 							"featureRequest": [
 								{
 									"details": "Alternative Feature | Feature Request | details only"

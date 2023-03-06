@@ -33,7 +33,7 @@ describe( '[Bad URL State]', () => {
 	const expectedFeatureId = Object.keys( normalizedReference.features )[ 0 ];
 
 	async function setup( urlQuery: string ) {
-		history.replace( urlQuery );
+		history.replace( `?${ urlQuery }` );
 		const apiClient = createMockApiClient();
 		apiClient.loadReportingConfig = jest.fn().mockResolvedValue( fakeReportingConfigApiResponse );
 		renderWithProviders( <App />, { apiClient } );
@@ -113,6 +113,7 @@ describe( '[Bad URL State]', () => {
 					issueTitle: '',
 				},
 				activeStep: 'nextSteps',
+				completedTasks: [ 'not-an-id' ],
 			} as RootState );
 
 			await setup( urlQuery );
@@ -168,5 +169,24 @@ describe( '[Bad URL State]', () => {
 				screen.getByRole( 'heading', { name: 'Step number 3: Next Steps' } )
 			).toBeInTheDocument();
 		} );
+	} );
+
+	test( 'Displays error message when active step is "Next Steps", but we are missing info', async () => {
+		const urlQuery = stateToQuery( {
+			issueDetails: {
+				featureId: 'invalidId',
+				issueType: 'bug',
+				issueTitle: '',
+			},
+			activeStep: 'nextSteps',
+		} as RootState );
+
+		await setup( urlQuery );
+
+		expectNoErrorThrown();
+
+		expect(
+			screen.getByText( 'Hmm... We seem to be missing some information.', { exact: false } )
+		).toBeInTheDocument();
 	} );
 } );

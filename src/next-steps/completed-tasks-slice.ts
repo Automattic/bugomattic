@@ -34,7 +34,7 @@ export const completedTasksSlice = createSlice( {
 		builder
 			.addCase( updateStateFromHistory, ( state, action ) => {
 				const completedTasks = action.payload.completedTasks;
-				if ( ! completedTasks ) {
+				if ( ! completedTasks || ! Array.isArray( completedTasks ) ) {
 					return [ ...initialState ];
 				}
 
