@@ -73,15 +73,15 @@ export function Feature( { id }: Props ) {
 				</SubstringHighlighter>
 			</button>
 			<Tooltip
-				aria-hidden={ true }
 				// Can't use #ID because some characters in IDs may not be safe for that syntax.
 				anchorSelect={ `[id='${ buttonId }']` }
-				content={ description }
 				float={ true }
 				noArrow={ true }
 				delayShow={ 1000 }
 				className={ styles.tooltip }
-			/>
+			>
+				<span aria-hidden="true">{ description }</span>
+			</Tooltip>
 			<span hidden={ true } id={ descriptionId }>
 				{ description }
 			</span>

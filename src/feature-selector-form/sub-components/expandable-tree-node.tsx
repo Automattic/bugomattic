@@ -25,6 +25,7 @@ export function ExpandableTreeNode( {
 	const randomString = Math.random().toString( 16 ).slice( 2 );
 	const contentId = `collapsible-tree-node-content_${ randomString }`;
 	const buttonId = `collapsible-tree-node-button_${ randomString }`;
+	const descriptionId = `collapsible-tree-node-description_${ randomString }`;
 
 	let icon: React.ReactNode;
 	if ( isExpanded ) {
@@ -42,20 +43,23 @@ export function ExpandableTreeNode( {
 				className={ styles.treeNode }
 				onClick={ handleToggle }
 				id={ buttonId }
-				aria-description={ description }
+				aria-describedby={ descriptionId }
 			>
 				{ icon }
 				{ label }
 			</button>
 			<Tooltip
-				aria-hidden={ true }
 				anchorSelect={ `#${ buttonId }` }
-				content={ description }
 				delayShow={ 1000 }
 				float={ true }
 				noArrow={ true }
 				className={ styles.tooltip }
-			/>
+			>
+				<span aria-hidden="true">{ description }</span>
+			</Tooltip>
+			<span hidden={ true } id={ descriptionId }>
+				{ description }
+			</span>
 			<div id={ contentId }>{ children }</div>
 		</li>
 	);

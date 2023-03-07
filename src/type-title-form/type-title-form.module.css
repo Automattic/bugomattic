@@ -86,3 +86,9 @@
 		margin-top: 0.25rem;
 	}
 }
+
+@media not ( hover: hover ) {
+	.infoIcon {
+		display: none;
+	}
+}

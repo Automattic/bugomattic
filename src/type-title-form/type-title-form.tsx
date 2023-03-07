@@ -157,15 +157,17 @@ export function TypeTitleForm( { onContinue }: Props ) {
 							aria-describedby={ urgentDescriptionId }
 						/>
 						{ "It's Urgent!" }
-						<InfoIcon aria-hidden={ true } className={ styles.infoIcon } id={ urgentIconId } />
+						<InfoIcon
+							aria-hidden={ true }
+							tabIndex={ -1 }
+							className={ styles.infoIcon }
+							id={ urgentIconId }
+						/>
 					</label>
-					<Tooltip
-						anchorSelect={ `#${ urgentIconId }` }
-						content={ urgentDescription }
-						aria-hidden={ true }
-						className={ styles.tooltip }
-					/>
-					<span hidden={ true } id={ urgentDescriptionId } role="tooltip">
+					<Tooltip anchorSelect={ `#${ urgentIconId }` } className={ styles.tooltip }>
+						<span aria-hidden="true">{ urgentDescription }</span>
+					</Tooltip>
+					<span hidden={ true } id={ urgentDescriptionId }>
 						{ urgentDescription }
 					</span>
 				</div>
@@ -176,7 +178,12 @@ export function TypeTitleForm( { onContinue }: Props ) {
 					<span className={ styles.titleLabel }>
 						<span className={ styles.titleWithIcon }>
 							<span>{ 'Title (Optional)' }</span>
-							<InfoIcon aria-hidden={ true } className={ styles.infoIcon } id={ titleIconId } />
+							<InfoIcon
+								aria-hidden={ true }
+								tabIndex={ -1 }
+								className={ styles.infoIcon }
+								id={ titleIconId }
+							/>
 						</span>
 						{ titleErrorMessage }
 					</span>
@@ -188,13 +195,10 @@ export function TypeTitleForm( { onContinue }: Props ) {
 						ariaDescribedBy={ titleDescriptionId }
 					/>
 				</label>
-				<Tooltip
-					anchorSelect={ `#${ titleIconId }` }
-					content={ titleDescription }
-					aria-hidden={ true }
-					className={ styles.tooltip }
-				/>
-				<span hidden={ true } id={ titleDescriptionId } role="tooltip">
+				<Tooltip anchorSelect={ `#${ titleIconId }` } className={ styles.tooltip }>
+					<span aria-hidden="true">{ titleDescription }</span>
+				</Tooltip>
+				<span hidden={ true } id={ titleDescriptionId }>
 					{ titleDescription }
 				</span>
 			</div>
