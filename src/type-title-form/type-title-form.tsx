@@ -164,9 +164,11 @@ export function TypeTitleForm( { onContinue }: Props ) {
 							id={ urgentIconId }
 						/>
 					</label>
-					<Tooltip anchorSelect={ `#${ urgentIconId }` } className={ styles.tooltip }>
-						<span aria-hidden="true">{ urgentDescription }</span>
-					</Tooltip>
+					<Tooltip
+						anchorSelect={ `#${ urgentIconId }` }
+						className={ styles.tooltip }
+						content={ urgentDescription }
+					/>
 					<span hidden={ true } id={ urgentDescriptionId }>
 						{ urgentDescription }
 					</span>
@@ -195,9 +197,11 @@ export function TypeTitleForm( { onContinue }: Props ) {
 						ariaDescribedBy={ titleDescriptionId }
 					/>
 				</label>
-				<Tooltip anchorSelect={ `#${ titleIconId }` } className={ styles.tooltip }>
-					<span aria-hidden="true">{ titleDescription }</span>
-				</Tooltip>
+				<Tooltip
+					anchorSelect={ `#${ titleIconId }` }
+					className={ styles.tooltip }
+					content={ titleDescription }
+				/>
 				<span hidden={ true } id={ titleDescriptionId }>
 					{ titleDescription }
 				</span>

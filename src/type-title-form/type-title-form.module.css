@@ -85,6 +85,10 @@
 		margin-left: 0;
 		margin-top: 0.25rem;
 	}
+
+	.tooltip {
+		max-width: 75vw;
+	}
 }
 
 @media not ( hover: hover ) {

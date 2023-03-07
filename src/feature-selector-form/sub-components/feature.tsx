@@ -79,9 +79,8 @@ export function Feature( { id }: Props ) {
 				noArrow={ true }
 				delayShow={ 1000 }
 				className={ styles.tooltip }
-			>
-				<span aria-hidden="true">{ description }</span>
-			</Tooltip>
+				content={ description }
+			/>
 			<span hidden={ true } id={ descriptionId }>
 				{ description }
 			</span>

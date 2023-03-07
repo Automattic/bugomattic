@@ -54,9 +54,8 @@ export function ExpandableTreeNode( {
 				float={ true }
 				noArrow={ true }
 				className={ styles.tooltip }
-			>
-				<span aria-hidden="true">{ description }</span>
-			</Tooltip>
+				content={ description }
+			/>
 			<span hidden={ true } id={ descriptionId }>
 				{ description }
 			</span>
