@@ -186,7 +186,7 @@ describe( '[Bad URL State]', () => {
 		expectNoErrorThrown();
 
 		expect(
-			screen.getByText( 'Hmm... We seem to be missing some information.', { exact: false } )
+			screen.getByText( 'Hmm, we seem to be missing some information', { exact: false } )
 		).toBeInTheDocument();
 	} );
 } );

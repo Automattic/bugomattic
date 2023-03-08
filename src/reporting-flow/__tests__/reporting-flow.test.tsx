@@ -319,10 +319,9 @@ describe( '[Reporting Flow]', () => {
 
 	test( 'Because there are no tasks configured, the next steps step now has a missing config message', async () => {
 		expect(
-			screen.getByText(
-				'Hmm... It appears this feature area has no issue reporting configuration.',
-				{ exact: false }
-			)
+			screen.getByText( 'Hmm, it appears this feature area has no issue reporting configuration.', {
+				exact: false,
+			} )
 		).toBeInTheDocument();
 	} );
 

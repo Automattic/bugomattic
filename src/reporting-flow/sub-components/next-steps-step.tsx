@@ -37,16 +37,16 @@ export function NextStepsStep( { stepNumber }: Props ) {
 	} else if ( requiredInfoIsMissing ) {
 		stepContentDisplay = (
 			<p className={ styles.badStateMessage } role="alert">
-				Hmm... We seem to be missing some information. This almost always means we could not parse
-				the info in the URL. Restart by clicking on the Bugomattic header at the top of the page.
+				Hmm, we seem to be missing some information. This almost always means we could not parse the
+				info in the URL. Please start over by clicking the Bugomattic header at the top of the page.
 			</p>
 		);
 	} else if ( noTasksAreConfigured ) {
 		stepContentDisplay = (
 			<p className={ styles.badStateMessage } role="alert">
-				Hmm... It appears this feature area has no issue reporting configuration. You can try
-				reaching out to the team contacts listed below (if available). You can also ping the
-				Bugomattic administrators if needed.
+				Hmm, it appears this feature area has no issue reporting configuration. We have been
+				notified and will correct this soon! In the meantime, you can try contacting the product
+				team directly.
 			</p>
 		);
 	} else {
