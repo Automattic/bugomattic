@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../app/store';
+import { startOver } from '../start-over/start-over-counter-slice';
 import { updateStateFromHistory } from '../url-history/actions';
 import { ActiveStep } from './types';
 
@@ -29,7 +30,7 @@ export const featureSelectorFormSlice = createSlice( {
 
 				return action.payload.activeStep;
 			} )
-			.addCase( 'startOver', () => initialState );
+			.addCase( startOver, () => initialState );
 	},
 } );
 

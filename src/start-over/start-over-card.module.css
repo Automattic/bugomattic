@@ -1,0 +1,30 @@
+@import '../variables.css';
+
+.card {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	padding: 1rem 1.5rem;
+	margin-top: 2rem;
+	border: 1px solid var( --color-border );
+	border-radius: 6px;
+	background-color: var( --color-shaded-background );
+	justify-content: space-between;
+}
+
+.message {
+	margin: 0;
+	margin-right: 1rem;
+	font-size: var( --font-header );
+}
+
+@media only screen and ( max-width: 600px ) {
+	.card {
+		flex-direction: column;
+	}
+
+	.message {
+		margin-right: 0;
+		margin-bottom: 1rem;
+	}
+}

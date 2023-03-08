@@ -19,6 +19,8 @@ import { ReportingFlow } from '../reporting-flow';
 import { UserEvent } from '@testing-library/user-event/dist/types/setup/setup';
 import { createMockMonitoringClient } from '../../test-utils/mock-monitoring-client';
 
+globalThis.scrollTo = jest.fn();
+
 /* To test the full flow, we write this test in an E2E testing style.
 We render the component once, and then break actions out into individual test steps.
 This is still fast though because it's all run in memory with jsdom! */
@@ -420,7 +422,17 @@ describe( '[Reporting Flow]', () => {
 		).not.toBeInTheDocument();
 	} );
 
-	test( 'Click the Start Over button', async () => {
+	test( 'The Start Over is not visible yet because tasks are not complete', () => {
+		expect( screen.queryByRole( 'button', { name: 'Start Over' } ) ).not.toBeInTheDocument();
+	} );
+
+	test( 'Complete the new tasks', async () => {
+		await user.click(
+			screen.getByRole( 'checkbox', { name: taskFor_B_bug.title, checked: false } )
+		);
+	} );
+
+	test( 'Click the Start Over button, which is now visible', async () => {
 		await user.click( screen.getByRole( 'button', { name: 'Start Over' } ) );
 	} );
 

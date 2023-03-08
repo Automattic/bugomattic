@@ -8,6 +8,7 @@ import { selectIssueType } from '../issue-details/issue-details-slice';
 import { ActiveStep } from './types';
 import { setActiveStep } from './active-step-slice';
 import { updateHistoryWithState } from '../url-history/actions';
+import { StartOverCard } from '../start-over/start-over-card';
 
 export function ReportingFlow() {
 	const dispatch = useAppDispatch();
@@ -31,6 +32,7 @@ export function ReportingFlow() {
 			<FeatureSelectionStep stepNumber={ 1 } goToNextStep={ handleFeatureSelectionNextStep } />
 			<TypeTitleStep stepNumber={ 2 } goToNextStep={ handleTypeTitleNextStep } />
 			<NextStepsStep stepNumber={ 3 } />
+			<StartOverCard />
 		</section>
 	);
 }

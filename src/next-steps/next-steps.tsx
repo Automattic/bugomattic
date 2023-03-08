@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../app/hooks';
+import { useAppSelector } from '../app/hooks';
 import { selectRelevantTaskIds } from '../combined-selectors/relevant-task-ids';
 import { Task } from './sub-components/task';
 import styles from './next-steps.module.css';
@@ -9,11 +9,8 @@ import { selectIssueFeatureId } from '../issue-details/issue-details-slice';
 import { selectAllTasksAreComplete } from '../combined-selectors/all-tasks-are-complete';
 import { useMonitoring } from '../monitoring/monitoring-provider';
 import { selectNormalizedReportingConfig } from '../reporting-config/reporting-config-slice';
-import { startOver } from './start-over-action';
-import { updateHistoryWithState } from '../url-history/actions';
 
 export function NextSteps() {
-	const dispatch = useAppDispatch();
 	const monitoringClient = useMonitoring();
 
 	const sectionRef = useRef< HTMLElement >( null );
@@ -25,12 +22,6 @@ export function NextSteps() {
 	const issueFeatureId = useAppSelector( selectIssueFeatureId );
 	const relevantTaskIds = useAppSelector( selectRelevantTaskIds );
 	const allTasksAreComplete = useAppSelector( selectAllTasksAreComplete );
-
-	const handleStartOverClick = () => {
-		dispatch( startOver() );
-		dispatch( updateHistoryWithState() );
-		monitoringClient.analytics.recordEvent( 'start_over_click' );
-	};
 
 	useEffect( () => {
 		const sourcesInOrder = relevantTaskIds.map( ( taskId ) => {
@@ -106,11 +97,6 @@ export function NextSteps() {
 					<Task key={ taskId } taskId={ taskId } />
 				) ) }
 			</ol>
-			<div className={ styles.startOverButtonWrapper }>
-				<button className="primaryButton" onClick={ handleStartOverClick }>
-					Start Over
-				</button>
-			</div>
 			<MoreInfo />
 		</section>
 	);

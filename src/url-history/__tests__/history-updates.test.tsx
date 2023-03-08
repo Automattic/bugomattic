@@ -13,6 +13,8 @@ import { ReportingConfigApiResponse } from '../../api/types';
 import { App } from '../../app/app';
 import history from 'history/browser';
 
+globalThis.scrollTo = jest.fn();
+
 /*
 This is a weird test, but it's design is very intentional!
 We want to avoid testing the nuance of how we track state in the URL query params.
@@ -39,9 +41,6 @@ describe( 'history updates', () => {
 						featureRequest: [
 							{
 								title: taskName,
-							},
-							{
-								title: 'Other task to avoid confetti',
 							},
 						],
 						urgent: [],
@@ -288,6 +287,8 @@ describe( 'history updates', () => {
 		} );
 
 		test( 'onStartOver', async () => {
+			// We have to complete all tasks to get the Start Over button to appear
+			await user.click( screen.getByRole( 'checkbox', { name: taskName, checked: false } ) );
 			await user.click( screen.getByRole( 'button', { name: 'Start Over' } ) );
 
 			validations.onStartOver();
