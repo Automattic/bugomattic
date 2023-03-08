@@ -144,7 +144,7 @@ button.clearButton:active {
 }
 
 .tooltip {
-	max-width: 30rem;
+	max-width: 20rem;
 }
 
 @media only screen and ( max-width: 600px ) {
@@ -159,10 +159,6 @@ button.clearButton:active {
 		width: 100%;
 		margin-left: 0;
 		margin-top: 2rem;
-	}
-
-	.tooltip {
-		max-width: 75vw;
 	}
 }
 

@@ -51,7 +51,7 @@ export function Feature( { id }: Props ) {
 	}
 
 	const safeId = replaceSpaces( id );
-	const buttonId = `button_${ safeId }`;
+	const featureNameId = `feature_name_${ safeId }`;
 	const descriptionId = `description_${ safeId }`;
 
 	return (
@@ -62,24 +62,24 @@ export function Feature( { id }: Props ) {
 				aria-selected={ isSelected }
 				className={ classNames.join( ' ' ) }
 				onClick={ handleFeatureSelect }
-				id={ buttonId }
 				aria-describedby={ descriptionId }
 			>
-				<SubstringHighlighter
-					substring={ searchTerm }
-					highlightClassName={ styles.searchSubstringMatch }
-				>
-					{ featureName }
-				</SubstringHighlighter>
+				<span id={ featureNameId }>
+					<SubstringHighlighter
+						substring={ searchTerm }
+						highlightClassName={ styles.searchSubstringMatch }
+					>
+						{ featureName }
+					</SubstringHighlighter>
+				</span>
 			</button>
 			<Tooltip
 				// Can't use #ID because some characters in IDs may not be safe for that syntax.
-				anchorSelect={ `[id='${ buttonId }']` }
-				float={ true }
-				noArrow={ true }
+				anchorSelect={ `[id='${ featureNameId }']` }
 				delayShow={ 1000 }
 				className={ styles.tooltip }
 				content={ description }
+				place="right"
 			/>
 			<span hidden={ true } id={ descriptionId }>
 				{ description }

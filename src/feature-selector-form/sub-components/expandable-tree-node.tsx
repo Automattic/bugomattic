@@ -24,7 +24,7 @@ export function ExpandableTreeNode( {
 	// If needed in the future, we can crawl the label for text content and add that.
 	const randomString = Math.random().toString( 16 ).slice( 2 );
 	const contentId = `collapsible-tree-node-content_${ randomString }`;
-	const buttonId = `collapsible-tree-node-button_${ randomString }`;
+	const labelId = `collapsible-tree-node-label_${ randomString }`;
 	const descriptionId = `collapsible-tree-node-description_${ randomString }`;
 
 	let icon: React.ReactNode;
@@ -42,19 +42,17 @@ export function ExpandableTreeNode( {
 				aria-controls={ contentId }
 				className={ styles.treeNode }
 				onClick={ handleToggle }
-				id={ buttonId }
 				aria-describedby={ descriptionId }
 			>
 				{ icon }
-				{ label }
+				<span id={ labelId }> { label }</span>
 			</button>
 			<Tooltip
-				anchorSelect={ `#${ buttonId }` }
+				anchorSelect={ `#${ labelId }` }
 				delayShow={ 1000 }
-				float={ true }
-				noArrow={ true }
 				className={ styles.tooltip }
 				content={ description }
+				place="right"
 			/>
 			<span hidden={ true } id={ descriptionId }>
 				{ description }

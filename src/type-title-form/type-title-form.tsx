@@ -168,6 +168,7 @@ export function TypeTitleForm( { onContinue }: Props ) {
 						anchorSelect={ `#${ urgentIconId }` }
 						className={ styles.tooltip }
 						content={ urgentDescription }
+						place="right"
 					/>
 					<span hidden={ true } id={ urgentDescriptionId }>
 						{ urgentDescription }
@@ -201,6 +202,7 @@ export function TypeTitleForm( { onContinue }: Props ) {
 					anchorSelect={ `#${ titleIconId }` }
 					className={ styles.tooltip }
 					content={ titleDescription }
+					place="right"
 				/>
 				<span hidden={ true } id={ titleDescriptionId }>
 					{ titleDescription }
