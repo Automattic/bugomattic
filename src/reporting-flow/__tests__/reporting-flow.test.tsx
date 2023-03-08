@@ -153,7 +153,7 @@ describe( '[Reporting Flow]', () => {
 		).not.toBeInTheDocument();
 	} );
 
-	test( 'Select a feature A and click "Continue"', async () => {
+	test( 'Select a feature (Feature A) and click "Continue"', async () => {
 		// Expand tree
 		await user.click( screen.getByRole( 'button', { name: product.name, expanded: false } ) );
 		await user.click( screen.getByRole( 'button', { name: featureGroup.name, expanded: false } ) );
@@ -186,7 +186,7 @@ describe( '[Reporting Flow]', () => {
 		).toBeInTheDocument();
 	} );
 
-	test( 'The title and type step is now active', async () => {
+	test( 'The type and title step is now active', async () => {
 		expect( screen.getByRole( 'form', { name: 'Set issue type and title' } ) ).toBeInTheDocument();
 	} );
 
@@ -201,13 +201,13 @@ describe( '[Reporting Flow]', () => {
 		await user.click( screen.getByRole( 'button', { name: 'Continue' } ) );
 	} );
 
-	test( 'The title and type step is marked as complete', async () => {
+	test( 'The type and title step is marked as complete', async () => {
 		expect(
 			screen.getByRole( 'heading', { name: 'Completed step: Type and Title' } )
 		).toBeInTheDocument();
 	} );
 
-	test( 'The title and type step gets an edit button', async () => {
+	test( 'The type and title step gets an edit button', async () => {
 		expect(
 			screen.getByRole( 'button', {
 				name: 'Edit',
@@ -250,7 +250,7 @@ describe( '[Reporting Flow]', () => {
 		).toBeInTheDocument();
 	} );
 
-	test( 'Click the edit button for the title and type step and record "type_step_edit" event', async () => {
+	test( 'Click the edit button for the type and title step', async () => {
 		await user.click(
 			screen.getByRole( 'button', {
 				name: 'Edit',
@@ -259,14 +259,14 @@ describe( '[Reporting Flow]', () => {
 		);
 	} );
 
-	test( 'The title and type step is not marked as complete because it is active', async () => {
+	test( 'The type and title step is not marked as complete because it is active', async () => {
 		// It reverts to its numerical heading;
 		expect(
 			screen.getByRole( 'heading', { name: 'Step number 2: Type and Title' } )
 		).toBeInTheDocument();
 	} );
 
-	test( 'The edit button for title and type step disappears because it is active', async () => {
+	test( 'The edit button for type and title step disappears because it is active', async () => {
 		// It reverts to its numerical heading;
 		expect(
 			screen.queryByRole( 'button', {
@@ -280,21 +280,17 @@ describe( '[Reporting Flow]', () => {
 		expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'type_step_edit' );
 	} );
 
-	test( 'Select a new type: "Bug", but do not continue', async () => {
-		await user.click( screen.getByRole( 'radio', { name: 'Bug' } ) );
+	test( 'Select a new type: "It\'s Urgent!", but do not continue', async () => {
+		await user.click( screen.getByRole( 'radio', { name: "It's Urgent!" } ) );
 	} );
 
-	test( 'The next step tasks do not update yet for the new type', async () => {
+	test( 'The next steps step does not update yet for the new type', async () => {
 		expect(
 			screen.getByRole( 'checkbox', { name: taskFor_A_featureRequest.title } )
 		).toBeInTheDocument();
-
-		expect(
-			screen.queryByRole( 'checkbox', { name: taskFor_A_bug.title } )
-		).not.toBeInTheDocument();
 	} );
 
-	test( 'Click "Continue" on the edited title and type step', async () => {
+	test( 'Click "Continue" on the edited type and title step', async () => {
 		await user.click( screen.getByRole( 'button', { name: 'Continue' } ) );
 	} );
 
@@ -318,12 +314,41 @@ describe( '[Reporting Flow]', () => {
 		).not.toBeInTheDocument();
 
 		// Details
-		expect( screen.getByText( 'Bug', { exact: true } ) ).toBeInTheDocument();
+		expect( screen.getByText( "It's Urgent!", { exact: true } ) ).toBeInTheDocument();
 	} );
 
-	test( 'The next step tasks update to reflect the new issue type', async () => {
+	test( 'Because there are no tasks configured, the next steps step now has a missing config message', async () => {
 		expect(
-			screen.queryByRole( 'checkbox', { name: taskFor_A_featureRequest.title } )
+			screen.getByText( 'Hmm, it appears this feature area has no issue reporting configuration.', {
+				exact: false,
+			} )
+		).toBeInTheDocument();
+	} );
+
+	test( 'An error is logged about the missing config', () => {
+		expect( monitoringClient.logger.error ).toHaveBeenCalledWith(
+			'Encountered an issue reporting configuration with no tasks',
+			{ featureId: featureA.id, issueType: 'urgent' }
+		);
+	} );
+
+	test( 'Edit the type and title step, change the issue type to "Bug", and continue', async () => {
+		await user.click(
+			screen.getByRole( 'button', {
+				name: 'Edit',
+				description: /Type and Title/,
+			} )
+		);
+		await user.click( screen.getByRole( 'radio', { name: 'Bug' } ) );
+		await user.click( screen.getByRole( 'button', { name: 'Continue' } ) );
+	} );
+
+	test( 'The next steps step now shows new tasks for the new issue type', async () => {
+		expect(
+			screen.queryByText(
+				'Hmm... It appears this feature area has no issue reporting configuration.',
+				{ exact: false }
+			)
 		).not.toBeInTheDocument();
 
 		expect(
@@ -415,7 +440,7 @@ describe( '[Reporting Flow]', () => {
 		).toBeInTheDocument();
 	} );
 
-	test( 'Does not make the title and type step active because it is already complete', async () => {
+	test( 'Does not make the type and title step active because it is already complete', async () => {
 		// It's the next step after feature selection, so we automatically go there!
 		expect(
 			screen.queryByRole( 'form', { name: 'Set issue type and title' } )

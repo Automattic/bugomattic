@@ -1,11 +1,11 @@
 import userEvent from '@testing-library/user-event';
 import React, { ReactElement } from 'react';
-import { NormalizedReportingConfig, Task } from '../../../reporting-config/types';
-import { createMockApiClient } from '../../../test-utils/mock-api-client';
-import { renderWithProviders } from '../../../test-utils/render-with-providers';
-import { Task as TaskComponent } from '../task';
+import { NormalizedReportingConfig, Task } from '../../reporting-config/types';
+import { createMockApiClient } from '../../test-utils/mock-api-client';
+import { renderWithProviders } from '../../test-utils/render-with-providers';
+import { Task as TaskComponent } from '../sub-components/task';
 import { screen, fireEvent } from '@testing-library/react';
-import { createMockMonitoringClient } from '../../../test-utils/mock-monitoring-client';
+import { createMockMonitoringClient } from '../../test-utils/mock-monitoring-client';
 
 describe( '[Task]', () => {
 	function setup( component: ReactElement, task: Task ) {
@@ -208,20 +208,21 @@ describe( '[Task]', () => {
 
 		describe( 'Creates correct default titles for task types:', () => {
 			test( 'GitHub link task', () => {
+				const repo = 'Automattic/bugomattic';
 				const task: Task = {
 					id: 'github',
 					parentId: 'foo',
 					parentType: 'product',
 					link: {
 						type: 'github',
-						repository: 'Automattic/bugomattic',
+						repository: repo,
 					},
 				};
 
 				setup( <TaskComponent taskId={ task.id } />, task );
 
 				expect(
-					screen.getByRole( 'checkbox', { name: 'Open an issue in GitHub' } )
+					screen.getByRole( 'checkbox', { name: `Open an issue in the ${ repo } repo` } )
 				).toBeInTheDocument();
 			} );
 

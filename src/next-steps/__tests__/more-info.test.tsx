@@ -1,11 +1,11 @@
 import React, { ReactElement } from 'react';
 import userEvent from '@testing-library/user-event';
-import { createMockApiClient } from '../../../test-utils/mock-api-client';
-import { NormalizedReportingConfig } from '../../../reporting-config/types';
-import { renderWithProviders } from '../../../test-utils/render-with-providers';
+import { createMockApiClient } from '../../test-utils/mock-api-client';
+import { NormalizedReportingConfig } from '../../reporting-config/types';
+import { renderWithProviders } from '../../test-utils/render-with-providers';
 import { MoreInfo } from '../more-info';
 import { fireEvent, screen } from '@testing-library/react';
-import { createMockMonitoringClient } from '../../../test-utils/mock-monitoring-client';
+import { createMockMonitoringClient } from '../../test-utils/mock-monitoring-client';
 
 describe( '[MoreInfo]', () => {
 	function setup(

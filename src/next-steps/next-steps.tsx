@@ -3,7 +3,7 @@ import { useAppSelector } from '../app/hooks';
 import { selectRelevantTaskIds } from '../combined-selectors/relevant-task-ids';
 import { Task } from './sub-components/task';
 import styles from './next-steps.module.css';
-import { MoreInfo } from './sub-components/more-info';
+import { MoreInfo } from './more-info';
 import Confetti from 'react-confetti';
 import { selectIssueFeatureId } from '../issue-details/issue-details-slice';
 import { selectAllTasksAreComplete } from '../combined-selectors/all-tasks-are-complete';

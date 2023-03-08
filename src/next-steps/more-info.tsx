@@ -1,10 +1,10 @@
 import React from 'react';
-import { useAppSelector } from '../../app/hooks';
-import { selectIssueFeatureId } from '../../issue-details/issue-details-slice';
-import { selectNormalizedReportingConfig } from '../../reporting-config/reporting-config-slice';
-import { Feature, FeatureGroup, Product } from '../../reporting-config/types';
-import { EntityInfo } from './entity-info';
-import styles from '../next-steps.module.css';
+import { useAppSelector } from '../app/hooks';
+import { selectIssueFeatureId } from '../issue-details/issue-details-slice';
+import { selectNormalizedReportingConfig } from '../reporting-config/reporting-config-slice';
+import { Feature, FeatureGroup, Product } from '../reporting-config/types';
+import { EntityInfo } from './sub-components/entity-info';
+import styles from './next-steps.module.css';
 
 export function MoreInfo() {
 	const featureId = useAppSelector( selectIssueFeatureId );

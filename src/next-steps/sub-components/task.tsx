@@ -146,7 +146,7 @@ function getDefaultTitleForLink( link: TaskLink ): string {
 		case 'general':
 			return link.href;
 		case 'github':
-			return 'Open an issue in GitHub';
+			return `Open an issue in the ${ link.repository } repo`;
 		case 'slack':
 			return `Notify the #${ link.channel } channel in Slack`;
 		case 'p2':

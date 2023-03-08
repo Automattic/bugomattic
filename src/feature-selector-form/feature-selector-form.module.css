@@ -63,9 +63,8 @@ button.selectedFeature:hover {
 }
 
 .searchSubstringMatch {
-	font-weight: 700;
+	font-weight: 800;
 	text-decoration: underline;
-	background-color: var( --color-primary-extra-light );
 }
 
 .noResultsMessage {
@@ -103,6 +102,9 @@ button.clearButton:active {
 	font-size: var( --font-body-small );
 	margin-top: 1.25rem;
 	overflow-x: hidden;
+	/* This is required to prevent an unnecessary scrollbar. 
+	When overflow-x is hidden, overflow-y can get converted to auto unless set. */
+	overflow-y: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
 }
