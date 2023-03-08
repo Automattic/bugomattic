@@ -93,7 +93,29 @@ button.editButton:active {
 	margin-top: 1.5rem;
 }
 
+.badStateWrapper {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+}
+
+.badStateImage {
+	width: 100%;
+	height: auto;
+	max-width: 480px;
+}
+
+.badStateHeader {
+	font-size: var( --font-header );
+	margin-top: 0;
+	font-weight: 700;
+	max-width: 600px;
+}
+
 .badStateMessage {
-	margin: 0;
-	font-style: italic;
+	font-weight: 300;
+	margin-top: 0;
+	margin-bottom: 2rem;
+	max-width: 600px;
 }

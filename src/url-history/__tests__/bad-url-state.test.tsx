@@ -171,7 +171,7 @@ describe( '[Bad URL State]', () => {
 		} );
 	} );
 
-	test( 'Displays error message when active step is "Next Steps", but we are missing info', async () => {
+	test( 'Displays error message and start over button when active step is "Next Steps", but we are missing info', async () => {
 		const urlQuery = stateToQuery( {
 			issueDetails: {
 				featureId: 'invalidId',
@@ -188,5 +188,6 @@ describe( '[Bad URL State]', () => {
 		expect(
 			screen.getByText( 'Hmm, we seem to be missing some information', { exact: false } )
 		).toBeInTheDocument();
+		expect( screen.getByRole( 'button', { name: 'Start Over' } ) ).toBeInTheDocument();
 	} );
 } );

@@ -325,6 +325,13 @@ describe( '[Reporting Flow]', () => {
 		).toBeInTheDocument();
 	} );
 
+	test( 'An error is logged about the missing config', () => {
+		expect( monitoringClient.logger.error ).toHaveBeenCalledWith(
+			'Encountered an issue reporting configuration with no tasks',
+			{ featureId: featureA.id, issueType: 'urgent' }
+		);
+	} );
+
 	test( 'Edit the type and title step, change the issue type to "Bug", and continue', async () => {
 		await user.click(
 			screen.getByRole( 'button', {
