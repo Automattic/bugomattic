@@ -15,6 +15,7 @@ import {
 import { IssueType } from '../issue-details/types';
 import { ReactComponent as InfoIcon } from '../common/svgs/info.svg';
 import { useMonitoring } from '../monitoring/monitoring-provider';
+import { Tooltip } from 'react-tooltip';
 import styles from './type-title-form.module.css';
 
 interface Props {
@@ -73,20 +74,23 @@ export function TypeTitleForm( { onContinue }: Props ) {
 		}
 	};
 
-	const urgentTooltipId = 'urgent-info-icon';
+	const urgentDescriptionId = 'urgent-description';
+	const urgentIconId = 'urgent-icon';
 	const urgentDescription =
 		'For when you need to escalate something urgently to a product team. ' +
 		'This should usually be reserved for widespread, critical issues such as outages or broken core workflows.';
 
-	const titleTooltipId = 'title-info-icon';
+	const titleDescriptionId = 'title-description';
+	const titleIconId = 'title-icon';
 	const titleDescription =
 		'We will pass along this title to issue forms (like GitHub) where possible.';
 
+	const titleErrorText = 'Title must be under the character limit';
 	let titleErrorMessage: ReactNode = null;
 	if ( showTitleError ) {
 		titleErrorMessage = (
 			<span className={ styles.formErrorWrapper }>
-				<FormErrorMessage>Title must be under the character limit</FormErrorMessage>
+				<FormErrorMessage>{ titleErrorText }</FormErrorMessage>
 			</span>
 		);
 	}
@@ -99,6 +103,8 @@ export function TypeTitleForm( { onContinue }: Props ) {
 			</span>
 		);
 	}
+
+	const titleInputId = 'issue-title-input';
 
 	return (
 		<form onSubmit={ handleSubmit } aria-label="Set issue type and title">
@@ -140,7 +146,7 @@ export function TypeTitleForm( { onContinue }: Props ) {
 					</label>
 				</div>
 
-				<div className={ styles.radioWrapper }>
+				<div className={ `${ styles.radioWrapper } ${ styles.radioWrapperWithIcon }` }>
 					<label className={ styles.radio }>
 						<input
 							type="radio"
@@ -151,44 +157,60 @@ export function TypeTitleForm( { onContinue }: Props ) {
 							onBlur={ handleTypeBlur }
 							aria-required={ true }
 							aria-invalid={ showTypeError }
-							aria-describedby={ urgentTooltipId }
+							aria-describedby={ urgentDescriptionId }
 						/>
 						{ "It's Urgent!" }
-						<InfoIcon
-							aria-hidden={ true }
-							className={ styles.infoIcon }
-							title={ urgentDescription }
-						/>
 					</label>
-					<span hidden={ true } id={ urgentTooltipId } role="tooltip">
+					<InfoIcon
+						aria-hidden={ true }
+						tabIndex={ -1 }
+						className={ styles.infoIcon }
+						id={ urgentIconId }
+					/>
+					<Tooltip
+						anchorSelect={ `#${ urgentIconId }` }
+						className={ styles.tooltip }
+						content={ urgentDescription }
+						place="right"
+						events={ [ 'click', 'hover' ] }
+					/>
+					<span hidden={ true } id={ urgentDescriptionId }>
 						{ urgentDescription }
 					</span>
 				</div>
 			</fieldset>
 
 			<div className={ styles.titleWrapper }>
-				<label>
-					<span className={ styles.titleLabel }>
-						<span className={ styles.titleWithIcon }>
-							<span>{ 'Title (Optional)' }</span>
-							<InfoIcon
-								aria-hidden={ true }
-								className={ styles.infoIcon }
-								title={ titleDescription }
-							/>
-						</span>
-						{ titleErrorMessage }
+				<span className={ styles.titleLabelRow }>
+					<span className={ styles.titleWithIcon }>
+						<label htmlFor={ titleInputId }>{ 'Title (Optional)' }</label>
+						<InfoIcon
+							aria-hidden={ true }
+							tabIndex={ -1 }
+							className={ styles.infoIcon }
+							id={ titleIconId }
+						/>
 					</span>
-					<LimitedTextField
-						onBlur={ handleTitleBlur }
-						value={ title }
-						onChange={ handleTitleChange }
-						characterLimit={ titleCharacterLimit }
-						ariaDescribedBy={ titleTooltipId }
-					/>
-				</label>
-				<span hidden={ true } id={ titleTooltipId } role="tooltip">
+					{ titleErrorMessage }
+				</span>
+				<LimitedTextField
+					onBlur={ handleTitleBlur }
+					value={ title }
+					onChange={ handleTitleChange }
+					characterLimit={ titleCharacterLimit }
+					ariaDescribedBy={ titleDescriptionId }
+					id={ titleInputId }
+				/>
+				<Tooltip
+					anchorSelect={ `#${ titleIconId }` }
+					className={ styles.tooltip }
+					content={ titleDescription }
+					place="right"
+					events={ [ 'click', 'hover' ] }
+				/>
+				<span hidden={ true } id={ titleDescriptionId }>
 					{ titleDescription }
+					{ showTitleError && `Error: ${ titleErrorText }.` }
 				</span>
 			</div>
 

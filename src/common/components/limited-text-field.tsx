@@ -8,6 +8,7 @@ interface Props {
 	onBlur?: FocusEventHandler< HTMLInputElement >;
 	onFocus?: FocusEventHandler< HTMLInputElement >;
 	ariaDescribedBy?: string;
+	id?: string;
 }
 
 export function LimitedTextField( {
@@ -17,6 +18,7 @@ export function LimitedTextField( {
 	onBlur,
 	onFocus,
 	ariaDescribedBy,
+	id,
 }: Props ) {
 	const charactersRemaining = characterLimit - value.length;
 	const isOverLimit = charactersRemaining < 0;
@@ -53,6 +55,7 @@ export function LimitedTextField( {
 				onFocus={ onFocus }
 				onBlur={ onBlur }
 				aria-describedby={ ariaDescribedBy }
+				id={ id }
 			/>
 			<p className={ styles.limitMessage }>{ limitMessage }</p>
 		</div>

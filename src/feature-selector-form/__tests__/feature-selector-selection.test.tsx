@@ -14,11 +14,6 @@ import { UserEvent } from '@testing-library/user-event/dist/types/setup/setup';
 import { createMockMonitoringClient } from '../../test-utils/mock-monitoring-client';
 
 describe( '[FeatureSelector -- Feature Selection]', () => {
-	// NOTE! Because we have descriptions here, we will be affected by this bug...
-	// https://github.com/eps1lon/dom-accessibility-api/issues/892
-	// ... until the fix ends up in react testing library.
-	// Therefore, when interacting with options, we will use 'description' -- not 'name'.
-
 	const featureUnderGroup: Feature = {
 		id: 'feature_under_group',
 		name: 'Test Feature Under Group',
@@ -148,8 +143,10 @@ describe( '[FeatureSelector -- Feature Selection]', () => {
 			} )
 		).toBeInTheDocument();
 		// Selected feature description
-		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-		expect( screen.getByText( featureUnderGroup.description! ) ).toBeInTheDocument();
+		expect( screen.getByTestId( 'selected-feature-description' ) ).toHaveTextContent(
+			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+			featureUnderGroup.description!
+		);
 		// Breadcrumb
 		expect(
 			screen.getByText( ( content ) => {
@@ -179,8 +176,10 @@ describe( '[FeatureSelector -- Feature Selection]', () => {
 			} )
 		).toBeInTheDocument();
 		// Selected feature description
-		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-		expect( screen.getByText( featureUnderProduct.description! ) ).toBeInTheDocument();
+		expect( screen.getByTestId( 'selected-feature-description' ) ).toHaveTextContent(
+			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+			featureUnderProduct.description!
+		);
 		// Breadcrumb
 		expect(
 			screen.getByText( ( content ) => {

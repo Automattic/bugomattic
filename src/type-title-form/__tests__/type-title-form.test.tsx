@@ -94,12 +94,14 @@ describe( '[TitleTypeForm]', () => {
 			const expectedText = 'Title must be under the character limit';
 
 			// Doesn't show immediately
-			expect( screen.queryByText( expectedText ) ).not.toBeInTheDocument();
+			expect(
+				screen.queryByText( expectedText, { selector: '[role=alert]' } )
+			).not.toBeInTheDocument();
 
 			// Click on a radio to blur the input field
 			await user.click( screen.getByRole( 'radio', { name: 'Bug' } ) );
 
-			expect( await screen.findByText( expectedText ) ).toBeInTheDocument();
+			expect( screen.getByText( expectedText, { selector: '[role=alert]' } ) ).toBeInTheDocument();
 		} );
 
 		test( 'Once you go back under the limit, the form error goes away', async () => {
