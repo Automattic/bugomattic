@@ -73,6 +73,17 @@ body {
 	text-align: initial;
 }
 
+.root button:focus-visible,
+.root input[type='button']:focus-visible,
+.root input[type='submit']:focus-visible {
+	outline: revert;
+}
+
+.root input[type='radio']:focus-visible,
+.root input[type='checkbox']:focus-visible {
+	outline: revert;
+}
+
 /*
 These are generic enough that it feels like overkill to make a new component just for these button styles.
 So, we'll enable a global class option. 
@@ -91,6 +102,10 @@ So, we'll enable a global class option.
 
 .root button.primaryButton:active {
 	background-color: var( --color-primary-extra-dark );
+}
+
+.root button.primaryButton:focus-visible {
+	outline-offset: 2px;
 }
 
 .root input code {
