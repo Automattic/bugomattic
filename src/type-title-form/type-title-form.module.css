@@ -25,6 +25,11 @@
 	margin-bottom: 0.5rem;
 }
 
+.radioWrapperWithIcon {
+	display: flex;
+	align-items: center;
+}
+
 .infoIcon {
 	height: 1rem;
 	width: 1rem;
@@ -45,7 +50,7 @@
 	margin-left: 0.5rem;
 }
 
-.titleLabel,
+.titleLabelRow,
 .typeLabel {
 	display: flex;
 	align-items: flex-end;
@@ -62,7 +67,7 @@
 	transform: translateY( -0.03125rem );
 }
 
-.typeLabel {
+.titleLabelRow {
 	padding: 0;
 }
 
@@ -75,7 +80,7 @@
 }
 
 @media only screen and ( max-width: 600px ) {
-	.titleLabel,
+	.titleLabelRow,
 	.typeLabel {
 		align-items: flex-start;
 		flex-direction: column;
@@ -85,10 +90,8 @@
 		margin-left: 0;
 		margin-top: 0.25rem;
 	}
-}
 
-@media not ( hover: hover ) {
-	.infoIcon {
-		display: none;
+	.tooltip {
+		max-width: 50vw;
 	}
 }
