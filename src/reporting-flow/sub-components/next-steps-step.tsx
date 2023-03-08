@@ -92,7 +92,10 @@ function MissingRequiredInfoWarning() {
 				This almost always means we could not parse the info in the URL. Please start over by
 				clicking the button below.
 			</p>
-			<button onClick={ handleStartOverClick } className="primaryButton">
+			<button
+				onClick={ handleStartOverClick }
+				className={ `${ styles.startOverButton } primaryButton` }
+			>
 				Start Over
 			</button>
 		</div>
