@@ -1,4 +1,4 @@
-import React, { ReactNode, useCallback, useEffect, useState } from 'react';
+import React, { ReactNode, useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { selectAllTasksAreComplete } from '../../combined-selectors/all-tasks-are-complete';
 import { selectRelevantTaskIds } from '../../combined-selectors/relevant-task-ids';
@@ -8,7 +8,7 @@ import { selectActiveStep } from '../active-step-slice';
 import { StepContainer } from './step-container';
 import { ReactComponent as MissingInfoIcon } from '../../common/svgs/missing-info.svg';
 import styles from '../reporting-flow.module.css';
-import { selectStartOverCounter, startOver } from '../../start-over/start-over-counter-slice';
+import { startOver } from '../../start-over/start-over-counter-slice';
 import { useMonitoring } from '../../monitoring/monitoring-provider';
 import { useLoggerWithCache } from '../../monitoring/use-logger-with-cache';
 import { MoreInfo } from '../../next-steps/more-info';
@@ -24,20 +24,11 @@ export function NextStepsStep( { stepNumber }: Props ) {
 	const issueFeatureId = useAppSelector( selectIssueFeatureId );
 	const issueType = useAppSelector( selectIssueType );
 	const activeStep = useAppSelector( selectActiveStep );
-	const startOverCounter = useAppSelector( selectStartOverCounter );
-
-	// We track whether we've been here because it's useful for persisting error messages.
-	const [ stepHasBeenActive, setStepHasBeenActive ] = useState( false );
-	if ( activeStep === 'nextSteps' && ! stepHasBeenActive ) {
-		setStepHasBeenActive( true );
-	}
-	// On starting over, we clear our local tracker of whether we've been here.
-	useEffect( () => setStepHasBeenActive( false ), [ startOverCounter ] );
 
 	const tasksExist = relevantTaskIds.length > 0;
 	const requiredInfoIsMissing =
-		( issueFeatureId === null || issueType === 'unset' ) && stepHasBeenActive;
-	const noTasksAreConfigured = ! tasksExist && stepHasBeenActive;
+		( issueFeatureId === null || issueType === 'unset' ) && activeStep === 'nextSteps';
+	const noTasksAreConfigured = ! tasksExist && activeStep === 'nextSteps';
 
 	const memoizedLogError = useLoggerWithCache( monitoringClient.logger.error, [
 		issueFeatureId,
