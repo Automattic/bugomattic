@@ -12,6 +12,7 @@ import { startOver } from '../../start-over/start-over-counter-slice';
 import { useMonitoring } from '../../monitoring/monitoring-provider';
 import { useLoggerWithCache } from '../../monitoring/use-logger-with-cache';
 import { MoreInfo } from '../../next-steps/more-info';
+import { updateHistoryWithState } from '../../url-history/actions';
 
 interface Props {
 	stepNumber: number;
@@ -74,6 +75,7 @@ function MissingRequiredInfoWarning() {
 	const dispatch = useAppDispatch();
 	const handleStartOverClick = () => {
 		dispatch( startOver() );
+		dispatch( updateHistoryWithState() );
 	};
 	return (
 		<div role="alert" className={ styles.badStateWrapper }>
