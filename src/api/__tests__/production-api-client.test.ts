@@ -1,6 +1,6 @@
 import { createProductionApiClient } from '../production-api-client';
 import { createServer, Request, Response } from 'miragejs';
-import { ReportingConfigApiResponse } from '../types';
+import { IssueApiResponse, ReportingConfigApiResponse } from '../types';
 import { LogPayload } from '../../monitoring/types';
 import { Server } from 'pretender';
 
@@ -19,6 +19,21 @@ describe( '[ProductionApiClient]', () => {
 			description: 'foo',
 		},
 	};
+
+	const fakeIssues: IssueApiResponse = [
+		{
+			author: 'Test author',
+			content: 'Test content',
+			dateCreated: '2021-01-01T00:00:00Z',
+			dateUpdated: '2021-01-01T00:00:00Z',
+			repo: 'Automattic/bugomattic',
+			status: 'open',
+			title: 'Test title',
+			url: 'https://github.com/Automattic/bugomattic/issues/1',
+		},
+	];
+
+	const fakeRepoFilters: string[] = [ 'Automattic/bugomattic', 'OtherOrg/other-repo' ];
 
 	let server: ReturnType< typeof createServer >;
 
@@ -43,6 +58,14 @@ describe( '[ProductionApiClient]', () => {
 				this.post( '/logs', () => {
 					return new Response( 200 );
 				} );
+
+				this.get( '/issues', () => {
+					return fakeIssues;
+				} );
+
+				this.get( '/repos', () => {
+					return fakeRepoFilters;
+				} );
 			},
 		} );
 	} );
@@ -50,6 +73,12 @@ describe( '[ProductionApiClient]', () => {
 	afterEach( () => {
 		server.shutdown();
 	} );
+
+	function getLastRequest(): Request {
+		// The types are borked here, see: https://github.com/pretenderjs/pretender/pull/353
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		return ( server.pretender as any ).handledRequests[ 0 ];
+	}
 
 	describe( 'loadReportingConfig()', () => {
 		test( 'Calls the correct endpoint and returns the reporting config', async () => {
@@ -170,6 +199,108 @@ describe( '[ProductionApiClient]', () => {
 
 			await expect( apiClient.log( fakeLogPayload ) ).rejects.toThrowError(
 				`Log web request failed with status code 400. Response body: ${ JSON.stringify(
+					errorBody
+				) }`
+			);
+		} );
+	} );
+
+	describe( 'searchIssues()', () => {
+		test( 'Calls the correct endpoint and returns the issue list', async () => {
+			const apiClient = createProductionApiClient();
+			const issues = await apiClient.searchIssues( 'test' );
+
+			// If this returns correctly, we called the correct endpoint.
+			expect( issues ).toEqual( fakeIssues );
+		} );
+
+		test( 'The request includes the nonce in the right header', async () => {
+			const apiClient = createProductionApiClient();
+			await apiClient.searchIssues( 'test' );
+
+			const lastRequest = getLastRequest();
+			expect( lastRequest.requestHeaders[ fakeNonceHeaderName ] ).toEqual( fakeNonce );
+		} );
+
+		test( 'If no optional params are passed, they are not added to the request query', async () => {
+			const search = 'test';
+			const apiClient = createProductionApiClient();
+			await apiClient.searchIssues( search );
+
+			const lastRequest = getLastRequest();
+			expect( lastRequest.queryParams.search ).toBe( search );
+			expect( lastRequest.queryParams.status ).toBeUndefined();
+			expect( lastRequest.queryParams.sort ).toBeUndefined();
+			expect( lastRequest.queryParams[ 'repos[]' ] ).toBeUndefined();
+		} );
+
+		test( 'If optional params are passed, they are added to the request query', async () => {
+			const search = 'test';
+			const status = 'open';
+			const sort = 'date-created';
+			const repos = [ 'repo1', 'repo2' ];
+
+			const apiClient = createProductionApiClient();
+			await apiClient.searchIssues( search, { status, sort, repos } );
+
+			const lastRequest = getLastRequest();
+			expect( lastRequest.queryParams.search ).toBe( search );
+			expect( lastRequest.queryParams.status ).toBe( status );
+			expect( lastRequest.queryParams.sort ).toBe( sort );
+			// Oh cool! This library knows how to interpret the array syntax in the query string!
+			// So we don't need the "[]" in the key name.
+			expect( lastRequest.queryParams[ 'repos' ] ).toEqual( repos );
+		} );
+
+		test( 'Throws an error if the request fails', async () => {
+			const apiClient = createProductionApiClient();
+
+			const errorBody = {
+				error: 'Invalid search parameter',
+			};
+
+			server.get( '/issues', () => {
+				return new Response( 400, {}, errorBody );
+			} );
+
+			await expect( apiClient.searchIssues( 'test' ) ).rejects.toThrowError(
+				`Search Issues web request failed with status code 400. Response body: ${ JSON.stringify(
+					errorBody
+				) }`
+			);
+		} );
+	} );
+
+	describe( 'getRepoFilters()', () => {
+		test( 'Calls the correct endpoint and returns the repo filters', async () => {
+			const apiClient = createProductionApiClient();
+			const repoFilters = await apiClient.getRepoFilters();
+
+			// If this returns correctly, we called the correct endpoint.
+			expect( repoFilters ).toEqual( fakeRepoFilters );
+		} );
+
+		test( 'The request includes the nonce in the right header', async () => {
+			const apiClient = createProductionApiClient();
+			await apiClient.getRepoFilters();
+
+			const lastRequest = getLastRequest();
+			expect( lastRequest.requestHeaders[ fakeNonceHeaderName ] ).toEqual( fakeNonce );
+		} );
+
+		test( 'Throws an error if the request fails', async () => {
+			const apiClient = createProductionApiClient();
+
+			const errorBody = {
+				error: 'Something went wrong',
+			};
+
+			server.get( '/repos', () => {
+				return new Response( 500, {}, errorBody );
+			} );
+
+			await expect( apiClient.getRepoFilters() ).rejects.toThrowError(
+				`Get Repo Filters web request failed with status code 500. Response body: ${ JSON.stringify(
 					errorBody
 				) }`
 			);

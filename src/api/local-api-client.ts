@@ -1,4 +1,4 @@
-import { ApiClient } from './types';
+import { ApiClient, Issue } from './types';
 import path from 'path-browserify';
 
 /**
@@ -6,11 +6,6 @@ import path from 'path-browserify';
  */
 export const localApiClient: ApiClient = {
 	loadReportingConfig: async () => {
-		const wait = ( ms: number ) =>
-			new Promise( ( resolve ) => {
-				setTimeout( resolve, ms );
-			} );
-
 		// Let's keep us honest by adding a little delay here.
 		await wait( 2000 );
 
@@ -30,4 +25,74 @@ export const localApiClient: ApiClient = {
 			);
 		}
 	},
+
+	searchIssues: async ( search, options ) => {
+		// Delay to simulate network latency.
+		await wait( 2000 );
+
+		// We can tweak this as needed during testing!
+		// As a baseline, we'll show all the passed search parameters in the content.
+		// And we'll randomize some other stuff so there's good variability.
+
+		const numberOfIssues = Math.floor( Math.random() * 20 );
+		const issues: Issue[] = [];
+		for ( let i = 0; i < numberOfIssues; i++ ) {
+			const randomString = Math.random().toString( 16 ).slice( 2 );
+			const title = `Issue ${ randomString }`;
+
+			const providedRepos = ( options?.repos || [ 'none provided' ] ).join( ', ' );
+			const providedStatus = options?.status || 'none provided';
+			const providedSort = options?.sort || 'none provided';
+			const content = `Search: <em data-search-match>${ search }</em> | Repos: ${ providedRepos } | Status: ${ providedStatus } | Sort: ${ providedSort }`;
+
+			const status = Math.random() > 0.5 ? 'open' : 'closed';
+
+			const oneWeekInMilliseconds = 7 * 24 * 60 * 60 * 1000;
+			const randomDate = new Date(
+				Date.now() - Math.floor( Math.random() * oneWeekInMilliseconds )
+			).toISOString();
+
+			issues.push( {
+				dateCreated: randomDate,
+				dateUpdated: randomDate,
+				title,
+				content,
+				status,
+				author: 'Fake Author',
+				repo: 'Fakeorg/fake-repo',
+				url: `https://github.com/Automattic/wp-calypso/issues/${ i }`,
+			} );
+		}
+
+		return issues;
+	},
+
+	getRepoFilters: async () => {
+		await wait( 2000 );
+		return [
+			'Automattic/wp-calypso',
+			'Automattic/wp-desktop',
+			'Automattic/jetpack',
+			'Automattic/themes',
+			'Automattic/simplenote-ios',
+			'Automattic/simplenote-android',
+			'Automattic/pocket-casts-ios',
+			'Automattic/sensei',
+			'Automattic/woocommerce.com',
+			'Automattic/newspack-blocks',
+			'wordpress-mobile/WordPress-iOS',
+			'wordpress-mobile/WordPress-Android',
+			'woocommerce/woocommerce',
+			'woocommerce/woocommerce-blocks',
+			'woocommerce/woocommerce-admin',
+			'woocommerce/woocommerce-ios',
+			'woocommerce/woocommerce-android',
+		];
+	},
 };
+
+async function wait( ms: number ) {
+	return new Promise( ( resolve ) => {
+		setTimeout( resolve, ms );
+	} );
+}

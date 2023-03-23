@@ -1,5 +1,10 @@
 import { LoggerApiClient, LogPayload } from '../monitoring/types';
-import { ApiClient, ReportingConfigApiResponse } from './types';
+import {
+	ApiClient,
+	IssueApiResponse,
+	ReportingConfigApiResponse,
+	SearchIssueOptions,
+} from './types';
 
 class ProductionApiClient implements ApiClient, LoggerApiClient {
 	private nonce: string;
@@ -63,6 +68,62 @@ class ProductionApiClient implements ApiClient, LoggerApiClient {
 			);
 		}
 	}
+
+	async getRepoFilters(): Promise< string[] > {
+		const request = new Request( '/wp-json/bugomattic/v1/repos/', {
+			method: 'GET',
+			credentials: 'same-origin',
+			headers: new Headers( {
+				[ this.nonceHeaderName ]: this.nonce,
+			} ),
+		} );
+		const response = await fetch( request );
+
+		if ( response.ok ) {
+			return response.json();
+		} else {
+			throw new Error(
+				`Get Repo Filters web request failed with status code ${
+					response.status
+				}. Response body: ${ JSON.stringify( await response.json() ) }`
+			);
+		}
+	}
+
+	async searchIssues( search: string, options?: SearchIssueOptions ): Promise< IssueApiResponse > {
+		const queryParams = new URLSearchParams();
+		queryParams.set( 'search', search );
+		if ( options?.sort ) {
+			queryParams.set( 'sort', options.sort );
+		}
+		if ( options?.status ) {
+			queryParams.set( 'status', options.status );
+		}
+		if ( options?.repos ) {
+			for ( const repo of options.repos ) {
+				queryParams.append( 'repos[]', repo );
+			}
+		}
+
+		const request = new Request( `/wp-json/bugomattic/v1/issues/?${ queryParams.toString() }`, {
+			method: 'GET',
+			credentials: 'same-origin',
+			headers: new Headers( {
+				[ this.nonceHeaderName ]: this.nonce,
+			} ),
+		} );
+		const response = await fetch( request );
+
+		if ( response.ok ) {
+			return response.json();
+		} else {
+			throw new Error(
+				`Search Issues web request failed with status code ${
+					response.status
+				}. Response body: ${ JSON.stringify( await response.json() ) }`
+			);
+		}
+	}
 }
 
 export function createProductionApiClient(): ApiClient & LoggerApiClient {
@@ -70,5 +131,7 @@ export function createProductionApiClient(): ApiClient & LoggerApiClient {
 	return {
 		loadReportingConfig: productionApiClient.loadReportingConfig.bind( productionApiClient ),
 		log: productionApiClient.log.bind( productionApiClient ),
+		getRepoFilters: productionApiClient.getRepoFilters.bind( productionApiClient ),
+		searchIssues: productionApiClient.searchIssues.bind( productionApiClient ),
 	};
 }
