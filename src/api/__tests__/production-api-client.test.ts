@@ -1,6 +1,6 @@
 import { createProductionApiClient } from '../production-api-client';
 import { createServer, Request, Response } from 'miragejs';
-import { IssueApiResponse, ReportingConfigApiResponse } from '../types';
+import { Issue, ReportingConfigApiResponse } from '../types';
 import { LogPayload } from '../../monitoring/types';
 import { Server } from 'pretender';
 
@@ -20,7 +20,7 @@ describe( '[ProductionApiClient]', () => {
 		},
 	};
 
-	const fakeIssues: IssueApiResponse = [
+	const fakeIssues: Issue[] = [
 		{
 			author: 'Test author',
 			content: 'Test content',

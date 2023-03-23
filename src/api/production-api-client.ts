@@ -1,10 +1,5 @@
 import { LoggerApiClient, LogPayload } from '../monitoring/types';
-import {
-	ApiClient,
-	IssueApiResponse,
-	ReportingConfigApiResponse,
-	SearchIssueOptions,
-} from './types';
+import { ApiClient, Issue, ReportingConfigApiResponse, SearchIssueOptions } from './types';
 
 class ProductionApiClient implements ApiClient, LoggerApiClient {
 	private nonce: string;
@@ -90,7 +85,7 @@ class ProductionApiClient implements ApiClient, LoggerApiClient {
 		}
 	}
 
-	async searchIssues( search: string, options?: SearchIssueOptions ): Promise< IssueApiResponse > {
+	async searchIssues( search: string, options?: SearchIssueOptions ): Promise< Issue[] > {
 		const queryParams = new URLSearchParams();
 		queryParams.set( 'search', search );
 		if ( options?.sort ) {
