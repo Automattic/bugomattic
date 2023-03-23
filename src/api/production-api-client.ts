@@ -11,6 +11,12 @@ class ProductionApiClient implements ApiClient, LoggerApiClient {
 	}
 
 	async loadReportingConfig(): Promise< ReportingConfigApiResponse > {
+		const cachedData = localStorage.getItem( 'cachedReportingConfigData' );
+		const cacheExpiry = localStorage.getItem( 'cacheExpiry' );
+		if ( cachedData && cacheExpiry && Date.now() < +cacheExpiry ) {
+			return JSON.parse( cachedData );
+		}
+
 		const request = new Request( '/wp-json/bugomattic/v1/reporting-config/', {
 			method: 'GET',
 			credentials: 'same-origin',
@@ -21,7 +27,13 @@ class ProductionApiClient implements ApiClient, LoggerApiClient {
 		const response = await fetch( request );
 
 		if ( response.ok ) {
-			return response.json();
+			const data = await response.json();
+
+			const cacheExpiryTime = Date.now() + 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
+			localStorage.setItem( 'cachedReportingConfigData', JSON.stringify( data ) );
+			localStorage.setItem( 'cacheExpiry', cacheExpiryTime.toString() );
+
+			return data;
 		} else {
 			throw new Error(
 				`Load Reporting Config web request failed with status code ${
