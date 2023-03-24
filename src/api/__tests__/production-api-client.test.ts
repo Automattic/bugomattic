@@ -35,11 +35,16 @@ describe( '[ProductionApiClient]', () => {
 
 	const fakeRepoFilters: string[] = [ 'Automattic/bugomattic', 'OtherOrg/other-repo' ];
 
+	const repoCacheKey = 'repoFilters';
+	const repoCackeExpiryKey = 'repoFiltersExpiry';
+
 	let server: ReturnType< typeof createServer >;
 
 	// Normally we use the "setup" pattern, but we need to teardown the server after each test.
 	// So we're using "beforeEach" and "afterEach" instead.
 	beforeEach( () => {
+		localStorage.clear();
+
 		globalThis.nonce = fakeNonce;
 		globalThis.nonceHeaderName = fakeNonceHeaderName;
 		localStorage.removeItem( cacheKey );
@@ -272,12 +277,16 @@ describe( '[ProductionApiClient]', () => {
 	} );
 
 	describe( 'getRepoFilters()', () => {
-		test( 'Calls the correct endpoint and returns the repo filters', async () => {
+		test( 'Calls the correct endpoint and returns the repo filters, saving to localstorage', async () => {
 			const apiClient = createProductionApiClient();
 			const repoFilters = await apiClient.getRepoFilters();
 
 			// If this returns correctly, we called the correct endpoint.
 			expect( repoFilters ).toEqual( fakeRepoFilters );
+
+			// Cache works correctly
+			expect( localStorage.getItem( repoCacheKey ) ).toEqual( JSON.stringify( fakeRepoFilters ) );
+			expect( localStorage.getItem( repoCackeExpiryKey ) ).not.toBeNull();
 		} );
 
 		test( 'The request includes the nonce in the right header', async () => {
@@ -286,6 +295,41 @@ describe( '[ProductionApiClient]', () => {
 
 			const lastRequest = getLastRequest();
 			expect( lastRequest.requestHeaders[ fakeNonceHeaderName ] ).toEqual( fakeNonce );
+		} );
+
+		test( 'Returns the cached repo filters if they are not expired', async () => {
+			const apiClient = createProductionApiClient();
+
+			const otherRepoFilters = [ 'OtherOrg/other-repo' ];
+
+			// Set the cache
+			localStorage.setItem( repoCacheKey, JSON.stringify( otherRepoFilters ) );
+			localStorage.setItem( repoCackeExpiryKey, ( Date.now() + 10000 ).toString() );
+
+			const repoFilters = await apiClient.getRepoFilters();
+
+			expect( repoFilters ).toEqual( otherRepoFilters );
+			expect( getLastRequest() ).toBeUndefined();
+		} );
+
+		test( 'Fetches the repo filters if the cache is expired', async () => {
+			const apiClient = createProductionApiClient();
+
+			const otherRepoFilters = [ 'OtherOrg/other-repo' ];
+
+			// Set the expired cache
+			localStorage.setItem( repoCacheKey, JSON.stringify( otherRepoFilters ) );
+			localStorage.setItem( repoCackeExpiryKey, ( Date.now() - 1 ).toString() );
+
+			const repoFilters = await apiClient.getRepoFilters();
+
+			expect( repoFilters ).toEqual( fakeRepoFilters );
+
+			// Make sure the cache was also updated
+			expect( localStorage.getItem( repoCacheKey ) ).toEqual( JSON.stringify( fakeRepoFilters ) );
+			expect( Number( localStorage.getItem( repoCackeExpiryKey ) ) ).toBeGreaterThanOrEqual(
+				Date.now()
+			);
 		} );
 
 		test( 'Throws an error if the request fails', async () => {

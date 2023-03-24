@@ -65,6 +65,15 @@ class ProductionApiClient implements ApiClient, LoggerApiClient {
 	}
 
 	async getRepoFilters(): Promise< string[] > {
+		const repoFiltersCacheKey = 'repoFilters';
+		const repoFiltersCacheExpiryKey = 'repoFiltersExpiry';
+		const cachedData = localStorage.getItem( repoFiltersCacheKey );
+		const cacheExpiry = localStorage.getItem( repoFiltersCacheExpiryKey );
+
+		if ( cachedData && cacheExpiry && Date.now() < +cacheExpiry ) {
+			return JSON.parse( cachedData );
+		}
+
 		const request = new Request( '/wp-json/bugomattic/v1/repos/', {
 			method: 'GET',
 			credentials: 'same-origin',
@@ -75,7 +84,14 @@ class ProductionApiClient implements ApiClient, LoggerApiClient {
 		const response = await fetch( request );
 
 		if ( response.ok ) {
-			return response.json();
+			const repoFilters = await response.json();
+
+			const newCacheExpiry = Date.now() + 14 * 24 * 60 * 60 * 1000; // 14 days -- these really won't change often
+
+			localStorage.setItem( repoFiltersCacheKey, JSON.stringify( repoFilters ) );
+			localStorage.setItem( repoFiltersCacheExpiryKey, newCacheExpiry.toString() );
+
+			return repoFilters;
 		} else {
 			throw new Error(
 				`Get Repo Filters web request failed with status code ${
