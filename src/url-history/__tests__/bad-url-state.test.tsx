@@ -67,7 +67,7 @@ describe( '[Bad URL State]', () => {
 					issueType: 'unset',
 					issueTitle: '',
 				},
-				activeStep: 'featureSelection',
+				activeReportingStep: 'featureSelection',
 			} as RootState );
 
 			await setup( urlQuery );
@@ -85,7 +85,7 @@ describe( '[Bad URL State]', () => {
 					issueType: 'not-a-real-issue-type' as any,
 					issueTitle: '',
 				},
-				activeStep: 'typeTitle',
+				activeReportingStep: 'typeTitle',
 			} as RootState );
 
 			await setup( urlQuery );
@@ -96,7 +96,7 @@ describe( '[Bad URL State]', () => {
 
 		test( 'Active step that is not part of the predefined list', async () => {
 			const urlQuery = stateToQuery( {
-				activeStep: 'not-a-real-step' as any,
+				activeReportingStep: 'not-a-real-step' as any,
 			} as RootState );
 
 			await setup( urlQuery );
@@ -112,7 +112,7 @@ describe( '[Bad URL State]', () => {
 					issueType: 'bug',
 					issueTitle: '',
 				},
-				activeStep: 'nextSteps',
+				activeReportingStep: 'nextSteps',
 				completedTasks: [ 'not-an-id' ],
 			} as RootState );
 
@@ -125,7 +125,7 @@ describe( '[Bad URL State]', () => {
 		test( 'Invalid types for all the tracked state fields', async () => {
 			const urlQuery = stateToQuery( {
 				issueDetails: { foo: 'bar' } as any,
-				activeStep: { foo: 'bar' } as any,
+				activeReportingStep: { foo: 'bar' } as any,
 				completedTasks: { foo: 'bar' } as any,
 			} as RootState );
 
@@ -149,7 +149,7 @@ describe( '[Bad URL State]', () => {
 		test( 'Undefined for all the tracked state fields', async () => {
 			const urlQuery = stateToQuery( {
 				issueDetails: undefined as any,
-				activeStep: undefined as any,
+				activeReportingStep: undefined as any,
 				completedTasks: undefined as any,
 			} as RootState );
 
@@ -178,7 +178,7 @@ describe( '[Bad URL State]', () => {
 				issueType: 'bug',
 				issueTitle: '',
 			},
-			activeStep: 'nextSteps',
+			activeReportingStep: 'nextSteps',
 		} as RootState );
 
 		await setup( urlQuery );

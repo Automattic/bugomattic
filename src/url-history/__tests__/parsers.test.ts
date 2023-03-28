@@ -4,7 +4,7 @@ import { queryToState, stateToQuery } from '../parsers';
 describe( 'url-history-parsers', () => {
 	test( 'Parsing state to query params and back preserves tracked top level state keys', () => {
 		const startingState: RootState = {
-			activeStep: 'typeTitle',
+			activeReportingStep: 'typeTitle',
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			reportingConfig: { foo: 'bar' } as any,
 			issueDetails: {
@@ -21,7 +21,7 @@ describe( 'url-history-parsers', () => {
 
 		const serializedAndReparsedState = queryToState( stateToQuery( startingState ) );
 		const expectedOutput: Partial< RootState > = {
-			activeStep: startingState.activeStep,
+			activeReportingStep: startingState.activeReportingStep,
 			issueDetails: startingState.issueDetails,
 			completedTasks: startingState.completedTasks,
 		};

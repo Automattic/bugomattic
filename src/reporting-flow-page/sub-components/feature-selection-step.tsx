@@ -2,9 +2,9 @@ import React, { ReactNode, useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { selectIssueFeatureId } from '../../issue-details/issue-details-slice';
 import { selectNormalizedReportingConfig } from '../../reporting-config/reporting-config-slice';
-import { selectActiveStep, setActiveStep } from '../active-step-slice';
+import { selectActiveReportingStep, setActiveReportingStep } from '../active-reporting-step-slice';
 import { StepContainer } from './step-container';
-import styles from '../reporting-flow.module.css';
+import styles from '../reporting-flow-page.module.css';
 import { FeatureSelectorForm } from '../../feature-selector-form/feature-selector-form';
 import { updateHistoryWithState } from '../../url-history/actions';
 import { useMonitoring } from '../../monitoring/monitoring-provider';
@@ -17,11 +17,11 @@ interface Props {
 export function FeatureSelectionStep( { stepNumber, goToNextStep }: Props ) {
 	const dispatch = useAppDispatch();
 	const monitoringClient = useMonitoring();
-	const activeStep = useAppSelector( selectActiveStep );
+	const activeStep = useAppSelector( selectActiveReportingStep );
 	const issueFeatureId = useAppSelector( selectIssueFeatureId );
 
 	const onEdit = useCallback( () => {
-		dispatch( setActiveStep( 'featureSelection' ) );
+		dispatch( setActiveReportingStep( 'featureSelection' ) );
 		dispatch( updateHistoryWithState() );
 		monitoringClient.analytics.recordEvent( 'feature_step_edit' );
 	}, [ dispatch, monitoringClient.analytics ] );

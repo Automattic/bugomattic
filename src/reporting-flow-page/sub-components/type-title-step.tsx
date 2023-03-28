@@ -3,9 +3,9 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { selectIssueTitle, selectIssueType } from '../../issue-details/issue-details-slice';
 import { IssueType } from '../../issue-details/types';
 import { TypeTitleForm } from '../../type-title-form/type-title-form';
-import { selectActiveStep, setActiveStep } from '../active-step-slice';
+import { selectActiveReportingStep, setActiveReportingStep } from '../active-reporting-step-slice';
 import { StepContainer } from './step-container';
-import styles from '../reporting-flow.module.css';
+import styles from '../reporting-flow-page.module.css';
 import { updateHistoryWithState } from '../../url-history/actions';
 import { useMonitoring } from '../../monitoring/monitoring-provider';
 
@@ -17,12 +17,12 @@ interface Props {
 export function TypeTitleStep( { stepNumber, goToNextStep }: Props ) {
 	const dispatch = useAppDispatch();
 	const monitoringClient = useMonitoring();
-	const activeStep = useAppSelector( selectActiveStep );
+	const activeStep = useAppSelector( selectActiveReportingStep );
 	const issueTitle = useAppSelector( selectIssueTitle );
 	const issueType = useAppSelector( selectIssueType );
 
 	const onEdit = useCallback( () => {
-		dispatch( setActiveStep( 'typeTitle' ) );
+		dispatch( setActiveReportingStep( 'typeTitle' ) );
 		dispatch( updateHistoryWithState() );
 		monitoringClient.analytics.recordEvent( 'type_step_edit' );
 	}, [ dispatch, monitoringClient.analytics ] );

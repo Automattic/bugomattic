@@ -4,7 +4,7 @@ import { AppErrorDisplay } from '../errors/app-error-display';
 import { useMonitoring } from '../monitoring/monitoring-provider';
 import { ReportingConfigLoadingIndicator } from '../reporting-config/reporting-config-loading-indicator';
 import { useReportingConfigLoad } from '../reporting-config/use-reporting-config';
-import { ReportingFlow } from '../reporting-flow/reporting-flow';
+import { ReportingFlow } from '../reporting-flow-page/reporting-flow-page';
 import { useInitialStateFromUrl } from '../url-history/hooks';
 import styles from './app.module.css';
 import { AppErrorBoundary } from '../errors/app-error-boundary';

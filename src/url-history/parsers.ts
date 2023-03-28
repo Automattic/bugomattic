@@ -9,7 +9,7 @@ type KeyableRootState = Omit< RootState, keyof EmptyObject >;
 // If you want any redux state to be tracked in the URL, add the top level key here.
 const trackedStateKeys: ( keyof KeyableRootState )[] = [
 	'issueDetails',
-	'activeStep',
+	'activeReportingStep',
 	'completedTasks',
 ];
 

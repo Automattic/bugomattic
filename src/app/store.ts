@@ -13,7 +13,7 @@ import {
 import { featureSelectorFormReducer } from '../feature-selector-form/feature-selector-form-slice';
 import { issueDetailsReducer } from '../issue-details/issue-details-slice';
 import { completedTasksReducer } from '../next-steps/completed-tasks-slice';
-import { activeStepReducer } from '../reporting-flow/active-step-slice';
+import { activeReportingStepReducer } from '../reporting-flow-page/active-reporting-step-slice';
 import { urlHistoryMiddleware, registerHistoryListener } from '../url-history/redux-handlers';
 import { startOverCounterReducer } from '../start-over/start-over-counter-slice';
 import { duplicateSearchReducer } from '../duplicate-search/duplicate-search-slice';
@@ -24,7 +24,7 @@ function createRootReducer() {
 		issueDetails: issueDetailsReducer,
 		completedTasks: completedTasksReducer,
 		featureSelectorForm: featureSelectorFormReducer,
-		activeStep: activeStepReducer,
+		activeReportingStep: activeReportingStepReducer,
 		startOverCounter: startOverCounterReducer,
 		duplicateSearch: duplicateSearchReducer,
 	} );

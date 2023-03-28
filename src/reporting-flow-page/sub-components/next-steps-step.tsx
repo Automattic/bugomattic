@@ -4,10 +4,10 @@ import { selectAllTasksAreComplete } from '../../combined-selectors/all-tasks-ar
 import { selectRelevantTaskIds } from '../../combined-selectors/relevant-task-ids';
 import { selectIssueFeatureId, selectIssueType } from '../../issue-details/issue-details-slice';
 import { NextSteps } from '../../next-steps/next-steps';
-import { selectActiveStep } from '../active-step-slice';
+import { selectActiveReportingStep } from '../active-reporting-step-slice';
 import { StepContainer } from './step-container';
 import { ReactComponent as MissingInfoIcon } from '../../common/svgs/missing-info.svg';
-import styles from '../reporting-flow.module.css';
+import styles from '../reporting-flow-page.module.css';
 import { startOver } from '../../start-over/start-over-counter-slice';
 import { useMonitoring } from '../../monitoring/monitoring-provider';
 import { useLoggerWithCache } from '../../monitoring/use-logger-with-cache';
@@ -24,7 +24,7 @@ export function NextStepsStep( { stepNumber }: Props ) {
 	const allTasksAreComplete = useAppSelector( selectAllTasksAreComplete );
 	const issueFeatureId = useAppSelector( selectIssueFeatureId );
 	const issueType = useAppSelector( selectIssueType );
-	const activeStep = useAppSelector( selectActiveStep );
+	const activeStep = useAppSelector( selectActiveReportingStep );
 
 	const tasksExist = relevantTaskIds.length > 0;
 	const requiredInfoIsMissing =
