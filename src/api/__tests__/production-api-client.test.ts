@@ -2,13 +2,12 @@ import { createProductionApiClient } from '../production-api-client';
 import { createServer, Request, Response } from 'miragejs';
 import { Issue, ReportingConfigApiResponse } from '../types';
 import { LogPayload } from '../../monitoring/types';
-import { Server } from 'pretender';
 
 describe( '[ProductionApiClient]', () => {
 	const fakeNonce = 'abc123';
 	const fakeNonceHeaderName = 'x-fake-nonce';
-	const cacheKey = 'cachedReportingConfigData';
-	const cacheExpiry = 'cacheExpiry';
+	const reportingConfigCacheKey = 'cachedReportingConfigData';
+	const reportingConfigCacheExpiryKey = 'cacheExpiry';
 	const fakeReportingConfig: ReportingConfigApiResponse = {
 		foo: {
 			description: 'bar',
@@ -47,7 +46,7 @@ describe( '[ProductionApiClient]', () => {
 
 		globalThis.nonce = fakeNonce;
 		globalThis.nonceHeaderName = fakeNonceHeaderName;
-		localStorage.removeItem( cacheKey );
+		localStorage.removeItem( reportingConfigCacheKey );
 
 		server = createServer( {
 			environment: 'test',
@@ -82,7 +81,7 @@ describe( '[ProductionApiClient]', () => {
 	function getLastRequest(): Request {
 		// The types are borked here, see: https://github.com/pretenderjs/pretender/pull/353
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		return ( server.pretender as any ).handledRequests[ 0 ];
+		return ( server.pretender as any ).handledRequests?.[ 0 ];
 	}
 
 	describe( 'loadReportingConfig()', () => {
@@ -93,48 +92,45 @@ describe( '[ProductionApiClient]', () => {
 			expect( reportingConfig ).toEqual( fakeReportingConfig );
 
 			// Assert that the data is stored in local storage
-			expect( localStorage.getItem( cacheKey ) ).toEqual( JSON.stringify( fakeReportingConfig ) );
+			expect( localStorage.getItem( reportingConfigCacheKey ) ).toEqual(
+				JSON.stringify( fakeReportingConfig )
+			);
 
-			expect( localStorage.getItem( cacheExpiry ) ).not.toBeNull();
+			expect( localStorage.getItem( reportingConfigCacheExpiryKey ) ).not.toBeNull();
 		} );
 
 		test( 'The request includes the nonce in the right header', async () => {
 			const apiClient = createProductionApiClient();
 			await apiClient.loadReportingConfig();
-
-			// The types are borked here, see: https://github.com/pretenderjs/pretender/pull/353
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			const lastRequest: Request = ( server.pretender as any ).handledRequests[ 0 ];
-			expect( lastRequest.requestHeaders[ fakeNonceHeaderName ] ).toEqual( fakeNonce );
+			expect( getLastRequest().requestHeaders[ fakeNonceHeaderName ] ).toEqual( fakeNonce );
 		} );
 
 		test( 'Fetches the data from cache if available and not expired', async () => {
 			const apiClient = createProductionApiClient();
 
-			localStorage.setItem( cacheKey, JSON.stringify( fakeReportingConfigCached ) );
-			localStorage.setItem( cacheExpiry, ( Date.now() + 10000 ).toString() );
+			localStorage.setItem( reportingConfigCacheKey, JSON.stringify( fakeReportingConfigCached ) );
+			localStorage.setItem( reportingConfigCacheExpiryKey, ( Date.now() + 10000 ).toString() );
 
 			const reportingConfig = await apiClient.loadReportingConfig();
 
 			expect( reportingConfig ).toEqual( fakeReportingConfigCached );
 
-			const requests = ( server.pretender as Server & { handledRequests: any[] } ).handledRequests;
-			expect( requests.length ).toEqual( 0 );
+			expect( getLastRequest() ).toBeUndefined();
 		} );
 
 		test( 'Fetches the reporting config again if cache has expired', async () => {
 			const apiClient = createProductionApiClient();
 
-			localStorage.setItem( cacheKey, JSON.stringify( fakeReportingConfigCached ) );
+			localStorage.setItem( reportingConfigCacheKey, JSON.stringify( fakeReportingConfigCached ) );
 			const cacheExpiryTime = Date.now() - 1;
-			localStorage.setItem( cacheExpiry, cacheExpiryTime.toString() );
+			localStorage.setItem( reportingConfigCacheExpiryKey, cacheExpiryTime.toString() );
 
 			const response = await apiClient.loadReportingConfig();
 
 			expect( response ).toEqual( fakeReportingConfig );
 
-			const cachedData = localStorage.getItem( cacheKey );
-			const newCacheExpiry = localStorage.getItem( cacheExpiry );
+			const cachedData = localStorage.getItem( reportingConfigCacheKey );
+			const newCacheExpiry = localStorage.getItem( reportingConfigCacheExpiryKey );
 
 			expect( cachedData ).toEqual( JSON.stringify( fakeReportingConfig ) );
 			expect( Number( newCacheExpiry ) ).toBeGreaterThanOrEqual( Date.now() );
@@ -175,20 +171,14 @@ describe( '[ProductionApiClient]', () => {
 			const apiClient = createProductionApiClient();
 			await apiClient.log( fakeLogPayload );
 
-			// The types are borked here, see: https://github.com/pretenderjs/pretender/pull/353
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			const lastRequest: Request = ( server.pretender as any ).handledRequests[ 0 ];
-			expect( lastRequest.requestHeaders[ fakeNonceHeaderName ] ).toEqual( fakeNonce );
+			expect( getLastRequest().requestHeaders[ fakeNonceHeaderName ] ).toEqual( fakeNonce );
 		} );
 
 		test( 'The request includes the log payload in the body', async () => {
 			const apiClient = createProductionApiClient();
 			await apiClient.log( fakeLogPayload );
 
-			// The types are borked here, see: https://github.com/pretenderjs/pretender/pull/353
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			const lastRequest: Request = ( server.pretender as any ).handledRequests[ 0 ];
-			expect( JSON.parse( lastRequest.requestBody ) ).toEqual( fakeLogPayload );
+			expect( JSON.parse( getLastRequest().requestBody ) ).toEqual( fakeLogPayload );
 		} );
 
 		test( 'Throws an error if the request fails', async () => {
