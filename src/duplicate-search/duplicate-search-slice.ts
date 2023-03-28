@@ -1,6 +1,6 @@
 // Redux slice for duplicate search
 
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { Action, createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ApiClient, AvailableRepoFiltersApiResponse, SearchIssueApiResponse } from '../api/types';
 import { AppDispatch, RootState } from '../app/store';
 import { DuplicateSearchState, IssueSortOption, IssueStatusFilter } from './types';
@@ -50,25 +50,25 @@ export const duplicateSearchSlice = createSlice( {
 	name: 'duplicateSearch',
 	initialState,
 	reducers: {
-		setSearchTermInternal: ( state, { payload }: PayloadAction< string > ) => {
+		setSearchTerm: ( state, { payload }: PayloadAction< string > ) => {
 			return {
 				...state,
 				searchTerm: payload,
 			};
 		},
-		setRepoFiltersInternal: ( state, { payload }: PayloadAction< string[] > ) => {
+		setRepoFilters: ( state, { payload }: PayloadAction< string[] > ) => {
 			return {
 				...state,
 				activeRepoFilters: [ ...payload ],
 			};
 		},
-		setStatusFilterInternal: ( state, { payload }: PayloadAction< IssueStatusFilter > ) => {
+		setStatusFilter: ( state, { payload }: PayloadAction< IssueStatusFilter > ) => {
 			return {
 				...state,
 				statusFilter: payload,
 			};
 		},
-		setSortInternal: ( state, { payload }: PayloadAction< IssueSortOption > ) => {
+		setSort: ( state, { payload }: PayloadAction< IssueSortOption > ) => {
 			return {
 				...state,
 				sort: payload,
@@ -109,30 +109,18 @@ export const duplicateSearchSlice = createSlice( {
 	},
 } );
 
-const { setSearchTermInternal, setRepoFiltersInternal, setStatusFilterInternal, setSortInternal } =
+export const { setSearchTerm, setRepoFilters, setStatusFilter, setSort } =
 	duplicateSearchSlice.actions;
 
-// These are all the action creators that should be practically used in components, as we want to trigger a search after each one of these updates!
-
-export const setSearchTerm = ( searchTerm: string ) => ( dispatch: AppDispatch ) => {
-	dispatch( setSearchTermInternal( searchTerm ) );
-	dispatch( searchIssues() );
-};
-
-export const setActiveRepoFilters = ( repoFilters: string[] ) => ( dispatch: AppDispatch ) => {
-	dispatch( setRepoFiltersInternal( repoFilters ) );
-	dispatch( searchIssues() );
-};
-
-export const setStatusFilter = ( statusFilter: IssueStatusFilter ) => ( dispatch: AppDispatch ) => {
-	dispatch( setStatusFilterInternal( statusFilter ) );
-	dispatch( searchIssues() );
-};
-
-export const setSort = ( sort: IssueSortOption ) => ( dispatch: AppDispatch ) => {
-	dispatch( setSortInternal( sort ) );
-	dispatch( searchIssues() );
-};
+// This is the action (actually, a thunk) creator that we will use in most components,
+// as we will want to search after any change to the search parameters.
+// E.g. dispatch( withSearchAfter( setSearchTerm( 'foo' ) ) );
+export function withSearchAfter( action: Action ) {
+	return ( dispatch: AppDispatch ) => {
+		dispatch( action );
+		dispatch( searchIssues() );
+	};
+}
 
 export const duplicateSearchReducer = duplicateSearchSlice.reducer;
 
