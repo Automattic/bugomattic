@@ -16,6 +16,7 @@ import { completedTasksReducer } from '../next-steps/completed-tasks-slice';
 import { activeStepReducer } from '../reporting-flow/active-step-slice';
 import { urlHistoryMiddleware, registerHistoryListener } from '../url-history/redux-handlers';
 import { startOverCounterReducer } from '../start-over/start-over-counter-slice';
+import { duplicateSearchReducer } from '../duplicate-search/duplicate-search-slice';
 
 function createRootReducer() {
 	return combineReducers( {
@@ -25,6 +26,7 @@ function createRootReducer() {
 		featureSelectorForm: featureSelectorFormReducer,
 		activeStep: activeStepReducer,
 		startOverCounter: startOverCounterReducer,
+		duplicateSearch: duplicateSearchReducer,
 	} );
 }
 

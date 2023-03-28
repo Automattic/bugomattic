@@ -1,6 +1,10 @@
 import { createProductionApiClient } from '../production-api-client';
 import { createServer, Request, Response } from 'miragejs';
-import { Issue, ReportingConfigApiResponse } from '../types';
+import {
+	AvailableRepoFiltersApiResponse,
+	ReportingConfigApiResponse,
+	SearchIssueApiResponse,
+} from '../types';
 import { LogPayload } from '../../monitoring/types';
 
 describe( '[ProductionApiClient]', () => {
@@ -19,7 +23,7 @@ describe( '[ProductionApiClient]', () => {
 		},
 	};
 
-	const fakeIssues: Issue[] = [
+	const fakeIssues: SearchIssueApiResponse = [
 		{
 			author: 'Test author',
 			content: 'Test content',
@@ -32,7 +36,10 @@ describe( '[ProductionApiClient]', () => {
 		},
 	];
 
-	const fakeRepoFilters: string[] = [ 'Automattic/bugomattic', 'OtherOrg/other-repo' ];
+	const fakeRepoFilters: AvailableRepoFiltersApiResponse = [
+		'Automattic/bugomattic',
+		'OtherOrg/other-repo',
+	];
 
 	const repoCacheKey = 'repoFilters';
 	const repoCackeExpiryKey = 'repoFiltersExpiry';
@@ -269,7 +276,7 @@ describe( '[ProductionApiClient]', () => {
 	describe( 'getRepoFilters()', () => {
 		test( 'Calls the correct endpoint and returns the repo filters, saving to localstorage', async () => {
 			const apiClient = createProductionApiClient();
-			const repoFilters = await apiClient.getRepoFilters();
+			const repoFilters = await apiClient.getAvailableRepoFilters();
 
 			// If this returns correctly, we called the correct endpoint.
 			expect( repoFilters ).toEqual( fakeRepoFilters );
@@ -281,7 +288,7 @@ describe( '[ProductionApiClient]', () => {
 
 		test( 'The request includes the nonce in the right header', async () => {
 			const apiClient = createProductionApiClient();
-			await apiClient.getRepoFilters();
+			await apiClient.getAvailableRepoFilters();
 
 			const lastRequest = getLastRequest();
 			expect( lastRequest.requestHeaders[ fakeNonceHeaderName ] ).toEqual( fakeNonce );
@@ -296,7 +303,7 @@ describe( '[ProductionApiClient]', () => {
 			localStorage.setItem( repoCacheKey, JSON.stringify( otherRepoFilters ) );
 			localStorage.setItem( repoCackeExpiryKey, ( Date.now() + 10000 ).toString() );
 
-			const repoFilters = await apiClient.getRepoFilters();
+			const repoFilters = await apiClient.getAvailableRepoFilters();
 
 			expect( repoFilters ).toEqual( otherRepoFilters );
 			expect( getLastRequest() ).toBeUndefined();
@@ -311,7 +318,7 @@ describe( '[ProductionApiClient]', () => {
 			localStorage.setItem( repoCacheKey, JSON.stringify( otherRepoFilters ) );
 			localStorage.setItem( repoCackeExpiryKey, ( Date.now() - 1 ).toString() );
 
-			const repoFilters = await apiClient.getRepoFilters();
+			const repoFilters = await apiClient.getAvailableRepoFilters();
 
 			expect( repoFilters ).toEqual( fakeRepoFilters );
 
@@ -333,7 +340,7 @@ describe( '[ProductionApiClient]', () => {
 				return new Response( 500, {}, errorBody );
 			} );
 
-			await expect( apiClient.getRepoFilters() ).rejects.toThrowError(
+			await expect( apiClient.getAvailableRepoFilters() ).rejects.toThrowError(
 				`Get Repo Filters web request failed with status code 500. Response body: ${ JSON.stringify(
 					errorBody
 				) }`

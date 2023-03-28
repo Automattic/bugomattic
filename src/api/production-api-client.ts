@@ -1,5 +1,11 @@
 import { LoggerApiClient, LogPayload } from '../monitoring/types';
-import { ApiClient, Issue, ReportingConfigApiResponse, SearchIssueOptions } from './types';
+import {
+	ApiClient,
+	AvailableRepoFiltersApiResponse,
+	ReportingConfigApiResponse,
+	SearchIssueApiResponse,
+	SearchIssueOptions,
+} from './types';
 
 class ProductionApiClient implements ApiClient, LoggerApiClient {
 	private nonce: string;
@@ -64,7 +70,7 @@ class ProductionApiClient implements ApiClient, LoggerApiClient {
 		}
 	}
 
-	async getRepoFilters(): Promise< string[] > {
+	async getAvailableRepoFilters(): Promise< AvailableRepoFiltersApiResponse > {
 		const repoFiltersCacheKey = 'repoFilters';
 		const repoFiltersCacheExpiryKey = 'repoFiltersExpiry';
 		const cachedData = localStorage.getItem( repoFiltersCacheKey );
@@ -101,7 +107,10 @@ class ProductionApiClient implements ApiClient, LoggerApiClient {
 		}
 	}
 
-	async searchIssues( search: string, options?: SearchIssueOptions ): Promise< Issue[] > {
+	async searchIssues(
+		search: string,
+		options?: SearchIssueOptions
+	): Promise< SearchIssueApiResponse > {
 		const queryParams = new URLSearchParams();
 		queryParams.set( 'search', search );
 		if ( options?.sort ) {
@@ -142,7 +151,8 @@ export function createProductionApiClient(): ApiClient & LoggerApiClient {
 	return {
 		loadReportingConfig: productionApiClient.loadReportingConfig.bind( productionApiClient ),
 		log: productionApiClient.log.bind( productionApiClient ),
-		getRepoFilters: productionApiClient.getRepoFilters.bind( productionApiClient ),
+		getAvailableRepoFilters:
+			productionApiClient.getAvailableRepoFilters.bind( productionApiClient ),
 		searchIssues: productionApiClient.searchIssues.bind( productionApiClient ),
 	};
 }
