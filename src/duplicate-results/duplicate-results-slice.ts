@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { RootState } from '../app/store';
 import { searchIssues } from '../duplicate-search/duplicate-search-slice';
 import { DuplicateResultsState } from './types';
 
@@ -37,3 +38,19 @@ export const duplicateResultsSlice = createSlice( {
 			} );
 	},
 } );
+
+export const duplicateResultsReducer = duplicateResultsSlice.reducer;
+
+/* Selectors */
+
+export function selectDuplicateResults( state: RootState ) {
+	return state.duplicateResults.results;
+}
+
+export function selectDuplicateResultsRequestStatus( state: RootState ) {
+	return state.duplicateResults.requestStatus;
+}
+
+export function selectDuplicateResultsRequestError( state: RootState ) {
+	return state.duplicateResults.requestError;
+}

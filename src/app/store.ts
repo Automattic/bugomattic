@@ -17,6 +17,7 @@ import { activeReportingStepReducer } from '../reporting-flow-page/active-report
 import { urlHistoryMiddleware, registerHistoryListener } from '../url-history/redux-handlers';
 import { startOverCounterReducer } from '../start-over/start-over-counter-slice';
 import { duplicateSearchReducer } from '../duplicate-search/duplicate-search-slice';
+import { duplicateResultsReducer } from '../duplicate-results/duplicate-results-slice';
 
 function createRootReducer() {
 	return combineReducers( {
@@ -27,6 +28,7 @@ function createRootReducer() {
 		activeReportingStep: activeReportingStepReducer,
 		startOverCounter: startOverCounterReducer,
 		duplicateSearch: duplicateSearchReducer,
+		duplicateResults: duplicateResultsReducer,
 	} );
 }
 
