@@ -2,14 +2,21 @@ import { createProductionApiClient } from '../production-api-client';
 import { createServer, Request, Response } from 'miragejs';
 import { ReportingConfigApiResponse } from '../types';
 import { LogPayload } from '../../monitoring/types';
+import { Server } from 'pretender';
 
 describe( '[ProductionApiClient]', () => {
 	const fakeNonce = 'abc123';
 	const fakeNonceHeaderName = 'x-fake-nonce';
-
+	const cacheKey = 'cachedReportingConfigData';
+	const cacheExpiry = 'cacheExpiry';
 	const fakeReportingConfig: ReportingConfigApiResponse = {
 		foo: {
 			description: 'bar',
+		},
+	};
+	const fakeReportingConfigCached: ReportingConfigApiResponse = {
+		bar: {
+			description: 'foo',
 		},
 	};
 
@@ -20,6 +27,7 @@ describe( '[ProductionApiClient]', () => {
 	beforeEach( () => {
 		globalThis.nonce = fakeNonce;
 		globalThis.nonceHeaderName = fakeNonceHeaderName;
+		localStorage.removeItem( cacheKey );
 
 		server = createServer( {
 			environment: 'test',
@@ -48,8 +56,12 @@ describe( '[ProductionApiClient]', () => {
 			const apiClient = createProductionApiClient();
 			const reportingConfig = await apiClient.loadReportingConfig();
 
-			// If this returns correctly, we called the correct endpoint.
 			expect( reportingConfig ).toEqual( fakeReportingConfig );
+
+			// Assert that the data is stored in local storage
+			expect( localStorage.getItem( cacheKey ) ).toEqual( JSON.stringify( fakeReportingConfig ) );
+
+			expect( localStorage.getItem( cacheExpiry ) ).not.toBeNull();
 		} );
 
 		test( 'The request includes the nonce in the right header', async () => {
@@ -60,6 +72,38 @@ describe( '[ProductionApiClient]', () => {
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			const lastRequest: Request = ( server.pretender as any ).handledRequests[ 0 ];
 			expect( lastRequest.requestHeaders[ fakeNonceHeaderName ] ).toEqual( fakeNonce );
+		} );
+
+		test( 'Fetches the data from cache if available and not expired', async () => {
+			const apiClient = createProductionApiClient();
+
+			localStorage.setItem( cacheKey, JSON.stringify( fakeReportingConfigCached ) );
+			localStorage.setItem( cacheExpiry, ( Date.now() + 10000 ).toString() );
+
+			const reportingConfig = await apiClient.loadReportingConfig();
+
+			expect( reportingConfig ).toEqual( fakeReportingConfigCached );
+
+			const requests = ( server.pretender as Server & { handledRequests: any[] } ).handledRequests;
+			expect( requests.length ).toEqual( 0 );
+		} );
+
+		test( 'Fetches the reporting config again if cache has expired', async () => {
+			const apiClient = createProductionApiClient();
+
+			localStorage.setItem( cacheKey, JSON.stringify( fakeReportingConfigCached ) );
+			const cacheExpiryTime = Date.now() - 1;
+			localStorage.setItem( cacheExpiry, cacheExpiryTime.toString() );
+
+			const response = await apiClient.loadReportingConfig();
+
+			expect( response ).toEqual( fakeReportingConfig );
+
+			const cachedData = localStorage.getItem( cacheKey );
+			const newCacheExpiry = localStorage.getItem( cacheExpiry );
+
+			expect( cachedData ).toEqual( JSON.stringify( fakeReportingConfig ) );
+			expect( Number( newCacheExpiry ) ).toBeGreaterThanOrEqual( Date.now() );
 		} );
 
 		test( 'Throws an error if the request fails', async () => {
