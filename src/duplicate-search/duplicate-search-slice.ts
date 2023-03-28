@@ -112,7 +112,7 @@ export const duplicateSearchSlice = createSlice( {
 const { setSearchTermInternal, setRepoFiltersInternal, setStatusFilterInternal, setSortInternal } =
 	duplicateSearchSlice.actions;
 
-// These are all the action creators that should be used, as we want to trigger a search after each one of these updates!
+// These are all the action creators that should be practically used in components, as we want to trigger a search after each one of these updates!
 
 export const setSearchTerm = ( searchTerm: string ) => ( dispatch: AppDispatch ) => {
 	dispatch( setSearchTermInternal( searchTerm ) );
