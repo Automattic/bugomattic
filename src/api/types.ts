@@ -6,8 +6,9 @@ import { LearnMoreLink, TaskDetails } from '../reporting-config/types';
  */
 export interface ApiClient {
 	loadReportingConfig(): Promise< ReportingConfigApiResponse >;
+	searchIssues( search: string, options?: SearchIssueOptions ): Promise< Issue[] >;
+	getRepoFilters(): Promise< string[] >;
 	// More to come as we add to the API
-	// e.g. searchForDuplicats();
 	// e.g. saveNewReportingConfig();
 }
 
@@ -53,4 +54,21 @@ export interface ApiTasks {
 	bug: TaskDetails[];
 	featureRequest: TaskDetails[];
 	urgent: TaskDetails[];
+}
+
+export interface Issue {
+	dateCreated: string;
+	dateUpdated: string;
+	title: string;
+	url: string;
+	repo: string;
+	status: 'open' | 'closed';
+	author: string;
+	content: string;
+}
+
+export interface SearchIssueOptions {
+	repos?: string[];
+	status?: 'open' | 'closed' | 'all';
+	sort?: 'date-created' | 'relevance';
 }
