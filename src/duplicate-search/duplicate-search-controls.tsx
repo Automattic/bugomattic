@@ -1,9 +1,6 @@
 import React from 'react';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
-import {
-	selectAvailableRepoFilters,
-	selectAvailableRepoFiltersLoadStatus,
-} from '../static-data/available-repo-filters/available-repo-filters-slice';
+import { selectAvailableRepoFilters } from '../static-data/available-repo-filters/available-repo-filters-slice';
 import { updateHistoryWithState } from '../url-history/actions';
 import {
 	setRepoFilters,
@@ -17,7 +14,6 @@ import {
 export function DuplicateSearchControls() {
 	const dispatch = useAppDispatch();
 	const repoFilters = useAppSelector( selectAvailableRepoFilters );
-	const repoFilterLoadStatus = useAppSelector( selectAvailableRepoFiltersLoadStatus );
 
 	const handleFauxSearch = () => {
 		dispatch( setSearchTerm( 'Test search term' ) );
@@ -27,18 +23,11 @@ export function DuplicateSearchControls() {
 		dispatch( updateHistoryWithState() );
 	};
 
-	let repoFiltersDisplay: string;
-	if ( repoFilterLoadStatus === 'loading' ) {
-		repoFiltersDisplay = 'Loading...';
-	} else {
-		repoFiltersDisplay = repoFilters.join( ', ' );
-	}
-
 	return (
 		<section>
 			<p>This is just a filler component</p>
 			<button onClick={ handleFauxSearch }>Faux search</button>
-			<p>Available repo filters: { repoFiltersDisplay }</p>
+			<p>Available repo filters: { repoFilters.join( ', ' ) }</p>
 		</section>
 	);
 }

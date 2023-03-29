@@ -1,5 +1,3 @@
-import { StaticDataLoadStatus } from '../types';
-
 /**
  * The operation-focused, client representation of the issue reporting config.
  * We take the backend JSON and normalize it and index it to make it more usable by the client.
@@ -7,7 +5,6 @@ import { StaticDataLoadStatus } from '../types';
 export interface ReportingConfigState {
 	normalized: NormalizedReportingConfig;
 	indexed: IndexedReportingConfig;
-	loadStatus: StaticDataLoadStatus;
 	loadError: string | null;
 }
 

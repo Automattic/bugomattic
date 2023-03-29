@@ -15,7 +15,7 @@ import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { createMockApiClient } from '../../test-utils/mock-api-client';
 import { renderWithProviders } from '../../test-utils/render-with-providers';
-import { ReportingFlow } from '../reporting-flow';
+import { ReportingFlowPage } from '../reporting-flow-page';
 import { UserEvent } from '@testing-library/user-event/dist/types/setup/setup';
 import { createMockMonitoringClient } from '../../test-utils/mock-monitoring-client';
 
@@ -112,7 +112,7 @@ describe( '[Reporting Flow]', () => {
 		monitoringClient = createMockMonitoringClient();
 		user = userEvent.setup();
 		// eslint-disable-next-line testing-library/no-render-in-setup
-		renderWithProviders( <ReportingFlow />, {
+		renderWithProviders( <ReportingFlowPage />, {
 			apiClient,
 			monitoringClient,
 			preloadedState: {

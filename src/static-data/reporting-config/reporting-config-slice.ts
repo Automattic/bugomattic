@@ -19,7 +19,6 @@ const initialIndexedReportingConfig: IndexedReportingConfig = {
 const initialState: ReportingConfigState = {
 	normalized: initialNormalizedReportingConfig,
 	indexed: initialIndexedReportingConfig,
-	loadStatus: 'empty',
 	loadError: null,
 };
 
@@ -38,16 +37,9 @@ export const reportingConfigSlice = createSlice( {
 	reducers: {},
 	extraReducers: ( builder ) => {
 		builder
-			.addCase( loadReportingConfig.pending, ( state ) => {
-				return {
-					...state,
-					loadStatus: 'loading',
-				};
-			} )
 			.addCase( loadReportingConfig.rejected, ( state, { error } ) => {
 				return {
 					...state,
-					loadStatus: 'error',
 					loadError: `${ error.name }: ${ error.message }`,
 				};
 			} )
@@ -62,16 +54,13 @@ export const reportingConfigSlice = createSlice( {
 					const error = err as Error;
 					return {
 						...state,
-						loadStatus: 'error',
 						loadError: `Failed to normalize reporting config. ${ error.name }: ${ error.message }`,
 					};
 				}
 
 				return {
-					...state,
 					normalized: normalized,
 					indexed: indexed,
-					loadStatus: 'loaded',
 					loadError: null,
 				};
 			} );
@@ -92,10 +81,6 @@ export function selectNormalizedReportingConfig( state: RootState ) {
 
 export function selectIndexedReportingConfig( state: RootState ) {
 	return state.reportingConfig.indexed;
-}
-
-export function selectReportingConfigLoadStatus( state: RootState ) {
-	return state.reportingConfig.loadStatus;
 }
 
 export function selectReportingConfigLoadError( state: RootState ) {
