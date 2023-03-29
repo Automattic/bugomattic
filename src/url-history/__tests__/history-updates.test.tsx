@@ -310,7 +310,7 @@ describe( 'history updates', () => {
 			apiClient.loadReportingConfig = jest.fn().mockResolvedValue( fakeReportingConfigApiResponse );
 			renderWithProviders( <App />, { apiClient } );
 			await waitForElementToBeRemoved(
-				screen.queryByRole( 'alert', { name: 'Loading issue reporting configuration' } )
+				screen.queryByRole( 'alert', { name: 'Loading required app data' } )
 			);
 		}
 

@@ -69,7 +69,7 @@ export const localApiClient: ApiClient = {
 	},
 
 	getAvailableRepoFilters: async () => {
-		await wait( 2000 );
+		await wait( 1000 );
 		return [
 			'Automattic/wp-calypso',
 			'Automattic/wp-desktop',

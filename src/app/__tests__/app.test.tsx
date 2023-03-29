@@ -32,7 +32,7 @@ describe( '[app]', () => {
 
 		// Loading indicator is present...
 		expect(
-			screen.getByRole( 'alert', { name: 'Loading issue reporting configuration' } )
+			screen.getByRole( 'alert', { name: 'Loading required app data' } )
 		).toBeInTheDocument();
 		// ...Reporting flow is not.
 		expect(
@@ -44,7 +44,7 @@ describe( '[app]', () => {
 		// Then it flips!
 
 		await waitForElementToBeRemoved( () =>
-			screen.queryByRole( 'alert', { name: 'Loading issue reporting configuration' } )
+			screen.queryByRole( 'alert', { name: 'Loading required app data' } )
 		);
 
 		expect(
@@ -61,7 +61,7 @@ describe( '[app]', () => {
 		const { monitoringClient } = setup( <App />, apiClient );
 
 		await waitForElementToBeRemoved( () =>
-			screen.queryByRole( 'alert', { name: 'Loading issue reporting configuration' } )
+			screen.queryByRole( 'alert', { name: 'Loading required app data' } )
 		);
 
 		expect(
@@ -82,7 +82,7 @@ describe( '[app]', () => {
 		const { monitoringClient } = setup( <App />, apiClient );
 
 		await waitForElementToBeRemoved( () =>
-			screen.queryByRole( 'alert', { name: 'Loading issue reporting configuration' } )
+			screen.queryByRole( 'alert', { name: 'Loading required app data' } )
 		);
 
 		expect(
@@ -103,7 +103,7 @@ describe( '[app]', () => {
 		const { monitoringClient } = setup( <App />, apiClient );
 
 		await waitForElementToBeRemoved( () =>
-			screen.queryByRole( 'alert', { name: 'Loading issue reporting configuration' } )
+			screen.queryByRole( 'alert', { name: 'Loading required app data' } )
 		);
 		expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'page_view' );
 	} );

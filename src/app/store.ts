@@ -62,6 +62,6 @@ export type AppDispatch = AppStore[ 'dispatch' ];
 export type AppThunk< ReturnType = void > = ThunkAction<
 	ReturnType,
 	RootState,
-	ApiClient,
+	{ apiClient: ApiClient },
 	Action< string >
 >;

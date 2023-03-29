@@ -1,11 +1,11 @@
 import React from 'react';
-import { AnimatedEllipsis } from '../../common/components';
-import styles from '../reporting-flow-page.module.css';
+import { AnimatedEllipsis } from '../common/components';
+import styles from './app.module.css';
 
-export function ReportingConfigLoadingIndicator() {
+export function AppLoadingIndicator() {
 	const messages = [
 		'Finding some loving homes for bugs.',
-		'"Hydrating config state" -- whatever that means!',
+		'"Hydrating app data" -- whatever that means!',
 		"We're getting ready, be down in a hurry!",
 	];
 
@@ -19,7 +19,7 @@ export function ReportingConfigLoadingIndicator() {
 			aria-relevant="all"
 			role="alert"
 			// For screen readers, let's be clear of the alert's intent.
-			aria-label="Loading issue reporting configuration"
+			aria-label="Loading required app data"
 		>
 			<span className={ styles.loadingMessage }>{ message }</span>
 			<AnimatedEllipsis aria-hidden={ true } />

@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react';
 import { useAppSelector } from '../app/hooks';
 import { AppErrorDisplay } from '../errors/app-error-display';
 import { useMonitoring } from '../monitoring/monitoring-provider';
-import { ReportingConfigLoadingIndicator } from './sub-components/reporting-config-loading-indicator';
+import { AppLoadingIndicator } from '../app/app-loading-indicator';
 import {
 	selectReportingConfigLoadError,
 	selectReportingConfigLoadStatus,
@@ -16,7 +16,7 @@ export function ReportingFlowPage() {
 
 	let display: ReactNode;
 	if ( loadStatus === 'empty' || loadStatus === 'loading' ) {
-		display = <ReportingConfigLoadingIndicator />;
+		display = <AppLoadingIndicator />;
 	} else if ( loadStatus === 'loaded' ) {
 		display = <ReportingFlow />;
 	} else {
