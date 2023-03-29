@@ -18,6 +18,7 @@ import { urlHistoryMiddleware, registerHistoryListener } from '../url-history/re
 import { startOverCounterReducer } from '../start-over/start-over-counter-slice';
 import { duplicateSearchReducer } from '../duplicate-search/duplicate-search-slice';
 import { duplicateResultsReducer } from '../duplicate-results/duplicate-results-slice';
+import { activePageReducer } from '../page/active-page-slice';
 
 function createRootReducer() {
 	return combineReducers( {
@@ -29,6 +30,7 @@ function createRootReducer() {
 		startOverCounter: startOverCounterReducer,
 		duplicateSearch: duplicateSearchReducer,
 		duplicateResults: duplicateResultsReducer,
+		activePage: activePageReducer,
 	} );
 }
 

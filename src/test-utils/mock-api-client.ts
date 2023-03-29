@@ -4,6 +4,6 @@ export function createMockApiClient() {
 			return {};
 		} ),
 		searchIssues: jest.fn( async () => [] ),
-		getRepoFilters: jest.fn( async () => [] ),
+		getAvailableRepoFilters: jest.fn( async () => [] ),
 	};
 }

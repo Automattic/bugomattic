@@ -1,35 +1,31 @@
 import React, { ReactNode, useEffect } from 'react';
 import { AppHeader } from '../app-header/app-header';
-import { AppErrorDisplay } from '../errors/app-error-display';
 import { useMonitoring } from '../monitoring/monitoring-provider';
-import { ReportingConfigLoadingIndicator } from '../reporting-config/reporting-config-loading-indicator';
-import { useReportingConfigLoad } from '../reporting-config/use-reporting-config';
-import { ReportingFlow } from '../reporting-flow-page/reporting-flow-page';
 import { useInitialStateFromUrl } from '../url-history/hooks';
 import styles from './app.module.css';
 import { AppErrorBoundary } from '../errors/app-error-boundary';
+import { useAppDataLoad } from './use-app-data';
+import { selectActivePage } from '../page/active-page-slice';
+import { useAppSelector } from './hooks';
+import { DuplicateSearchingPage } from '../duplicate-searching/duplicate-searching-page';
+import { ReportingFlowPage } from '../reporting-flow-page/reporting-flow-page';
 
 export function App() {
-	const { loadStatus, error } = useReportingConfigLoad();
+	useAppDataLoad();
 	const monitoringClient = useMonitoring();
 	useInitialStateFromUrl();
+	const activePage = useAppSelector( selectActivePage );
 
 	useEffect( () => {
 		monitoringClient.analytics.recordEvent( 'page_view' );
 	}, [ monitoringClient.analytics ] );
 
 	let mainDisplay: ReactNode;
-	if ( loadStatus === 'empty' || loadStatus === 'loading' ) {
-		mainDisplay = <ReportingConfigLoadingIndicator />;
-	} else if ( loadStatus === 'loaded' ) {
-		mainDisplay = <ReportingFlow />;
+	if ( activePage === 'duplicateSearching' ) {
+		mainDisplay = <DuplicateSearchingPage />;
 	} else {
-		monitoringClient.logger.error( 'Error occurred when loading the reporting config', {
-			error: error,
-		} );
-		mainDisplay = <AppErrorDisplay />;
+		mainDisplay = <ReportingFlowPage />;
 	}
-
 	return (
 		<div className={ styles.appMain }>
 			<AppHeader />

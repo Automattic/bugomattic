@@ -15,7 +15,7 @@ import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { createMockApiClient } from '../../test-utils/mock-api-client';
 import { renderWithProviders } from '../../test-utils/render-with-providers';
-import { ReportingFlow } from '../reporting-flow-page';
+import { ReportingFlow } from '../reporting-flow';
 import { UserEvent } from '@testing-library/user-event/dist/types/setup/setup';
 import { createMockMonitoringClient } from '../../test-utils/mock-monitoring-client';
 
