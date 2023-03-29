@@ -2,16 +2,16 @@ import React, { ReactNode } from 'react';
 import { useAppSelector } from '../app/hooks';
 import { AppErrorDisplay } from '../errors/app-error-display';
 import { useMonitoring } from '../monitoring/monitoring-provider';
-import { ReportingConfigLoadingIndicator } from '../reporting-config/reporting-config-loading-indicator';
+import { ReportingConfigLoadingIndicator } from './sub-components/reporting-config-loading-indicator';
 import {
-	selectReportingConfigError,
+	selectReportingConfigLoadError,
 	selectReportingConfigLoadStatus,
-} from '../reporting-config/reporting-config-slice';
+} from '../static-data/reporting-config/reporting-config-slice';
 import { ReportingFlow } from './reporting-flow';
 
 export function ReportingFlowPage() {
 	const loadStatus = useAppSelector( selectReportingConfigLoadStatus );
-	const loadError = useAppSelector( selectReportingConfigError );
+	const loadError = useAppSelector( selectReportingConfigLoadError );
 	const monitoringClient = useMonitoring();
 
 	let display: ReactNode;

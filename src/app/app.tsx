@@ -4,21 +4,22 @@ import { useMonitoring } from '../monitoring/monitoring-provider';
 import { useInitialStateFromUrl } from '../url-history/hooks';
 import styles from './app.module.css';
 import { AppErrorBoundary } from '../errors/app-error-boundary';
-import { useAppDataLoad } from './use-app-data';
+import { useStaticDataLoad } from '../static-data/use-static-data';
 import { selectActivePage } from '../page/active-page-slice';
 import { useAppSelector } from './hooks';
-import { DuplicateSearchingPage } from '../duplicate-searching/duplicate-searching-page';
+import { DuplicateSearchingPage } from '../duplicate-searching-page/duplicate-searching-page';
 import { ReportingFlowPage } from '../reporting-flow-page/reporting-flow-page';
 
 export function App() {
-	useAppDataLoad();
-	const monitoringClient = useMonitoring();
+	useStaticDataLoad();
 	useInitialStateFromUrl();
-	const activePage = useAppSelector( selectActivePage );
 
+	const monitoringClient = useMonitoring();
 	useEffect( () => {
 		monitoringClient.analytics.recordEvent( 'page_view' );
 	}, [ monitoringClient.analytics ] );
+
+	const activePage = useAppSelector( selectActivePage );
 
 	let mainDisplay: ReactNode;
 	if ( activePage === 'duplicateSearching' ) {

@@ -4,7 +4,7 @@ import {
 	FeatureGroup,
 	NormalizedReportingConfig,
 	Product,
-} from '../../reporting-config/types';
+} from '../../static-data/reporting-config/types';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { FeatureSelectorForm } from '../feature-selector-form';
@@ -70,8 +70,8 @@ describe( '[FeatureSelector -- Feature Selection]', () => {
 					normalized: reportingConfig,
 					// eslint-disable-next-line @typescript-eslint/no-explicit-any
 					indexed: {} as any,
-					status: 'loaded',
-					error: null,
+					loadStatus: 'loaded',
+					loadError: null,
 				},
 			},
 		} );

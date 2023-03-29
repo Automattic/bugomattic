@@ -1,7 +1,12 @@
 import React from 'react';
 import { createGeneralHref, createP2Href, createSlackHref } from '../../common/lib';
 import { useMonitoring } from '../../monitoring/monitoring-provider';
-import { Feature, FeatureGroup, LearnMoreLink, Product } from '../../reporting-config/types';
+import {
+	Feature,
+	FeatureGroup,
+	LearnMoreLink,
+	Product,
+} from '../../static-data/reporting-config/types';
 import styles from '../next-steps.module.css';
 
 interface Props {

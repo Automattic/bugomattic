@@ -10,7 +10,7 @@ import {
 	NormalizedReportingConfig,
 	Product,
 	Task,
-} from '../../reporting-config/types';
+} from '../../static-data/reporting-config/types';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { createMockApiClient } from '../../test-utils/mock-api-client';
@@ -120,8 +120,8 @@ describe( '[Reporting Flow]', () => {
 					normalized: reportingConfig,
 					// eslint-disable-next-line @typescript-eslint/no-explicit-any
 					indexed: {} as any,
-					status: 'loaded',
-					error: null,
+					loadStatus: 'loaded',
+					loadError: null,
 				},
 			},
 		} );

@@ -1,4 +1,9 @@
-import { GeneralLink, NewGitHubIssueLink, P2Link, SlackLink } from '../../reporting-config/types';
+import {
+	GeneralLink,
+	NewGitHubIssueLink,
+	P2Link,
+	SlackLink,
+} from '../../static-data/reporting-config/types';
 import urlJoin from 'url-join';
 
 // We re-use some link data structures throughout the app. Let's centralize their santization to make sure they are safe.

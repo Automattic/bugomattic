@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../app/store';
-import { NormalizedReportingConfig } from '../reporting-config/types';
+import { NormalizedReportingConfig } from '../static-data/reporting-config/types';
 import { startOver } from '../start-over/start-over-counter-slice';
 import { updateStateFromHistory } from '../url-history/actions';
 import { FeatureId, IssueDetails, IssueType } from './types';

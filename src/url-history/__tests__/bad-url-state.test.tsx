@@ -8,7 +8,7 @@ import { waitForElementToBeRemoved, screen } from '@testing-library/react';
 import { ReportingConfigApiResponse } from '../../api/types';
 import { stateToQuery } from '../parsers';
 import { RootState } from '../../app/store';
-import { normalizeReportingConfig } from '../../reporting-config/reporting-config-parsers';
+import { normalizeReportingConfig } from '../../static-data/reporting-config/reporting-config-parsers';
 
 describe( '[Bad URL State]', () => {
 	const fakeReportingConfigApiResponse: ReportingConfigApiResponse = {

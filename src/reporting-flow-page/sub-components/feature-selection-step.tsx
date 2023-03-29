@@ -1,7 +1,7 @@
 import React, { ReactNode, useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { selectIssueFeatureId } from '../../issue-details/issue-details-slice';
-import { selectNormalizedReportingConfig } from '../../reporting-config/reporting-config-slice';
+import { selectNormalizedReportingConfig } from '../../static-data/reporting-config/reporting-config-slice';
 import { selectActiveReportingStep, setActiveReportingStep } from '../active-reporting-step-slice';
 import { StepContainer } from './step-container';
 import styles from '../reporting-flow-page.module.css';

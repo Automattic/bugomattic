@@ -1,7 +1,7 @@
 // Redux slice for duplicate search
 
 import { Action, createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ApiClient, AvailableRepoFiltersApiResponse, SearchIssueApiResponse } from '../api/types';
+import { ApiClient, SearchIssueApiResponse } from '../api/types';
 import { AppDispatch, RootState } from '../app/store';
 import { DuplicateSearchState, IssueSortOption, IssueStatusFilter } from './types';
 
@@ -11,21 +11,7 @@ const initialState: DuplicateSearchState = {
 	activeRepoFilters: [],
 	statusFilter: 'all',
 	sort: 'relevance',
-	availableRepoFilters: {
-		repos: [],
-		requestStatus: 'empty',
-		requestError: null,
-	},
 };
-
-export const loadAvailableRepoFilters = createAsyncThunk<
-	AvailableRepoFiltersApiResponse,
-	void,
-	{ extra: { apiClient: ApiClient } }
->( 'duplicateSearch/loadAvailableRepoFilters', async ( _, { extra } ) => {
-	const { apiClient } = extra;
-	return await apiClient.getAvailableRepoFilters();
-} );
 
 export const searchIssues = createAsyncThunk<
 	SearchIssueApiResponse,
@@ -75,38 +61,6 @@ export const duplicateSearchSlice = createSlice( {
 			};
 		},
 	},
-	extraReducers: ( builder ) => {
-		builder
-			.addCase( loadAvailableRepoFilters.pending, ( state ) => {
-				return {
-					...state,
-					availableRepoFilters: {
-						...state.availableRepoFilters,
-						requestStatus: 'loading',
-					},
-				};
-			} )
-			.addCase( loadAvailableRepoFilters.rejected, ( state, { error } ) => {
-				return {
-					...state,
-					availableRepoFilters: {
-						...state.availableRepoFilters,
-						requestStatus: 'error',
-						requestError: `${ error.name }: ${ error.message }`,
-					},
-				};
-			} )
-			.addCase( loadAvailableRepoFilters.fulfilled, ( state, { payload } ) => {
-				return {
-					...state,
-					availableRepoFilters: {
-						...state.availableRepoFilters,
-						requestStatus: 'loaded',
-						repos: payload,
-					},
-				};
-			} );
-	},
 } );
 
 export const { setSearchTerm, setRepoFilters, setStatusFilter, setSort } =
@@ -140,16 +94,4 @@ export function selectStatusFilter( state: RootState ) {
 
 export function selectSort( state: RootState ) {
 	return state.duplicateSearch.sort;
-}
-
-export function selectAvailableRepoFilters( state: RootState ) {
-	return state.duplicateSearch.availableRepoFilters.repos;
-}
-
-export function selectAvailableRepoFiltersRequestStatus( state: RootState ) {
-	return state.duplicateSearch.availableRepoFilters.requestStatus;
-}
-
-export function selectAvailableRepoFiltersRequestError( state: RootState ) {
-	return state.duplicateSearch.availableRepoFilters.requestError;
 }

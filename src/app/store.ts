@@ -6,10 +6,7 @@ import {
 	PreloadedState,
 } from '@reduxjs/toolkit';
 import { ApiClient } from '../api/types';
-import {
-	reportingConfigReducer,
-	surfaceReportingConfigMiddleware,
-} from '../reporting-config/reporting-config-slice';
+import { reportingConfigReducer } from '../static-data/reporting-config/reporting-config-slice';
 import { featureSelectorFormReducer } from '../feature-selector-form/feature-selector-form-slice';
 import { issueDetailsReducer } from '../issue-details/issue-details-slice';
 import { completedTasksReducer } from '../next-steps/completed-tasks-slice';
@@ -19,10 +16,13 @@ import { startOverCounterReducer } from '../start-over/start-over-counter-slice'
 import { duplicateSearchReducer } from '../duplicate-search/duplicate-search-slice';
 import { duplicateResultsReducer } from '../duplicate-results/duplicate-results-slice';
 import { activePageReducer } from '../page/active-page-slice';
+import { availableRepoFiltersReducer } from '../static-data/available-repo-filters/available-repo-filters-slice';
+import { surfaceStaticDataMiddleware } from '../static-data/static-data-middleware';
 
 function createRootReducer() {
 	return combineReducers( {
 		reportingConfig: reportingConfigReducer,
+		availableRepoFilters: availableRepoFiltersReducer,
 		issueDetails: issueDetailsReducer,
 		completedTasks: completedTasksReducer,
 		featureSelectorForm: featureSelectorFormReducer,
@@ -46,7 +46,7 @@ export function setupStore( apiClient: ApiClient, preloadedState?: PreloadedStat
 				thunk: {
 					extraArgument: { apiClient },
 				},
-			} ).concat( surfaceReportingConfigMiddleware, urlHistoryMiddleware ),
+			} ).concat( surfaceStaticDataMiddleware, urlHistoryMiddleware ),
 		preloadedState,
 	} );
 

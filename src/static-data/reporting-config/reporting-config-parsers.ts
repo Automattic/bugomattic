@@ -1,4 +1,9 @@
-import { ApiFeatureGroups, ApiFeatures, ApiTasks, ReportingConfigApiResponse } from '../api/types';
+import {
+	ApiFeatureGroups,
+	ApiFeatures,
+	ApiTasks,
+	ReportingConfigApiResponse,
+} from '../../api/types';
 import {
 	FeatureGroups,
 	FeatureParentEntityType,

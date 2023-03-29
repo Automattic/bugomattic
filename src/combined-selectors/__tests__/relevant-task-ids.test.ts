@@ -3,7 +3,7 @@
 // so being able to use "any" to stub out those parts is helpful here.
 import { RootState } from '../../app/store';
 import { selectRelevantTaskIds } from '../relevant-task-ids';
-import { NormalizedReportingConfig, TaskDetails } from '../../reporting-config/types';
+import { NormalizedReportingConfig, TaskDetails } from '../../static-data/reporting-config/types';
 
 describe( '[selectRelevantTaskIds]', () => {
 	test( 'Returns empty array if there is no feature id in the state', () => {
@@ -46,8 +46,8 @@ describe( '[selectRelevantTaskIds]', () => {
 			reportingConfig: {
 				normalized: normalized,
 				indexed: {} as any,
-				status: 'loaded',
-				error: null,
+				loadStatus: 'loaded',
+				loadError: null,
 			},
 			issueDetails: {
 				issueType: 'bug',
@@ -100,8 +100,8 @@ describe( '[selectRelevantTaskIds]', () => {
 			reportingConfig: {
 				normalized: normalized,
 				indexed: {} as any,
-				status: 'loaded',
-				error: null,
+				loadStatus: 'loaded',
+				loadError: null,
 			},
 			issueDetails: {
 				issueType: 'unset',
@@ -195,8 +195,8 @@ describe( '[selectRelevantTaskIds]', () => {
 			reportingConfig: {
 				normalized: normalized,
 				indexed: {} as any,
-				status: 'loaded',
-				error: null,
+				loadStatus: 'loaded',
+				loadError: null,
 			},
 			issueDetails: {
 				issueType: 'bug',
@@ -295,8 +295,8 @@ describe( '[selectRelevantTaskIds]', () => {
 			reportingConfig: {
 				normalized: normalized,
 				indexed: {} as any,
-				status: 'loaded',
-				error: null,
+				loadStatus: 'loaded',
+				loadError: null,
 			},
 			issueDetails: {
 				issueType: 'featureRequest',
@@ -374,8 +374,8 @@ describe( '[selectRelevantTaskIds]', () => {
 			reportingConfig: {
 				normalized: normalized,
 				indexed: {} as any,
-				status: 'loaded',
-				error: null,
+				loadStatus: 'loaded',
+				loadError: null,
 			},
 			issueDetails: {
 				issueType: 'urgent',

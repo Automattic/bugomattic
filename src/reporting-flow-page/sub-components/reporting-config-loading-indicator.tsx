@@ -1,6 +1,6 @@
 import React from 'react';
-import { AnimatedEllipsis } from '../common/components';
-import styles from './reporting-config-loading-indicator.module.css';
+import { AnimatedEllipsis } from '../../common/components';
+import styles from '../reporting-flow-page.module.css';
 
 export function ReportingConfigLoadingIndicator() {
 	const messages = [
@@ -15,13 +15,13 @@ export function ReportingConfigLoadingIndicator() {
 
 	return (
 		<div
-			className={ styles.wrapper }
+			className={ styles.loadingWrapper }
 			aria-relevant="all"
 			role="alert"
 			// For screen readers, let's be clear of the alert's intent.
 			aria-label="Loading issue reporting configuration"
 		>
-			<span className={ styles.message }>{ message }</span>
+			<span className={ styles.loadingMessage }>{ message }</span>
 			<AnimatedEllipsis aria-hidden={ true } />
 		</div>
 	);

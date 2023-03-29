@@ -1,6 +1,6 @@
 import { Issue } from '../duplicate-results/types';
 import { IssueSortOption, IssueStatusFilter } from '../duplicate-search/types';
-import { LearnMoreLink, TaskDetails } from '../reporting-config/types';
+import { LearnMoreLink, TaskDetails } from '../static-data/reporting-config/types';
 
 /**
  * An interface representing an interaction with the API.

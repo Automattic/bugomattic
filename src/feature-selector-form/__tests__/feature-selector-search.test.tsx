@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { NormalizedReportingConfig } from '../../reporting-config/types';
+import { NormalizedReportingConfig } from '../../static-data/reporting-config/types';
 import userEvent from '@testing-library/user-event';
 import { screen } from '@testing-library/react';
 import { FeatureSelectorForm } from '../feature-selector-form';
@@ -97,8 +97,8 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 					normalized: reportingConfig,
 					// eslint-disable-next-line @typescript-eslint/no-explicit-any
 					indexed: {} as any,
-					status: 'loaded',
-					error: null,
+					loadStatus: 'loaded',
+					loadError: null,
 				},
 			},
 		} );

@@ -2,7 +2,9 @@ import React from 'react';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import {
 	selectAvailableRepoFilters,
-	selectAvailableRepoFiltersRequestStatus,
+	selectAvailableRepoFiltersLoadStatus,
+} from '../static-data/available-repo-filters/available-repo-filters-slice';
+import {
 	setRepoFilters,
 	setSearchTerm,
 	setSort,
@@ -14,7 +16,7 @@ import {
 export function DuplicateSearchControls() {
 	const dispatch = useAppDispatch();
 	const repoFilters = useAppSelector( selectAvailableRepoFilters );
-	const repoFilterRequestState = useAppSelector( selectAvailableRepoFiltersRequestStatus );
+	const repoFilterLoadStatus = useAppSelector( selectAvailableRepoFiltersLoadStatus );
 
 	const handleFauxSearch = () => {
 		dispatch( setSearchTerm( 'Test search term' ) );
@@ -24,7 +26,7 @@ export function DuplicateSearchControls() {
 	};
 
 	let repoFiltersDisplay: string;
-	if ( repoFilterRequestState === 'loading' ) {
+	if ( repoFilterLoadStatus === 'loading' ) {
 		repoFiltersDisplay = 'Loading...';
 	} else {
 		repoFiltersDisplay = repoFilters.join( ', ' );
