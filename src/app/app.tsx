@@ -5,7 +5,7 @@ import { useInitialStateFromUrl } from '../url-history/hooks';
 import styles from './app.module.css';
 import { AppErrorBoundary } from '../errors/app-error-boundary';
 import { useStaticDataLoad } from '../static-data/use-static-data';
-import { selectActivePage } from '../page/active-page-slice';
+import { selectActivePage } from '../active-page/active-page-slice';
 import { useAppSelector } from './hooks';
 import { DuplicateSearchingPage } from '../duplicate-searching-page/duplicate-searching-page';
 import { ReportingFlowPage } from '../reporting-flow-page/reporting-flow-page';

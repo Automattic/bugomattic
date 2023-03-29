@@ -3,6 +3,8 @@
 import { Action, createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ApiClient, SearchIssueApiResponse } from '../api/types';
 import { AppDispatch, RootState } from '../app/store';
+import { ActionWithStaticData } from '../static-data/types';
+import { updateStateFromHistory } from '../url-history/actions';
 import { DuplicateSearchState, IssueSortOption, IssueStatusFilter } from './types';
 
 const initialState: DuplicateSearchState = {
@@ -13,11 +15,14 @@ const initialState: DuplicateSearchState = {
 	sort: 'relevance',
 };
 
+const validIssueStatusFilters = new Set< IssueStatusFilter >( [ 'all', 'open', 'closed' ] );
+const validIssueSortOptions = new Set< IssueSortOption >( [ 'date-created', 'relevance' ] );
+
 export const searchIssues = createAsyncThunk<
 	SearchIssueApiResponse,
 	void,
 	{ extra: { apiClient: ApiClient } }
->( 'duplicateResults/searchIssues', async ( _, { extra, getState } ) => {
+>( 'duplicateSearch/searchIssues', async ( _, { extra, getState } ) => {
 	const rootState = getState() as RootState;
 	const searchTerm = selectDuplicateSearchTerm( rootState );
 	const activeRepoFilters = selectActiveRepoFilters( rootState );
@@ -60,6 +65,64 @@ export const duplicateSearchSlice = createSlice( {
 				sort: payload,
 			};
 		},
+	},
+	extraReducers: ( builder ) => {
+		builder.addCase( updateStateFromHistory, ( _state, action ) => {
+			const duplicateSearchInfo = action.payload.duplicateSearch;
+			if ( ! duplicateSearchInfo || typeof duplicateSearchInfo !== 'object' ) {
+				return { ...initialState };
+			}
+
+			// Validate the payload from history, and fall back to the initial state if invalid.
+
+			let searchTerm: string;
+			if (
+				! duplicateSearchInfo.searchTerm ||
+				typeof duplicateSearchInfo.searchTerm !== 'string'
+			) {
+				searchTerm = initialState.searchTerm;
+			} else {
+				searchTerm = duplicateSearchInfo.searchTerm;
+			}
+
+			const actionWithStaticData = action as ActionWithStaticData;
+			const avaliableRepoFiltersSet = new Set( actionWithStaticData.meta.availableRepoFilters );
+			let activeRepoFilters: string[];
+			if (
+				! duplicateSearchInfo.activeRepoFilters ||
+				! Array.isArray( duplicateSearchInfo.activeRepoFilters )
+			) {
+				activeRepoFilters = [ ...initialState.activeRepoFilters ];
+			} else {
+				activeRepoFilters = duplicateSearchInfo.activeRepoFilters.filter( ( repo ) =>
+					avaliableRepoFiltersSet.has( repo )
+				);
+			}
+
+			let statusFilter: IssueStatusFilter;
+			if (
+				! duplicateSearchInfo.statusFilter ||
+				! validIssueStatusFilters.has( duplicateSearchInfo.statusFilter )
+			) {
+				statusFilter = initialState.statusFilter;
+			} else {
+				statusFilter = duplicateSearchInfo.statusFilter;
+			}
+
+			let sort: IssueSortOption;
+			if ( ! duplicateSearchInfo.sort || ! validIssueSortOptions.has( duplicateSearchInfo.sort ) ) {
+				sort = initialState.sort;
+			} else {
+				sort = duplicateSearchInfo.sort;
+			}
+
+			return {
+				searchTerm,
+				activeRepoFilters,
+				statusFilter,
+				sort,
+			};
+		} );
 	},
 } );
 

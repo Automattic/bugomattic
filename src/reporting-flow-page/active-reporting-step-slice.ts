@@ -22,7 +22,7 @@ export const activeReportingStepSlice = createSlice( {
 	},
 	extraReducers: ( builder ) => {
 		builder
-			.addCase( updateStateFromHistory, ( state, action ) => {
+			.addCase( updateStateFromHistory, ( _state, action ) => {
 				const activeReportingStep = action.payload.activeReportingStep;
 				if ( ! activeReportingStep ) {
 					return initialState;

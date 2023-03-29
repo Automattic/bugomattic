@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../app/store';
-import { NormalizedReportingConfig } from '../static-data/reporting-config/types';
 import { startOver } from '../start-over/start-over-counter-slice';
 import { updateStateFromHistory } from '../url-history/actions';
+import { ActionWithStaticData } from '../static-data/types';
 
 // This is just for additional clarity in the function signatures below!
 type TaskId = string;
@@ -38,12 +38,8 @@ export const completedTasksSlice = createSlice( {
 					return [ ...initialState ];
 				}
 
-				const actionWithReportingConfig = action as PayloadAction<
-					TaskId,
-					string,
-					NormalizedReportingConfig
-				>;
-				const { tasks } = actionWithReportingConfig.meta;
+				const actionWithStaticData = action as ActionWithStaticData;
+				const { tasks } = actionWithStaticData.meta.reportingConfig;
 
 				const filteredCompletedTasks = completedTasks.filter(
 					( taskId ) => typeof taskId === 'string' && !! tasks[ taskId ]

@@ -4,6 +4,7 @@ import {
 	selectAvailableRepoFilters,
 	selectAvailableRepoFiltersLoadStatus,
 } from '../static-data/available-repo-filters/available-repo-filters-slice';
+import { updateHistoryWithState } from '../url-history/actions';
 import {
 	setRepoFilters,
 	setSearchTerm,
@@ -23,6 +24,7 @@ export function DuplicateSearchControls() {
 		dispatch( setStatusFilter( 'open' ) );
 		dispatch( setRepoFilters( [] ) );
 		dispatch( withSearchAfter( setSort( 'relevance' ) ) );
+		dispatch( updateHistoryWithState() );
 	};
 
 	let repoFiltersDisplay: string;

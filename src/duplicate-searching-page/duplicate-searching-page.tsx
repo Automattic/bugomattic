@@ -2,12 +2,16 @@ import React from 'react';
 import { useAppDispatch } from '../app/hooks';
 import { DuplicateResults } from '../duplicate-results/duplicate-results';
 import { DuplicateSearchControls } from '../duplicate-search/duplicate-search-controls';
-import { setActivePage } from '../page/active-page-slice';
+import { setActivePage } from '../active-page/active-page-slice';
+import { updateHistoryWithState } from '../url-history/actions';
 
 // TODO: This is a placeholder component for the duplicate searching page. Modify and tweak however needed! :)
 export function DuplicateSearchingPage() {
 	const dispatch = useAppDispatch();
-	const handleReportingFlowClick = () => dispatch( setActivePage( 'reportingFlow' ) );
+	const handleReportingFlowClick = () => {
+		dispatch( setActivePage( 'reportingFlow' ) );
+		dispatch( updateHistoryWithState() );
+	};
 	return (
 		<section
 			style={ {

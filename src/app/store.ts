@@ -15,7 +15,7 @@ import { urlHistoryMiddleware, registerHistoryListener } from '../url-history/re
 import { startOverCounterReducer } from '../start-over/start-over-counter-slice';
 import { duplicateSearchReducer } from '../duplicate-search/duplicate-search-slice';
 import { duplicateResultsReducer } from '../duplicate-results/duplicate-results-slice';
-import { activePageReducer } from '../page/active-page-slice';
+import { activePageReducer } from '../active-page/active-page-slice';
 import { availableRepoFiltersReducer } from '../static-data/available-repo-filters/available-repo-filters-slice';
 import { surfaceStaticDataMiddleware } from '../static-data/static-data-middleware';
 

@@ -9,7 +9,7 @@ import { ActiveReportingStep } from './types';
 import { setActiveReportingStep } from './active-reporting-step-slice';
 import { updateHistoryWithState } from '../url-history/actions';
 import { StartOverCard } from '../start-over/start-over-card';
-import { setActivePage } from '../page/active-page-slice';
+import { setActivePage } from '../active-page/active-page-slice';
 
 export function ReportingFlow() {
 	const dispatch = useAppDispatch();
@@ -27,13 +27,18 @@ export function ReportingFlow() {
 		dispatch( updateHistoryWithState() );
 	}, [ dispatch ] );
 
-	const handleGoToDuplicateSearchClick = () => dispatch( setActivePage( 'duplicateSearching' ) );
+	const handleGoToDuplicateSearchClick = () => {
+		dispatch( setActivePage( 'duplicateSearching' ) );
+		dispatch( updateHistoryWithState() );
+	};
 
 	return (
 		<section className={ styles.flowContainer }>
 			<h2 className="screenReaderOnly">Report a new issue</h2>
 			{ /* Not the real button, just a placeholder, probably should be a button styled link, etc. */ }
-			<button onClick={ handleGoToDuplicateSearchClick }>Go to duplicate searching</button>
+			<button style={ { marginBottom: '1rem' } } onClick={ handleGoToDuplicateSearchClick }>
+				Go to duplicate searching
+			</button>
 			<FeatureSelectionStep stepNumber={ 1 } goToNextStep={ handleFeatureSelectionNextStep } />
 			<TypeTitleStep stepNumber={ 2 } goToNextStep={ handleTypeTitleNextStep } />
 			<NextStepsStep stepNumber={ 3 } />
