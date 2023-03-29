@@ -70,7 +70,7 @@ class ProductionApiClient implements ApiClient, LoggerApiClient {
 		}
 	}
 
-	async getAvailableRepoFilters(): Promise< AvailableRepoFiltersApiResponse > {
+	async loadAvailableRepoFilters(): Promise< AvailableRepoFiltersApiResponse > {
 		const repoFiltersCacheKey = 'repoFilters';
 		const repoFiltersCacheExpiryKey = 'repoFiltersExpiry';
 		const cachedData = localStorage.getItem( repoFiltersCacheKey );
@@ -151,8 +151,8 @@ export function createProductionApiClient(): ApiClient & LoggerApiClient {
 	return {
 		loadReportingConfig: productionApiClient.loadReportingConfig.bind( productionApiClient ),
 		log: productionApiClient.log.bind( productionApiClient ),
-		getAvailableRepoFilters:
-			productionApiClient.getAvailableRepoFilters.bind( productionApiClient ),
+		loadAvailableRepoFilters:
+			productionApiClient.loadAvailableRepoFilters.bind( productionApiClient ),
 		searchIssues: productionApiClient.searchIssues.bind( productionApiClient ),
 	};
 }

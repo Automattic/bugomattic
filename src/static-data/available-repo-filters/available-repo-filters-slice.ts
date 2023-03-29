@@ -14,7 +14,7 @@ export const loadAvailableRepoFilters = createAsyncThunk<
 	{ extra: { apiClient: ApiClient } }
 >( 'availableRepoFilters/load', async ( _, { extra } ) => {
 	const { apiClient } = extra;
-	return await apiClient.getAvailableRepoFilters();
+	return await apiClient.loadAvailableRepoFilters();
 } );
 
 export const availableRepoFiltersSlice = createSlice( {

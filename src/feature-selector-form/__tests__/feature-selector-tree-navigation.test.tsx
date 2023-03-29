@@ -93,9 +93,7 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 			preloadedState: {
 				reportingConfig: {
 					normalized: reportingConfig,
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any
-					indexed: {} as any,
-					loadStatus: 'loaded',
+					indexed: {},
 					loadError: null,
 				},
 			},

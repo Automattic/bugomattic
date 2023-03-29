@@ -9,7 +9,7 @@ import { LearnMoreLink, TaskDetails } from '../static-data/reporting-config/type
 export interface ApiClient {
 	loadReportingConfig(): Promise< ReportingConfigApiResponse >;
 	searchIssues( search: string, options?: SearchIssueOptions ): Promise< SearchIssueApiResponse >;
-	getAvailableRepoFilters(): Promise< AvailableRepoFiltersApiResponse >;
+	loadAvailableRepoFilters(): Promise< AvailableRepoFiltersApiResponse >;
 	// More to come as we add to the API
 	// e.g. saveNewReportingConfig();
 }

@@ -68,7 +68,7 @@ export const localApiClient: ApiClient = {
 		return issues;
 	},
 
-	getAvailableRepoFilters: async () => {
+	loadAvailableRepoFilters: async () => {
 		await wait( 1000 );
 		return [
 			'Automattic/wp-calypso',

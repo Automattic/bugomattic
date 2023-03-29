@@ -14,6 +14,7 @@ export function DuplicateSearchingPage() {
 	};
 	return (
 		<section
+			// TODO: update with a real CSS module for this overall page.
 			style={ {
 				maxWidth: '800px',
 				margin: '0 auto',

@@ -50,8 +50,10 @@ describe( 'history updates', () => {
 		},
 	};
 
+	// TODO: Expand with some more steps in duplicate searching
 	const pointsInTime = [
 		'onStart',
+		'onReportingFlowStart',
 		'onFeatureSelectionComplete',
 		'onTypeTitleComplete',
 		'onFirstTaskComplete',
@@ -63,8 +65,16 @@ describe( 'history updates', () => {
 
 	type PointInTime = typeof pointsInTime[ number ];
 
-	const validations: { [ key in PointInTime ]: () => void } = {
-		onStart: () => {
+	const validations: { [ key in PointInTime ]: () => Promise< void > } = {
+		onStart: async () => {
+			expect(
+				screen.getByRole( 'heading', { name: 'Search for duplicate issues' } )
+			).toBeInTheDocument();
+
+			expect( screen.queryByRole( 'form', { name: 'Select a feature' } ) ).not.toBeInTheDocument();
+		},
+
+		onReportingFlowStart: async () => {
 			expect( screen.getByRole( 'form', { name: 'Select a feature' } ) ).toBeInTheDocument();
 			expect(
 				screen.queryByRole( 'button', { name: 'Clear currently selected feature' } )
@@ -76,9 +86,13 @@ describe( 'history updates', () => {
 			expect(
 				screen.queryByRole( 'list', { name: 'Steps to report issue' } )
 			).not.toBeInTheDocument();
+
+			expect(
+				screen.queryByRole( 'heading', { name: 'Search for duplicate issues' } )
+			).not.toBeInTheDocument();
 		},
 
-		onFeatureSelectionComplete: () => {
+		onFeatureSelectionComplete: async () => {
 			expect(
 				screen.getByRole( 'heading', { name: 'Completed step: Product and Feature' } )
 			).toBeInTheDocument();
@@ -92,7 +106,7 @@ describe( 'history updates', () => {
 			).not.toBeInTheDocument();
 		},
 
-		onTypeTitleComplete: () => {
+		onTypeTitleComplete: async () => {
 			expect(
 				screen.getByRole( 'heading', { name: 'Completed step: Product and Feature' } )
 			).toBeInTheDocument();
@@ -106,7 +120,7 @@ describe( 'history updates', () => {
 			expect( screen.getByRole( 'list', { name: 'Steps to report issue' } ) ).toBeInTheDocument();
 		},
 
-		onFirstTaskComplete: () => {
+		onFirstTaskComplete: async () => {
 			expect(
 				screen.getByRole( 'heading', { name: 'Completed step: Product and Feature' } )
 			).toBeInTheDocument();
@@ -119,7 +133,7 @@ describe( 'history updates', () => {
 			).toBeInTheDocument();
 		},
 
-		onFirstTaskUnComplete: () => {
+		onFirstTaskUnComplete: async () => {
 			expect(
 				screen.getByRole( 'heading', { name: 'Completed step: Product and Feature' } )
 			).toBeInTheDocument();
@@ -132,10 +146,13 @@ describe( 'history updates', () => {
 			).toBeInTheDocument();
 		},
 
-		onFeatureSelectionEdit: () => {
+		onFeatureSelectionEdit: async () => {
 			expect( screen.getByRole( 'form', { name: 'Select a feature' } ) ).toBeInTheDocument();
+			// We have to do an async wait on this one because we actually don't set the feature selector form state directly from the URL.
+			// It's really "local" state that we store in redux to avoid prop drilling.
+			// So it is updated on render from the issueFeatureId. This means another render loop has to run.
 			expect(
-				screen.getByRole( 'button', { name: 'Clear currently selected feature' } )
+				await screen.findByRole( 'button', { name: 'Clear currently selected feature' } )
 			).toBeInTheDocument(); // The current feature should still be selected
 
 			expect(
@@ -145,7 +162,7 @@ describe( 'history updates', () => {
 			expect( screen.getByRole( 'list', { name: 'Steps to report issue' } ) ).toBeInTheDocument();
 		},
 
-		onTypeTitleEdit: () => {
+		onTypeTitleEdit: async () => {
 			expect(
 				screen.getByRole( 'heading', { name: 'Completed step: Product and Feature' } )
 			).toBeInTheDocument();
@@ -163,7 +180,7 @@ describe( 'history updates', () => {
 			expect( screen.getByRole( 'list', { name: 'Steps to report issue' } ) ).toBeInTheDocument();
 		},
 
-		onStartOver: () => {
+		onStartOver: async () => {
 			expect( screen.getByRole( 'form', { name: 'Select a feature' } ) ).toBeInTheDocument();
 			expect(
 				screen.queryByRole( 'button', { name: 'Clear currently selected feature' } )
@@ -180,6 +197,7 @@ describe( 'history updates', () => {
 
 	const referenceUrlQueries: { [ key in PointInTime ]: string } = {
 		onStart: 'WILL BE SET IN TEST',
+		onReportingFlowStart: 'WILL BE SET IN TEST',
 		onFeatureSelectionComplete: 'WILL BE SET IN TEST',
 		onTypeTitleComplete: 'WILL BE SET IN TEST',
 		onFirstTaskComplete: 'WILL BE SET IN TEST',
@@ -190,18 +208,30 @@ describe( 'history updates', () => {
 	};
 
 	let user: UserEvent;
-	beforeAll( () => {
+	beforeAll( async () => {
 		const apiClient = createMockApiClient();
 		user = userEvent.setup();
 		apiClient.loadReportingConfig = jest.fn().mockResolvedValue( fakeReportingConfigApiResponse );
 		// eslint-disable-next-line testing-library/no-render-in-setup
 		renderWithProviders( <App />, { apiClient } );
+		await waitForElementToBeRemoved(
+			screen.queryByRole( 'alert', { name: 'Loading required app data' } )
+		);
 	} );
 
 	describe( 'Set point in time reference url queries and ensure history change', () => {
-		test( 'onStart', () => {
-			validations.onStart();
+		test( 'onStart', async () => {
+			await validations.onStart();
 			referenceUrlQueries.onStart = history.location.search;
+		} );
+
+		test( 'onReportingFlowStart', async () => {
+			await user.click( screen.getByRole( 'button', { name: 'Go to reporting flow' } ) );
+
+			await validations.onReportingFlowStart();
+
+			referenceUrlQueries.onReportingFlowStart = history.location.search;
+			expect( referenceUrlQueries.onReportingFlowStart ).not.toBe( referenceUrlQueries.onStart );
 		} );
 
 		test( 'onFeatureSelectionComplete', async () => {
@@ -209,11 +239,11 @@ describe( 'history updates', () => {
 			await user.click( screen.getByRole( 'option', { name: 'Feature' } ) );
 			await user.click( screen.getByRole( 'button', { name: 'Continue' } ) );
 
-			validations.onFeatureSelectionComplete();
+			await validations.onFeatureSelectionComplete();
 
 			referenceUrlQueries.onFeatureSelectionComplete = history.location.search;
 			expect( referenceUrlQueries.onFeatureSelectionComplete ).not.toBe(
-				referenceUrlQueries.onStart
+				referenceUrlQueries.onReportingFlowStart
 			);
 		} );
 
@@ -223,7 +253,7 @@ describe( 'history updates', () => {
 			await user.click( screen.getByRole( 'radio', { name: 'Feature Request' } ) );
 			await user.click( screen.getByRole( 'button', { name: 'Continue' } ) );
 
-			validations.onTypeTitleComplete();
+			await validations.onTypeTitleComplete();
 
 			referenceUrlQueries.onTypeTitleComplete = history.location.search;
 			expect( referenceUrlQueries.onTypeTitleComplete ).not.toBe(
@@ -235,7 +265,7 @@ describe( 'history updates', () => {
 			await user.click( screen.getByRole( 'checkbox', { name: taskName, checked: false } ) );
 			await screen.findByRole( 'checkbox', { name: taskName, checked: true } );
 
-			validations.onFirstTaskComplete();
+			await validations.onFirstTaskComplete();
 
 			referenceUrlQueries.onFirstTaskComplete = history.location.search;
 			expect( referenceUrlQueries.onFirstTaskComplete ).not.toBe(
@@ -246,7 +276,7 @@ describe( 'history updates', () => {
 		test( 'onFirstTaskUnComplete', async () => {
 			await user.click( screen.getByRole( 'checkbox', { name: taskName, checked: true } ) );
 
-			validations.onFirstTaskUnComplete();
+			await validations.onFirstTaskUnComplete();
 
 			referenceUrlQueries.onFirstTaskUnComplete = history.location.search;
 			expect( referenceUrlQueries.onFirstTaskUnComplete ).not.toBe(
@@ -262,7 +292,7 @@ describe( 'history updates', () => {
 				} )
 			);
 
-			validations.onFeatureSelectionEdit();
+			await validations.onFeatureSelectionEdit();
 
 			referenceUrlQueries.onFeatureSelectionEdit = history.location.search;
 			expect( referenceUrlQueries.onFeatureSelectionEdit ).not.toBe(
@@ -278,7 +308,7 @@ describe( 'history updates', () => {
 				} )
 			);
 
-			validations.onTypeTitleEdit();
+			await validations.onTypeTitleEdit();
 
 			referenceUrlQueries.onTypeTitleEdit = history.location.search;
 			expect( referenceUrlQueries.onTypeTitleEdit ).not.toBe(
@@ -291,7 +321,7 @@ describe( 'history updates', () => {
 			await user.click( screen.getByRole( 'checkbox', { name: taskName, checked: false } ) );
 			await user.click( screen.getByRole( 'button', { name: 'Start Over' } ) );
 
-			validations.onStartOver();
+			await validations.onStartOver();
 
 			referenceUrlQueries.onStartOver = history.location.search;
 			expect( referenceUrlQueries.onStartOver ).not.toBe( referenceUrlQueries.onTypeTitleEdit );
@@ -319,7 +349,7 @@ describe( 'history updates', () => {
 				const urlQuery = referenceUrlQueries[ pointInTime ];
 
 				await setup( urlQuery );
-				validations[ pointInTime ]();
+				await validations[ pointInTime ]();
 			} );
 		}
 	} );

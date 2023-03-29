@@ -5,6 +5,7 @@ export type IssueSortOption = 'date-created' | 'relevance';
 
 export interface DuplicateSearchState {
 	searchTerm: string;
+	// Naming is to differentiate from the "available" repo filters.
 	activeRepoFilters: string[];
 	statusFilter: IssueStatusFilter;
 	sort: IssueSortOption;

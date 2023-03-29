@@ -26,7 +26,7 @@ export const activePageSlice = createSlice( {
 				return initialState;
 			}
 
-			return action.payload.activePage;
+			return activePage;
 		} );
 	},
 } );

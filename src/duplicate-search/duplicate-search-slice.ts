@@ -2,14 +2,13 @@
 
 import { Action, createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ApiClient, SearchIssueApiResponse } from '../api/types';
-import { AppDispatch, RootState } from '../app/store';
+import { AppThunk, RootState } from '../app/store';
 import { ActionWithStaticData } from '../static-data/types';
 import { updateStateFromHistory } from '../url-history/actions';
 import { DuplicateSearchState, IssueSortOption, IssueStatusFilter } from './types';
 
 const initialState: DuplicateSearchState = {
 	searchTerm: '',
-	// To differentiate from the available repo filters.
 	activeRepoFilters: [],
 	statusFilter: 'all',
 	sort: 'relevance',
@@ -47,7 +46,7 @@ export const duplicateSearchSlice = createSlice( {
 				searchTerm: payload,
 			};
 		},
-		setRepoFilters: ( state, { payload }: PayloadAction< string[] > ) => {
+		setActiveRepoFilters: ( state, { payload }: PayloadAction< string[] > ) => {
 			return {
 				...state,
 				activeRepoFilters: [ ...payload ],
@@ -68,8 +67,8 @@ export const duplicateSearchSlice = createSlice( {
 	},
 	extraReducers: ( builder ) => {
 		builder.addCase( updateStateFromHistory, ( _state, action ) => {
-			const duplicateSearchInfo = action.payload.duplicateSearch;
-			if ( ! duplicateSearchInfo || typeof duplicateSearchInfo !== 'object' ) {
+			const duplicateSearchParamsFromUrl = action.payload.duplicateSearch;
+			if ( ! duplicateSearchParamsFromUrl || typeof duplicateSearchParamsFromUrl !== 'object' ) {
 				return { ...initialState };
 			}
 
@@ -77,43 +76,46 @@ export const duplicateSearchSlice = createSlice( {
 
 			let searchTerm: string;
 			if (
-				! duplicateSearchInfo.searchTerm ||
-				typeof duplicateSearchInfo.searchTerm !== 'string'
+				! duplicateSearchParamsFromUrl.searchTerm ||
+				typeof duplicateSearchParamsFromUrl.searchTerm !== 'string'
 			) {
 				searchTerm = initialState.searchTerm;
 			} else {
-				searchTerm = duplicateSearchInfo.searchTerm;
+				searchTerm = duplicateSearchParamsFromUrl.searchTerm;
 			}
 
 			const actionWithStaticData = action as ActionWithStaticData;
 			const avaliableRepoFiltersSet = new Set( actionWithStaticData.meta.availableRepoFilters );
 			let activeRepoFilters: string[];
 			if (
-				! duplicateSearchInfo.activeRepoFilters ||
-				! Array.isArray( duplicateSearchInfo.activeRepoFilters )
+				! duplicateSearchParamsFromUrl.activeRepoFilters ||
+				! Array.isArray( duplicateSearchParamsFromUrl.activeRepoFilters )
 			) {
 				activeRepoFilters = [ ...initialState.activeRepoFilters ];
 			} else {
-				activeRepoFilters = duplicateSearchInfo.activeRepoFilters.filter( ( repo ) =>
+				activeRepoFilters = duplicateSearchParamsFromUrl.activeRepoFilters.filter( ( repo ) =>
 					avaliableRepoFiltersSet.has( repo )
 				);
 			}
 
 			let statusFilter: IssueStatusFilter;
 			if (
-				! duplicateSearchInfo.statusFilter ||
-				! validIssueStatusFilters.has( duplicateSearchInfo.statusFilter )
+				! duplicateSearchParamsFromUrl.statusFilter ||
+				! validIssueStatusFilters.has( duplicateSearchParamsFromUrl.statusFilter )
 			) {
 				statusFilter = initialState.statusFilter;
 			} else {
-				statusFilter = duplicateSearchInfo.statusFilter;
+				statusFilter = duplicateSearchParamsFromUrl.statusFilter;
 			}
 
 			let sort: IssueSortOption;
-			if ( ! duplicateSearchInfo.sort || ! validIssueSortOptions.has( duplicateSearchInfo.sort ) ) {
+			if (
+				! duplicateSearchParamsFromUrl.sort ||
+				! validIssueSortOptions.has( duplicateSearchParamsFromUrl.sort )
+			) {
 				sort = initialState.sort;
 			} else {
-				sort = duplicateSearchInfo.sort;
+				sort = duplicateSearchParamsFromUrl.sort;
 			}
 
 			return {
@@ -126,14 +128,14 @@ export const duplicateSearchSlice = createSlice( {
 	},
 } );
 
-export const { setSearchTerm, setRepoFilters, setStatusFilter, setSort } =
+export const { setSearchTerm, setActiveRepoFilters, setStatusFilter, setSort } =
 	duplicateSearchSlice.actions;
 
 // This is the action (actually, a thunk) creator that we will use in most components,
 // as we will want to search after any change to the search parameters.
 // E.g. dispatch( withSearchAfter( setSearchTerm( 'foo' ) ) );
-export function withSearchAfter( action: Action ) {
-	return ( dispatch: AppDispatch ) => {
+export function withSearchAfter( action: Action ): AppThunk {
+	return ( dispatch ) => {
 		dispatch( action );
 		dispatch( searchIssues() );
 	};

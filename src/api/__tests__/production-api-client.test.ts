@@ -276,7 +276,7 @@ describe( '[ProductionApiClient]', () => {
 	describe( 'getRepoFilters()', () => {
 		test( 'Calls the correct endpoint and returns the repo filters, saving to localstorage', async () => {
 			const apiClient = createProductionApiClient();
-			const repoFilters = await apiClient.getAvailableRepoFilters();
+			const repoFilters = await apiClient.loadAvailableRepoFilters();
 
 			// If this returns correctly, we called the correct endpoint.
 			expect( repoFilters ).toEqual( fakeRepoFilters );
@@ -288,7 +288,7 @@ describe( '[ProductionApiClient]', () => {
 
 		test( 'The request includes the nonce in the right header', async () => {
 			const apiClient = createProductionApiClient();
-			await apiClient.getAvailableRepoFilters();
+			await apiClient.loadAvailableRepoFilters();
 
 			const lastRequest = getLastRequest();
 			expect( lastRequest.requestHeaders[ fakeNonceHeaderName ] ).toEqual( fakeNonce );
@@ -303,7 +303,7 @@ describe( '[ProductionApiClient]', () => {
 			localStorage.setItem( repoCacheKey, JSON.stringify( otherRepoFilters ) );
 			localStorage.setItem( repoCackeExpiryKey, ( Date.now() + 10000 ).toString() );
 
-			const repoFilters = await apiClient.getAvailableRepoFilters();
+			const repoFilters = await apiClient.loadAvailableRepoFilters();
 
 			expect( repoFilters ).toEqual( otherRepoFilters );
 			expect( getLastRequest() ).toBeUndefined();
@@ -318,7 +318,7 @@ describe( '[ProductionApiClient]', () => {
 			localStorage.setItem( repoCacheKey, JSON.stringify( otherRepoFilters ) );
 			localStorage.setItem( repoCackeExpiryKey, ( Date.now() - 1 ).toString() );
 
-			const repoFilters = await apiClient.getAvailableRepoFilters();
+			const repoFilters = await apiClient.loadAvailableRepoFilters();
 
 			expect( repoFilters ).toEqual( fakeRepoFilters );
 
@@ -340,7 +340,7 @@ describe( '[ProductionApiClient]', () => {
 				return new Response( 500, {}, errorBody );
 			} );
 
-			await expect( apiClient.getAvailableRepoFilters() ).rejects.toThrowError(
+			await expect( apiClient.loadAvailableRepoFilters() ).rejects.toThrowError(
 				`Get Repo Filters web request failed with status code 500. Response body: ${ JSON.stringify(
 					errorBody
 				) }`

@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { selectAvailableRepoFilters } from '../static-data/available-repo-filters/available-repo-filters-slice';
 import { updateHistoryWithState } from '../url-history/actions';
 import {
-	setRepoFilters,
+	setActiveRepoFilters,
 	setSearchTerm,
 	setSort,
 	setStatusFilter,
@@ -18,7 +18,7 @@ export function DuplicateSearchControls() {
 	const handleFauxSearch = () => {
 		dispatch( setSearchTerm( 'Test search term' ) );
 		dispatch( setStatusFilter( 'open' ) );
-		dispatch( setRepoFilters( [] ) );
+		dispatch( setActiveRepoFilters( [] ) );
 		dispatch( withSearchAfter( setSort( 'relevance' ) ) );
 		dispatch( updateHistoryWithState() );
 	};
