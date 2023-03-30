@@ -29,7 +29,7 @@ Then, we reload those URLs later, and ensure we can pass the same set of validat
 
 describe( 'history updates', () => {
 	const productName = 'Product';
-	const featureName = 'Feature';
+	const featureName = 'Unique feature name';
 	const taskName = 'Task Title';
 	const issueTitle = 'Sample Issue Title';
 	const fakeReportingConfigApiResponse: ReportingConfigApiResponse = {
@@ -54,8 +54,8 @@ describe( 'history updates', () => {
 	const pointsInTime = [
 		'onStart',
 		'onReportingFlowStart',
-		'onFeatureSelectionComplete',
 		'onTypeTitleComplete',
+		'onFeatureSelectionComplete',
 		'onFirstTaskComplete',
 		'onFirstTaskUnComplete',
 		'onFeatureSelectionEdit',
@@ -63,7 +63,7 @@ describe( 'history updates', () => {
 		'onStartOver',
 	] as const;
 
-	type PointInTime = typeof·pointsInTime[ number ];
+	type PointInTime = typeof pointsInTime[ number ];
 
 	const validations: { [ key in PointInTime ]: () => Promise< void > } = {
 		onStart: async () => {
@@ -182,14 +182,13 @@ describe( 'history updates', () => {
 		},
 
 		onStartOver: async () => {
-			expect( screen.getByRole( 'form', { name: 'Select a feature' } ) ).toBeInTheDocument();
 			expect(
-				screen.queryByRole( 'button', { name: 'Clear currently selected feature' } )
-			).not.toBeInTheDocument();
+				screen.getByRole( 'form', { name: 'Set issue type and title' } )
+			).toBeInTheDocument();
 
-			expect(
-				screen.queryByRole( 'form', { name: 'Set issue title and type' } )
-			).not.toBeInTheDocument();
+			expect( screen.queryByRole( 'form', { name: 'Select a feature' } ) ).not.toBeInTheDocument();
+			expect( screen.queryByText( featureName ) ).not.toBeInTheDocument();
+
 			expect(
 				screen.queryByRole( 'list', { name: 'Steps to report issue' } )
 			).not.toBeInTheDocument();
@@ -250,8 +249,8 @@ describe( 'history updates', () => {
 		} );
 
 		test( 'onFeatureSelectionComplete', async () => {
-			await user.click( screen.getByRole( 'button', { name: 'Product' } ) );
-			await user.click( screen.getByRole( 'option', { name: 'Feature' } ) );
+			await user.click( screen.getByRole( 'button', { name: productName } ) );
+			await user.click( screen.getByRole( 'option', { name: featureName } ) );
 			await user.click( screen.getByRole( 'button', { name: 'Continue' } ) );
 
 			await validations.onFeatureSelectionComplete();
