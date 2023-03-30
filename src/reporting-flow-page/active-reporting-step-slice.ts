@@ -4,7 +4,7 @@ import { startOver } from '../start-over/start-over-counter-slice';
 import { updateStateFromHistory } from '../url-history/actions';
 import { ActiveReportingStep } from './types';
 
-const initialState: ActiveReportingStep = 'featureSelection' as ActiveReportingStep;
+const initialState: ActiveReportingStep = 'typeTitle' as ActiveReportingStep;
 
 const validActiveReportingSteps = new Set< ActiveReportingStep >( [
 	'featureSelection',
