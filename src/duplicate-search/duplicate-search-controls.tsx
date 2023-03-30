@@ -1,13 +1,12 @@
 import React from 'react';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { selectAvailableRepoFilters } from '../static-data/available-repo-filters/available-repo-filters-slice';
-import { updateHistoryWithState } from '../url-history/actions';
 import {
 	setActiveRepoFilters,
 	setSearchTerm,
 	setSort,
 	setStatusFilter,
-	withSearchAfter,
+	setSearchParam,
 } from './duplicate-search-slice';
 
 // TODO: This is a placeholder component for the duplicate search controls. Modify and tweak however needed! :)
@@ -19,8 +18,9 @@ export function DuplicateSearchControls() {
 		dispatch( setSearchTerm( 'Test search term' ) );
 		dispatch( setStatusFilter( 'open' ) );
 		dispatch( setActiveRepoFilters( [] ) );
-		dispatch( withSearchAfter( setSort( 'relevance' ) ) );
-		dispatch( updateHistoryWithState() );
+
+		// What the dispatch in most components will actually look like
+		dispatch( setSearchParam( setSort( 'relevance' ) ) );
 	};
 
 	return (
