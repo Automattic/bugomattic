@@ -4,7 +4,7 @@ import { NextStepsStep } from './sub-components/next-steps-step';
 import { TypeTitleStep } from './sub-components/type-title-step';
 import styles from './reporting-flow-page.module.css';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { selectIssueType, selectIssueFeatureId } from '../issue-details/issue-details-slice';
+import { selectIssueFeatureId } from '../issue-details/issue-details-slice';
 import { ActiveReportingStep } from './types';
 import { setActiveReportingStep } from './active-reporting-step-slice';
 import { updateHistoryWithState } from '../url-history/actions';
