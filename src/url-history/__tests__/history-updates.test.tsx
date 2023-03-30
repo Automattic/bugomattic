@@ -63,7 +63,7 @@ describe( 'history updates', () => {
 		'onStartOver',
 	] as const;
 
-	type PointInTime = typeof pointsInTime[ number ];
+	type PointInTime = typeof·pointsInTime[ number ];
 
 	const validations: { [ key in PointInTime ]: () => Promise< void > } = {
 		onStart: async () => {
@@ -71,20 +71,22 @@ describe( 'history updates', () => {
 				screen.getByRole( 'heading', { name: 'Search for duplicate issues' } )
 			).toBeInTheDocument();
 
-			expect( screen.queryByRole( 'form', { name: 'Select a feature' } ) ).not.toBeInTheDocument();
-		},
-
-		onReportingFlowStart: async () => {
-			expect( screen.getByRole( 'form', { name: 'Select a feature' } ) ).toBeInTheDocument();
-			expect(
-				screen.queryByRole( 'button', { name: 'Clear currently selected feature' } )
-			).not.toBeInTheDocument();
-
 			expect(
 				screen.queryByRole( 'form', { name: 'Set issue type and title' } )
 			).not.toBeInTheDocument();
+		},
+
+		onReportingFlowStart: async () => {
 			expect(
-				screen.queryByRole( 'list', { name: 'Steps to report issue' } )
+				screen.getByRole( 'form', { name: 'Set issue type and title' } )
+			).toBeInTheDocument();
+			expect(
+				screen.queryByRole( 'button', { name: 'Steps to report issue' } )
+			).not.toBeInTheDocument();
+
+			expect( screen.queryByRole( 'form', { name: 'Select a feature' } ) ).not.toBeInTheDocument();
+			expect(
+				screen.queryByRole( 'list', { name: 'Clear currently selected feature' } )
 			).not.toBeInTheDocument();
 
 			expect(
@@ -92,40 +94,39 @@ describe( 'history updates', () => {
 			).not.toBeInTheDocument();
 		},
 
-		onFeatureSelectionComplete: async () => {
+		onTypeTitleComplete: async () => {
 			expect(
-				screen.getByRole( 'heading', { name: 'Completed step: Product and Feature' } )
+				screen.getByRole( 'heading', { name: 'Completed step: Type and Title' } )
 			).toBeInTheDocument();
-			expect( screen.getByText( `${ productName } > ${ featureName }` ) ).toBeInTheDocument();
 
-			expect(
-				screen.getByRole( 'form', { name: 'Set issue type and title' } )
-			).toBeInTheDocument();
+			expect( screen.getByRole( 'form', { name: 'Select a feature' } ) ).toBeInTheDocument();
+			expect( screen.getByText( issueTitle ) ).toBeInTheDocument();
+			expect( screen.getByText( 'Feature Request' ) ).toBeInTheDocument();
+
 			expect(
 				screen.queryByRole( 'list', { name: 'Steps to report issue' } )
 			).not.toBeInTheDocument();
 		},
 
-		onTypeTitleComplete: async () => {
-			expect(
-				screen.getByRole( 'heading', { name: 'Completed step: Product and Feature' } )
-			).toBeInTheDocument();
-
+		onFeatureSelectionComplete: async () => {
 			expect(
 				screen.getByRole( 'heading', { name: 'Completed step: Type and Title' } )
 			).toBeInTheDocument();
-			expect( screen.getByText( issueTitle ) ).toBeInTheDocument();
-			expect( screen.getByText( 'Feature Request' ) ).toBeInTheDocument();
+
+			expect(
+				screen.getByRole( 'heading', { name: 'Completed step: Product and Feature' } )
+			).toBeInTheDocument();
+			expect( screen.getByText( `${ productName } > ${ featureName }` ) ).toBeInTheDocument();
 
 			expect( screen.getByRole( 'list', { name: 'Steps to report issue' } ) ).toBeInTheDocument();
 		},
 
 		onFirstTaskComplete: async () => {
 			expect(
-				screen.getByRole( 'heading', { name: 'Completed step: Product and Feature' } )
+				screen.getByRole( 'heading', { name: 'Completed step: Type and Title' } )
 			).toBeInTheDocument();
 			expect(
-				screen.getByRole( 'heading', { name: 'Completed step: Type and Title' } )
+				screen.getByRole( 'heading', { name: 'Completed step: Product and Feature' } )
 			).toBeInTheDocument();
 
 			expect(
@@ -234,19 +235,6 @@ describe( 'history updates', () => {
 			expect( referenceUrlQueries.onReportingFlowStart ).not.toBe( referenceUrlQueries.onStart );
 		} );
 
-		test( 'onFeatureSelectionComplete', async () => {
-			await user.click( screen.getByRole( 'button', { name: 'Product' } ) );
-			await user.click( screen.getByRole( 'option', { name: 'Feature' } ) );
-			await user.click( screen.getByRole( 'button', { name: 'Continue' } ) );
-
-			await validations.onFeatureSelectionComplete();
-
-			referenceUrlQueries.onFeatureSelectionComplete = history.location.search;
-			expect( referenceUrlQueries.onFeatureSelectionComplete ).not.toBe(
-				referenceUrlQueries.onReportingFlowStart
-			);
-		} );
-
 		test( 'onTypeTitleComplete', async () => {
 			await user.click( screen.getByRole( 'textbox', { name: /Title \(Optional\)/ } ) );
 			await user.keyboard( issueTitle );
@@ -258,6 +246,19 @@ describe( 'history updates', () => {
 			referenceUrlQueries.onTypeTitleComplete = history.location.search;
 			expect( referenceUrlQueries.onTypeTitleComplete ).not.toBe(
 				referenceUrlQueries.onFeatureSelectionComplete
+			);
+		} );
+
+		test( 'onFeatureSelectionComplete', async () => {
+			await user.click( screen.getByRole( 'button', { name: 'Product' } ) );
+			await user.click( screen.getByRole( 'option', { name: 'Feature' } ) );
+			await user.click( screen.getByRole( 'button', { name: 'Continue' } ) );
+
+			await validations.onFeatureSelectionComplete();
+
+			referenceUrlQueries.onFeatureSelectionComplete = history.location.search;
+			expect( referenceUrlQueries.onFeatureSelectionComplete ).not.toBe(
+				referenceUrlQueries.onReportingFlowStart
 			);
 		} );
 

@@ -107,7 +107,9 @@ describe( '[Bad URL State]', () => {
 			await setup( urlQuery );
 
 			expectNoErrorThrown();
-			expect( screen.getByRole( 'form', { name: 'Select a feature' } ) ).toBeInTheDocument();
+			expect(
+				screen.getByRole( 'form', { name: 'Set issue type and title' } )
+			).toBeInTheDocument();
 		} );
 
 		test( 'Completed task ID that is not in the reporting config', async () => {
