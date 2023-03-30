@@ -18,6 +18,7 @@ export const surfaceStaticDataMiddleware: Middleware< {}, RootState > =
 		action = {
 			...action,
 			meta: {
+				...action.meta,
 				reportingConfig,
 				availableRepoFilters,
 			},

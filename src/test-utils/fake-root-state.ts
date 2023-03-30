@@ -41,6 +41,7 @@ export function createFakeRootState( partialState: Partial< RootState > = {} ): 
 			results: [],
 			requestStatus: 'fulfilled',
 			requestError: null,
+			currentRequestId: '',
 		},
 	};
 

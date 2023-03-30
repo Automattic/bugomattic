@@ -7,6 +7,7 @@ const initialState: DuplicateResultsState = {
 	results: [],
 	requestStatus: 'fulfilled',
 	requestError: null,
+	currentRequestId: '',
 };
 
 export const duplicateResultsSlice = createSlice( {
@@ -15,20 +16,34 @@ export const duplicateResultsSlice = createSlice( {
 	reducers: {},
 	extraReducers: ( builder ) => {
 		builder
-			.addCase( searchIssues.pending, ( state ) => {
+			.addCase( searchIssues.pending, ( state, { meta } ) => {
 				return {
 					...state,
 					requestStatus: 'pending',
+					// createAsyncThunk automatically generates a unique requestId for each request! How helpful! :D
+					// We can use this to make sure we only care about the most recently made search request
+					// in the case of multiple requests being made in a short period of time.
+					currentRequestId: meta.requestId,
 				};
 			} )
-			.addCase( searchIssues.rejected, ( state, { error } ) => {
+			.addCase( searchIssues.rejected, ( state, { error, meta } ) => {
+				// This is an old request, ignore it
+				if ( state.currentRequestId !== meta.requestId ) {
+					return { ...state };
+				}
+
 				return {
 					...state,
 					requestStatus: 'error',
 					requestError: `${ error.name }: ${ error.message }`,
 				};
 			} )
-			.addCase( searchIssues.fulfilled, ( state, { payload } ) => {
+			.addCase( searchIssues.fulfilled, ( state, { payload, meta } ) => {
+				// This is an old request, ignore it
+				if ( state.currentRequestId !== meta.requestId ) {
+					return { ...state };
+				}
+
 				return {
 					...state,
 					results: payload,

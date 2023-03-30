@@ -15,4 +15,5 @@ export interface DuplicateResultsState {
 	results: Issue[];
 	requestStatus: 'pending' | 'fulfilled' | 'error';
 	requestError: string | null;
+	currentRequestId: string;
 }

@@ -20,7 +20,7 @@ const validIssueSortOptions = new Set< IssueSortOption >( [ 'date-created', 'rel
 export const searchIssues = createAsyncThunk<
 	SearchIssueApiResponse,
 	void,
-	{ extra: { apiClient: ApiClient } }
+	{ extra: { apiClient: ApiClient }; requestId: string }
 >( 'duplicateSearch/searchIssues', async ( _, { extra, getState } ) => {
 	const rootState = getState() as RootState;
 	const searchTerm = selectDuplicateSearchTerm( rootState );
