@@ -133,6 +133,8 @@ export const { setSearchTerm, setActiveRepoFilters, setStatusFilter, setSort } =
 
 // This is the action (actually, a thunk) creator that we will use in most components,
 // as we will want to search after any change to the search parameters.
+// It's really just syntax sugar for dipatching the action and then the search action.
+// But, I think it will read nicely in the components.
 // E.g. dispatch( withSearchAfter( setSearchTerm( 'foo' ) ) );
 export function withSearchAfter( action: Action ): AppThunk {
 	return ( dispatch ) => {
