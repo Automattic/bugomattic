@@ -6,7 +6,7 @@ import { useMonitoring } from '../monitoring/monitoring-provider';
 import {
 	selectNormalizedReportingConfig,
 	selectProductIdForFeature,
-} from '../reporting-config/reporting-config-slice';
+} from '../static-data/reporting-config/reporting-config-slice';
 import {
 	selectSelectedFeatureId,
 	setFeatureSearchTerm,

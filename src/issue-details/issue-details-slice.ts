@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../app/store';
-import { NormalizedReportingConfig } from '../reporting-config/types';
 import { startOver } from '../start-over/start-over-counter-slice';
 import { updateStateFromHistory } from '../url-history/actions';
 import { FeatureId, IssueDetails, IssueType } from './types';
+import { ActionWithStaticData } from '../static-data/types';
 
 const initialState: IssueDetails = {
 	featureId: null,
@@ -52,12 +52,8 @@ export const issueDetailsSlice = createSlice( {
 
 				const issueTitle = issueDetails.issueTitle ?? initialState.issueTitle;
 
-				const actionWithReportingConfig = action as PayloadAction<
-					FeatureId,
-					string,
-					NormalizedReportingConfig
-				>;
-				const { features } = actionWithReportingConfig.meta;
+				const actionWithStaticData = action as ActionWithStaticData;
+				const { features } = actionWithStaticData.meta.reportingConfig;
 				let featureId: FeatureId;
 				if ( issueDetails.featureId === null || features[ issueDetails.featureId ] ) {
 					featureId = issueDetails.featureId;

@@ -1,6 +1,6 @@
 import userEvent from '@testing-library/user-event';
 import React, { ReactElement } from 'react';
-import { NormalizedReportingConfig, Task } from '../../reporting-config/types';
+import { NormalizedReportingConfig, Task } from '../../static-data/reporting-config/types';
 import { createMockApiClient } from '../../test-utils/mock-api-client';
 import { renderWithProviders } from '../../test-utils/render-with-providers';
 import { Task as TaskComponent } from '../sub-components/task';
@@ -26,10 +26,8 @@ describe( '[Task]', () => {
 			preloadedState: {
 				reportingConfig: {
 					normalized: reportingConfig,
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any
-					indexed: {} as any,
-					status: 'loaded',
-					error: null,
+					indexed: {},
+					loadError: null,
 				},
 			},
 		} );

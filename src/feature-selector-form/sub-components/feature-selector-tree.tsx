@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import { useAppSelector } from '../../app/hooks';
 import { selectReportingConfigSearchResults } from '../../combined-selectors/reporting-config-search-results';
-import { selectNormalizedReportingConfig } from '../../reporting-config/reporting-config-slice';
+import { selectNormalizedReportingConfig } from '../../static-data/reporting-config/reporting-config-slice';
 import { selectFeatureSearchTerm } from '../feature-selector-form-slice';
 import styles from '../feature-selector-form.module.css';
 import { SortedProductList } from './sorted-product-list';

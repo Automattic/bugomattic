@@ -5,8 +5,7 @@
 export interface ReportingConfigState {
 	normalized: NormalizedReportingConfig;
 	indexed: IndexedReportingConfig;
-	status: 'empty' | 'loading' | 'loaded' | 'error';
-	error: string | null;
+	loadError: string | null;
 }
 
 /**
@@ -23,8 +22,9 @@ export interface NormalizedReportingConfig {
  * Indices built from the reporting configuration to facilitate searching for features.
  * TODO: Implement, once we know what kind of searching we will support
  */
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface IndexedReportingConfig {
-	foo: string; // TODO: figure out what indices we need.
+	// TODO: figure out what indices we need.
 }
 
 export type FeatureParentEntityType = 'product' | 'featureGroup';

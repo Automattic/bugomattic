@@ -1,9 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-// ^^ We don't care about parts of the state tree,
-// so being able to use "any" to stub out those parts is helpful here.
-import { RootState } from '../../app/store';
 import { selectRelevantTaskIds } from '../relevant-task-ids';
-import { NormalizedReportingConfig, TaskDetails } from '../../reporting-config/types';
+import { NormalizedReportingConfig, TaskDetails } from '../../static-data/reporting-config/types';
+import { createFakeRootState } from '../../test-utils/fake-root-state';
 
 describe( '[selectRelevantTaskIds]', () => {
 	test( 'Returns empty array if there is no feature id in the state', () => {
@@ -40,21 +37,18 @@ describe( '[selectRelevantTaskIds]', () => {
 			},
 		};
 
-		const state: RootState = {
-			completedTasks: [],
-			featureSelectorForm: {} as any,
+		const state = createFakeRootState( {
 			reportingConfig: {
 				normalized: normalized,
-				indexed: {} as any,
-				status: 'loaded',
-				error: null,
+				indexed: {},
+				loadError: null,
 			},
 			issueDetails: {
 				issueType: 'bug',
 				featureId: null,
 				issueTitle: '',
 			},
-		};
+		} );
 
 		const output = selectRelevantTaskIds( state );
 		expect( output ).toEqual( [] );
@@ -94,21 +88,18 @@ describe( '[selectRelevantTaskIds]', () => {
 			},
 		};
 
-		const state: RootState = {
-			completedTasks: [],
-			featureSelectorForm: {} as any,
+		const state = createFakeRootState( {
 			reportingConfig: {
 				normalized: normalized,
-				indexed: {} as any,
-				status: 'loaded',
-				error: null,
+				indexed: {},
+				loadError: null,
 			},
 			issueDetails: {
 				issueType: 'unset',
 				featureId: 'feature_id',
 				issueTitle: '',
 			},
-		};
+		} );
 
 		const output = selectRelevantTaskIds( state );
 		expect( output ).toEqual( [] );
@@ -189,21 +180,18 @@ describe( '[selectRelevantTaskIds]', () => {
 			},
 		};
 
-		const state: RootState = {
-			completedTasks: [],
-			featureSelectorForm: {} as any,
+		const state = createFakeRootState( {
 			reportingConfig: {
 				normalized: normalized,
-				indexed: {} as any,
-				status: 'loaded',
-				error: null,
+				indexed: {},
+				loadError: null,
 			},
 			issueDetails: {
 				issueType: 'bug',
 				featureId: featureId,
 				issueTitle: '',
 			},
-		};
+		} );
 
 		const output = selectRelevantTaskIds( state );
 		expect( output ).toEqual( [
@@ -289,21 +277,18 @@ describe( '[selectRelevantTaskIds]', () => {
 			},
 		};
 
-		const state: RootState = {
-			completedTasks: [],
-			featureSelectorForm: {} as any,
+		const state = createFakeRootState( {
 			reportingConfig: {
 				normalized: normalized,
-				indexed: {} as any,
-				status: 'loaded',
-				error: null,
+				indexed: {},
+				loadError: null,
 			},
 			issueDetails: {
 				issueType: 'featureRequest',
 				featureId: featureId,
 				issueTitle: '',
 			},
-		};
+		} );
 
 		const output = selectRelevantTaskIds( state );
 		expect( output ).toEqual( [ featureTaskId ] );
@@ -368,21 +353,18 @@ describe( '[selectRelevantTaskIds]', () => {
 			},
 		};
 
-		const state: RootState = {
-			completedTasks: [],
-			featureSelectorForm: {} as any,
+		const state = createFakeRootState( {
 			reportingConfig: {
 				normalized: normalized,
-				indexed: {} as any,
-				status: 'loaded',
-				error: null,
+				indexed: {},
+				loadError: null,
 			},
 			issueDetails: {
 				issueType: 'urgent',
 				featureId: featureId,
 				issueTitle: '',
 			},
-		};
+		} );
 
 		const output = selectRelevantTaskIds( state );
 		expect( output ).toEqual( [ featureTaskId ] );

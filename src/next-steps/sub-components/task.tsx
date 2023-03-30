@@ -1,7 +1,7 @@
 import React, { ReactNode, useMemo } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { selectNormalizedReportingConfig } from '../../reporting-config/reporting-config-slice';
-import { TaskLink } from '../../reporting-config/types';
+import { selectNormalizedReportingConfig } from '../../static-data/reporting-config/reporting-config-slice';
+import { TaskLink } from '../../static-data/reporting-config/types';
 import { ReactComponent as SlackIcon } from '../../common/svgs/slack.svg';
 import { ReactComponent as GithubIcon } from '../../common/svgs/github.svg';
 import { ReactComponent as P2Icon } from '../../common/svgs/p2.svg';

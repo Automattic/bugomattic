@@ -8,7 +8,7 @@ import Confetti from 'react-confetti';
 import { selectIssueFeatureId } from '../issue-details/issue-details-slice';
 import { selectAllTasksAreComplete } from '../combined-selectors/all-tasks-are-complete';
 import { useMonitoring } from '../monitoring/monitoring-provider';
-import { selectNormalizedReportingConfig } from '../reporting-config/reporting-config-slice';
+import { selectNormalizedReportingConfig } from '../static-data/reporting-config/reporting-config-slice';
 
 export function NextSteps() {
 	const monitoringClient = useMonitoring();

@@ -1,8 +1,8 @@
 import React from 'react';
 import { useAppSelector } from '../app/hooks';
 import { selectIssueFeatureId } from '../issue-details/issue-details-slice';
-import { selectNormalizedReportingConfig } from '../reporting-config/reporting-config-slice';
-import { Feature, FeatureGroup, Product } from '../reporting-config/types';
+import { selectNormalizedReportingConfig } from '../static-data/reporting-config/reporting-config-slice';
+import { Feature, FeatureGroup, Product } from '../static-data/reporting-config/types';
 import { EntityInfo } from './sub-components/entity-info';
 import styles from './next-steps.module.css';
 

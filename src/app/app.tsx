@@ -1,41 +1,73 @@
-import React, { ReactNode, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { AppHeader } from '../app-header/app-header';
-import { AppErrorDisplay } from '../errors/app-error-display';
 import { useMonitoring } from '../monitoring/monitoring-provider';
-import { ReportingConfigLoadingIndicator } from '../reporting-config/reporting-config-loading-indicator';
-import { useReportingConfigLoad } from '../reporting-config/use-reporting-config';
-import { ReportingFlow } from '../reporting-flow/reporting-flow';
-import { useInitialStateFromUrl } from '../url-history/hooks';
 import styles from './app.module.css';
 import { AppErrorBoundary } from '../errors/app-error-boundary';
+import { selectActivePage } from '../active-page/active-page-slice';
+import { useAppSelector } from './hooks';
+import { DuplicateSearchingPage } from '../duplicate-searching-page/duplicate-searching-page';
+import { ReportingFlowPage } from '../reporting-flow-page/reporting-flow-page';
+import { useAppDataHydration } from './use-app-data-hydration';
+import { AnimatedEllipsis } from '../common/components';
 
 export function App() {
-	const { loadStatus, error } = useReportingConfigLoad();
 	const monitoringClient = useMonitoring();
-	useInitialStateFromUrl();
-
 	useEffect( () => {
 		monitoringClient.analytics.recordEvent( 'page_view' );
 	}, [ monitoringClient.analytics ] );
-
-	let mainDisplay: ReactNode;
-	if ( loadStatus === 'empty' || loadStatus === 'loading' ) {
-		mainDisplay = <ReportingConfigLoadingIndicator />;
-	} else if ( loadStatus === 'loaded' ) {
-		mainDisplay = <ReportingFlow />;
-	} else {
-		monitoringClient.logger.error( 'Error occurred when loading the reporting config', {
-			error: error,
-		} );
-		mainDisplay = <AppErrorDisplay />;
-	}
 
 	return (
 		<div className={ styles.appMain }>
 			<AppHeader />
 			<AppErrorBoundary>
-				<main className={ styles.appMain }>{ mainDisplay }</main>
+				<main className={ styles.appMain }>
+					<MainDisplay />
+				</main>
 			</AppErrorBoundary>
+		</div>
+	);
+}
+
+function MainDisplay() {
+	// Doing all the main data hydration here so any truly unexpected errors (should be extremely rare!) bubble up to the error boundary.
+	// In general though, all we care about here is whether they hydration is done or not.
+	// We defer any expected error handling (e.g. request failure, bad configuration) to the child components.
+	// This allows as much of the app to be usable as possible, even if some parts are not working.
+	const ready = useAppDataHydration();
+	const activePage = useAppSelector( selectActivePage );
+
+	if ( ! ready ) {
+		return <AppLoadingIndicator />;
+	}
+
+	if ( activePage === 'duplicateSearching' ) {
+		return <DuplicateSearchingPage />;
+	}
+
+	return <ReportingFlowPage />;
+}
+
+function AppLoadingIndicator() {
+	const messages = [
+		'Finding some loving homes for bugs.',
+		'"Hydrating app data" -- whatever that means!',
+		"We're getting ready, be down in a hurry!",
+	];
+
+	const randomIndex = Math.floor( Math.random() * messages.length );
+
+	const message = messages[ randomIndex ];
+
+	return (
+		<div
+			className={ styles.loadingWrapper }
+			aria-relevant="all"
+			role="alert"
+			// For screen readers, let's be clear of the alert's intent.
+			aria-label="Loading required app data"
+		>
+			<span className={ styles.loadingMessage }>{ message }</span>
+			<AnimatedEllipsis aria-hidden={ true } />
 		</div>
 	);
 }

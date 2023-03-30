@@ -1,4 +1,9 @@
-import { ApiFeatureGroups, ApiFeatures, ApiTasks, ReportingConfigApiResponse } from '../api/types';
+import {
+	ApiFeatureGroups,
+	ApiFeatures,
+	ApiTasks,
+	ReportingConfigApiResponse,
+} from '../../api/types';
 import {
 	FeatureGroups,
 	FeatureParentEntityType,
@@ -317,7 +322,5 @@ export function indexReportingConfig(
 ): IndexedReportingConfig {
 	// TODO: create real implementation once we know the indices we need!
 
-	return {
-		foo: 'bar',
-	};
+	return {};
 }

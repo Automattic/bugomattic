@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
 	selectNormalizedReportingConfig,
 	selectProductIdForFeature,
-} from '../../reporting-config/reporting-config-slice';
+} from '../../static-data/reporting-config/reporting-config-slice';
 import styles from './../feature-selector-form.module.css';
 import {
 	selectFeatureSearchTerm,

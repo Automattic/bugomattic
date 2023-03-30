@@ -1,5 +1,6 @@
-import { ApiClient, Issue } from './types';
+import { ApiClient } from './types';
 import path from 'path-browserify';
+import { Issue } from '../duplicate-results/types';
 
 /**
  * An implementation of the API client that returns faked values for local development.
@@ -67,8 +68,8 @@ export const localApiClient: ApiClient = {
 		return issues;
 	},
 
-	getRepoFilters: async () => {
-		await wait( 2000 );
+	loadAvailableRepoFilters: async () => {
+		await wait( 1000 );
 		return [
 			'Automattic/wp-calypso',
 			'Automattic/wp-desktop',

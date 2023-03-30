@@ -17,84 +17,73 @@ describe( '[app]', () => {
 		return { monitoringClient };
 	}
 
-	test( 'App shows loading indicator until reporting config is loaded, then the reporting flow', async () => {
+	test( 'App shows loading indicator until all configuration is loaded, then the current landing page (duplicate searching)', async () => {
 		const apiClient = createMockApiClient();
 		// This function will get set to the resolve() function in the API client call.
-		let resolveRequestPromise: ( config: ReportingConfigApiResponse ) => void = () => {
+		let resolveReportingConfigRequestPromise: (
+			config: ReportingConfigApiResponse
+		) => void = () => {
 			throw new Error( 'loadReportingConfig was not called in mocked API Client' );
 		};
-		const requestPromise = new Promise< ReportingConfigApiResponse >( ( resolve ) => {
-			resolveRequestPromise = resolve;
+		const reportingConfigRequestPromise = new Promise< ReportingConfigApiResponse >(
+			( resolve ) => {
+				resolveReportingConfigRequestPromise = resolve;
+			}
+		);
+		apiClient.loadReportingConfig.mockReturnValue( reportingConfigRequestPromise );
+
+		let resolveAvailableRepoFiltersRequestPromise: ( config: string[] ) => void = () => {
+			throw new Error( 'loadAvailableRepoFilters was not called in mocked API Client' );
+		};
+		const availableRepoFiltersRequestPromise = new Promise< string[] >( ( resolve ) => {
+			resolveAvailableRepoFiltersRequestPromise = resolve;
 		} );
-		apiClient.loadReportingConfig.mockReturnValue( requestPromise );
+		apiClient.loadAvailableRepoFilters.mockReturnValue( availableRepoFiltersRequestPromise );
 
 		setup( <App />, apiClient );
 
 		// Loading indicator is present...
 		expect(
-			screen.getByRole( 'alert', { name: 'Loading issue reporting configuration' } )
+			screen.getByRole( 'alert', { name: 'Loading required app data' } )
 		).toBeInTheDocument();
-		// ...Reporting flow is not.
+		// ...Landing page is not.
 		expect(
-			screen.queryByRole( 'heading', { name: 'Report a new issue' } )
+			screen.queryByRole( 'heading', { name: 'Search for duplicate issues' } )
 		).not.toBeInTheDocument();
 
-		resolveRequestPromise( {} );
+		resolveReportingConfigRequestPromise( {} );
 
-		// Then it flips!
+		// We're still not ready! We've resolved one request, but more remain!
+
+		resolveAvailableRepoFiltersRequestPromise( [] );
+
+		// Now we should be ready!
 
 		await waitForElementToBeRemoved( () =>
-			screen.queryByRole( 'alert', { name: 'Loading issue reporting configuration' } )
+			screen.queryByRole( 'alert', { name: 'Loading required app data' } )
 		);
 
 		expect(
-			await screen.findByRole( 'heading', { name: 'Report a new issue' } )
+			await screen.findByRole( 'heading', { name: 'Search for duplicate issues' } )
 		).toBeInTheDocument();
 	} );
 
-	test( 'If the web request to load the reporting config fails, shows app error component and logs error', async () => {
+	test( 'Even if web requests fail, we still show the app', async () => {
 		const apiClient = createMockApiClient();
 		const apiErrorMessage = 'Request failed with status code 500';
 		const apiError = new Error( apiErrorMessage );
 		apiClient.loadReportingConfig.mockRejectedValue( apiError );
+		apiClient.loadAvailableRepoFilters.mockRejectedValue( apiError );
 
-		const { monitoringClient } = setup( <App />, apiClient );
+		setup( <App />, apiClient );
 
 		await waitForElementToBeRemoved( () =>
-			screen.queryByRole( 'alert', { name: 'Loading issue reporting configuration' } )
+			screen.queryByRole( 'alert', { name: 'Loading required app data' } )
 		);
 
 		expect(
-			screen.getByRole( 'alert', { name: 'Uh oh! Something went wrong :(' } )
+			await screen.findByRole( 'heading', { name: 'Search for duplicate issues' } )
 		).toBeInTheDocument();
-
-		expect( monitoringClient.logger.error ).toBeCalledWith(
-			'Error occurred when loading the reporting config',
-			{ error: `${ apiError.name }: ${ apiError.message }` }
-		);
-	} );
-
-	test( 'If parsing the reporting config fails, shows app error component and logs error', async () => {
-		const apiClient = createMockApiClient();
-		const reportingConfigToCauseError = { foo: 'bar' };
-		apiClient.loadReportingConfig.mockResolvedValue( reportingConfigToCauseError );
-
-		const { monitoringClient } = setup( <App />, apiClient );
-
-		await waitForElementToBeRemoved( () =>
-			screen.queryByRole( 'alert', { name: 'Loading issue reporting configuration' } )
-		);
-
-		expect(
-			screen.getByRole( 'alert', { name: 'Uh oh! Something went wrong :(' } )
-		).toBeInTheDocument();
-
-		expect( monitoringClient.logger.error ).toBeCalledWith(
-			'Error occurred when loading the reporting config',
-			{
-				error: expect.stringContaining( 'Failed to normalize reporting config' ),
-			}
-		);
 	} );
 
 	test( 'On loading, records the "page_view" event', async () => {
@@ -103,7 +92,7 @@ describe( '[app]', () => {
 		const { monitoringClient } = setup( <App />, apiClient );
 
 		await waitForElementToBeRemoved( () =>
-			screen.queryByRole( 'alert', { name: 'Loading issue reporting configuration' } )
+			screen.queryByRole( 'alert', { name: 'Loading required app data' } )
 		);
 		expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'page_view' );
 	} );

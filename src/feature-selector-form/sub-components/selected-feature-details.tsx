@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { selectNormalizedReportingConfig } from '../../reporting-config/reporting-config-slice';
+import { selectNormalizedReportingConfig } from '../../static-data/reporting-config/reporting-config-slice';
 import { ReactComponent as ChevronRightIcon } from '../../common/svgs/chevron-right.svg';
 import styles from '../feature-selector-form.module.css';
 import { setSelectedFeatureId } from '../feature-selector-form-slice';

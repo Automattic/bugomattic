@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ReportingConfigApiResponse } from '../../api/types';
+import { ReportingConfigApiResponse } from '../../../api/types';
 import { normalizeReportingConfig } from '../reporting-config-parsers';
 
 function createFakeReportingConfigResponse(): ReportingConfigApiResponse {

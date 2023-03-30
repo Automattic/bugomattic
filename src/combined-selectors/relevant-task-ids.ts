@@ -1,14 +1,14 @@
 import { createSelector } from '@reduxjs/toolkit';
 import { IssueDetails } from '../issue-details/types';
 import { selectIssueDetails } from '../issue-details/issue-details-slice';
-import { selectNormalizedReportingConfig } from '../reporting-config/reporting-config-slice';
+import { selectNormalizedReportingConfig } from '../static-data/reporting-config/reporting-config-slice';
 import {
 	NormalizedReportingConfig,
 	Product,
 	TaskDetails,
 	TaskParentEntityType,
 	Tasks,
-} from '../reporting-config/types';
+} from '../static-data/reporting-config/types';
 
 // The "createSelector" function lets you memo-ize potentially expensive selectors:
 // https://redux.js.org/usage/deriving-data-selectors#optimizing-selectors-with-memoization

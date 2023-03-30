@@ -1,4 +1,6 @@
-import { LearnMoreLink, TaskDetails } from '../reporting-config/types';
+import { Issue } from '../duplicate-results/types';
+import { IssueSortOption, IssueStatusFilter } from '../duplicate-search/types';
+import { LearnMoreLink, TaskDetails } from '../static-data/reporting-config/types';
 
 /**
  * An interface representing an interaction with the API.
@@ -6,8 +8,8 @@ import { LearnMoreLink, TaskDetails } from '../reporting-config/types';
  */
 export interface ApiClient {
 	loadReportingConfig(): Promise< ReportingConfigApiResponse >;
-	searchIssues( search: string, options?: SearchIssueOptions ): Promise< Issue[] >;
-	getRepoFilters(): Promise< string[] >;
+	searchIssues( search: string, options?: SearchIssueOptions ): Promise< SearchIssueApiResponse >;
+	loadAvailableRepoFilters(): Promise< AvailableRepoFiltersApiResponse >;
 	// More to come as we add to the API
 	// e.g. saveNewReportingConfig();
 }
@@ -56,19 +58,12 @@ export interface ApiTasks {
 	urgent: TaskDetails[];
 }
 
-export interface Issue {
-	dateCreated: string;
-	dateUpdated: string;
-	title: string;
-	url: string;
-	repo: string;
-	status: 'open' | 'closed';
-	author: string;
-	content: string;
-}
-
 export interface SearchIssueOptions {
 	repos?: string[];
-	status?: 'open' | 'closed' | 'all';
-	sort?: 'date-created' | 'relevance';
+	status?: IssueStatusFilter;
+	sort?: IssueSortOption;
 }
+
+export type SearchIssueApiResponse = Issue[];
+
+export type AvailableRepoFiltersApiResponse = string[];

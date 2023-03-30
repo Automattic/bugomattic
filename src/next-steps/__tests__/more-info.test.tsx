@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import userEvent from '@testing-library/user-event';
 import { createMockApiClient } from '../../test-utils/mock-api-client';
-import { NormalizedReportingConfig } from '../../reporting-config/types';
+import { NormalizedReportingConfig } from '../../static-data/reporting-config/types';
 import { renderWithProviders } from '../../test-utils/render-with-providers';
 import { MoreInfo } from '../more-info';
 import { fireEvent, screen } from '@testing-library/react';
@@ -22,10 +22,8 @@ describe( '[MoreInfo]', () => {
 			preloadedState: {
 				reportingConfig: {
 					normalized: reportingConfig,
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any
-					indexed: {} as any,
-					status: 'loaded',
-					error: null,
+					indexed: {},
+					loadError: null,
 				},
 				issueDetails: {
 					issueType: 'bug',
