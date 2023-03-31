@@ -28,7 +28,6 @@ describe( '[MoreInfo]', () => {
 				issueDetails: {
 					issueType: 'bug',
 					featureId: featureId,
-					issueTitle: '',
 				},
 			},
 		} );

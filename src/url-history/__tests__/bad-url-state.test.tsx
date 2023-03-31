@@ -67,7 +67,6 @@ describe( '[Bad URL State]', () => {
 				issueDetails: {
 					featureId: 'not-a-real-feature-id',
 					issueType: 'unset',
-					issueTitle: '',
 				},
 				activePage: 'reportingFlow',
 				activeReportingStep: 'featureSelection',
@@ -86,10 +85,9 @@ describe( '[Bad URL State]', () => {
 				issueDetails: {
 					featureId: expectedFeatureId,
 					issueType: 'not-a-real-issue-type' as any,
-					issueTitle: '',
 				},
 				activePage: 'reportingFlow',
-				activeReportingStep: 'typeTitle',
+				activeReportingStep: 'type',
 			} as RootState );
 
 			await setup( urlQuery );
@@ -107,9 +105,7 @@ describe( '[Bad URL State]', () => {
 			await setup( urlQuery );
 
 			expectNoErrorThrown();
-			expect(
-				screen.getByRole( 'form', { name: 'Set issue type and title' } )
-			).toBeInTheDocument();
+			expect( screen.getByRole( 'form', { name: 'Set issue type' } ) ).toBeInTheDocument();
 		} );
 
 		test( 'Completed task ID that is not in the reporting config', async () => {
@@ -117,7 +113,6 @@ describe( '[Bad URL State]', () => {
 				issueDetails: {
 					featureId: expectedFeatureId,
 					issueType: 'bug',
-					issueTitle: '',
 				},
 				activePage: 'reportingFlow',
 				activeReportingStep: 'nextSteps',
@@ -176,7 +171,6 @@ describe( '[Bad URL State]', () => {
 			issueDetails: {
 				featureId: 'invalidId',
 				issueType: 'bug',
-				issueTitle: '',
 			},
 			activeReportingStep: 'nextSteps',
 			activePage: 'reportingFlow',

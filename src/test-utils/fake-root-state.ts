@@ -27,7 +27,6 @@ export function createFakeRootState( partialState: Partial< RootState > = {} ): 
 		issueDetails: {
 			issueType: 'unset',
 			featureId: null,
-			issueTitle: '',
 		},
 		startOverCounter: 0,
 

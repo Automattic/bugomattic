@@ -6,7 +6,6 @@ import { ReactComponent as SlackIcon } from '../../common/svgs/slack.svg';
 import { ReactComponent as GithubIcon } from '../../common/svgs/github.svg';
 import { ReactComponent as P2Icon } from '../../common/svgs/p2.svg';
 import { ReactComponent as LinkIcon } from '../../common/svgs/external-link.svg';
-import { selectIssueDetails } from '../../issue-details/issue-details-slice';
 import styles from '../next-steps.module.css';
 import {
 	addCompletedTask,
@@ -32,7 +31,6 @@ export function Task( { taskId }: Props ) {
 	const dispatch = useAppDispatch();
 	const monitoringClient = useMonitoring();
 	const { tasks } = useAppSelector( selectNormalizedReportingConfig );
-	const { issueTitle } = useAppSelector( selectIssueDetails );
 	const completedTaskIds = useAppSelector( selectCompletedTasks );
 
 	const logError = useLoggerWithCache( monitoringClient.logger.error, [ taskId, tasks ] );
@@ -84,7 +82,7 @@ export function Task( { taskId }: Props ) {
 
 		try {
 			const linkText = title || getDefaultTitleForLink( link );
-			const href = createLinkHref( link, issueTitle );
+			const href = createLinkHref( link );
 			titleDisplay = (
 				<a
 					className={ styles.taskTitle }
@@ -171,12 +169,12 @@ function getAppIconForLink( link: TaskLink ): ReactNode {
 	}
 }
 
-function createLinkHref( link: TaskLink, issueTitle?: string ): string {
+function createLinkHref( link: TaskLink ): string {
 	switch ( link.type ) {
 		case 'general':
 			return createGeneralHref( link );
 		case 'github':
-			return createNewGithubIssueHref( link, issueTitle );
+			return createNewGithubIssueHref( link );
 		case 'slack':
 			return createSlackHref( link );
 		case 'p2':

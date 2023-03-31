@@ -32,7 +32,6 @@ export type EventName =
 	| 'feature_clear'
 	| 'feature_search'
 	| 'feature_save'
-	| 'title_save'
 	| 'type_save'
 	| 'feature_step_edit'
 	| 'type_step_edit'

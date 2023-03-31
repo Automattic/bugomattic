@@ -11,9 +11,8 @@ describe( 'url-history-parsers', () => {
 				repos: [ 'ignored' ],
 				loadError: 'ignored',
 			},
-			activeReportingStep: 'typeTitle',
+			activeReportingStep: 'type',
 			issueDetails: {
-				issueTitle: 'This is a test',
 				issueType: 'bug',
 				featureId: 'test_feature_id',
 			},

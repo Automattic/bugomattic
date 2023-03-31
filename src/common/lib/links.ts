@@ -36,7 +36,7 @@ export function createP2Href( link: P2Link ) {
 	return url.href;
 }
 
-export function createNewGithubIssueHref( link: NewGitHubIssueLink, issueTitle?: string ) {
+export function createNewGithubIssueHref( link: NewGitHubIssueLink ) {
 	// For safety, we don't really need to validate all the individual pieces here.
 	// As long as we use the URL API and guarantee the root GitHub domain, we are safe.
 	// Any broken pieces will just result in a Github 404 or the param being tossed out by Github.
@@ -48,10 +48,6 @@ export function createNewGithubIssueHref( link: NewGitHubIssueLink, issueTitle?:
 		pathEnd = 'new/choose';
 	}
 	url.pathname = urlJoin( link.repository, 'issues', pathEnd );
-
-	if ( issueTitle ) {
-		url.searchParams.append( 'title', issueTitle );
-	}
 
 	if ( link.template ) {
 		url.searchParams.append( 'template', link.template );
