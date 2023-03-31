@@ -8,6 +8,7 @@ import { ActionWithStaticData } from '../static-data/types';
 const initialState: IssueDetails = {
 	featureId: null,
 	issueType: 'unset',
+	issueTitle: '',
 };
 
 const validIssueTypes = new Set< IssueType >( [ 'unset', 'bug', 'featureRequest', 'urgent' ] );
@@ -28,6 +29,12 @@ export const issueDetailsSlice = createSlice( {
 				featureId: action.payload,
 			};
 		},
+		setIssueTitle( state, action: PayloadAction< string > ) {
+			return {
+				...state,
+				issueTitle: action.payload,
+			};
+		},
 	},
 	extraReducers: ( builder ) => {
 		builder
@@ -43,6 +50,8 @@ export const issueDetailsSlice = createSlice( {
 					? issueDetails.issueType
 					: initialState.issueType;
 
+				const issueTitle = issueDetails.issueTitle ?? initialState.issueTitle;
+
 				const actionWithStaticData = action as ActionWithStaticData;
 				const { features } = actionWithStaticData.meta.reportingConfig;
 				let featureId: FeatureId;
@@ -54,7 +63,7 @@ export const issueDetailsSlice = createSlice( {
 					featureId = initialState.featureId;
 				}
 
-				return { featureId, issueType };
+				return { featureId, issueType, issueTitle };
 			} )
 			.addCase( startOver, () => {
 				return {
@@ -65,7 +74,7 @@ export const issueDetailsSlice = createSlice( {
 } );
 
 export const issueDetailsReducer = issueDetailsSlice.reducer;
-export const { setIssueType, setIssueFeatureId } = issueDetailsSlice.actions;
+export const { setIssueType, setIssueFeatureId, setIssueTitle } = issueDetailsSlice.actions;
 
 export function selectIssueDetails( state: RootState ): IssueDetails {
 	return state.issueDetails;
@@ -73,6 +82,10 @@ export function selectIssueDetails( state: RootState ): IssueDetails {
 
 export function selectIssueFeatureId( state: RootState ): FeatureId {
 	return state.issueDetails.featureId;
+}
+
+export function selectIssueTitle( state: RootState ): string {
+	return state.issueDetails.issueTitle;
 }
 
 export function selectIssueType( state: RootState ): IssueType {

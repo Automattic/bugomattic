@@ -110,5 +110,19 @@ describe( '[Links]', () => {
 				} )
 			).toBe( expectedHref );
 		} );
+
+		test( 'If an issue title is provided, adds and encodes query param for it', () => {
+			const expectedHref =
+				'https://github.com/Automattic/bugomattic/issues/new/choose?title=foo%26bar';
+			expect(
+				createNewGithubIssueHref(
+					{
+						type: 'github',
+						repository: 'Automattic/bugomattic',
+					},
+					'foo&bar'
+				)
+			).toBe( expectedHref );
+		} );
 	} );
 } );
