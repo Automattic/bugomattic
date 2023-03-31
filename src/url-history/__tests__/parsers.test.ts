@@ -15,6 +15,7 @@ describe( 'url-history-parsers', () => {
 			issueDetails: {
 				issueType: 'bug',
 				featureId: 'test_feature_id',
+				issueTitle: '',
 			},
 			featureSelectorForm: {
 				searchTerm: 'should be ignored',

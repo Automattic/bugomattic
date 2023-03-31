@@ -46,6 +46,7 @@ describe( '[selectRelevantTaskIds]', () => {
 			issueDetails: {
 				issueType: 'bug',
 				featureId: null,
+				issueTitle: '',
 			},
 		} );
 
@@ -96,6 +97,7 @@ describe( '[selectRelevantTaskIds]', () => {
 			issueDetails: {
 				issueType: 'unset',
 				featureId: 'feature_id',
+				issueTitle: '',
 			},
 		} );
 
@@ -187,6 +189,7 @@ describe( '[selectRelevantTaskIds]', () => {
 			issueDetails: {
 				issueType: 'bug',
 				featureId: featureId,
+				issueTitle: '',
 			},
 		} );
 
@@ -283,6 +286,7 @@ describe( '[selectRelevantTaskIds]', () => {
 			issueDetails: {
 				issueType: 'featureRequest',
 				featureId: featureId,
+				issueTitle: '',
 			},
 		} );
 
@@ -358,6 +362,7 @@ describe( '[selectRelevantTaskIds]', () => {
 			issueDetails: {
 				issueType: 'urgent',
 				featureId: featureId,
+				issueTitle: '',
 			},
 		} );
 

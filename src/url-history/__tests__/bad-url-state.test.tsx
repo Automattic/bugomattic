@@ -67,6 +67,7 @@ describe( '[Bad URL State]', () => {
 				issueDetails: {
 					featureId: 'not-a-real-feature-id',
 					issueType: 'unset',
+					issueTitle: '',
 				},
 				activePage: 'reportingFlow',
 				activeReportingStep: 'featureSelection',
@@ -85,6 +86,7 @@ describe( '[Bad URL State]', () => {
 				issueDetails: {
 					featureId: expectedFeatureId,
 					issueType: 'not-a-real-issue-type' as any,
+					issueTitle: '',
 				},
 				activePage: 'reportingFlow',
 				activeReportingStep: 'type',
@@ -113,6 +115,7 @@ describe( '[Bad URL State]', () => {
 				issueDetails: {
 					featureId: expectedFeatureId,
 					issueType: 'bug',
+					issueTitle: '',
 				},
 				activePage: 'reportingFlow',
 				activeReportingStep: 'nextSteps',
@@ -171,6 +174,7 @@ describe( '[Bad URL State]', () => {
 			issueDetails: {
 				featureId: 'invalidId',
 				issueType: 'bug',
+				issueTitle: '',
 			},
 			activeReportingStep: 'nextSteps',
 			activePage: 'reportingFlow',
