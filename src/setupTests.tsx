@@ -6,3 +6,11 @@
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom';
+import React from 'react';
+
+// Mock out the Confetti component, as it uses a canvas element that JSDOM doesn't support.
+jest.mock( 'react-confetti', () => {
+	return function MockConfetti() {
+		return <div data-testid="mock-confetti"></div>;
+	};
+} );

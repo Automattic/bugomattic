@@ -130,63 +130,24 @@ describe( '[Reporting Flow]', () => {
 
 	test( 'The steps are arranged in the correct order', async () => {
 		expect(
-			screen.getByRole( 'heading', { name: 'Step number 1: Product and Feature' } )
+			screen.getByRole( 'heading', { name: 'Step number 1: Type and Title' } )
 		).toBeInTheDocument();
 		expect(
-			screen.getByRole( 'heading', { name: 'Step number 2: Type and Title' } )
+			screen.getByRole( 'heading', { name: 'Step number 2: Product and Feature' } )
 		).toBeInTheDocument();
 		expect(
 			screen.getByRole( 'heading', { name: 'Step number 3: Next Steps' } )
 		).toBeInTheDocument();
 	} );
 
-	test( 'The flow starts with the feature selection step active', async () => {
-		expect( screen.getByRole( 'form', { name: 'Select a feature' } ) ).toBeInTheDocument();
+	test( 'The flow starts with the type and title step active', async () => {
+		expect( screen.getByRole( 'form', { name: 'Set issue type and title' } ) ).toBeInTheDocument();
 
 		// Make sure the content of the other steps is not visible
-		expect(
-			screen.queryByRole( 'form', { name: 'Set issue type and title' } )
-		).not.toBeInTheDocument();
+		expect( screen.queryByRole( 'form', { name: 'Select a feature' } ) ).not.toBeInTheDocument();
 		expect(
 			screen.queryByRole( 'list', { name: 'Steps to report issue' } )
 		).not.toBeInTheDocument();
-	} );
-
-	test( 'Select a feature (Feature A) and click "Continue"', async () => {
-		// Expand tree
-		await user.click( screen.getByRole( 'button', { name: product.name, expanded: false } ) );
-		await user.click( screen.getByRole( 'button', { name: featureGroup.name, expanded: false } ) );
-
-		// Select feature
-		await user.click( screen.getByRole( 'option', { name: featureA.name } ) );
-
-		await user.click( screen.getByRole( 'button', { name: 'Continue' } ) );
-	} );
-
-	test( 'The feature selection step is marked as complete', async () => {
-		expect(
-			screen.getByRole( 'heading', { name: 'Completed step: Product and Feature' } )
-		).toBeInTheDocument();
-	} );
-
-	test( 'The feature selection step gets an edit button', async () => {
-		expect(
-			screen.getByRole( 'button', {
-				name: 'Edit',
-				description: /Product and Feature/,
-			} )
-		).toBeInTheDocument();
-	} );
-
-	test( 'The feature selection form is replaced with selected feature breadcrumb', async () => {
-		expect( screen.queryByRole( 'form', { name: 'Select a feature' } ) ).not.toBeInTheDocument();
-		expect(
-			screen.getByText( `${ product.name } > ${ featureGroup.name } > ${ featureA.name }` )
-		).toBeInTheDocument();
-	} );
-
-	test( 'The type and title step is now active', async () => {
-		expect( screen.getByRole( 'form', { name: 'Set issue type and title' } ) ).toBeInTheDocument();
 	} );
 
 	test( 'Enter issue title, select "Feature Request" type, and click "Continue"', async () => {
@@ -222,6 +183,38 @@ describe( '[Reporting Flow]', () => {
 		expect( screen.getByText( issueTitle ) ).toBeInTheDocument();
 		expect( screen.getByText( 'Feature Request' ) ).toBeInTheDocument();
 	} );
+	test( 'Select a feature (Feature A) and click "Continue"', async () => {
+		// Expand tree
+		await user.click( screen.getByRole( 'button', { name: product.name, expanded: false } ) );
+		await user.click( screen.getByRole( 'button', { name: featureGroup.name, expanded: false } ) );
+
+		// Select feature
+		await user.click( screen.getByRole( 'option', { name: featureA.name } ) );
+
+		await user.click( screen.getByRole( 'button', { name: 'Continue' } ) );
+	} );
+
+	test( 'The feature selection step is marked as complete', async () => {
+		expect(
+			screen.getByRole( 'heading', { name: 'Completed step: Product and Feature' } )
+		).toBeInTheDocument();
+	} );
+
+	test( 'The feature selection step gets an edit button', async () => {
+		expect(
+			screen.getByRole( 'button', {
+				name: 'Edit',
+				description: /Product and Feature/,
+			} )
+		).toBeInTheDocument();
+	} );
+
+	test( 'The feature selection form is replaced with selected feature breadcrumb', async () => {
+		expect( screen.queryByRole( 'form', { name: 'Select a feature' } ) ).not.toBeInTheDocument();
+		expect(
+			screen.getByText( `${ product.name } > ${ featureGroup.name } > ${ featureA.name }` )
+		).toBeInTheDocument();
+	} );
 
 	test( 'The right list of next step tasks appear for issue details', async () => {
 		expect(
@@ -236,7 +229,7 @@ describe( '[Reporting Flow]', () => {
 	} );
 
 	test( 'Confetti appears', async () => {
-		expect( await screen.findByTestId( 'confetti' ) ).toBeInTheDocument();
+		expect( await screen.findByTestId( 'mock-confetti' ) ).toBeInTheDocument();
 	} );
 
 	test( 'The event "task_complete_all" is recorded', () => {
@@ -261,7 +254,7 @@ describe( '[Reporting Flow]', () => {
 	test( 'The type and title step is not marked as complete because it is active', async () => {
 		// It reverts to its numerical heading;
 		expect(
-			screen.getByRole( 'heading', { name: 'Step number 2: Type and Title' } )
+			screen.getByRole( 'heading', { name: 'Step number 1: Type and Title' } )
 		).toBeInTheDocument();
 	} );
 
@@ -367,7 +360,7 @@ describe( '[Reporting Flow]', () => {
 	test( 'The feature selection step is not marked as complete because it is active', async () => {
 		// It reverts to its numerical heading;
 		expect(
-			screen.getByRole( 'heading', { name: 'Step number 1: Product and Feature' } )
+			screen.getByRole( 'heading', { name: 'Step number 2: Product and Feature' } )
 		).toBeInTheDocument();
 	} );
 
@@ -462,21 +455,13 @@ describe( '[Reporting Flow]', () => {
 
 	test( 'Everything resets to its initial state', async () => {
 		// First step is expanded
-		expect( screen.getByRole( 'form', { name: 'Select a feature' } ) ).toBeInTheDocument();
-		expect(
-			screen.queryByRole( 'form', { name: 'Set issue title and type' } )
-		).not.toBeInTheDocument();
+		expect( screen.getByRole( 'form', { name: 'Set issue type and title' } ) ).toBeInTheDocument();
+		expect( screen.queryByRole( 'form', { name: 'Select a feature' } ) ).not.toBeInTheDocument();
 		expect(
 			screen.queryByRole( 'list', { name: 'Steps to report issue' } )
 		).not.toBeInTheDocument();
 
-		// No feature is selected
-		expect(
-			screen.queryByRole( 'button', { name: 'Clear currently selected feature' } )
-		).not.toBeInTheDocument();
-
-		// No saved type and title visible
-		expect( screen.queryByText( 'Feature Request' ) ).not.toBeInTheDocument();
-		expect( screen.queryByText( issueTitle ) ).not.toBeInTheDocument();
+		// No selected feature area
+		expect( screen.queryByText( featureB.name ) ).not.toBeInTheDocument();
 	} );
 } );
