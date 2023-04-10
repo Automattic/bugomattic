@@ -1,8 +1,8 @@
 import React, { ReactNode, useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { selectIssueTitle, selectIssueType } from '../../issue-details/issue-details-slice';
+import { selectIssueType } from '../../issue-details/issue-details-slice';
 import { IssueType } from '../../issue-details/types';
-import { TypeTitleForm } from '../../type-title-form/type-title-form';
+import { TypeForm } from '../../type-form/type-form';
 import { selectActiveReportingStep, setActiveReportingStep } from '../active-reporting-step-slice';
 import { StepContainer } from './step-container';
 import styles from '../reporting-flow-page.module.css';
@@ -14,34 +14,33 @@ interface Props {
 	goToNextStep: () => void;
 }
 
-export function TypeTitleStep( { stepNumber, goToNextStep }: Props ) {
+export function TypeStep( { stepNumber, goToNextStep }: Props ) {
 	const dispatch = useAppDispatch();
 	const monitoringClient = useMonitoring();
 	const activeStep = useAppSelector( selectActiveReportingStep );
-	const issueTitle = useAppSelector( selectIssueTitle );
 	const issueType = useAppSelector( selectIssueType );
 
 	const onEdit = useCallback( () => {
-		dispatch( setActiveReportingStep( 'typeTitle' ) );
+		dispatch( setActiveReportingStep( 'type' ) );
 		dispatch( updateHistoryWithState() );
 		monitoringClient.analytics.recordEvent( 'type_step_edit' );
 	}, [ dispatch, monitoringClient.analytics ] );
 
-	const isActive = activeStep === 'typeTitle';
+	const isActive = activeStep === 'type';
 	const isComplete = issueType !== 'unset' && ! isActive;
 
 	let stepContentDisplay: ReactNode;
 	if ( isActive ) {
-		stepContentDisplay = <TypeTitleForm onContinue={ goToNextStep } />;
+		stepContentDisplay = <TypeForm onContinue={ goToNextStep } />;
 	} else if ( isComplete ) {
-		stepContentDisplay = <CompletedStep title={ issueTitle } type={ issueType } />;
+		stepContentDisplay = <CompletedStep type={ issueType } />;
 	} else {
 		stepContentDisplay = null;
 	}
 
 	return (
 		<StepContainer
-			title="Type and Title"
+			title="Type"
 			stepNumber={ stepNumber }
 			isComplete={ isComplete }
 			showEditButton={ isComplete }
@@ -54,22 +53,15 @@ export function TypeTitleStep( { stepNumber, goToNextStep }: Props ) {
 
 interface CompletedStepProps {
 	type: IssueType;
-	title?: string;
 }
 
-function CompletedStep( { title, type }: CompletedStepProps ) {
+function CompletedStep( { type }: CompletedStepProps ) {
 	return (
 		<div>
 			<div className={ styles.completedContentWrapper }>
 				<h4 className={ styles.completedContentHeader }>Type</h4>
 				<p className={ styles.completedContentValue }>{ getDisplayTextForType( type ) }</p>
 			</div>
-			{ title && (
-				<div className={ styles.completedContentWrapper }>
-					<h4 className={ styles.completedContentHeader }>Title</h4>
-					<p className={ styles.completedContentValue }>{ title }</p>
-				</div>
-			) }
 		</div>
 	);
 }

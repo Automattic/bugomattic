@@ -1,1 +1,1 @@
-export type ActiveReportingStep = 'typeTitle' | 'featureSelection' | 'nextSteps';
+export type ActiveReportingStep = 'type' | 'featureSelection' | 'nextSteps';

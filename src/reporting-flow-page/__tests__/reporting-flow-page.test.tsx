@@ -126,12 +126,8 @@ describe( '[Reporting Flow]', () => {
 		} );
 	} );
 
-	const issueTitle = 'Foo Bar Issue Title';
-
 	test( 'The steps are arranged in the correct order', async () => {
-		expect(
-			screen.getByRole( 'heading', { name: 'Step number 1: Type and Title' } )
-		).toBeInTheDocument();
+		expect( screen.getByRole( 'heading', { name: 'Step number 1: Type' } ) ).toBeInTheDocument();
 		expect(
 			screen.getByRole( 'heading', { name: 'Step number 2: Product and Feature' } )
 		).toBeInTheDocument();
@@ -140,8 +136,8 @@ describe( '[Reporting Flow]', () => {
 		).toBeInTheDocument();
 	} );
 
-	test( 'The flow starts with the type and title step active', async () => {
-		expect( screen.getByRole( 'form', { name: 'Set issue type and title' } ) ).toBeInTheDocument();
+	test( 'The flow starts with the type step active', async () => {
+		expect( screen.getByRole( 'form', { name: 'Set issue type' } ) ).toBeInTheDocument();
 
 		// Make sure the content of the other steps is not visible
 		expect( screen.queryByRole( 'form', { name: 'Select a feature' } ) ).not.toBeInTheDocument();
@@ -150,37 +146,28 @@ describe( '[Reporting Flow]', () => {
 		).not.toBeInTheDocument();
 	} );
 
-	test( 'Enter issue title, select "Feature Request" type, and click "Continue"', async () => {
-		// Set title
-		await user.click( screen.getByRole( 'textbox', { name: /Title/ } ) );
-		await user.keyboard( issueTitle );
-
+	test( 'Select "Feature Request" type, and click "Continue"', async () => {
 		// Set type
 		await user.click( screen.getByRole( 'radio', { name: 'Feature Request' } ) );
 
 		await user.click( screen.getByRole( 'button', { name: 'Continue' } ) );
 	} );
 
-	test( 'The type and title step is marked as complete', async () => {
-		expect(
-			screen.getByRole( 'heading', { name: 'Completed step: Type and Title' } )
-		).toBeInTheDocument();
+	test( 'The type step is marked as complete', async () => {
+		expect( screen.getByRole( 'heading', { name: 'Completed step: Type' } ) ).toBeInTheDocument();
 	} );
 
-	test( 'The type and title step gets an edit button', async () => {
+	test( 'The type step gets an edit button', async () => {
 		expect(
 			screen.getByRole( 'button', {
 				name: 'Edit',
-				description: /Type and Title/,
+				description: /Type/,
 			} )
 		).toBeInTheDocument();
 	} );
 
-	test( 'The type and title form is replaced with details about issue title and type', async () => {
-		expect(
-			screen.queryByRole( 'form', { name: 'Set issue type and title' } )
-		).not.toBeInTheDocument();
-		expect( screen.getByText( issueTitle ) ).toBeInTheDocument();
+	test( 'The type form is replaced with details about issue type', async () => {
+		expect( screen.queryByRole( 'form', { name: 'Set issue type' } ) ).not.toBeInTheDocument();
 		expect( screen.getByText( 'Feature Request' ) ).toBeInTheDocument();
 	} );
 	test( 'Select a feature (Feature A) and click "Continue"', async () => {
@@ -242,28 +229,26 @@ describe( '[Reporting Flow]', () => {
 		).toBeInTheDocument();
 	} );
 
-	test( 'Click the edit button for the type and title step', async () => {
+	test( 'Click the edit button for the type step', async () => {
 		await user.click(
 			screen.getByRole( 'button', {
 				name: 'Edit',
-				description: /Type and Title/,
+				description: /Type/,
 			} )
 		);
 	} );
 
-	test( 'The type and title step is not marked as complete because it is active', async () => {
+	test( 'The type step is not marked as complete because it is active', async () => {
 		// It reverts to its numerical heading;
-		expect(
-			screen.getByRole( 'heading', { name: 'Step number 1: Type and Title' } )
-		).toBeInTheDocument();
+		expect( screen.getByRole( 'heading', { name: 'Step number 1: Type' } ) ).toBeInTheDocument();
 	} );
 
-	test( 'The edit button for type and title step disappears because it is active', async () => {
+	test( 'The edit button for type step disappears because it is active', async () => {
 		// It reverts to its numerical heading;
 		expect(
 			screen.queryByRole( 'button', {
 				name: 'Edit',
-				description: /Type and Title/,
+				description: /Type/,
 			} )
 		).not.toBeInTheDocument();
 	} );
@@ -282,28 +267,24 @@ describe( '[Reporting Flow]', () => {
 		).toBeInTheDocument();
 	} );
 
-	test( 'Click "Continue" on the edited type and title step', async () => {
+	test( 'Click "Continue" on the edited type step', async () => {
 		await user.click( screen.getByRole( 'button', { name: 'Continue' } ) );
 	} );
 
-	test( 'The title and type form returns to its completed state', async () => {
+	test( 'The type form returns to its completed state', async () => {
 		// Heading
-		expect(
-			screen.getByRole( 'heading', { name: 'Completed step: Type and Title' } )
-		).toBeInTheDocument();
+		expect( screen.getByRole( 'heading', { name: 'Completed step: Type' } ) ).toBeInTheDocument();
 
 		// Edit button
 		expect(
 			screen.getByRole( 'button', {
 				name: 'Edit',
-				description: /Type and Title/,
+				description: /Type/,
 			} )
 		).toBeInTheDocument();
 
 		// No form
-		expect(
-			screen.queryByRole( 'form', { name: 'Set issue type and title' } )
-		).not.toBeInTheDocument();
+		expect( screen.queryByRole( 'form', { name: 'Set issue type' } ) ).not.toBeInTheDocument();
 
 		// Details
 		expect( screen.getByText( "It's Urgent!", { exact: true } ) ).toBeInTheDocument();
@@ -324,11 +305,11 @@ describe( '[Reporting Flow]', () => {
 		);
 	} );
 
-	test( 'Edit the type and title step, change the issue type to "Bug", and continue', async () => {
+	test( 'Edit the type step, change the issue type to "Bug", and continue', async () => {
 		await user.click(
 			screen.getByRole( 'button', {
 				name: 'Edit',
-				description: /Type and Title/,
+				description: /Type/,
 			} )
 		);
 		await user.click( screen.getByRole( 'radio', { name: 'Bug' } ) );
@@ -432,11 +413,9 @@ describe( '[Reporting Flow]', () => {
 		).toBeInTheDocument();
 	} );
 
-	test( 'Does not make the type and title step active because it is already complete', async () => {
+	test( 'Does not make the type step active because it is already complete', async () => {
 		// It's the next step after feature selection, so we automatically go there!
-		expect(
-			screen.queryByRole( 'form', { name: 'Set issue type and title' } )
-		).not.toBeInTheDocument();
+		expect( screen.queryByRole( 'form', { name: 'Set issue type' } ) ).not.toBeInTheDocument();
 	} );
 
 	test( 'The Start Over is not visible yet because tasks are not complete', () => {
@@ -455,7 +434,7 @@ describe( '[Reporting Flow]', () => {
 
 	test( 'Everything resets to its initial state', async () => {
 		// First step is expanded
-		expect( screen.getByRole( 'form', { name: 'Set issue type and title' } ) ).toBeInTheDocument();
+		expect( screen.getByRole( 'form', { name: 'Set issue type' } ) ).toBeInTheDocument();
 		expect( screen.queryByRole( 'form', { name: 'Select a feature' } ) ).not.toBeInTheDocument();
 		expect(
 			screen.queryByRole( 'list', { name: 'Steps to report issue' } )

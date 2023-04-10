@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { FeatureSelectionStep } from './sub-components/feature-selection-step';
 import { NextStepsStep } from './sub-components/next-steps-step';
-import { TypeTitleStep } from './sub-components/type-title-step';
+import { TypeStep } from './sub-components/type-step';
 import styles from './reporting-flow-page.module.css';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { selectIssueFeatureId } from '../issue-details/issue-details-slice';
@@ -37,7 +37,7 @@ function ReportingFlow() {
 		dispatch( updateHistoryWithState() );
 	}, [ dispatch ] );
 
-	const handleTypeTitleNextStep = useCallback( () => {
+	const handleTypeNextStep = useCallback( () => {
 		const featureSelectionStepIsComplete = issueFeatureId !== null;
 		const nextStep: ActiveReportingStep = featureSelectionStepIsComplete
 			? 'nextSteps'
@@ -58,7 +58,7 @@ function ReportingFlow() {
 			<button style={ { marginBottom: '1rem' } } onClick={ handleGoToDuplicateSearchClick }>
 				Go to duplicate searching
 			</button>
-			<TypeTitleStep stepNumber={ 1 } goToNextStep={ handleTypeTitleNextStep } />
+			<TypeStep stepNumber={ 1 } goToNextStep={ handleTypeNextStep } />
 			<FeatureSelectionStep stepNumber={ 2 } goToNextStep={ handleFeatureSelectionNextStep } />
 			<NextStepsStep stepNumber={ 3 } />
 			<StartOverCard />

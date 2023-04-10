@@ -31,7 +31,6 @@ describe( 'history updates', () => {
 	const productName = 'Product';
 	const featureName = 'Unique feature name';
 	const taskName = 'Task Title';
-	const issueTitle = 'Sample Issue Title';
 	const fakeReportingConfigApiResponse: ReportingConfigApiResponse = {
 		[ productName ]: {
 			features: {
@@ -54,12 +53,12 @@ describe( 'history updates', () => {
 	const pointsInTime = [
 		'onStart',
 		'onReportingFlowStart',
-		'onTypeTitleComplete',
+		'onTypeComplete',
 		'onFeatureSelectionComplete',
 		'onFirstTaskComplete',
 		'onFirstTaskUnComplete',
 		'onFeatureSelectionEdit',
-		'onTypeTitleEdit',
+		'onTypeEdit',
 		'onStartOver',
 	] as const;
 
@@ -71,15 +70,11 @@ describe( 'history updates', () => {
 				screen.getByRole( 'heading', { name: 'Search for duplicate issues' } )
 			).toBeInTheDocument();
 
-			expect(
-				screen.queryByRole( 'form', { name: 'Set issue type and title' } )
-			).not.toBeInTheDocument();
+			expect( screen.queryByRole( 'form', { name: 'Set issue type' } ) ).not.toBeInTheDocument();
 		},
 
 		onReportingFlowStart: async () => {
-			expect(
-				screen.getByRole( 'form', { name: 'Set issue type and title' } )
-			).toBeInTheDocument();
+			expect( screen.getByRole( 'form', { name: 'Set issue type' } ) ).toBeInTheDocument();
 			expect(
 				screen.queryByRole( 'button', { name: 'Steps to report issue' } )
 			).not.toBeInTheDocument();
@@ -94,13 +89,10 @@ describe( 'history updates', () => {
 			).not.toBeInTheDocument();
 		},
 
-		onTypeTitleComplete: async () => {
-			expect(
-				screen.getByRole( 'heading', { name: 'Completed step: Type and Title' } )
-			).toBeInTheDocument();
+		onTypeComplete: async () => {
+			expect( screen.getByRole( 'heading', { name: 'Completed step: Type' } ) ).toBeInTheDocument();
 
 			expect( screen.getByRole( 'form', { name: 'Select a feature' } ) ).toBeInTheDocument();
-			expect( screen.getByText( issueTitle ) ).toBeInTheDocument();
 			expect( screen.getByText( 'Feature Request' ) ).toBeInTheDocument();
 
 			expect(
@@ -109,9 +101,7 @@ describe( 'history updates', () => {
 		},
 
 		onFeatureSelectionComplete: async () => {
-			expect(
-				screen.getByRole( 'heading', { name: 'Completed step: Type and Title' } )
-			).toBeInTheDocument();
+			expect( screen.getByRole( 'heading', { name: 'Completed step: Type' } ) ).toBeInTheDocument();
 
 			expect(
 				screen.getByRole( 'heading', { name: 'Completed step: Product and Feature' } )
@@ -122,9 +112,7 @@ describe( 'history updates', () => {
 		},
 
 		onFirstTaskComplete: async () => {
-			expect(
-				screen.getByRole( 'heading', { name: 'Completed step: Type and Title' } )
-			).toBeInTheDocument();
+			expect( screen.getByRole( 'heading', { name: 'Completed step: Type' } ) ).toBeInTheDocument();
 			expect(
 				screen.getByRole( 'heading', { name: 'Completed step: Product and Feature' } )
 			).toBeInTheDocument();
@@ -138,9 +126,7 @@ describe( 'history updates', () => {
 			expect(
 				screen.getByRole( 'heading', { name: 'Completed step: Product and Feature' } )
 			).toBeInTheDocument();
-			expect(
-				screen.getByRole( 'heading', { name: 'Completed step: Type and Title' } )
-			).toBeInTheDocument();
+			expect( screen.getByRole( 'heading', { name: 'Completed step: Type' } ) ).toBeInTheDocument();
 
 			expect(
 				screen.getByRole( 'checkbox', { name: taskName, checked: false } )
@@ -156,24 +142,17 @@ describe( 'history updates', () => {
 				await screen.findByRole( 'button', { name: 'Clear currently selected feature' } )
 			).toBeInTheDocument(); // The current feature should still be selected
 
-			expect(
-				screen.getByRole( 'heading', { name: 'Completed step: Type and Title' } )
-			).toBeInTheDocument();
+			expect( screen.getByRole( 'heading', { name: 'Completed step: Type' } ) ).toBeInTheDocument();
 
 			expect( screen.getByRole( 'list', { name: 'Steps to report issue' } ) ).toBeInTheDocument();
 		},
 
-		onTypeTitleEdit: async () => {
+		onTypeEdit: async () => {
 			expect(
 				screen.getByRole( 'heading', { name: 'Completed step: Product and Feature' } )
 			).toBeInTheDocument();
 
-			expect(
-				screen.getByRole( 'form', { name: 'Set issue type and title' } )
-			).toBeInTheDocument();
-			expect( screen.getByRole( 'textbox', { name: /Title \(Optional\)/ } ) ).toHaveValue(
-				issueTitle
-			);
+			expect( screen.getByRole( 'form', { name: 'Set issue type' } ) ).toBeInTheDocument();
 			expect(
 				screen.getByRole( 'radio', { name: 'Feature Request', checked: true } )
 			).toBeInTheDocument();
@@ -182,9 +161,7 @@ describe( 'history updates', () => {
 		},
 
 		onStartOver: async () => {
-			expect(
-				screen.getByRole( 'form', { name: 'Set issue type and title' } )
-			).toBeInTheDocument();
+			expect( screen.getByRole( 'form', { name: 'Set issue type' } ) ).toBeInTheDocument();
 
 			expect( screen.queryByRole( 'form', { name: 'Select a feature' } ) ).not.toBeInTheDocument();
 			expect( screen.queryByText( featureName ) ).not.toBeInTheDocument();
@@ -199,11 +176,11 @@ describe( 'history updates', () => {
 		onStart: 'WILL BE SET IN TEST',
 		onReportingFlowStart: 'WILL BE SET IN TEST',
 		onFeatureSelectionComplete: 'WILL BE SET IN TEST',
-		onTypeTitleComplete: 'WILL BE SET IN TEST',
+		onTypeComplete: 'WILL BE SET IN TEST',
 		onFirstTaskComplete: 'WILL BE SET IN TEST',
 		onFirstTaskUnComplete: 'WILL BE SET IN TEST',
 		onFeatureSelectionEdit: 'WILL BE SET IN TEST',
-		onTypeTitleEdit: 'WILL BE SET IN TEST',
+		onTypeEdit: 'WILL BE SET IN TEST',
 		onStartOver: 'WILL BE SET IN TEST',
 	};
 
@@ -234,16 +211,14 @@ describe( 'history updates', () => {
 			expect( referenceUrlQueries.onReportingFlowStart ).not.toBe( referenceUrlQueries.onStart );
 		} );
 
-		test( 'onTypeTitleComplete', async () => {
-			await user.click( screen.getByRole( 'textbox', { name: /Title \(Optional\)/ } ) );
-			await user.keyboard( issueTitle );
+		test( 'onTypeComplete', async () => {
 			await user.click( screen.getByRole( 'radio', { name: 'Feature Request' } ) );
 			await user.click( screen.getByRole( 'button', { name: 'Continue' } ) );
 
-			await validations.onTypeTitleComplete();
+			await validations.onTypeComplete();
 
-			referenceUrlQueries.onTypeTitleComplete = history.location.search;
-			expect( referenceUrlQueries.onTypeTitleComplete ).not.toBe(
+			referenceUrlQueries.onTypeComplete = history.location.search;
+			expect( referenceUrlQueries.onTypeComplete ).not.toBe(
 				referenceUrlQueries.onFeatureSelectionComplete
 			);
 		} );
@@ -269,7 +244,7 @@ describe( 'history updates', () => {
 
 			referenceUrlQueries.onFirstTaskComplete = history.location.search;
 			expect( referenceUrlQueries.onFirstTaskComplete ).not.toBe(
-				referenceUrlQueries.onTypeTitleComplete
+				referenceUrlQueries.onTypeComplete
 			);
 		} );
 
@@ -300,18 +275,18 @@ describe( 'history updates', () => {
 			);
 		} );
 
-		test( 'onTypeTitleEdit', async () => {
+		test( 'onTypeEdit', async () => {
 			await user.click(
 				screen.getByRole( 'button', {
 					name: 'Edit',
-					description: /Type and Title/,
+					description: /Type/,
 				} )
 			);
 
-			await validations.onTypeTitleEdit();
+			await validations.onTypeEdit();
 
-			referenceUrlQueries.onTypeTitleEdit = history.location.search;
-			expect( referenceUrlQueries.onTypeTitleEdit ).not.toBe(
+			referenceUrlQueries.onTypeEdit = history.location.search;
+			expect( referenceUrlQueries.onTypeEdit ).not.toBe(
 				referenceUrlQueries.onFeatureSelectionEdit
 			);
 		} );
@@ -324,7 +299,7 @@ describe( 'history updates', () => {
 			await validations.onStartOver();
 
 			referenceUrlQueries.onStartOver = history.location.search;
-			expect( referenceUrlQueries.onStartOver ).not.toBe( referenceUrlQueries.onTypeTitleEdit );
+			expect( referenceUrlQueries.onStartOver ).not.toBe( referenceUrlQueries.onTypeEdit );
 		} );
 	} );
 
