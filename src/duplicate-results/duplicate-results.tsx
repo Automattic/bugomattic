@@ -4,6 +4,7 @@ import {
 	selectDuplicateResults,
 	selectDuplicateResultsRequestStatus,
 } from './duplicate-results-slice';
+import { IssueList } from './sub-components';
 
 // TODO: This is a placeholder component for the duplicate results. Modify and tweak however needed! :)
 export function DuplicateResults() {
@@ -14,13 +15,7 @@ export function DuplicateResults() {
 	if ( resultsRequestStatus === 'pending' ) {
 		display = <p>Loading...</p>;
 	} else {
-		display = (
-			<>
-				{ results.map( ( result ) => (
-					<div key={ result.url }>{ result.content }</div>
-				) ) }
-			</>
-		);
+		display = <IssueList issues={ results } />;
 	}
 	return <section>{ display }</section>;
 }

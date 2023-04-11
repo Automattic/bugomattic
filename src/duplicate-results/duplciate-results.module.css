@@ -1,0 +1,56 @@
+@import '../variables.css';
+
+ol.issueList {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	border: 1px solid var( --color-border );
+	border-radius: 6px;
+	overflow-y: hidden;
+}
+
+li.issueResult {
+	display: flex;
+	flex-direction: row;
+	padding: 1rem 2rem 1rem 0;
+}
+
+.issueResult:hover {
+	background-color: var( --color-primary-extra-light );
+}
+
+.openIssue {
+	border-left: 4px solid green;
+}
+
+.closedIssue {
+	border-left: 4px solid purple;
+}
+
+.issueTitle {
+	margin-top: 0;
+	margin-bottom: 1rem;
+	font-size: var( --font-header );
+}
+
+.issueContent {
+	margin-top: 0;
+	margin-bottom: 1rem;
+}
+
+.issueTitle a {
+	color: var( --color-text-primary );
+	text-decoration: none;
+}
+
+.issueMeta {
+	display: flex;
+	flex-direction: row;
+	column-gap: 1rem;
+	align-items: center;
+	font-size: var( --font-body-small );
+}
+
+.statusIconWrapper {
+	padding: 0 1rem;
+}
