@@ -13,7 +13,10 @@ export function IssueResult( { issue }: Props ) {
 	const { title, url, content, status, dateCreated, dateUpdated, author, repo } = issue;
 
 	const issueId = url.split( '/' ).pop();
-	const tooltipId = `tooltip-${ repo }-${ issueId }`;
+	const uniqueId = `${ repo }-${ issueId }`;
+
+	const titleId = `title-${ uniqueId }`;
+	const tooltipId = `tooltip-${ uniqueId }`;
 
 	const repoWithoutOrg = repo.split( '/' )[ 1 ];
 
@@ -42,33 +45,39 @@ export function IssueResult( { issue }: Props ) {
 
 	return (
 		<li className={ issueResultClasses.join( ' ' ) }>
-			<div className={ styles.statusIconWrapper }>{ statusIcon }</div>
-			<div>
-				<p className={ styles.issueTitle }>
-					<a target="_blank" href={ url } rel="noreferrer">
+			<a
+				aria-labelledby={ titleId }
+				className={ styles.issueLinkWrapper }
+				target="_blank"
+				href={ url }
+				rel="noreferrer"
+			>
+				<div className={ styles.statusIconWrapper }>{ statusIcon }</div>
+				<div>
+					<p className={ styles.issueTitle } id={ titleId }>
 						{ title }
-					</a>
-				</p>
-				<p className={ styles.issueContent }>
-					<TextMatchHighlighter
-						textMatch={ searchMatchRegex }
-						highlightClassName={ styles.searchMatch }
-					>
-						{ content }
-					</TextMatchHighlighter>
-				</p>
-				<div className={ styles.issueMeta }>
-					<span>{ repoWithoutOrg }</span>
-					<span>{ author }</span>
-					<span data-tooltip-id={ tooltipId } data-tooltip-content={ dateCreatedTooltip }>
-						{ dateCreatedDisplay }
-					</span>
-					<span data-tooltip-id={ tooltipId } data-tooltip-content={ dateUpdatedTooltip }>
-						{ dateUpdatedDisplay }
-					</span>
+					</p>
+					<p className={ styles.issueContent }>
+						<TextMatchHighlighter
+							textMatch={ searchMatchRegex }
+							highlightClassName={ styles.searchMatch }
+						>
+							{ content }
+						</TextMatchHighlighter>
+					</p>
+					<div className={ styles.issueMeta }>
+						<span>{ repoWithoutOrg }</span>
+						<span>{ author }</span>
+						<span data-tooltip-id={ tooltipId } data-tooltip-content={ dateCreatedTooltip }>
+							{ dateCreatedDisplay }
+						</span>
+						<span data-tooltip-id={ tooltipId } data-tooltip-content={ dateUpdatedTooltip }>
+							{ dateUpdatedDisplay }
+						</span>
+					</div>
+					<Tooltip id={ tooltipId } />
 				</div>
-				<Tooltip id={ tooltipId } />
-			</div>
+			</a>
 		</li>
 	);
 }
