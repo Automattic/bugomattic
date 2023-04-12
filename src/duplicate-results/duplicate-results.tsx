@@ -24,7 +24,6 @@ export function DuplicateResults() {
 	useEffect( () => {
 		if ( resultsRequestStatus === 'fulfilled' ) {
 			const newHeight = resultsContainerContentRef.current?.clientHeight;
-			console.log( 'new height is: ' + newHeight );
 			setResultsContainerContentHeight( newHeight );
 		}
 	}, [ resultsRequestStatus ] );
