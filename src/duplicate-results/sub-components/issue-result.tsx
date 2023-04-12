@@ -46,7 +46,7 @@ export function IssueResult( { issue }: Props ) {
 						{ title }
 					</a>
 				</p>
-				<p className={ styles.issueContent }>{ content }</p>
+				<p className={ styles.issueContent }>{ highlightSearchMatches( content ) }</p>
 				<div className={ styles.issueMeta }>
 					<span>{ repoWithoutOrg }</span>
 					<span>{ author }</span>
@@ -61,4 +61,42 @@ export function IssueResult( { issue }: Props ) {
 			</div>
 		</li>
 	);
+}
+
+function highlightSearchMatches( content: string ) {
+	const regex = /<em data-search-match>(.*?)<\/em>/g;
+	const outputParts = [];
+	let currentIndex = 0;
+
+	// Using indices as keys isn't generally recommended, but keys aren't really important here.
+	// We'll always be re-rendering everything on each pass.
+
+	for ( const match of content.matchAll( regex ) ) {
+		const fullMatchText = match[ 0 ];
+		const captureGroupText = match[ 1 ];
+		const matchStartIndex = match.index as number; // match.index is always defined when using matchAll.
+
+		// Add the text before the match.
+		outputParts.push(
+			<span key={ currentIndex }>{ content.slice( currentIndex, matchStartIndex ) }</span>
+		);
+
+		// Add the matched, highlighted text.
+		outputParts.push(
+			<span
+				key={ matchStartIndex }
+				data-testid="highlighted-substring"
+				className={ styles.searchMatch }
+			>
+				{ captureGroupText }
+			</span>
+		);
+
+		// Update the current index to the end of the match.
+		currentIndex = matchStartIndex + fullMatchText.length;
+	}
+
+	outputParts.push( <span key={ currentIndex }>{ content.slice( currentIndex ) }</span> );
+
+	return outputParts;
 }

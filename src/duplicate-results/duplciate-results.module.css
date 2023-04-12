@@ -54,3 +54,7 @@ li.issueResult {
 .statusIconWrapper {
 	padding: 0 1rem;
 }
+
+.searchMatch {
+	font-weight: 700;
+}

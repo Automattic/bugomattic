@@ -44,7 +44,7 @@ export const localApiClient: ApiClient = {
 			const providedRepos = ( options?.repos || [ 'none provided' ] ).join( ', ' );
 			const providedStatus = options?.status || 'none provided';
 			const providedSort = options?.sort || 'none provided';
-			const content = `Search: <em data-search-match>${ search }</em> | Repos: ${ providedRepos } | Status: ${ providedStatus } | Sort: ${ providedSort }`;
+			const content = `Search: <em data-search-match>${ search }</em>. And another match: <em data-search-match>foo</em>. | Repos: ${ providedRepos } | Status: ${ providedStatus } | Sort: ${ providedSort }`;
 
 			const status = Math.random() > 0.5 ? 'open' : 'closed';
 
