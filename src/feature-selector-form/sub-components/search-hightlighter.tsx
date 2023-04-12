@@ -13,7 +13,7 @@ export function SearchHighlighter( { children }: Props ) {
 
 	return (
 		<SubstringHighlighter
-			substring={ searchTerm }
+			textMatch={ searchTerm }
 			highlightClassName={ styles.searchSubstringMatch }
 		>
 			{ children }

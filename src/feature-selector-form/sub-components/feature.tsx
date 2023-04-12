@@ -66,7 +66,7 @@ export function Feature( { id }: Props ) {
 			>
 				<span id={ featureNameId }>
 					<SubstringHighlighter
-						substring={ searchTerm }
+						textMatch={ searchTerm }
 						highlightClassName={ styles.searchSubstringMatch }
 					>
 						{ featureName }
