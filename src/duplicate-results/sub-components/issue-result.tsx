@@ -2,7 +2,7 @@ import React from 'react';
 import { Issue } from '../types';
 import { formatDistance, format } from 'date-fns';
 import { Tooltip } from 'react-tooltip';
-import styles from '../duplciate-results.module.css';
+import styles from '../duplicate-results.module.css';
 import { TextMatchHighlighter } from '../../common/components';
 
 interface Props {
