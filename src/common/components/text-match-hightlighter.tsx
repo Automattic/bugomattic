@@ -6,7 +6,7 @@ interface Props {
 	highlightClassName: string;
 }
 
-export function SubstringHighlighter( {
+export function TextMatchHighlighter( {
 	children: content,
 	textMatch,
 	highlightClassName,
@@ -23,9 +23,9 @@ export function SubstringHighlighter( {
 	}
 
 	const outputParts = [];
-	let currentIndex = 0;
+	let endIndexOfLastMatch = 0;
 
-	// Note: using indices as keys isn't generally recommended, but keys aren't really important here.
+	// Note: using indices as React keys isn't generally recommended, but it's the right call here.
 	// We'll always be re-rendering everything on each pass. We're just avoiding console errors.
 	for ( const match of content.matchAll( regex ) ) {
 		const fullMatchText = match[ 0 ];
@@ -34,10 +34,12 @@ export function SubstringHighlighter( {
 		const matchStartIndex = match.index as number; // match.index is always defined when using matchAll.
 
 		// Make sure the match isn't right at the start, or right after another match.
-		if ( currentIndex !== matchStartIndex ) {
-			// Add the text before the match.
+		if ( endIndexOfLastMatch !== matchStartIndex ) {
+			// And if it's not, add the text before the match.
 			outputParts.push(
-				<span key={ currentIndex }>{ content.slice( currentIndex, matchStartIndex ) }</span>
+				<span key={ endIndexOfLastMatch }>
+					{ content.slice( endIndexOfLastMatch, matchStartIndex ) }
+				</span>
 			);
 		}
 
@@ -55,10 +57,12 @@ export function SubstringHighlighter( {
 		);
 
 		// Update the current index to the end of the match.
-		currentIndex = matchStartIndex + fullMatchText.length;
+		endIndexOfLastMatch = matchStartIndex + fullMatchText.length;
 	}
 
-	outputParts.push( <span key={ currentIndex }>{ content.slice( currentIndex ) }</span> );
+	outputParts.push(
+		<span key={ endIndexOfLastMatch }>{ content.slice( endIndexOfLastMatch ) }</span>
+	);
 
 	return <>{ outputParts }</>;
 }

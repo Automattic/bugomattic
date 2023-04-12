@@ -3,7 +3,7 @@ import { Issue } from '../types';
 import { formatDistance, format } from 'date-fns';
 import { Tooltip } from 'react-tooltip';
 import styles from '../duplciate-results.module.css';
-import { SubstringHighlighter } from '../../common/components';
+import { TextMatchHighlighter } from '../../common/components';
 
 interface Props {
 	issue: Issue;
@@ -50,12 +50,12 @@ export function IssueResult( { issue }: Props ) {
 					</a>
 				</p>
 				<p className={ styles.issueContent }>
-					<SubstringHighlighter
+					<TextMatchHighlighter
 						textMatch={ searchMatchRegex }
 						highlightClassName={ styles.searchMatch }
 					>
 						{ content }
-					</SubstringHighlighter>
+					</TextMatchHighlighter>
 				</p>
 				<div className={ styles.issueMeta }>
 					<span>{ repoWithoutOrg }</span>
