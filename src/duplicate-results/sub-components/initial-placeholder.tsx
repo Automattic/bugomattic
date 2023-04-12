@@ -1,5 +1,5 @@
 import React from 'react';
-import { ReactComponent as PlaceholderIllustration } from './placeholder-illustration.svg';
+import { ReactComponent as PlaceholderIllustration } from './initial-placeholder.svg';
 import styles from '../duplicate-results.module.css';
 
 export function DuplicateResultsInitialPlaceholder() {

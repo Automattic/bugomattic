@@ -7,6 +7,7 @@
 	border-radius: 6px;
 	overflow-y: hidden;
 	background-color: var( --color-shaded-background );
+	position: relative;
 }
 
 ol.issueList {
@@ -106,6 +107,7 @@ p.issueContent {
 .placeholderIllustration {
 	width: 100%;
 	max-width: 300px;
+	height: auto;
 }
 
 h3.placeholderHeader {
@@ -128,8 +130,12 @@ p.placeholderText {
 	align-items: center;
 	justify-content: center;
 	text-align: center;
-	height: 100%;
-	max-height: 600px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	max-height: 480px;
 }
 
 .loadingMessage {
