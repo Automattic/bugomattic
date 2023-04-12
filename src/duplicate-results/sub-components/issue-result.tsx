@@ -52,8 +52,12 @@ export function IssueResult( { issue }: Props ) {
 				href={ url }
 				rel="noreferrer"
 			>
-				<div className={ styles.statusIconWrapper }>{ statusIcon }</div>
-				<div>
+				<div className={ styles.statusIconWrapper }>
+					<span data-tooltip-id={ tooltipId } data-tooltip-content={ status }>
+						{ statusIcon }
+					</span>
+				</div>
+				<div className={ styles.issueDetailsWrapper }>
 					<p className={ styles.issueTitle } id={ titleId }>
 						{ title }
 					</p>
@@ -66,7 +70,9 @@ export function IssueResult( { issue }: Props ) {
 						</TextMatchHighlighter>
 					</p>
 					<div className={ styles.issueMeta }>
-						<span>{ repoWithoutOrg }</span>
+						<span data-tooltip-id={ tooltipId } data-tooltip-content={ repo }>
+							{ repoWithoutOrg }
+						</span>
 						<span>{ author }</span>
 						<span data-tooltip-id={ tooltipId } data-tooltip-content={ dateCreatedTooltip }>
 							{ dateCreatedDisplay }
@@ -75,9 +81,9 @@ export function IssueResult( { issue }: Props ) {
 							{ dateUpdatedDisplay }
 						</span>
 					</div>
-					<Tooltip id={ tooltipId } />
 				</div>
 			</a>
+			<Tooltip id={ tooltipId } place="bottom" />
 		</li>
 	);
 }

@@ -21,6 +21,11 @@ a.issueLinkWrapper {
 	padding: 1rem 2rem 1rem 0;
 }
 
+.issueDetailsWrapper {
+	/* This is needed to support ellipsis truncating in the child elements */
+	min-width: 0;
+}
+
 .issueResult:hover {
 	background-color: var( --color-primary-extra-light );
 }
@@ -33,15 +38,37 @@ a.issueLinkWrapper {
 	border-left: 4px solid purple;
 }
 
-.issueTitle {
+p.issueTitle {
 	margin-top: 0;
 	margin-bottom: 1rem;
 	font-size: var( --font-header );
+
+	/* (GPT4-generated) This block truncates after two lines. */
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: normal;
+	max-height: calc( 1.2em * 2 );
+	line-height: 1.2;
+	overflow-wrap: break-word;
 }
 
-.issueContent {
+p.issueContent {
 	margin-top: 0;
 	margin-bottom: 1rem;
+
+	/* (GPT4-generated) This block truncates after two lines. */
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: normal;
+	max-height: calc( 1.2em * 2 );
+	line-height: 1.2;
+	overflow-wrap: break-word;
 }
 
 .issueMeta {

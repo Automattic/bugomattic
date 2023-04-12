@@ -102,7 +102,6 @@ a.taskTitle:hover {
 .moreInfoColumn {
 	min-width: 0;
 	overflow-wrap: break-word;
-	word-wrap: break-word;
 }
 
 .moreInfoColumn:nth-child( n + 2 ) {

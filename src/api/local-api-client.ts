@@ -39,12 +39,14 @@ export const localApiClient: ApiClient = {
 		const issues: Issue[] = [];
 		for ( let i = 0; i < numberOfIssues; i++ ) {
 			const randomString = Math.random().toString( 16 ).slice( 2 );
-			const title = `Issue ${ randomString }`;
+			const title = `Issue ${ randomString } ${ 'abc'.repeat( 50 ) }`;
+
+			const url = `https://github.com/Automattic/wp-calypso/issues/${ i }`;
 
 			const providedRepos = ( options?.repos || [ 'none provided' ] ).join( ', ' );
 			const providedStatus = options?.status || 'none provided';
 			const providedSort = options?.sort || 'none provided';
-			const content = `Search: <em data-search-match>${ search }</em>. And another match: <em data-search-match>foo</em>. | Repos: ${ providedRepos } | Status: ${ providedStatus } | Sort: ${ providedSort }`;
+			const content = `Search: <em data-search-match>${ search }</em>. And another match: <em data-search-match>foo</em>. | Repos: ${ providedRepos } | Status: ${ providedStatus } | Sort: ${ providedSort } ${ url }`;
 
 			const status = Math.random() > 0.5 ? 'open' : 'closed';
 
@@ -61,7 +63,7 @@ export const localApiClient: ApiClient = {
 				status,
 				author: 'Fake Author',
 				repo: 'Fakeorg/fake-repo',
-				url: `https://github.com/Automattic/wp-calypso/issues/${ i }`,
+				url: url,
 			} );
 		}
 
