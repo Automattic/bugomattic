@@ -33,6 +33,14 @@ a.issueLinkWrapper {
 	min-width: 0;
 }
 
+.issueResult:nth-child( 2n ) {
+	background-color: #fafafa;
+}
+
+.issueResult:nth-child( 2n + 1 ) {
+	background-color: var( --color-white );
+}
+
 .issueResult:hover {
 	background-color: var( --color-primary-extra-light );
 }
