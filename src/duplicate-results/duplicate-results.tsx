@@ -15,15 +15,20 @@ export function DuplicateResults() {
 	const resultsRequestStatus = useAppSelector( selectDuplicateResultsRequestStatus );
 	const noRequestsMade = useAppSelector( selectNoDuplicateRequestsMade );
 
-	let display: ReactNode;
+	let resultsContainerDisplay: ReactNode;
 
 	if ( noRequestsMade ) {
-		display = <DuplicateResultsInitialPlaceholder />;
+		resultsContainerDisplay = <DuplicateResultsInitialPlaceholder />;
 	} else if ( resultsRequestStatus === 'pending' ) {
-		display = <DuplicateResultsLoadingIndicator />;
+		resultsContainerDisplay = <DuplicateResultsLoadingIndicator />;
 	} else {
-		display = <IssueList issues={ results } />;
+		resultsContainerDisplay = <IssueList issues={ results } />;
 	}
 
-	return <section className={ styles.resultsSection }>{ display }</section>;
+	return (
+		<section>
+			<div className={ styles.resultsContainer }>{ resultsContainerDisplay }</div>
+			{ ! noRequestsMade && <p>Banner Placeholder</p> }
+		</section>
+	);
 }

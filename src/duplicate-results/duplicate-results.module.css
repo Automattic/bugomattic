@@ -1,6 +1,6 @@
 @import '../variables.css';
 
-.resultsSection {
+.resultsContainer {
 	padding: 0;
 	margin: 0;
 	border: 1px solid var( --color-border );
