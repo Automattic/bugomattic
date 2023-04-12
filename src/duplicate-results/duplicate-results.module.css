@@ -1,12 +1,18 @@
 @import '../variables.css';
 
-ol.issueList {
-	list-style: none;
+.resultsSection {
 	padding: 0;
 	margin: 0;
 	border: 1px solid var( --color-border );
 	border-radius: 6px;
 	overflow-y: hidden;
+	background-color: var( --color-shaded-background );
+}
+
+ol.issueList {
+	list-style: none;
+	padding: 0;
+	margin: 0;
 }
 
 li.issueResult {
@@ -86,6 +92,50 @@ p.issueContent {
 
 .searchMatch {
 	font-weight: 700;
+}
+
+.placeholderWrapper {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	padding: 3rem 1rem;
+}
+
+.placeholderIllustration {
+	width: 100%;
+	max-width: 300px;
+}
+
+h3.placeholderHeader {
+	font-size: var( --font-header );
+	margin-top: 0;
+	margin-bottom: 0.5rem;
+	font-weight: 500;
+}
+
+p.placeholderText {
+	font-size: var( --font-body );
+	margin-top: 0;
+	margin-bottom: 0;
+	font-weight: 300;
+}
+
+.loadingWrapper {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	height: 100%;
+	max-height: 600px;
+}
+
+.loadingMessage {
+	font-size: var( --font-header );
+	margin: 0;
+	font-weight: 500;
 }
 
 @media only screen and ( max-width: 600px ) {
