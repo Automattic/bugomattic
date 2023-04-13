@@ -6,6 +6,7 @@ import styles from '../duplicate-results.module.css';
 import { TextMatchHighlighter } from '../../common/components';
 import { ReactComponent as OpenIcon } from '../svgs/open-icon.svg';
 import { ReactComponent as ClosedIcon } from '../svgs/closed-icon.svg';
+import { replaceSpaces } from '../../common/lib';
 
 interface Props {
 	issue: Issue;
@@ -14,8 +15,9 @@ interface Props {
 export function IssueResult( { issue }: Props ) {
 	const { title, url, content, status, dateCreated, dateUpdated, author, repo } = issue;
 
-	const issueId = url.split( '/' ).pop();
-	const uniqueId = `${ repo }-${ issueId }`;
+	const issueId = url.split( '/' ).pop(); // Last piece of the URL
+	// Combo of repo and issue ID should make a unique ID we can use for various elements.
+	const uniqueId = replaceSpaces( `${ repo }-${ issueId }` );
 
 	const titleId = `title-${ uniqueId }`;
 	const tooltipId = `tooltip-${ uniqueId }`;

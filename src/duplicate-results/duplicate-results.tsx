@@ -14,18 +14,20 @@ import { LoadingIndicator } from '../common/components';
 export function DuplicateResults() {
 	const results = useAppSelector( selectDuplicateResults );
 	const resultsRequestStatus = useAppSelector( selectDuplicateResultsRequestStatus );
-	const requestsMade = useAppSelector( selectDuplicateRequestsWereMade );
+	const requestsWereMade = useAppSelector( selectDuplicateRequestsWereMade );
 
 	// We want to handle the case when we come back to this page.
 	// Since this is local state, we want to tie it back to the redux state.
-	const [ showBanner, setShowBanner ] = useState( requestsMade );
+	const [ showBanner, setShowBanner ] = useState( requestsWereMade );
 
 	useEffect( () => {
-		if ( requestsMade && resultsRequestStatus === 'fulfilled' ) {
+		if ( requestsWereMade && resultsRequestStatus === 'fulfilled' ) {
 			setShowBanner( true );
 		}
-	}, [ requestsMade, resultsRequestStatus ] );
+	}, [ requestsWereMade, resultsRequestStatus ] );
 
+	// This ref and corresponding useEffect hook are used to preserve the height of the
+	// results container between searches. This keeps the UI from jumping around while searching.
 	const resultsContainerContentRef = useRef< HTMLDivElement >( null );
 	const [ resultsContainerContentHeight, setResultsContainerContentHeight ] = useState<
 		number | undefined
@@ -41,7 +43,7 @@ export function DuplicateResults() {
 	const resultsLimit = 20; // We can tweak this as needed!
 
 	let resultsContainerDisplay: ReactNode;
-	if ( ! requestsMade ) {
+	if ( ! requestsWereMade ) {
 		resultsContainerDisplay = (
 			<PlaceholderMessage
 				illustration={ InitialIllustration }
