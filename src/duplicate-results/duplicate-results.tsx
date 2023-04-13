@@ -3,18 +3,27 @@ import { useAppSelector } from '../app/hooks';
 import {
 	selectDuplicateResults,
 	selectDuplicateResultsRequestStatus,
-	selectNoDuplicateRequestsMade,
+	selectDuplicateRequestsWereMade,
 } from './duplicate-results-slice';
 import { DuplicateResultsLoadingIndicator, IssueList } from './sub-components';
 import styles from './duplicate-results.module.css';
 import { DuplicateResultsInitialPlaceholder } from './sub-components/initial-placeholder';
 import { NoDuplicateResultsFound } from './sub-components/no-results-found';
 
-// TODO: This is a placeholder component for the duplicate results. Modify and tweak however needed! :)
 export function DuplicateResults() {
 	const results = useAppSelector( selectDuplicateResults );
 	const resultsRequestStatus = useAppSelector( selectDuplicateResultsRequestStatus );
-	const noRequestsMade = useAppSelector( selectNoDuplicateRequestsMade );
+	const requestsMade = useAppSelector( selectDuplicateRequestsWereMade );
+
+	// We want to handle the case when we come back to this page.
+	// Since this is local state, we want to tie it back to the redux state.
+	const [ showBanner, setShowBanner ] = useState( requestsMade );
+
+	useEffect( () => {
+		if ( requestsMade && resultsRequestStatus === 'fulfilled' ) {
+			setShowBanner( true );
+		}
+	}, [ requestsMade, resultsRequestStatus ] );
 
 	const resultsContainerContentRef = useRef< HTMLDivElement >( null );
 	const [ resultsContainerContentHeight, setResultsContainerContentHeight ] = useState<
@@ -31,7 +40,7 @@ export function DuplicateResults() {
 	const resultsLimit = 20; // We can tweak this as needed!
 
 	let resultsContainerDisplay: ReactNode;
-	if ( noRequestsMade ) {
+	if ( ! requestsMade ) {
 		resultsContainerDisplay = <DuplicateResultsInitialPlaceholder />;
 	} else if ( resultsRequestStatus === 'pending' ) {
 		resultsContainerDisplay = <DuplicateResultsLoadingIndicator />;
@@ -50,7 +59,7 @@ export function DuplicateResults() {
 				{ /* We need another wrapper here to accurately get the height of the display content */ }
 				<div ref={ resultsContainerContentRef }>{ resultsContainerDisplay }</div>
 			</div>
-			{ ! noRequestsMade && <p>Banner Placeholder</p> }
+			{ showBanner && <p>Banner Placeholder</p> }
 		</section>
 	);
 }

@@ -70,6 +70,6 @@ export function selectDuplicateResultsRequestError( state: RootState ) {
 	return state.duplicateResults.requestError;
 }
 
-export function selectNoDuplicateRequestsMade( state: RootState ) {
-	return state.duplicateResults.currentRequestId === '';
+export function selectDuplicateRequestsWereMade( state: RootState ) {
+	return state.duplicateResults.currentRequestId !== '';
 }
