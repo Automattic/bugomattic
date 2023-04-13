@@ -4,8 +4,8 @@ import { formatDistance, format } from 'date-fns';
 import { Tooltip } from 'react-tooltip';
 import styles from '../duplicate-results.module.css';
 import { TextMatchHighlighter } from '../../common/components';
-import { ReactComponent as OpenIcon } from './open-icon.svg';
-import { ReactComponent as ClosedIcon } from './closed-icon.svg';
+import { ReactComponent as OpenIcon } from '../svgs/open-icon.svg';
+import { ReactComponent as ClosedIcon } from '../svgs/closed-icon.svg';
 
 interface Props {
 	issue: Issue;

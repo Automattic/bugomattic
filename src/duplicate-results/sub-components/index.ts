@@ -1,3 +1,3 @@
 export * from './issue-list';
-export * from './initial-placeholder';
+export * from './placeholder-message';
 export * from './loading-indicator';

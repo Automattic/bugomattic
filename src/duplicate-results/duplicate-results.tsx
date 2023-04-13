@@ -5,10 +5,10 @@ import {
 	selectDuplicateResultsRequestStatus,
 	selectDuplicateRequestsWereMade,
 } from './duplicate-results-slice';
-import { DuplicateResultsLoadingIndicator, IssueList } from './sub-components';
+import { DuplicateResultsLoadingIndicator, IssueList, PlaceholderMessage } from './sub-components';
 import styles from './duplicate-results.module.css';
-import { DuplicateResultsInitialPlaceholder } from './sub-components/initial-placeholder';
-import { NoDuplicateResultsFound } from './sub-components/no-results-found';
+import { ReactComponent as InitialIllustration } from './svgs/initial-illustration.svg';
+import { ReactComponent as NoResultsIllustration } from '../common/svgs/missing-info.svg';
 
 export function DuplicateResults() {
 	const results = useAppSelector( selectDuplicateResults );
@@ -41,11 +41,23 @@ export function DuplicateResults() {
 
 	let resultsContainerDisplay: ReactNode;
 	if ( ! requestsMade ) {
-		resultsContainerDisplay = <DuplicateResultsInitialPlaceholder />;
+		resultsContainerDisplay = (
+			<PlaceholderMessage
+				illustration={ InitialIllustration }
+				header="Enter some keywords to search for duplicates."
+				message="Click on “Report an Issue” to open a bug, request a few feature, and more."
+			/>
+		);
 	} else if ( resultsRequestStatus === 'pending' ) {
 		resultsContainerDisplay = <DuplicateResultsLoadingIndicator />;
 	} else if ( results.length === 0 ) {
-		resultsContainerDisplay = <NoDuplicateResultsFound />;
+		resultsContainerDisplay = (
+			<PlaceholderMessage
+				illustration={ NoResultsIllustration }
+				header="No results found."
+				message="Try a different search or change your filters. You can also report a new issue below."
+			/>
+		);
 	} else {
 		resultsContainerDisplay = <IssueList issues={ results.slice( 0, resultsLimit ) } />;
 	}
