@@ -49,7 +49,7 @@ export function TextMatchHighlighter( {
 		outputParts.push(
 			<span
 				key={ matchStartIndex }
-				data-testid="highlighted-substring"
+				data-testid="highlighted-text-match"
 				className={ highlightClassName }
 			>
 				{ matchDisplayText }

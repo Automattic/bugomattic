@@ -38,9 +38,9 @@ export function IssueResult( { issue }: Props ) {
 
 	let statusIcon: ReactNode;
 	if ( status === 'open' ) {
-		statusIcon = <OpenIcon className={ styles.statusIcon } />;
+		statusIcon = <OpenIcon data-testid="open-icon" className={ styles.statusIcon } />;
 	} else {
-		statusIcon = <ClosedIcon className={ styles.statusIcon } />;
+		statusIcon = <ClosedIcon data-testid="closed-icon" className={ styles.statusIcon } />;
 	}
 
 	const issueResultClasses = [ styles.issueResult ];

@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import { TextMatchHighlighter } from '../text-match-hightlighter';
 
 describe( '[TextMatchHighlighter]', () => {
-	const testId = 'highlighted-substring';
+	const testId = 'highlighted-text-match';
 	const highlightClassName = 'fake-class-name';
 
 	function makeExactMatchRegex( string: string ) {
