@@ -8,6 +8,7 @@ import {
 	setStatusFilter,
 	setSearchParam,
 } from './duplicate-search-slice';
+import { StatusFilter } from './sub-components';
 
 // TODO: This is a placeholder component for the duplicate search controls. Modify and tweak however needed! :)
 export function DuplicateSearchControls() {
@@ -28,6 +29,9 @@ export function DuplicateSearchControls() {
 			<p>This is just a filler component</p>
 			<button onClick={ handleFauxSearch }>Faux search</button>
 			<p>Available repo filters: { repoFilters.join( ', ' ) }</p>
+			<div>
+				<StatusFilter />
+			</div>
 		</section>
 	);
 }
