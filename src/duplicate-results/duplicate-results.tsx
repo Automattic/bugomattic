@@ -31,8 +31,6 @@ export function DuplicateResults() {
 		}
 	}, [ resultsRequestStatus ] );
 
-	console.log( 'render' );
-
 	const resultsLimit = 20; // We can tweak this as needed!
 
 	let resultsContainerDisplay: ReactNode;
