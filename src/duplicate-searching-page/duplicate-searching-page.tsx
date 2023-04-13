@@ -16,8 +16,9 @@ export function DuplicateSearchingPage() {
 		<section
 			// TODO: update with a real CSS module for this overall page.
 			style={ {
-				maxWidth: '800px',
+				maxWidth: '920px',
 				margin: '0 auto',
+				padding: '0 0.5rem',
 			} }
 		>
 			<h2 className="screenReaderOnly">Search for duplicate issues</h2>

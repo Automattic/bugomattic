@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { Issue } from '../types';
 import { formatDistance, format } from 'date-fns';
 import { Tooltip } from 'react-tooltip';
 import styles from '../duplicate-results.module.css';
 import { TextMatchHighlighter } from '../../common/components';
+import { ReactComponent as OpenIcon } from './open-icon.svg';
+import { ReactComponent as ClosedIcon } from './closed-icon.svg';
 
 interface Props {
 	issue: Issue;
@@ -32,7 +34,12 @@ export function IssueResult( { issue }: Props ) {
 	} ) }`;
 	const dateUpdatedTooltip = format( new Date( dateUpdated ), 'PPpppp' );
 
-	const statusIcon = status === 'open' ? '🟢' : '🔴';
+	let statusIcon: ReactNode;
+	if ( status === 'open' ) {
+		statusIcon = <OpenIcon className={ styles.statusIcon } />;
+	} else {
+		statusIcon = <ClosedIcon className={ styles.statusIcon } />;
+	}
 
 	const issueResultClasses = [ styles.issueResult ];
 	if ( status === 'closed' ) {

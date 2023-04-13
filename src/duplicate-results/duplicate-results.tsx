@@ -28,8 +28,9 @@ export function DuplicateResults() {
 		}
 	}, [ resultsRequestStatus ] );
 
-	let resultsContainerDisplay: ReactNode;
+	const resultsLimit = 20; // We can tweak this as needed!
 
+	let resultsContainerDisplay: ReactNode;
 	if ( noRequestsMade ) {
 		resultsContainerDisplay = <DuplicateResultsInitialPlaceholder />;
 	} else if ( resultsRequestStatus === 'pending' ) {
@@ -37,7 +38,7 @@ export function DuplicateResults() {
 	} else if ( results.length === 0 ) {
 		resultsContainerDisplay = <NoDuplicateResultsFound />;
 	} else {
-		resultsContainerDisplay = <IssueList issues={ results } />;
+		resultsContainerDisplay = <IssueList issues={ results.slice( 0, resultsLimit ) } />;
 	}
 
 	return (

@@ -25,7 +25,7 @@ a.issueLinkWrapper {
 	flex-direction: row;
 	color: var( --color-text-primary );
 	text-decoration: none;
-	padding: 1rem 2rem 1rem 0;
+	padding: 0.75rem 1.25rem 0.75rem 0;
 }
 
 .issueDetailsWrapper {
@@ -46,17 +46,18 @@ a.issueLinkWrapper {
 }
 
 .openIssue {
-	border-left: 4px solid green;
+	border-left: 4px solid #4ab866;
 }
 
 .closedIssue {
-	border-left: 4px solid purple;
+	border-left: 4px solid #7a00df;
 }
 
 p.issueTitle {
 	margin-top: 0;
-	margin-bottom: 1rem;
+	margin-bottom: 0.5rem;
 	font-size: var( --font-header );
+	font-weight: 500;
 
 	/* (GPT4-generated) This block truncates after two lines. */
 	display: -webkit-box;
@@ -72,7 +73,8 @@ p.issueTitle {
 
 p.issueContent {
 	margin-top: 0;
-	margin-bottom: 1rem;
+	margin-bottom: 0.75rem;
+	font-weight: 300;
 
 	/* (GPT4-generated) This block truncates after two lines. */
 	display: -webkit-box;
@@ -92,11 +94,16 @@ p.issueContent {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
-	column-gap: 1rem;
+	column-gap: 1.125rem;
+}
+
+.statusIcon {
+	height: 1.5rem;
+	width: 1.5rem;
 }
 
 .statusIconWrapper {
-	padding: 0 1rem;
+	padding: 0 0.75rem;
 }
 
 .searchMatch {
