@@ -20,14 +20,14 @@ export function DuplicateResults() {
 	// This ref and corresponding useEffect hook are used to preserve the height of the
 	// results container between searches. This keeps the UI from jumping around while searching.
 	const resultsContainerContentRef = useRef< HTMLDivElement >( null );
-	const [ resultsContainerContentHeight, setResultsContainerContentHeight ] = useState<
+	const [ resultsContainerContentHeightPx, setResultsContainerContentHeightPx ] = useState<
 		number | undefined
 	>( undefined );
 
 	useEffect( () => {
 		if ( resultsRequestStatus === 'fulfilled' ) {
 			const newHeight = resultsContainerContentRef.current?.clientHeight;
-			setResultsContainerContentHeight( newHeight );
+			setResultsContainerContentHeightPx( newHeight );
 		}
 	}, [ resultsRequestStatus ] );
 
@@ -72,7 +72,9 @@ export function DuplicateResults() {
 		<section>
 			<div
 				className={ styles.resultsContainer }
-				style={ resultsContainerContentHeight ? { minHeight: resultsContainerContentHeight } : {} }
+				style={
+					resultsContainerContentHeightPx ? { minHeight: resultsContainerContentHeightPx } : {}
+				}
 			>
 				{ /* We need another wrapper here to accurately get the height of the display content */ }
 				<div ref={ resultsContainerContentRef }>{ resultsContainerDisplay }</div>

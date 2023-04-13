@@ -8,6 +8,10 @@
 	overflow-y: hidden;
 	background-color: var( --color-shaded-background );
 	position: relative;
+	/* The min heights of this container is set directly in the React component based on the height of its content.
+	However, because the loading indicator is absolutely positioned, we need to set a fallback min height here.
+	This handles the edge case where you change pages and come back mid-request. */
+	min-height: 160px;
 }
 
 ol.issueList {
