@@ -8,7 +8,7 @@ import { useAppSelector } from './hooks';
 import { DuplicateSearchingPage } from '../duplicate-searching-page/duplicate-searching-page';
 import { ReportingFlowPage } from '../reporting-flow-page/reporting-flow-page';
 import { useAppDataHydration } from './use-app-data-hydration';
-import { AnimatedEllipsis } from '../common/components';
+import { LoadingIndicator } from '../common/components';
 
 export function App() {
 	const monitoringClient = useMonitoring();
@@ -53,21 +53,12 @@ function AppLoadingIndicator() {
 		'"Hydrating app data" -- whatever that means!',
 		"We're getting ready, be down in a hurry!",
 	];
-
 	const randomIndex = Math.floor( Math.random() * messages.length );
-
 	const message = messages[ randomIndex ];
 
 	return (
-		<div
-			className={ styles.loadingWrapper }
-			aria-relevant="all"
-			role="alert"
-			// For screen readers, let's be clear of the alert's intent.
-			aria-label="Loading required app data"
-		>
-			<span className={ styles.loadingMessage }>{ message }</span>
-			<AnimatedEllipsis aria-hidden={ true } />
+		<div className={ styles.loadingWrapper }>
+			<LoadingIndicator message={ message } ariaLabel="Loading required app data" />
 		</div>
 	);
 }

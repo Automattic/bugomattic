@@ -18,7 +18,6 @@ export function DuplicateSearchingPage() {
 			style={ {
 				maxWidth: '920px',
 				margin: '0 auto',
-				padding: '0 0.5rem',
 			} }
 		>
 			<h2 className="screenReaderOnly">Search for duplicate issues</h2>

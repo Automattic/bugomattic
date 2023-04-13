@@ -153,12 +153,6 @@ p.placeholderText {
 	max-height: 480px;
 }
 
-.loadingMessage {
-	font-size: var( --font-header );
-	margin: 0;
-	font-weight: 500;
-}
-
 @media only screen and ( max-width: 600px ) {
 	.issueMeta {
 		display: grid;

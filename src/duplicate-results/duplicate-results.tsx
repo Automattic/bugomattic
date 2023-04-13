@@ -5,10 +5,11 @@ import {
 	selectDuplicateResultsRequestStatus,
 	selectDuplicateRequestsWereMade,
 } from './duplicate-results-slice';
-import { DuplicateResultsLoadingIndicator, IssueList, PlaceholderMessage } from './sub-components';
+import { IssueList, PlaceholderMessage } from './sub-components';
 import styles from './duplicate-results.module.css';
 import { ReactComponent as InitialIllustration } from './svgs/initial-illustration.svg';
 import { ReactComponent as NoResultsIllustration } from '../common/svgs/missing-info.svg';
+import { LoadingIndicator } from '../common/components';
 
 export function DuplicateResults() {
 	const results = useAppSelector( selectDuplicateResults );
@@ -49,7 +50,14 @@ export function DuplicateResults() {
 			/>
 		);
 	} else if ( resultsRequestStatus === 'pending' ) {
-		resultsContainerDisplay = <DuplicateResultsLoadingIndicator />;
+		resultsContainerDisplay = (
+			<div className={ styles.loadingWrapper }>
+				<LoadingIndicator
+					message="Finding some duplicate issues…"
+					ariaLabel="Duplicate search in progress"
+				/>
+			</div>
+		);
 	} else if ( results.length === 0 ) {
 		resultsContainerDisplay = (
 			<PlaceholderMessage
