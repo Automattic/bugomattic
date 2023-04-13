@@ -67,7 +67,12 @@ export function DuplicateResults() {
 			/>
 		);
 	} else {
-		resultsContainerDisplay = <IssueList issues={ results.slice( 0, resultsLimit ) } />;
+		resultsContainerDisplay = (
+			<>
+				<h3 className="screenReaderOnly">Potential duplicate issues found. Results are below.</h3>
+				<IssueList issues={ results.slice( 0, resultsLimit ) } />
+			</>
+		);
 	}
 
 	return (
