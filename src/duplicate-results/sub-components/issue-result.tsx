@@ -54,6 +54,9 @@ export function IssueResult( { issue }: Props ) {
 		issueResultClasses.push( styles.openIssue );
 	}
 
+	// I strongly prefer to do this using Regex capturing vs Reacts "dangerouslySetInnerHTML".
+	// That way, we avoid all XSS risk, and we are future proofed in case the search match markup
+	// changes in the future to not be HTML tags.
 	const searchMatchRegex = /<em data-search-match>(.*?)<\/em>/g;
 
 	return (
