@@ -9,7 +9,7 @@ interface Props {
 
 export function IssueList( { issues }: Props ) {
 	return (
-		<ol className={ styles.issueList }>
+		<ol className={ styles.issueList } aria-label="Duplicate issue search results">
 			{ issues.map( ( issue ) => (
 				// The URL is always unique, so we can use it as a key.
 				<IssueResult key={ issue.url } issue={ issue } />

@@ -57,12 +57,15 @@ export function DuplicateResults() {
 				illustration={ NoResultsIllustration }
 				header="No results found."
 				message="Try a different search or change your filters. You can also report a new issue below."
+				ariaLive="polite"
 			/>
 		);
 	} else {
 		resultsContainerDisplay = (
 			<>
-				<h3 className="screenReaderOnly">Potential duplicate issues found. Results are below.</h3>
+				<h3 className="screenReaderOnly" aria-live="polite">
+					Potential duplicate issues found. Results are below.
+				</h3>
 				<IssueList issues={ results.slice( 0, resultsLimit ) } />
 			</>
 		);

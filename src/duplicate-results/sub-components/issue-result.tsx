@@ -38,9 +38,13 @@ export function IssueResult( { issue }: Props ) {
 
 	let statusIcon: ReactNode;
 	if ( status === 'open' ) {
-		statusIcon = <OpenIcon data-testid="open-icon" className={ styles.statusIcon } />;
+		statusIcon = (
+			<OpenIcon data-testid="open-icon" aria-hidden="true" className={ styles.statusIcon } />
+		);
 	} else {
-		statusIcon = <ClosedIcon data-testid="closed-icon" className={ styles.statusIcon } />;
+		statusIcon = (
+			<ClosedIcon data-testid="closed-icon" aria-hidden="true" className={ styles.statusIcon } />
+		);
 	}
 
 	const issueResultClasses = [ styles.issueResult ];
@@ -79,9 +83,10 @@ export function IssueResult( { issue }: Props ) {
 						</TextMatchHighlighter>
 					</p>
 					<div className={ styles.issueMeta }>
-						<span data-tooltip-id={ tooltipId } data-tooltip-content={ repo }>
+						<span data-tooltip-id={ tooltipId } data-tooltip-content={ repo } aria-hidden="true">
 							{ repoWithoutOrg }
 						</span>
+						<span className="screenReaderOnly">{ `Repository: ${ repo }` }</span>
 						<span>{ author }</span>
 						<span data-tooltip-id={ tooltipId } data-tooltip-content={ dateCreatedTooltip }>
 							{ dateCreatedDisplay }
