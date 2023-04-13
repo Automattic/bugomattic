@@ -5,7 +5,7 @@ import {
 	selectDuplicateResultsRequestStatus,
 	selectDuplicateRequestsWereMade,
 } from './duplicate-results-slice';
-import { IssueList, PlaceholderMessage } from './sub-components';
+import { IssueList, PlaceholderMessage, useShowBanner } from './sub-components';
 import styles from './duplicate-results.module.css';
 import { ReactComponent as InitialIllustration } from './svgs/initial-illustration.svg';
 import { ReactComponent as NoResultsIllustration } from '../common/svgs/missing-info.svg';
@@ -15,16 +15,7 @@ export function DuplicateResults() {
 	const results = useAppSelector( selectDuplicateResults );
 	const resultsRequestStatus = useAppSelector( selectDuplicateResultsRequestStatus );
 	const requestsWereMade = useAppSelector( selectDuplicateRequestsWereMade );
-
-	// We want to handle the case when we come back to this page.
-	// Since this is local state, we want to tie it back to the redux state.
-	const [ showBanner, setShowBanner ] = useState( requestsWereMade );
-
-	useEffect( () => {
-		if ( requestsWereMade && resultsRequestStatus === 'fulfilled' ) {
-			setShowBanner( true );
-		}
-	}, [ requestsWereMade, resultsRequestStatus ] );
+	const showBanner = useShowBanner();
 
 	// This ref and corresponding useEffect hook are used to preserve the height of the
 	// results container between searches. This keeps the UI from jumping around while searching.
