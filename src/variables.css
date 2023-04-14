@@ -1,12 +1,13 @@
 :root {
-	--color-primary: #0675c4; /* Automattic Blue 50 */
-	--color-primary-dark: #044b7a; /* Automattic Blue 70 */
-	--color-primary-extra-dark: #01283d; /* Automattic Blue 90 */
+	--color-primary: #3858e9; /* Automattic Blue 50 */
+	--color-primary-dark: #1d35b4; /* Automattic Blue 70 */
+	--color-primary-extra-dark: #061a80; /* Automattic Blue 90 */
 	--color-primary-light: #bbe0fa; /* Automattic Blue 20 */
 	--color-primary-extra-light: #e9eff5; /* Automattic Blue 5 */
 	--color-accent: #c9356e; /* Automattic Pink 50 */
 	--color-neutral: #dcdcde; /* Automattic Gray 5 */
 	--color-neutral-light: #eeeeee;
+	--color-neutral-extra-light: #fafafa;
 	--color-neutral-dark: #646970; /* Automattic Gray 50 */
 	--color-error: #d63638; /* Automattic Red 50 */
 	--color-success: #008a20; /* Automattic Green 50 */
