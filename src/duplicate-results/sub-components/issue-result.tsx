@@ -99,14 +99,26 @@ export function IssueResult( { issue }: Props ) {
 						<span data-tooltip-id={ tooltipId } data-tooltip-content={ repo } aria-hidden="true">
 							{ repoWithoutOrg }
 						</span>
-						<span className="screenReaderOnly">{ `Repository: ${ repo }` }</span>
-						<span>{ author }</span>
-						<span data-tooltip-id={ tooltipId } data-tooltip-content={ dateCreatedTooltip }>
+						<span aria-hidden="true">{ author }</span>
+						<span
+							data-tooltip-id={ tooltipId }
+							data-tooltip-content={ dateCreatedTooltip }
+							aria-hidden="true"
+						>
 							{ dateCreatedDisplay }
 						</span>
-						<span data-tooltip-id={ tooltipId } data-tooltip-content={ dateUpdatedTooltip }>
+						<span
+							data-tooltip-id={ tooltipId }
+							data-tooltip-content={ dateUpdatedTooltip }
+							aria-hidden="true"
+						>
 							{ dateUpdatedDisplay }
 						</span>
+
+						<span className="screenReaderOnly">{ `Repository: ${ repo }` }</span>
+						<span className="screenReaderOnly">{ `Author: ${ author }` }</span>
+						<span className="screenReaderOnly">{ `${ dateCreatedDisplay }: ${ dateCreatedTooltip }` }</span>
+						<span className="screenReaderOnly">{ `${ dateUpdatedDisplay }: ${ dateUpdatedTooltip }` }</span>
 					</div>
 				</div>
 			</a>
