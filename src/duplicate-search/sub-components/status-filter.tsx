@@ -22,24 +22,28 @@ export function StatusFilter() {
 	const currentStatusFilterOptions: IssueStatusFilter[] = [ 'all', 'open', 'closed' ];
 
 	return (
-		<div
-			aria-label="Issue status filter"
-			role="listbox"
-			aria-activedescendant={ createId( currentStatusFilter ) }
-			className={ styles.statusFilterControl }
-		>
-			{ currentStatusFilterOptions.map( ( statusFilter ) => (
-				<button
-					id={ createId( statusFilter ) }
-					key={ statusFilter }
-					onClick={ createClickHandler( statusFilter ) }
-					aria-selected={ currentStatusFilter === statusFilter }
-					role="option"
-					className={ styles.statusFilterOption }
-				>
-					{ createDisplayText( statusFilter ) }
-				</button>
-			) ) }
+		// This extra wrapper helps with a weird paint glitch in Chromium browsers that can sometimes
+		// leave a single pixel of whitespace within the control.
+		<div className={ styles.statusFilterWrapper }>
+			<div
+				aria-label="Issue status filter"
+				role="listbox"
+				aria-activedescendant={ createId( currentStatusFilter ) }
+				className={ styles.statusFilterControl }
+			>
+				{ currentStatusFilterOptions.map( ( statusFilter ) => (
+					<button
+						id={ createId( statusFilter ) }
+						key={ statusFilter }
+						onClick={ createClickHandler( statusFilter ) }
+						aria-selected={ currentStatusFilter === statusFilter }
+						role="option"
+						className={ styles.statusFilterOption }
+					>
+						{ createDisplayText( statusFilter ) }
+					</button>
+				) ) }
+			</div>
 		</div>
 	);
 }
