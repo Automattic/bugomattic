@@ -39,11 +39,25 @@ export function IssueResult( { issue }: Props ) {
 	let statusIcon: ReactNode;
 	if ( status === 'open' ) {
 		statusIcon = (
-			<OpenIcon data-testid="open-icon" aria-hidden="true" className={ styles.statusIcon } />
+			<OpenIcon
+				data-tooltip-id={ tooltipId }
+				data-tooltip-content="Open"
+				data-testid="open-icon"
+				role="img"
+				tabIndex={ -1 }
+				className={ styles.statusIcon }
+			/>
 		);
 	} else {
 		statusIcon = (
-			<ClosedIcon data-testid="closed-icon" aria-hidden="true" className={ styles.statusIcon } />
+			<ClosedIcon
+				data-tooltip-id={ tooltipId }
+				data-tooltip-content="Closed"
+				data-testid="closed-icon"
+				role="img"
+				tabIndex={ -1 }
+				className={ styles.statusIcon }
+			/>
 		);
 	}
 
@@ -68,11 +82,7 @@ export function IssueResult( { issue }: Props ) {
 				href={ url }
 				rel="noreferrer"
 			>
-				<div className={ styles.statusIconWrapper }>
-					<span data-tooltip-id={ tooltipId } data-tooltip-content={ status }>
-						{ statusIcon }
-					</span>
-				</div>
+				<div className={ styles.statusIconWrapper }>{ statusIcon }</div>
 				<div className={ styles.issueDetailsWrapper }>
 					<p className={ styles.issueTitle } id={ titleId }>
 						{ title }
