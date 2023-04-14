@@ -2,10 +2,10 @@ import React, { ReactNode, useMemo } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { selectNormalizedReportingConfig } from '../../static-data/reporting-config/reporting-config-slice';
 import { TaskLink } from '../../static-data/reporting-config/types';
-import { ReactComponent as SlackIcon } from '../../common/svgs/slack.svg';
+import { ReactComponent as SlackIcon } from '../../common/svgs/slack-colored.svg';
 import { ReactComponent as GithubIcon } from '../../common/svgs/github.svg';
 import { ReactComponent as P2Icon } from '../../common/svgs/p2.svg';
-import { ReactComponent as LinkIcon } from '../../common/svgs/external-link.svg';
+import { ReactComponent as LinkIcon } from '../../common/svgs/external-link-blue.svg';
 import { selectIssueDetails } from '../../issue-details/issue-details-slice';
 import styles from '../next-steps.module.css';
 import {
