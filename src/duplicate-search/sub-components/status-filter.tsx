@@ -34,7 +34,7 @@ export function StatusFilter() {
 
 	return (
 		<div
-			aria-label="Status filter"
+			aria-label="Issue status filter"
 			role="listbox"
 			aria-activedescendant={ activeId }
 			className={ styles.statusFilterControl }
