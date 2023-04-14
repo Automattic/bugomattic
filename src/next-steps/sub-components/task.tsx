@@ -76,6 +76,7 @@ export function Task( { taskId }: Props ) {
 
 	let taskIsBroken = false;
 	let titleDisplay: ReactNode;
+	let buttonDisplay: ReactNode = null;
 	if ( link ) {
 		const handleLinkClick = () => {
 			monitoringClient.analytics.recordEvent( 'task_link_click', { linkType: link.type } );
@@ -83,11 +84,12 @@ export function Task( { taskId }: Props ) {
 		};
 
 		try {
-			const linkText = title || getDefaultTitleForLink( link );
+			const titleText = title || getDefaultTitleForLink( link );
 			const href = createLinkHref( link, issueTitle );
-			titleDisplay = (
+			titleDisplay = <span className={ styles.taskTitle }>{ titleText }</span>;
+			buttonDisplay = (
 				<a
-					className={ styles.taskTitle }
+					className={ styles.taskLink }
 					target="_blank"
 					href={ href }
 					rel="noreferrer"
@@ -95,7 +97,7 @@ export function Task( { taskId }: Props ) {
 					onClick={ handleLinkClick }
 				>
 					{ getAppIconForLink( link ) }
-					<span className={ styles.linkText }>{ linkText }</span>
+					<span className={ styles.linkText }>{ getLinkName( link ) }</span>
 					<LinkIcon aria-hidden={ true } className={ styles.linkIcon } />
 				</a>
 			);
@@ -137,6 +139,7 @@ export function Task( { taskId }: Props ) {
 					{ detailsDisplay }
 				</div>
 			</label>
+			{ buttonDisplay && <div className={ styles.buttonContent }>{ buttonDisplay }</div> }
 		</li>
 	);
 }
@@ -168,6 +171,19 @@ function getAppIconForLink( link: TaskLink ): ReactNode {
 			);
 		case 'p2':
 			return <P2Icon data-testid="p2-icon" aria-hidden={ true } className={ styles.appIcon } />;
+	}
+}
+
+function getLinkName( link: TaskLink ): string {
+	switch ( link.type ) {
+		case 'general':
+			return 'General';
+		case 'github':
+			return 'GitHub';
+		case 'slack':
+			return 'Slack';
+		case 'p2':
+			return 'P2';
 	}
 }
 
