@@ -8,23 +8,10 @@ export function StatusFilter() {
 	const dispatch = useAppDispatch();
 	const currentStatusFilter = useAppSelector( selectStatusFilter );
 
-	const allId = 'status-filter-all';
-	const openId = 'status-filter-open';
-	const closedId = 'status-filter-closed';
+	const createId = ( statusFilter: IssueStatusFilter ) => `status-filter-${ statusFilter }`;
 
-	let activeId: string;
-	switch ( currentStatusFilter ) {
-		case 'open':
-			activeId = openId;
-			break;
-		case 'closed':
-			activeId = closedId;
-			break;
-		case 'all':
-		default:
-			activeId = allId;
-			break;
-	}
+	const createDisplayText = ( statusFilter: IssueStatusFilter ) =>
+		statusFilter.charAt( 0 ).toUpperCase() + statusFilter.slice( 1 );
 
 	const createClickHandler = ( selectedStatusFilter: IssueStatusFilter ) => () => {
 		if ( selectedStatusFilter !== currentStatusFilter ) {
@@ -32,40 +19,27 @@ export function StatusFilter() {
 		}
 	};
 
+	const currentStatusFilterOptions: IssueStatusFilter[] = [ 'all', 'open', 'closed' ];
+
 	return (
 		<div
 			aria-label="Issue status filter"
 			role="listbox"
-			aria-activedescendant={ activeId }
+			aria-activedescendant={ createId( currentStatusFilter ) }
 			className={ styles.statusFilterControl }
 		>
-			<button
-				id={ allId }
-				onClick={ createClickHandler( 'all' ) }
-				aria-selected={ currentStatusFilter === 'all' }
-				role="option"
-				className={ styles.statusFilterOption }
-			>
-				All
-			</button>
-			<button
-				id={ openId }
-				onClick={ createClickHandler( 'open' ) }
-				aria-selected={ currentStatusFilter === 'open' }
-				role="option"
-				className={ styles.statusFilterOption }
-			>
-				Open
-			</button>
-			<button
-				id={ closedId }
-				onClick={ createClickHandler( 'closed' ) }
-				aria-selected={ currentStatusFilter === 'closed' }
-				role="option"
-				className={ styles.statusFilterOption }
-			>
-				Closed
-			</button>
+			{ currentStatusFilterOptions.map( ( statusFilter ) => (
+				<button
+					id={ createId( statusFilter ) }
+					key={ statusFilter }
+					onClick={ createClickHandler( statusFilter ) }
+					aria-selected={ currentStatusFilter === statusFilter }
+					role="option"
+					className={ styles.statusFilterOption }
+				>
+					{ createDisplayText( statusFilter ) }
+				</button>
+			) ) }
 		</div>
 	);
 }
