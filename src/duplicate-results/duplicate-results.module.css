@@ -157,6 +157,11 @@ p.placeholderText {
 	max-height: 480px;
 }
 
+/* This is modifying the opacity of our tooltips just in this component */
+.issueResult {
+	--rt-opacity: 1;
+}
+
 @media only screen and ( max-width: 600px ) {
 	.issueMeta {
 		display: grid;
