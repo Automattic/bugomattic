@@ -29,7 +29,7 @@ button.statusFilterOption {
 
 button.statusFilterOption:focus-visible {
 	outline: none;
-	box-shadow: inset 0px 0px 10px var( --color-neutral-dark );
+	border: 1px solid var( --color-primary-extra-dark );
 }
 
 button.statusFilterOption:hover {
