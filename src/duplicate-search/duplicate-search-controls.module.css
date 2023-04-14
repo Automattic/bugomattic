@@ -15,6 +15,7 @@
 
 .statusFilterControl:focus-within {
 	border-color: var( --color-primary );
+	outline: 1px solid var( --color-primary );
 }
 
 button.statusFilterOption {
@@ -28,7 +29,7 @@ button.statusFilterOption {
 
 button.statusFilterOption:focus-visible {
 	outline: none;
-	border: 1px solid var( --color-primary-extra-dark );
+	box-shadow: inset 0px 0px 10px var( --color-neutral-dark );
 }
 
 button.statusFilterOption:hover {
