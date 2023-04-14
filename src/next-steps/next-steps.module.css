@@ -33,8 +33,7 @@
 	font-size: var( --font-header );
 	font-weight: 500;
 	color: var( --color-text-primary );
-	word-wrap: break-word;
-	word-break: break-all;
+	overflow-wrap: break-word;
 }
 
 a.taskLink {
