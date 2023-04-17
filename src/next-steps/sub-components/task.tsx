@@ -18,6 +18,7 @@ import {
 	createNewGithubIssueHref,
 	createP2Href,
 	createSlackHref,
+	replaceSpaces,
 } from '../../common/lib';
 import { useMonitoring } from '../../monitoring/monitoring-provider';
 import { updateHistoryWithState } from '../../url-history/actions';
@@ -84,15 +85,21 @@ export function Task( { taskId }: Props ) {
 		};
 
 		try {
+			const titleId = replaceSpaces( `title-${ taskId }` );
 			const titleText = title || getDefaultTitleForLink( link );
 			const href = createLinkHref( link, issueTitle );
-			titleDisplay = <span className={ styles.taskTitle }>{ titleText }</span>;
+			titleDisplay = (
+				<span id={ titleId } className={ styles.taskTitle }>
+					{ titleText }
+				</span>
+			);
 			buttonDisplay = (
 				<a
 					className={ styles.taskLink }
 					target="_blank"
 					href={ href }
 					rel="noreferrer"
+					aria-describedby={ titleId }
 					// When they open a link, let's trigger the checkbox change too
 					onClick={ handleLinkClick }
 				>
