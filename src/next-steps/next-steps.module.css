@@ -8,18 +8,53 @@
 
 .task {
 	display: flex;
+	padding-right: 0.625rem;
 	align-items: flex-start;
-	width: fit-content;
+}
+
+.taskListItem {
+	border: 1px solid var( --color-border-light );
+	background-color: var( --color-item-background );
+	border-radius: 6px;
+	padding: 0.625rem;
+	display: flex;
+	flex-direction: row;
+}
+
+.buttonContent {
+	margin-left: auto;
 }
 
 .taskListItem:nth-child( n + 2 ) {
-	margin-top: 2rem;
+	margin-top: 1rem;
 }
 
 .taskTitle {
 	font-size: var( --font-header );
 	font-weight: 500;
 	color: var( --color-text-primary );
+	overflow-wrap: break-word;
+}
+
+a.taskLink {
+	background-color: var( --color-white );
+	border: var( --color-primary ) 1px solid;
+	border-radius: 4px;
+	padding: 0.625rem 1.25rem;
+	display: inline-flex;
+	align-items: center;
+	font-size: var( --font-body );
+	color: var( --color-primary );
+	text-decoration: none;
+	font-weight: 500;
+}
+
+a.taskLink:hover {
+	background-color: var( --color-neutral-light );
+}
+
+a.taskLink:active {
+	background-color: var( --color-neutral );
 }
 
 .badTask {
@@ -48,15 +83,6 @@ input[type='checkbox'].taskCheckbox:checked::after {
 	border: 1px solid var( --color-border-dark );
 }
 
-a.taskTitle {
-	text-decoration: none;
-}
-
-a.taskTitle:hover {
-	color: var( --color-primary-dark );
-	text-decoration: underline;
-}
-
 .appIcon,
 .linkIcon {
 	height: 1.25rem;
@@ -65,12 +91,10 @@ a.taskTitle:hover {
 
 .appIcon {
 	position: relative;
-	top: 0.125rem;
 }
 
 .linkIcon {
 	position: relative;
-	top: 0.1875rem;
 }
 
 .appIcon,

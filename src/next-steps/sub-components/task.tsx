@@ -2,10 +2,10 @@ import React, { ReactNode, useMemo } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { selectNormalizedReportingConfig } from '../../static-data/reporting-config/reporting-config-slice';
 import { TaskLink } from '../../static-data/reporting-config/types';
-import { ReactComponent as SlackIcon } from '../../common/svgs/slack.svg';
+import { ReactComponent as SlackIcon } from '../../common/svgs/slack-colored.svg';
 import { ReactComponent as GithubIcon } from '../../common/svgs/github.svg';
 import { ReactComponent as P2Icon } from '../../common/svgs/p2.svg';
-import { ReactComponent as LinkIcon } from '../../common/svgs/external-link.svg';
+import { ReactComponent as LinkIcon } from '../../common/svgs/external-link-blue.svg';
 import { selectIssueDetails } from '../../issue-details/issue-details-slice';
 import styles from '../next-steps.module.css';
 import {
@@ -18,6 +18,7 @@ import {
 	createNewGithubIssueHref,
 	createP2Href,
 	createSlackHref,
+	replaceSpaces,
 } from '../../common/lib';
 import { useMonitoring } from '../../monitoring/monitoring-provider';
 import { updateHistoryWithState } from '../../url-history/actions';
@@ -76,6 +77,7 @@ export function Task( { taskId }: Props ) {
 
 	let taskIsBroken = false;
 	let titleDisplay: ReactNode;
+	let buttonDisplay: ReactNode = null;
 	if ( link ) {
 		const handleLinkClick = () => {
 			monitoringClient.analytics.recordEvent( 'task_link_click', { linkType: link.type } );
@@ -83,19 +85,26 @@ export function Task( { taskId }: Props ) {
 		};
 
 		try {
-			const linkText = title || getDefaultTitleForLink( link );
+			const titleId = replaceSpaces( `title-${ taskId }` );
+			const titleText = title || getDefaultTitleForLink( link );
 			const href = createLinkHref( link, issueTitle );
 			titleDisplay = (
+				<span id={ titleId } className={ styles.taskTitle }>
+					{ titleText }
+				</span>
+			);
+			buttonDisplay = (
 				<a
-					className={ styles.taskTitle }
+					className={ styles.taskLink }
 					target="_blank"
 					href={ href }
 					rel="noreferrer"
+					aria-describedby={ titleId }
 					// When they open a link, let's trigger the checkbox change too
 					onClick={ handleLinkClick }
 				>
 					{ getAppIconForLink( link ) }
-					<span className={ styles.linkText }>{ linkText }</span>
+					<span className={ styles.linkText }>{ getLinkName( link ) }</span>
 					<LinkIcon aria-hidden={ true } className={ styles.linkIcon } />
 				</a>
 			);
@@ -137,6 +146,7 @@ export function Task( { taskId }: Props ) {
 					{ detailsDisplay }
 				</div>
 			</label>
+			{ buttonDisplay && <div className={ styles.buttonContent }>{ buttonDisplay }</div> }
 		</li>
 	);
 }
@@ -168,6 +178,19 @@ function getAppIconForLink( link: TaskLink ): ReactNode {
 			);
 		case 'p2':
 			return <P2Icon data-testid="p2-icon" aria-hidden={ true } className={ styles.appIcon } />;
+	}
+}
+
+function getLinkName( link: TaskLink ): string {
+	switch ( link.type ) {
+		case 'general':
+			return 'General';
+		case 'github':
+			return 'GitHub';
+		case 'slack':
+			return 'Slack';
+		case 'p2':
+			return 'P2';
 	}
 }
 

@@ -126,10 +126,11 @@ describe( '[Task]', () => {
 						repository: 'Automattic/bugomattic',
 					},
 				};
+				const linkName = 'GitHub';
 
 				setup( <TaskComponent taskId={ task.id } />, task );
 
-				const link = screen.getByRole( 'link', { name: title } );
+				const link = screen.getByRole( 'link', { name: linkName } );
 				expect( link ).toBeInTheDocument();
 				const expectedHref = 'https://github.com/Automattic/bugomattic/issues/new/choose';
 				expect( link ).toHaveAttribute( 'href', expectedHref );
@@ -149,10 +150,11 @@ describe( '[Task]', () => {
 						channel: channel,
 					},
 				};
+				const linkName = 'Slack';
 
 				setup( <TaskComponent taskId={ task.id } />, task );
 
-				const link = screen.getByRole( 'link', { name: title } );
+				const link = screen.getByRole( 'link', { name: linkName } );
 				expect( link ).toBeInTheDocument();
 				const expectedHref = `https://slack.com/app_redirect?channel=${ channel }`;
 				expect( link ).toHaveAttribute( 'href', expectedHref );
@@ -172,10 +174,11 @@ describe( '[Task]', () => {
 						subdomain: subdomain,
 					},
 				};
+				const linkName = 'P2';
 
 				setup( <TaskComponent taskId={ task.id } />, task );
 
-				const link = screen.getByRole( 'link', { name: title } );
+				const link = screen.getByRole( 'link', { name: linkName } );
 				expect( link ).toBeInTheDocument();
 				const expectedHref = `https://${ subdomain }.wordpress.com/`;
 				expect( link ).toHaveAttribute( 'href', expectedHref );
@@ -195,10 +198,11 @@ describe( '[Task]', () => {
 						href: href,
 					},
 				};
+				const linkName = 'General';
 
 				setup( <TaskComponent taskId={ task.id } />, task );
 
-				const link = screen.getByRole( 'link', { name: title } );
+				const link = screen.getByRole( 'link', { name: linkName } );
 				expect( link ).toBeInTheDocument();
 				expect( link ).toHaveAttribute( 'href', href );
 			} );
@@ -275,8 +279,9 @@ describe( '[Task]', () => {
 				};
 
 				setup( <TaskComponent taskId={ task.id } />, task );
-
-				expect( screen.getByRole( 'checkbox', { name: href } ) ).toBeInTheDocument();
+				const link = screen.getByRole( 'link', { name: 'General' } );
+				expect( link ).toHaveAttribute( 'href', href );
+				expect( link ).toBeInTheDocument();
 			} );
 
 			test( 'Task with no link and no title', () => {
@@ -358,11 +363,12 @@ describe( '[Task]', () => {
 					href: 'https://automattic.com/',
 				},
 			};
+			const linkName = 'General';
 
 			setup( <TaskComponent taskId={ task.id } />, task );
 
 			// The userEvent action doesn't play well with links, so using fireEvent.
-			fireEvent.click( screen.getByRole( 'link', { name: title } ) );
+			fireEvent.click( screen.getByRole( 'link', { name: linkName } ) );
 
 			expect(
 				await screen.findByRole( 'checkbox', { name: title, checked: true } )
@@ -381,11 +387,12 @@ describe( '[Task]', () => {
 					href: 'https://automattic.com/',
 				},
 			};
+			const linkName = 'General';
 
 			const { monitoringClient } = setup( <TaskComponent taskId={ task.id } />, task );
 
 			// The userEvent action doesn't play well with links, so using fireEvent.
-			fireEvent.click( screen.getByRole( 'link', { name: title } ) );
+			fireEvent.click( screen.getByRole( 'link', { name: linkName } ) );
 
 			expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'task_complete' );
 			expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'task_link_click', {
