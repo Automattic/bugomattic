@@ -51,6 +51,7 @@
 		]
 	},
 	"dependencies": {
+		"@floating-ui/react": "^0.23.0",
 		"@reduxjs/toolkit": "^1.8.6",
 		"@types/lodash.debounce": "^4.0.7",
 		"@types/node": "^16.7.13",
