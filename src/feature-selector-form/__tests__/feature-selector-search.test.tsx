@@ -223,7 +223,7 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 			const { user } = setup( <FeatureSelectorForm /> );
 			await search( user, 'ghi' );
 
-			const highlightedMatches = screen.getAllByTestId( 'highlighted-substring' );
+			const highlightedMatches = screen.getAllByTestId( 'highlighted-text-match' );
 			expect( highlightedMatches.length ).toBe( 1 );
 			expect( highlightedMatches[ 0 ]?.textContent ).toBe( 'GHI' );
 		} );

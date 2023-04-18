@@ -11,7 +11,7 @@ import {
 	setSelectedFeatureId,
 } from '../feature-selector-form-slice';
 import { includesIgnoringCase, replaceSpaces } from '../../common/lib';
-import { SubstringHighlighter } from '../../common/components';
+import { TextMatchHighlighter } from '../../common/components';
 import { useMonitoring } from '../../monitoring/monitoring-provider';
 import { Tooltip } from 'react-tooltip';
 
@@ -65,12 +65,12 @@ export function Feature( { id }: Props ) {
 				aria-describedby={ descriptionId }
 			>
 				<span id={ featureNameId }>
-					<SubstringHighlighter
-						substring={ searchTerm }
+					<TextMatchHighlighter
+						textMatch={ searchTerm }
 						highlightClassName={ styles.searchSubstringMatch }
 					>
 						{ featureName }
-					</SubstringHighlighter>
+					</TextMatchHighlighter>
 				</span>
 			</button>
 			<Tooltip

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAppSelector } from '../../app/hooks';
-import { SubstringHighlighter } from '../../common/components';
+import { TextMatchHighlighter } from '../../common/components';
 import { selectFeatureSearchTerm } from '../feature-selector-form-slice';
 import styles from '../feature-selector-form.module.css';
 
@@ -12,11 +12,11 @@ export function SearchHighlighter( { children }: Props ) {
 	const searchTerm = useAppSelector( selectFeatureSearchTerm );
 
 	return (
-		<SubstringHighlighter
-			substring={ searchTerm }
+		<TextMatchHighlighter
+			textMatch={ searchTerm }
 			highlightClassName={ styles.searchSubstringMatch }
 		>
 			{ children }
-		</SubstringHighlighter>
+		</TextMatchHighlighter>
 	);
 }

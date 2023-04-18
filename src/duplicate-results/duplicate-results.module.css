@@ -1,0 +1,173 @@
+@import '../variables.css';
+
+.resultsContainer {
+	padding: 0;
+	margin: 0;
+	border: 1px solid var( --color-border );
+	border-radius: 6px;
+	overflow-y: hidden;
+	background-color: var( --color-shaded-background );
+	position: relative;
+	/* The min heights of this container is set directly in the React component based on the height of its content.
+	However, because the loading indicator is absolutely positioned, we need to set a fallback min height here.
+	This handles the edge case where you change pages and come back mid-request. */
+	min-height: 160px;
+}
+
+ol.issueList {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+li.issueResult {
+	padding: 0;
+}
+
+a.issueLinkWrapper {
+	display: flex;
+	flex-direction: row;
+	color: var( --color-text-primary );
+	text-decoration: none;
+	padding: 0.75rem 1.25rem 0.75rem 0;
+}
+
+.issueDetailsWrapper {
+	/* This is needed to support ellipsis truncating in the child elements */
+	min-width: 0;
+}
+
+.issueResult:nth-child( 2n ) {
+	background-color: #fafafa;
+}
+
+.issueResult:nth-child( 2n + 1 ) {
+	background-color: var( --color-white );
+}
+
+.issueResult:hover {
+	background-color: var( --color-primary-extra-light );
+}
+
+.openIssue {
+	border-left: 4px solid #4ab866;
+}
+
+.closedIssue {
+	border-left: 4px solid #7a00df;
+}
+
+p.issueTitle {
+	margin-top: 0;
+	margin-bottom: 0.5rem;
+	font-size: var( --font-header );
+	font-weight: 500;
+
+	/* (GPT4-generated) This block truncates after two lines. */
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: normal;
+	max-height: calc( 1.2em * 2 );
+	line-height: 1.2;
+	overflow-wrap: break-word;
+}
+
+p.issueContent {
+	margin-top: 0;
+	margin-bottom: 0.75rem;
+	font-weight: 300;
+
+	/* (GPT4-generated) This block truncates after two lines. */
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: normal;
+	max-height: calc( 1.2em * 2 );
+	line-height: 1.2;
+	overflow-wrap: break-word;
+}
+
+.issueMeta {
+	font-size: var( --font-body-small );
+
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	column-gap: 1.125rem;
+}
+
+.statusIcon {
+	height: 1.5rem;
+	width: 1.5rem;
+}
+
+.statusIconWrapper {
+	padding: 0 0.75rem;
+}
+
+.searchMatch {
+	font-weight: 700;
+}
+
+.placeholderWrapper {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	padding: 3rem 1rem;
+}
+
+.placeholderIllustration {
+	width: 100%;
+	max-width: 300px;
+	height: auto;
+}
+
+h3.placeholderHeader {
+	font-size: var( --font-header );
+	margin-top: 0;
+	margin-bottom: 0.5rem;
+	font-weight: 500;
+}
+
+p.placeholderText {
+	font-size: var( --font-body );
+	margin-top: 0;
+	margin-bottom: 0;
+	font-weight: 300;
+}
+
+.loadingWrapper {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	max-height: 480px;
+}
+
+/* This is modifying the opacity of our tooltips just in this component */
+.issueResult {
+	--rt-opacity: 1;
+}
+
+@media only screen and ( max-width: 600px ) {
+	.issueMeta {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		grid-auto-rows: auto;
+		row-gap: 0.5rem;
+		align-items: start;
+	}
+}

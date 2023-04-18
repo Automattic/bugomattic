@@ -35,16 +35,23 @@ export const localApiClient: ApiClient = {
 		// As a baseline, we'll show all the passed search parameters in the content.
 		// And we'll randomize some other stuff so there's good variability.
 
-		const numberOfIssues = Math.floor( Math.random() * 20 );
+		// For testing purposes, we'll find no results one third of the time.
+		const numberOfIssues = Math.random() > 0.33 ? Math.floor( Math.random() * 20 ) : 0;
 		const issues: Issue[] = [];
 		for ( let i = 0; i < numberOfIssues; i++ ) {
 			const randomString = Math.random().toString( 16 ).slice( 2 );
-			const title = `Issue ${ randomString }`;
+			const title = `Issue ${ randomString } ${ 'title '.repeat(
+				Math.floor( Math.random() * 50 )
+			) }`;
+
+			const url = `https://github.com/Automattic/wp-calypso/issues/${ i }`;
 
 			const providedRepos = ( options?.repos || [ 'none provided' ] ).join( ', ' );
 			const providedStatus = options?.status || 'none provided';
 			const providedSort = options?.sort || 'none provided';
-			const content = `Search: <em data-search-match>${ search }</em> | Repos: ${ providedRepos } | Status: ${ providedStatus } | Sort: ${ providedSort }`;
+			const content =
+				`Search: <em data-search-match>${ search }</em>. And another match: <em data-search-match>foo</em>. | Repos: ${ providedRepos } | Status: ${ providedStatus } | Sort: ${ providedSort }` +
+				` ${ 'details '.repeat( Math.floor( Math.random() * 30 ) ) } `;
 
 			const status = Math.random() > 0.5 ? 'open' : 'closed';
 
@@ -61,7 +68,7 @@ export const localApiClient: ApiClient = {
 				status,
 				author: 'Fake Author',
 				repo: 'Fakeorg/fake-repo',
-				url: `https://github.com/Automattic/wp-calypso/issues/${ i }`,
+				url: url,
 			} );
 		}
 

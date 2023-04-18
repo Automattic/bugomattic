@@ -10,11 +10,3 @@
 	justify-content: center;
 	min-height: 600px;
 }
-
-.loadingMessage {
-	font-size: var( --font-header );
-	font-family: var( --font-san-serif );
-	color: var( --color-text );
-	display: block;
-	text-align: center;
-}
