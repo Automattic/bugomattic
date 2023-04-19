@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import styles from '../duplicate-search-controls.module.css';
 
 interface Props {
@@ -12,16 +12,19 @@ interface ReposByOrg {
 }
 
 export function ManualRepoFilter( { availableRepos, activeRepos, setActiveRepos }: Props ) {
-	const sortedAvailableRepos = [ ...availableRepos ].sort();
-	const reposByOrg: ReposByOrg = {};
+	const sortedAvailableRepos = useMemo( () => [ ...availableRepos ].sort(), [ availableRepos ] );
 
-	sortedAvailableRepos.forEach( ( repo ) => {
-		const [ org ] = repo.split( '/' );
-		if ( ! reposByOrg[ org ] ) {
-			reposByOrg[ org ] = [];
-		}
-		reposByOrg[ org ].push( repo );
-	} );
+	const reposByOrg: ReposByOrg = useMemo( () => {
+		const reposByOrg: ReposByOrg = {};
+		sortedAvailableRepos.forEach( ( repo ) => {
+			const [ org ] = repo.split( '/' );
+			if ( ! reposByOrg[ org ] ) {
+				reposByOrg[ org ] = [];
+			}
+			reposByOrg[ org ].push( repo );
+		} );
+		return reposByOrg;
+	}, [ sortedAvailableRepos ] );
 
 	const createCheckboxChangeHandler =
 		( repo: string ) => ( event: React.ChangeEvent< HTMLInputElement > ) => {
@@ -72,7 +75,7 @@ export function ManualRepoFilter( { availableRepos, activeRepos, setActiveRepos 
 						{ org }
 						<ul
 							aria-label={ `List of repositories for ${ org } organization` }
-							className={ styles.repoFilterListForOrg }
+							className={ styles.repoFilterRepoList }
 						>
 							{ fullRepoNamesForOrg.map( ( fullRepoName ) => (
 								<li key={ fullRepoName }>

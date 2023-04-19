@@ -1,6 +1,70 @@
 @import '../variables.css';
 
-.repoPopoverWrapper {
+.inlineIcon {
+	height: 1.5rem;
+	width: 1.5rem;
+}
+
+.filterSortBar {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 1.625rem;
+}
+
+.filterControls {
+	display: flex;
+	flex-direction: row;
+	column-gap: 0.625rem;
+	justify-content: flex-start;
+	align-items: center;
+}
+
+/* TODO: Move to its own app-wide styles in CSS or through a shared component */
+button.dropdownButton {
+	padding: 0.375rem 0.5625rem 0.375rem 0.75rem;
+	display: flex;
+	align-items: center;
+	background-color: var( --color-white );
+	border-radius: 2px;
+	border: 1px solid var( --color-border-dark );
+}
+
+button.dropdownButton:hover {
+	background-color: var( --color-neutral-light );
+}
+
+button.dropdownButton:active {
+	background-color: var( --color-neutral );
+}
+
+button.dropdownButton:focus-visible {
+	border-color: var( --color-primary );
+	outline: 1px solid var( --color-primary );
+}
+
+button.dropdownButton[data-active='true'] {
+	background-color: var( --color-primary );
+	border-color: var( --color-primary );
+	color: var( --color-white );
+}
+
+button.dropdownButton[data-active='true'] .inlineIcon path {
+	fill: var( --color-white );
+}
+
+button.dropdownButton[data-active='true']:hover {
+	background-color: var( --color-primary-dark );
+	border-color: var( --color-primary-dark );
+}
+
+button.dropdownButton[data-active='true']:active {
+	background-color: var( --color-primary-extra-dark );
+	border-color: var( --color-primary-extra-dark );
+}
+
+.repoPopover {
 	z-index: 2;
 	background-color: var( --color-white );
 	border: 1px solid var( --color-border );
@@ -16,30 +80,33 @@
 	flex-direction: column;
 }
 
-.repoFilterModeSwitcherWrapper {
+.repoPopoverHeader {
 	flex-shrink: 0;
 	margin-bottom: 1rem;
 }
 
-.repoFilterContentWrapper {
+.repoPopoverBody {
 	flex-grow: 1;
 	overflow: auto;
 }
 
-.repoFilterManualWrapper {
+.repoPopoverManualModeBody {
 	/* This height tends to cut a filter in half, which is good for showing scroll ability */
 	height: 23rem;
 }
 
-.repoFilterButtonWrapper {
+.repoPopoverFooter {
+	flex-shrink: 0;
 	padding: 1rem 0 0 0;
 	margin: 1rem 0 0 0;
 	border-top: 1px solid var( --color-border );
+}
+
+.repoFilterButtonWrapper {
 	display: flex;
 	flex-direction: row;
 	justify-content: flex-end;
 	column-gap: 0.75rem;
-	flex-shrink: 0;
 }
 
 .repoFilterModeControl {
@@ -78,7 +145,7 @@
 	font-weight: 300;
 }
 
-.repoFilterListForOrg {
+.repoFilterRepoList {
 	list-style: none;
 	padding-left: 1.875rem;
 	font-weight: 400;

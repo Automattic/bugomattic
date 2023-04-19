@@ -20,6 +20,7 @@ import {
 import { SegmentedControl } from '../../common/components';
 import { DefaultRepoFilter } from './default-repo-filter';
 import { ManualRepoFilter } from './manual-repo-filter';
+import { ReactComponent as DownIcon } from '../../common/svgs/chevron-down.svg';
 
 type FilterMode = 'Default' | 'Manual';
 
@@ -91,20 +92,26 @@ export function RepoFilter() {
 		setFilterMode( newFilterMode );
 	}, [] );
 
-	const contentWrapperClasses = [ styles.repoFilterContentWrapper ];
+	const popoverBodyClasses = [ styles.repoPopoverBody ];
 	if ( filterMode === 'Manual' ) {
-		contentWrapperClasses.push( styles.repoFilterManualWrapper );
+		popoverBodyClasses.push( styles.repoPopoverManualModeBody );
 	}
 
 	return (
 		<>
-			<button ref={ refs.setReference } { ...getReferenceProps() }>
-				Repositories
+			<button
+				className={ styles.dropdownButton }
+				ref={ refs.setReference }
+				{ ...getReferenceProps() }
+				data-active={ savedActiveRepos.length > 0 }
+			>
+				<span>Repositories</span>
+				<DownIcon className={ styles.inlineIcon } />
 			</button>
 			{ isPopoverOpen && (
 				<FloatingFocusManager context={ context } modal={ false }>
 					<div
-						className={ styles.repoPopoverWrapper }
+						className={ styles.repoPopover }
 						ref={ refs.setFloating }
 						style={ {
 							position: strategy,
@@ -113,7 +120,7 @@ export function RepoFilter() {
 						} }
 						{ ...getFloatingProps() }
 					>
-						<div className={ styles.repoFilterModeSwitcherWrapper }>
+						<div className={ styles.repoPopoverHeader }>
 							<SegmentedControl
 								options={ filterModeOptions }
 								selectedOption={ filterMode }
@@ -122,18 +129,20 @@ export function RepoFilter() {
 								className={ styles.repoFilterModeControl }
 							/>
 						</div>
-						<div className={ contentWrapperClasses.join( ' ' ) }>{ filterModeDisplay }</div>
-						<div className={ styles.repoFilterButtonWrapper }>
-							<button
-								type="button"
-								className={ styles.repoFilterCancelButton }
-								onClick={ handleCancelClick }
-							>
-								Cancel
-							</button>
-							<button type="button" className="primaryButton" onClick={ handleFilterClick }>
-								Filter
-							</button>
+						<div className={ popoverBodyClasses.join( ' ' ) }>{ filterModeDisplay }</div>
+						<div className={ styles.repoPopoverFooter }>
+							<div className={ styles.repoFilterButtonWrapper }>
+								<button
+									type="button"
+									className={ styles.repoFilterCancelButton }
+									onClick={ handleCancelClick }
+								>
+									Cancel
+								</button>
+								<button type="button" className="primaryButton" onClick={ handleFilterClick }>
+									Filter
+								</button>
+							</div>
 						</div>
 					</div>
 				</FloatingFocusManager>

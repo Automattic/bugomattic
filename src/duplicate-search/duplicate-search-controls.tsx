@@ -9,6 +9,7 @@ import {
 	setSearchParam,
 } from './duplicate-search-slice';
 import { RepoFilter, StatusFilter } from './sub-components';
+import styles from './duplicate-search-controls.module.css';
 
 // TODO: This is a placeholder component for the duplicate search controls. Modify and tweak however needed! :)
 export function DuplicateSearchControls() {
@@ -29,9 +30,11 @@ export function DuplicateSearchControls() {
 			<p>This is just a filler component</p>
 			<button onClick={ handleFauxSearch }>Faux search</button>
 			<p>Available repo filters: { repoFilters.join( ', ' ) }</p>
-			<div>
-				<StatusFilter />
-				<RepoFilter />
+			<div className={ styles.filterSortBar }>
+				<div className={ styles.filterControls }>
+					<StatusFilter />
+					<RepoFilter />
+				</div>
 			</div>
 		</section>
 	);
