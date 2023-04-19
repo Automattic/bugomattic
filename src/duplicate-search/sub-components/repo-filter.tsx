@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { ReactNode, useCallback, useMemo, useState } from 'react';
 import {
 	useFloating,
 	autoUpdate,
@@ -17,27 +17,35 @@ import {
 	setActiveRepoFilters,
 	setSearchParam,
 } from '../duplicate-search-slice';
+import { SegmentedControl } from '../../common/components';
+
+type FilterMode = 'Default' | 'Manual';
 
 export function RepoFilter() {
 	const dispatch = useAppDispatch();
 
 	const availableRepos = useAppSelector( selectAvailableRepoFilters );
 	const savedActiveRepos = useAppSelector( selectActiveRepoFilters );
+	const initialFilterMode: FilterMode = useMemo(
+		() => ( savedActiveRepos.length === 0 ? 'Default' : 'Manual' ),
+		[ savedActiveRepos ]
+	);
 
 	const [ workingActiveRepos, setWorkingActiveRepos ] = useState( savedActiveRepos );
-	const [ isDefaultFilterActive, setIsDefaultFilterActive ] = useState(
-		savedActiveRepos.length === 0
-	);
+	const [ filterMode, setFilterMode ] = useState< FilterMode >( initialFilterMode );
 
 	const [ isPopoverOpen, setIsPopoverOpen ] = useState( false );
 
-	const handlePopoverToggle = ( newIsPopoverOpenValue: boolean ) => {
-		if ( newIsPopoverOpenValue ) {
-			setWorkingActiveRepos( savedActiveRepos );
-			setIsDefaultFilterActive( savedActiveRepos.length === 0 );
-		}
-		setIsPopoverOpen( newIsPopoverOpenValue );
-	};
+	const handlePopoverToggle = useCallback(
+		( newIsPopoverOpenValue: boolean ) => {
+			if ( newIsPopoverOpenValue ) {
+				setWorkingActiveRepos( savedActiveRepos );
+				setFilterMode( initialFilterMode );
+			}
+			setIsPopoverOpen( newIsPopoverOpenValue );
+		},
+		[ initialFilterMode, savedActiveRepos ]
+	);
 
 	const { x, y, refs, strategy, context } = useFloating( {
 		placement: 'bottom-start',
@@ -53,19 +61,33 @@ export function RepoFilter() {
 
 	const { getReferenceProps, getFloatingProps } = useInteractions( [ click, dismiss, role ] );
 
-	const handleCancelClick = () => {
+	const handleCancelClick = useCallback( () => {
 		setIsPopoverOpen( false );
-	};
+	}, [] );
 
-	const handleFilterClick = () => {
-		const newRepoFilters = isDefaultFilterActive ? [] : workingActiveRepos;
+	const handleFilterClick = useCallback( () => {
+		const newRepoFilters = filterMode === 'Default' ? [] : workingActiveRepos;
 		dispatch( setSearchParam( setActiveRepoFilters( newRepoFilters ) ) );
 		setIsPopoverOpen( false );
-	};
+	}, [ dispatch, filterMode, workingActiveRepos ] );
 
-	const handleSwitchViewClick = () => {
-		setIsDefaultFilterActive( ! isDefaultFilterActive );
-	};
+	let filterModeDisplay: ReactNode;
+	if ( filterMode === 'Default' ) {
+		filterModeDisplay = <DefaultFilterView />;
+	} else {
+		filterModeDisplay = (
+			<RepoChecklist
+				availableRepos={ availableRepos }
+				activeRepos={ workingActiveRepos }
+				setActiveRepos={ setWorkingActiveRepos }
+			/>
+		);
+	}
+
+	const filterModeOptions: FilterMode[] = [ 'Default', 'Manual' ];
+	const handleSwitchModeClick = useCallback( ( newFilterMode: FilterMode ) => {
+		setFilterMode( newFilterMode );
+	}, [] );
 
 	return (
 		<>
@@ -85,18 +107,13 @@ export function RepoFilter() {
 						{ ...getFloatingProps() }
 					>
 						<div>
-							<button type="button" onClick={ handleSwitchViewClick }>
-								Switch
-							</button>
-							{ isDefaultFilterActive ? (
-								<DefaultFilterView />
-							) : (
-								<RepoChecklist
-									availableRepos={ availableRepos }
-									activeRepos={ workingActiveRepos }
-									setActiveRepos={ setWorkingActiveRepos }
-								/>
-							) }
+							<SegmentedControl
+								options={ filterModeOptions }
+								selectedOption={ filterMode }
+								onSelect={ handleSwitchModeClick as ( option: string ) => void }
+								controlId="repo-filter-mode"
+							/>
+							{ filterModeDisplay }
 						</div>
 						<div>
 							{ ' ' }
