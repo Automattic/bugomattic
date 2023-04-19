@@ -91,6 +91,11 @@ export function RepoFilter() {
 		setFilterMode( newFilterMode );
 	}, [] );
 
+	const contentWrapperClasses = [ styles.repoFilterContentWrapper ];
+	if ( filterMode === 'Manual' ) {
+		contentWrapperClasses.push( styles.repoFilterManualWrapper );
+	}
+
 	return (
 		<>
 			<button ref={ refs.setReference } { ...getReferenceProps() }>
@@ -108,7 +113,7 @@ export function RepoFilter() {
 						} }
 						{ ...getFloatingProps() }
 					>
-						<div>
+						<div className={ styles.repoFilterModeSwitcherWrapper }>
 							<SegmentedControl
 								options={ filterModeOptions }
 								selectedOption={ filterMode }
@@ -116,8 +121,8 @@ export function RepoFilter() {
 								controlId="repo-filter-mode"
 								className={ styles.repoFilterModeControl }
 							/>
-							{ filterModeDisplay }
 						</div>
+						<div className={ contentWrapperClasses.join( ' ' ) }>{ filterModeDisplay }</div>
 						<div className={ styles.repoFilterButtonWrapper }>
 							<button
 								type="button"

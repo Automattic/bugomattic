@@ -3,26 +3,32 @@
 .repoPopoverWrapper {
 	z-index: 2;
 	background-color: var( --color-white );
-	max-width: 24rem;
 	border: 1px solid var( --color-border );
 	box-shadow: 0px 2px 3px -1px rgba( 0, 0, 0, 0.1 );
 	padding: 1rem;
-}
-
-.repoFilterModeControl {
-	margin: 0 auto;
-}
-
-.repoFilterModeDescription {
-	font-size: var( --font-body-small );
-	margin: 1rem 0;
-}
-
-.repoFilterIllustration {
-	display: block;
-	width: 190px;
+	overflow: auto;
+	width: 20rem;
 	height: auto;
-	margin: 0 auto 1rem auto;
+	min-height: 16rem;
+	min-width: 12rem;
+	resize: both;
+	display: flex;
+	flex-direction: column;
+}
+
+.repoFilterModeSwitcherWrapper {
+	flex-shrink: 0;
+	margin-bottom: 1rem;
+}
+
+.repoFilterContentWrapper {
+	flex-grow: 1;
+	overflow: auto;
+}
+
+.repoFilterManualWrapper {
+	/* This height tends to cut a filter in half, which is good for showing scroll ability */
+	height: 23rem;
 }
 
 .repoFilterButtonWrapper {
@@ -33,6 +39,23 @@
 	flex-direction: row;
 	justify-content: flex-end;
 	column-gap: 0.75rem;
+	flex-shrink: 0;
+}
+
+.repoFilterModeControl {
+	margin: 0 auto;
+}
+
+.repoFilterModeDescription {
+	font-size: var( --font-body-small );
+	margin: 0 0 1rem 0;
+}
+
+.repoFilterIllustration {
+	display: block;
+	width: 190px;
+	height: auto;
+	margin: 0 auto 1rem auto;
 }
 
 /* TODO: Move to its own app-wide styles in CSS or through a shared component */
