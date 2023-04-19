@@ -48,3 +48,44 @@
 .repoFilterCancelButton:active {
 	background-color: var( --color-neutral );
 }
+
+.repoFilterOrgList {
+	list-style: none;
+	padding-left: 0;
+	font-weight: 300;
+}
+
+.repoFilterListForOrg {
+	list-style: none;
+	padding-left: 1.875rem;
+	font-weight: 400;
+	margin: 0.75rem 0;
+}
+
+.repoFilterCheckbox {
+	margin-right: 0.625rem;
+	height: 1.25rem;
+	width: 1.25rem;
+}
+
+.repoFilterCheckboxWrapper {
+	padding: 0.5rem 0;
+	display: flex;
+	align-items: center;
+	width: max-content;
+}
+
+button.repoFilterMassActionButton {
+	color: var( --color-primary );
+	background-color: transparent;
+	padding: 0;
+	font-size: var( --font-body-small );
+}
+
+.repoFilterMassActionButton:hover {
+	color: var( --color-primary-dark );
+}
+
+.repoFilterMassActionButton:active {
+	color: var( --color-primary-extra-dark );
+}

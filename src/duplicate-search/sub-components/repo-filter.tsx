@@ -19,6 +19,7 @@ import {
 } from '../duplicate-search-slice';
 import { SegmentedControl } from '../../common/components';
 import { DefaultRepoFilter } from './default-repo-filter';
+import { ManualRepoFilter } from './manual-repo-filter';
 
 type FilterMode = 'Default' | 'Manual';
 
@@ -77,7 +78,7 @@ export function RepoFilter() {
 		filterModeDisplay = <DefaultRepoFilter />;
 	} else {
 		filterModeDisplay = (
-			<RepoChecklist
+			<ManualRepoFilter
 				availableRepos={ availableRepos }
 				activeRepos={ workingActiveRepos }
 				setActiveRepos={ setWorkingActiveRepos }
@@ -133,39 +134,5 @@ export function RepoFilter() {
 				</FloatingFocusManager>
 			) }
 		</>
-	);
-}
-
-interface RepoChecklistProps {
-	availableRepos: string[];
-	activeRepos: string[];
-	setActiveRepos: ( activeRepos: string[] ) => void;
-}
-
-function RepoChecklist( { availableRepos, activeRepos, setActiveRepos }: RepoChecklistProps ) {
-	const createCheckboxChangeHandler =
-		( repo: string ) => ( event: React.ChangeEvent< HTMLInputElement > ) => {
-			const { checked } = event.target;
-			const newActiveRepos = checked
-				? [ ...activeRepos, repo ]
-				: activeRepos.filter( ( activeRepo ) => activeRepo !== repo );
-			setActiveRepos( newActiveRepos );
-		};
-
-	return (
-		<ul>
-			{ availableRepos.map( ( repo ) => (
-				<li key={ repo }>
-					<label>
-						<input
-							type="checkbox"
-							checked={ activeRepos.includes( repo ) }
-							onChange={ createCheckboxChangeHandler( repo ) }
-						/>
-						{ repo }
-					</label>
-				</li>
-			) ) }
-		</ul>
 	);
 }
