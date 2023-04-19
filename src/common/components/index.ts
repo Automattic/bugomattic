@@ -6,3 +6,4 @@ export * from './animated-ellipsis';
 export * from './loading-indicator';
 export * from './pill';
 export * from './action-popover';
+export * from './segmented-control';
