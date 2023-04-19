@@ -11,6 +11,7 @@ interface Props {
 	selectedOption: string;
 	onSelect: ( option: string ) => void;
 	controlId: string;
+	className?: string;
 }
 
 function optionIsString( option: string | OptionWithDisplayText ): option is string {
@@ -25,7 +26,13 @@ function getOptionDisplayText( option: string | OptionWithDisplayText ) {
 	return optionIsString( option ) ? option : option.displayText;
 }
 
-export function SegmentedControl( { options, selectedOption, onSelect, controlId }: Props ) {
+export function SegmentedControl( {
+	options,
+	selectedOption,
+	onSelect,
+	controlId,
+	className,
+}: Props ) {
 	const createId = ( option: string | OptionWithDisplayText ) =>
 		`${ controlId }-${ getOptionValue( option ) }`;
 
@@ -41,10 +48,12 @@ export function SegmentedControl( { options, selectedOption, onSelect, controlId
 		return optionValue === selectedOption;
 	};
 
+	const wrapperClasses = className ? `${ styles.wrapper } ${ className }` : styles.wrapper;
+
 	return (
 		// This extra wrapper helps with a weird paint glitch in Chromium browsers that can sometimes
 		// leave a single pixel of whitespace within the control.
-		<div className={ styles.wrapper }>
+		<div className={ wrapperClasses }>
 			<div
 				aria-label="Segmented control"
 				role="listbox"

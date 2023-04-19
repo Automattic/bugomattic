@@ -18,6 +18,7 @@ import {
 	setSearchParam,
 } from '../duplicate-search-slice';
 import { SegmentedControl } from '../../common/components';
+import { DefaultRepoFilter } from './default-repo-filter';
 
 type FilterMode = 'Default' | 'Manual';
 
@@ -73,7 +74,7 @@ export function RepoFilter() {
 
 	let filterModeDisplay: ReactNode;
 	if ( filterMode === 'Default' ) {
-		filterModeDisplay = <DefaultFilterView />;
+		filterModeDisplay = <DefaultRepoFilter />;
 	} else {
 		filterModeDisplay = (
 			<RepoChecklist
@@ -112,12 +113,16 @@ export function RepoFilter() {
 								selectedOption={ filterMode }
 								onSelect={ handleSwitchModeClick as ( option: string ) => void }
 								controlId="repo-filter-mode"
+								className={ styles.repoFilterModeControl }
 							/>
 							{ filterModeDisplay }
 						</div>
-						<div>
-							{ ' ' }
-							<button type="button" onClick={ handleCancelClick }>
+						<div className={ styles.repoFilterButtonWrapper }>
+							<button
+								type="button"
+								className={ styles.repoFilterCancelButton }
+								onClick={ handleCancelClick }
+							>
 								Cancel
 							</button>
 							<button type="button" className="primaryButton" onClick={ handleFilterClick }>
@@ -163,8 +168,4 @@ function RepoChecklist( { availableRepos, activeRepos, setActiveRepos }: RepoChe
 			) ) }
 		</ul>
 	);
-}
-
-function DefaultFilterView() {
-	return <p>Default filters</p>;
 }

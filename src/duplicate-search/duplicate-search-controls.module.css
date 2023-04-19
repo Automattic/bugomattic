@@ -3,8 +3,48 @@
 .repoPopoverWrapper {
 	z-index: 2;
 	background-color: var( --color-white );
-	max-width: 30rem;
+	max-width: 24rem;
 	border: 1px solid var( --color-border );
 	box-shadow: 0px 2px 3px -1px rgba( 0, 0, 0, 0.1 );
 	padding: 1rem;
+}
+
+.repoFilterModeControl {
+	margin: 0 auto;
+}
+
+.repoFilterModeDescription {
+	font-size: var( --font-body-small );
+	margin: 1rem 0;
+}
+
+.repoFilterIllustration {
+	display: block;
+	width: 190px;
+	height: auto;
+	margin: 0 auto 1rem auto;
+}
+
+.repoFilterButtonWrapper {
+	padding: 1rem 0 0 0;
+	margin: 1rem 0 0 0;
+	border-top: 1px solid var( --color-border );
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-end;
+	column-gap: 0.75rem;
+}
+
+/* TODO: Move to its own app-wide styles in CSS or through a shared component */
+.repoFilterCancelButton {
+	color: var( --color-primary );
+	background-color: var( --color-white );
+}
+
+.repoFilterCancelButton:hover {
+	background-color: var( --color-neutral-light );
+}
+
+.repoFilterCancelButton:active {
+	background-color: var( --color-neutral );
 }
