@@ -35,8 +35,8 @@ export const localApiClient: ApiClient = {
 		// As a baseline, we'll show all the passed search parameters in the content.
 		// And we'll randomize some other stuff so there's good variability.
 
-		// For testing purposes, we'll find no results one third of the time.
-		const numberOfIssues = Math.random() > 0.33 ? Math.floor( Math.random() * 20 ) : 0;
+		// For testing purposes, we'll find no results one quarter of the time.
+		const numberOfIssues = Math.random() > 0.25 ? Math.floor( Math.random() * 20 ) : 0;
 		const issues: Issue[] = [];
 		for ( let i = 0; i < numberOfIssues; i++ ) {
 			const randomString = Math.random().toString( 16 ).slice( 2 );
