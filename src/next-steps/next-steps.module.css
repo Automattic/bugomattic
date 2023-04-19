@@ -196,11 +196,11 @@ input[type='checkbox'].taskCheckbox:checked::after {
 	}
 
 	.taskListItem {
-		flex-wrap: wrap;
+		flex-direction: column;
 	}
 
 	.buttonContent {
-		margin-top: 0.625rem;
+		margin-top: 1rem;
 		margin-left: 2rem;
 	}
 }
