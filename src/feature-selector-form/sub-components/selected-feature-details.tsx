@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { selectNormalizedReportingConfig } from '../../static-data/reporting-config/reporting-config-slice';
-import { ReactComponent as ChevronRightIcon } from '../../common/svgs/chevron-right.svg';
 import styles from '../feature-selector-form.module.css';
 import { setSelectedFeatureId } from '../feature-selector-form-slice';
 import { useMonitoring } from '../../monitoring/monitoring-provider';
+import { SortedKeywordList } from './sorted-keyword-list';
 
 interface Props {
 	featureId: string;
@@ -13,28 +13,20 @@ interface Props {
 export function SelectedFeatureDetails( { featureId }: Props ) {
 	const dispatch = useAppDispatch();
 	const monitoringClient = useMonitoring();
-	const { features, featureGroups, products } = useAppSelector( selectNormalizedReportingConfig );
-	const { name: featureName, description, parentId, parentType } = features[ featureId ];
-
-	let productName: string;
-	let featureGroupName: string | null = null;
-	if ( parentType === 'product' ) {
-		productName = products[ parentId ].name;
-	} else {
-		// Parent is a Feature Group
-		const featureGroup = featureGroups[ parentId ];
-		featureGroupName = featureGroup.name;
-		productName = products[ featureGroup.productId ].name;
-	}
-
-	const BreadcrumbIcon = () => (
-		<ChevronRightIcon aria-label="Is a parent of" className={ styles.breadcrumbIcon } />
-	);
+	const { features } = useAppSelector( selectNormalizedReportingConfig );
+	const { name: featureName, description, keywords } = features[ featureId ];
 
 	const handleClearClick = () => {
 		dispatch( setSelectedFeatureId( null ) );
 		monitoringClient.analytics.recordEvent( 'feature_clear' );
 	};
+
+	let keywordsDisplay: ReactNode;
+	if ( keywords ) {
+		keywordsDisplay = <SortedKeywordList keywords={ keywords } />;
+	} else {
+		keywordsDisplay = <span className={ styles.noKeywords }>None</span>;
+	}
 
 	return (
 		<div>
@@ -61,17 +53,10 @@ export function SelectedFeatureDetails( { featureId }: Props ) {
 				</p>
 			) }
 
-			<h4 className="screenReaderOnly">Breadcrumb for currently selected feature:</h4>
-			<div className={ styles.selectedFeatureBreadcrumb }>
-				{ productName }
-				<BreadcrumbIcon />
-				{ featureGroupName && (
-					<>
-						{ featureGroupName }
-						<BreadcrumbIcon />
-					</>
-				) }
-				{ featureName }
+			<div className={ styles.selectedFeatureKeywords }>
+				<h4 className="screenReaderOnly">Keywords for currently selected feature:</h4>
+				<p className={ styles.selectedFeatureKeywordTitle }>Keywords</p>
+				{ keywordsDisplay }
 			</div>
 		</div>
 	);
