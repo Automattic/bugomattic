@@ -1,8 +1,9 @@
 import React, { useMemo } from 'react';
 import styles from '../duplicate-search-controls.module.css';
+import { useAppSelector } from '../../app/hooks';
+import { selectAvailableRepoFilters } from '../../static-data/available-repo-filters/available-repo-filters-slice';
 
 interface Props {
-	availableRepos: string[];
 	activeRepos: string[];
 	setActiveRepos: ( activeRepos: string[] ) => void;
 }
@@ -11,7 +12,8 @@ interface ReposByOrg {
 	[ org: string ]: string[];
 }
 
-export function ManualRepoFilter( { availableRepos, activeRepos, setActiveRepos }: Props ) {
+export function ManualRepoFilter( { activeRepos, setActiveRepos }: Props ) {
+	const availableRepos = useAppSelector( selectAvailableRepoFilters );
 	const sortedAvailableRepos = useMemo( () => [ ...availableRepos ].sort(), [ availableRepos ] );
 
 	const reposByOrg: ReposByOrg = useMemo( () => {

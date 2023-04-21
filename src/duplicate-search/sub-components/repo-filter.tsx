@@ -10,7 +10,6 @@ import {
 	FloatingFocusManager,
 } from '@floating-ui/react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { selectAvailableRepoFilters } from '../../static-data/available-repo-filters/available-repo-filters-slice';
 import styles from '../duplicate-search-controls.module.css';
 import {
 	selectActiveRepoFilters,
@@ -28,7 +27,6 @@ type FilterMode = 'Default' | 'Manual';
 export function RepoFilter() {
 	const dispatch = useAppDispatch();
 
-	const availableRepos = useAppSelector( selectAvailableRepoFilters );
 	const savedActiveRepos = useAppSelector( selectActiveRepoFilters );
 
 	const initialFilterMode: FilterMode = useMemo(
@@ -71,7 +69,6 @@ export function RepoFilter() {
 	} else {
 		filterModeDisplay = (
 			<ManualRepoFilter
-				availableRepos={ availableRepos }
 				activeRepos={ workingActiveRepos }
 				setActiveRepos={ setWorkingActiveRepos }
 			/>
