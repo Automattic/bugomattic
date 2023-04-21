@@ -27,10 +27,14 @@ describe( '[DuplicateSearchControls]', () => {
 		loadError: null,
 	};
 	const defaultInitialSearchState: DuplicateSearchState = {
-		searchTerm: 'foo bar',
+		searchTerm: '',
 		statusFilter: 'all',
 		activeRepoFilters: [],
 		sort: 'relevance',
+	};
+	const searchStateWithSearchTerm: DuplicateSearchState = {
+		...defaultInitialSearchState,
+		searchTerm: 'foo bar',
 	};
 
 	function setup( component: ReactElement, preLoadedState?: Partial< RootState > ) {
@@ -96,6 +100,14 @@ describe( '[DuplicateSearchControls]', () => {
 
 			expect( apiClient.searchIssues ).toHaveBeenCalledTimes( 1 );
 		} );
+
+		test( "If you change another parameter while the search input is empty, it doesn't search", async () => {
+			const { user, apiClient } = setup( <DuplicateSearchControls /> );
+
+			await user.click( screen.getByRole( 'option', { name: 'Open' } ) );
+
+			expect( apiClient.searchIssues ).not.toHaveBeenCalled();
+		} );
 	} );
 
 	describe( 'Status filter', () => {
@@ -115,11 +127,13 @@ describe( '[DuplicateSearchControls]', () => {
 		} );
 
 		test( 'Selecting a new filter triggers a new search with the selected status filter', async () => {
-			const { apiClient, user } = setup( <DuplicateSearchControls /> );
+			const { apiClient, user } = setup( <DuplicateSearchControls />, {
+				duplicateSearch: searchStateWithSearchTerm,
+			} );
 
 			await user.click( screen.getByRole( 'option', { name: 'Closed' } ) );
 
-			expect( apiClient.searchIssues ).toHaveBeenCalledWith( defaultInitialSearchState.searchTerm, {
+			expect( apiClient.searchIssues ).toHaveBeenCalledWith( searchStateWithSearchTerm.searchTerm, {
 				status: 'closed',
 				sort: defaultInitialSearchState.sort,
 				repos: defaultInitialSearchState.activeRepoFilters,
@@ -127,7 +141,9 @@ describe( '[DuplicateSearchControls]', () => {
 		} );
 
 		test( 'Selecting the same filter does not trigger a new search', async () => {
-			const { apiClient, user } = setup( <DuplicateSearchControls /> );
+			const { apiClient, user } = setup( <DuplicateSearchControls />, {
+				duplicateSearch: searchStateWithSearchTerm,
+			} );
 
 			await user.click( screen.getByRole( 'option', { name: 'All' } ) );
 
@@ -224,7 +240,9 @@ describe( '[DuplicateSearchControls]', () => {
 		} );
 
 		test( 'Clicking "Cancel" closes popover, but does not fire a new search or save repos', async () => {
-			const { apiClient } = setup( <DuplicateSearchControls /> );
+			const { apiClient } = setup( <DuplicateSearchControls />, {
+				duplicateSearch: searchStateWithSearchTerm,
+			} );
 
 			await userEvent.click( screen.getByRole( 'button', { name: 'Repository filter' } ) );
 			await userEvent.click( screen.getByRole( 'option', { name: 'Manual' } ) );
@@ -249,7 +267,9 @@ describe( '[DuplicateSearchControls]', () => {
 		} );
 
 		test( 'Clicking "Filter" closes popover and fires a new search', async () => {
-			const { apiClient } = setup( <DuplicateSearchControls /> );
+			const { apiClient } = setup( <DuplicateSearchControls />, {
+				duplicateSearch: searchStateWithSearchTerm,
+			} );
 
 			await userEvent.click( screen.getByRole( 'button', { name: 'Repository filter' } ) );
 			await userEvent.click( screen.getByRole( 'button', { name: 'Filter' } ) );
@@ -261,13 +281,15 @@ describe( '[DuplicateSearchControls]', () => {
 		} );
 
 		test( 'Filtering on default mode searches with no repo filters', async () => {
-			const { apiClient } = setup( <DuplicateSearchControls /> );
+			const { apiClient } = setup( <DuplicateSearchControls />, {
+				duplicateSearch: searchStateWithSearchTerm,
+			} );
 
 			await userEvent.click( screen.getByRole( 'button', { name: 'Repository filter' } ) );
 			await userEvent.click( screen.getByRole( 'button', { name: 'Filter' } ) );
 
 			expect( apiClient.searchIssues ).toHaveBeenCalledWith(
-				defaultInitialSearchState.searchTerm,
+				searchStateWithSearchTerm.searchTerm,
 				expect.objectContaining( {
 					repos: [],
 				} )
@@ -275,14 +297,16 @@ describe( '[DuplicateSearchControls]', () => {
 		} );
 
 		test( 'Filtering on manual mode with nothing selected searches with no repo filters', async () => {
-			const { apiClient } = setup( <DuplicateSearchControls /> );
+			const { apiClient } = setup( <DuplicateSearchControls />, {
+				duplicateSearch: searchStateWithSearchTerm,
+			} );
 
 			await userEvent.click( screen.getByRole( 'button', { name: 'Repository filter' } ) );
 			await userEvent.click( screen.getByRole( 'option', { name: 'Manual' } ) );
 			await userEvent.click( screen.getByRole( 'button', { name: 'Filter' } ) );
 
 			expect( apiClient.searchIssues ).toHaveBeenCalledWith(
-				defaultInitialSearchState.searchTerm,
+				searchStateWithSearchTerm.searchTerm,
 				expect.objectContaining( {
 					repos: [],
 				} )
@@ -290,7 +314,9 @@ describe( '[DuplicateSearchControls]', () => {
 		} );
 
 		test( 'Filtering on manual mode with repos selected searches with the checked repos', async () => {
-			const { apiClient } = setup( <DuplicateSearchControls /> );
+			const { apiClient } = setup( <DuplicateSearchControls />, {
+				duplicateSearch: searchStateWithSearchTerm,
+			} );
 
 			await userEvent.click( screen.getByRole( 'button', { name: 'Repository filter' } ) );
 			await userEvent.click( screen.getByRole( 'option', { name: 'Manual' } ) );
@@ -307,7 +333,7 @@ describe( '[DuplicateSearchControls]', () => {
 			await userEvent.click( screen.getByRole( 'button', { name: 'Filter' } ) );
 
 			expect( apiClient.searchIssues ).toHaveBeenCalledWith(
-				defaultInitialSearchState.searchTerm,
+				searchStateWithSearchTerm.searchTerm,
 				expect.objectContaining( {
 					repos: [ availableRepoFilters[ 0 ], availableRepoFilters[ 1 ] ],
 				} )
