@@ -62,6 +62,42 @@ describe( '[DuplicateSearchControls]', () => {
 		return fullName.split( '/' )[ 1 ];
 	}
 
+	describe( 'Search input', () => {
+		async function search( user: ReturnType< typeof userEvent.setup >, searchTerm: string ) {
+			await user.click( screen.getByRole( 'textbox', { name: 'Search for duplicate issues' } ) );
+			await user.keyboard( searchTerm );
+			// Bypass debouncing by hitting enter
+			await user.keyboard( '{Enter}' );
+		}
+
+		test( 'If you enter a search term, it searches for it', async () => {
+			const { user, apiClient } = setup( <DuplicateSearchControls /> );
+
+			await search( user, 'foo' );
+
+			expect( apiClient.searchIssues ).toHaveBeenCalledWith( 'foo', expect.anything() );
+		} );
+
+		test( "If you search for only white space, it doesn't search", async () => {
+			const { user, apiClient } = setup( <DuplicateSearchControls /> );
+
+			await search( user, ' ' );
+
+			expect( apiClient.searchIssues ).not.toHaveBeenCalled();
+		} );
+
+		test( "If you clear the field, it doesn't search again", async () => {
+			const { user, apiClient } = setup( <DuplicateSearchControls /> );
+
+			await search( user, 'foo' );
+
+			await user.clear( screen.getByRole( 'textbox', { name: 'Search for duplicate issues' } ) );
+			await user.keyboard( '{Enter}' );
+
+			expect( apiClient.searchIssues ).toHaveBeenCalledTimes( 1 );
+		} );
+	} );
+
 	describe( 'Status filter', () => {
 		test( 'By default the "All" filter is selected', () => {
 			setup( <DuplicateSearchControls /> );
@@ -70,18 +106,18 @@ describe( '[DuplicateSearchControls]', () => {
 		} );
 
 		test( 'Selecting a new status filter marks that status as selected', async () => {
-			setup( <DuplicateSearchControls /> );
+			const { user } = setup( <DuplicateSearchControls /> );
 
-			await userEvent.click( screen.getByRole( 'option', { name: 'Open' } ) );
+			await user.click( screen.getByRole( 'option', { name: 'Open' } ) );
 
 			expect( screen.getByRole( 'option', { name: 'Open', selected: true } ) ).toBeInTheDocument();
 			expect( screen.getByRole( 'option', { name: 'All', selected: false } ) ).toBeInTheDocument();
 		} );
 
 		test( 'Selecting a new filter triggers a new search with the selected status filter', async () => {
-			const { apiClient } = setup( <DuplicateSearchControls /> );
+			const { apiClient, user } = setup( <DuplicateSearchControls /> );
 
-			await userEvent.click( screen.getByRole( 'option', { name: 'Closed' } ) );
+			await user.click( screen.getByRole( 'option', { name: 'Closed' } ) );
 
 			expect( apiClient.searchIssues ).toHaveBeenCalledWith( defaultInitialSearchState.searchTerm, {
 				status: 'closed',
@@ -91,9 +127,9 @@ describe( '[DuplicateSearchControls]', () => {
 		} );
 
 		test( 'Selecting the same filter does not trigger a new search', async () => {
-			const { apiClient } = setup( <DuplicateSearchControls /> );
+			const { apiClient, user } = setup( <DuplicateSearchControls /> );
 
-			await userEvent.click( screen.getByRole( 'option', { name: 'All' } ) );
+			await user.click( screen.getByRole( 'option', { name: 'All' } ) );
 
 			expect( apiClient.searchIssues ).not.toHaveBeenCalled();
 		} );
