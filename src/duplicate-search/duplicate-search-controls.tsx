@@ -15,7 +15,7 @@ export function DuplicateSearchControls() {
 
 	return (
 		<section>
-			<div>
+			<div className={ styles.searchWrapper }>
 				<DebouncedSearch
 					placeholder="Search"
 					callback={ handleSearchTerm }

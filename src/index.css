@@ -35,18 +35,24 @@ body {
 	font-family: var( --font-san-serif );
 	padding: 0.75rem 0.5rem;
 	width: 100%;
-	border-radius: 4px;
+	border-radius: 2px;
 	background-color: var( --color-white );
-	border: 2px solid var( --color-border-dark );
+	border: 1px solid var( --color-border-dark );
 	box-sizing: border-box;
+}
+
+.root input[type='text']:hover,
+.root input[type='search']:hover,
+.root input[type='email']:hover {
+	outline: 1px solid var( --color-border-dark );
 }
 
 .root input[type='text']:focus,
 .root input[type='search']:focus,
 .root input[type='email']:focus {
 	background-color: var( --color-white );
-	border: 2px solid var( --color-primary );
-	outline: none;
+	border: 1px solid var( --color-primary );
+	outline: 1px solid var( --color-primary );
 }
 
 .root input[type='radio'],
