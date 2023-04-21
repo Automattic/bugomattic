@@ -57,7 +57,8 @@ export function ManualRepoFilter( { availableRepos, activeRepos, setActiveRepos 
 		</button>
 	);
 
-	const massActionButton = activeRepos.length === 0 ? selectAllButton : deselectAllButton;
+	const massActionButton =
+		activeRepos.length === availableRepos.length ? deselectAllButton : selectAllButton;
 
 	return (
 		<div>

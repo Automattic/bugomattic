@@ -289,11 +289,15 @@ describe( '[DuplicateSearchControls]', () => {
 
 			await userEvent.click( screen.getByRole( 'button', { name: 'Repository filter' } ) );
 			await userEvent.click( screen.getByRole( 'option', { name: 'Manual' } ) );
-			await userEvent.click(
-				screen.getByRole( 'checkbox', {
-					name: getRepoNameFromFullName( availableRepoFilters[ 0 ] ),
-				} )
-			);
+
+			for ( const availableRepoFilter of availableRepoFilters ) {
+				await userEvent.click(
+					screen.getByRole( 'checkbox', {
+						name: getRepoNameFromFullName( availableRepoFilter ),
+					} )
+				);
+			}
+
 			await userEvent.click( screen.getByRole( 'button', { name: 'Deselect all' } ) );
 
 			expect( screen.queryByRole( 'checkbox', { checked: true } ) ).not.toBeInTheDocument();
