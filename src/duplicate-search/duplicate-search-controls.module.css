@@ -23,7 +23,7 @@
 
 /* TODO: Move to its own app-wide styles in CSS or through a shared component */
 button.dropdownButton {
-	padding: 0.375rem 0.5625rem 0.375rem 0.75rem;
+	padding: 0.375rem 0.5625rem 0.375rem 0.5625rem;
 	display: flex;
 	align-items: center;
 	background-color: var( --color-white );
@@ -115,14 +115,14 @@ button.dropdownButton[data-active='true']:active {
 
 .repoFilterModeDescription {
 	font-size: var( --font-body-small );
-	margin: 0 0 1rem 0;
+	margin: 0 0 0.5rem 0;
 }
 
 .repoFilterIllustration {
 	display: block;
 	width: 190px;
 	height: auto;
-	margin: 0 auto 1rem auto;
+	margin: 1rem auto 1rem auto;
 }
 
 /* TODO: Move to its own app-wide styles in CSS or through a shared component */
@@ -143,6 +143,11 @@ button.dropdownButton[data-active='true']:active {
 	list-style: none;
 	padding-left: 0;
 	font-weight: 300;
+}
+
+.repoFilterOrgList > li {
+	margin-top: 0.75rem;
+	padding-top: 0.75rem;
 }
 
 .repoFilterRepoList {

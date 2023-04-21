@@ -21,6 +21,7 @@ import { SegmentedControl } from '../../common/components';
 import { DefaultRepoFilter } from './default-repo-filter';
 import { ManualRepoFilter } from './manual-repo-filter';
 import { ReactComponent as DownIcon } from '../../common/svgs/chevron-down.svg';
+import { ReactComponent as FilterIcon } from '../../common/svgs/filter.svg';
 
 type FilterMode = 'Default' | 'Manual';
 
@@ -103,6 +104,7 @@ export function RepoFilter() {
 				aria-label="Repository filter"
 				aria-describedby={ currentFilterDescriptionId }
 			>
+				<FilterIcon aria-hidden={ true } className={ styles.inlineIcon } />
 				<span>Repositories</span>
 				<DownIcon aria-hidden={ true } className={ styles.inlineIcon } />
 			</button>
