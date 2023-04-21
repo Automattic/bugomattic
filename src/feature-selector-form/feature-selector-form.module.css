@@ -156,9 +156,8 @@ button.clearButton:active {
 }
 
 .noKeywords {
-	font-style: italic;
-	color: var( --color-error );
-	font-size: var( --font-header );
+	color: var( --color-text-primary );
+	font-size: var( --font-body-small );
 }
 
 @media only screen and ( max-width: 600px ) {
