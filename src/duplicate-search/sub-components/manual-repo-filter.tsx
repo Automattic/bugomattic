@@ -15,15 +15,14 @@ export function ManualRepoFilter( { availableRepos, activeRepos, setActiveRepos 
 	const sortedAvailableRepos = useMemo( () => [ ...availableRepos ].sort(), [ availableRepos ] );
 
 	const reposByOrg: ReposByOrg = useMemo( () => {
-		const reposByOrg: ReposByOrg = {};
-		sortedAvailableRepos.forEach( ( repo ) => {
+		return sortedAvailableRepos.reduce( ( reposByOrg: ReposByOrg, repo: string ) => {
 			const [ org ] = repo.split( '/' );
 			if ( ! reposByOrg[ org ] ) {
 				reposByOrg[ org ] = [];
 			}
 			reposByOrg[ org ].push( repo );
-		} );
-		return reposByOrg;
+			return reposByOrg;
+		}, {} );
 	}, [ sortedAvailableRepos ] );
 
 	const createCheckboxChangeHandler =

@@ -29,13 +29,14 @@ export function RepoFilter() {
 
 	const availableRepos = useAppSelector( selectAvailableRepoFilters );
 	const savedActiveRepos = useAppSelector( selectActiveRepoFilters );
+
 	const initialFilterMode: FilterMode = useMemo(
 		() => ( savedActiveRepos.length === 0 ? 'Default' : 'Manual' ),
 		[ savedActiveRepos ]
 	);
+	const [ filterMode, setFilterMode ] = useState< FilterMode >( initialFilterMode );
 
 	const [ workingActiveRepos, setWorkingActiveRepos ] = useState( savedActiveRepos );
-	const [ filterMode, setFilterMode ] = useState< FilterMode >( initialFilterMode );
 
 	const [ isPopoverOpen, setIsPopoverOpen ] = useState( false );
 
@@ -50,19 +51,8 @@ export function RepoFilter() {
 		[ initialFilterMode, savedActiveRepos ]
 	);
 
-	const { x, y, refs, strategy, context } = useFloating( {
-		placement: 'bottom-start',
-		open: isPopoverOpen,
-		onOpenChange: handlePopoverToggle,
-		middleware: [ shift() ],
-		whileElementsMounted: autoUpdate,
-	} );
-
-	const click = useClick( context );
-	const dismiss = useDismiss( context );
-	const role = useRole( context );
-
-	const { getReferenceProps, getFloatingProps } = useInteractions( [ click, dismiss, role ] );
+	const { x, y, refs, strategy, context, getReferenceProps, getFloatingProps } =
+		usePopoverFloatingConfiguration( isPopoverOpen, handlePopoverToggle );
 
 	const handleCancelClick = useCallback( () => {
 		setIsPopoverOpen( false );
@@ -88,8 +78,8 @@ export function RepoFilter() {
 	}
 
 	const filterModeOptions: FilterMode[] = [ 'Default', 'Manual' ];
-	const handleSwitchModeClick = useCallback( ( newFilterMode: FilterMode ) => {
-		setFilterMode( newFilterMode );
+	const handleSwitchModeClick = useCallback( ( newFilterMode: string ) => {
+		setFilterMode( newFilterMode as FilterMode );
 	}, [] );
 
 	const popoverBodyClasses = [ styles.repoPopoverBody ];
@@ -114,7 +104,7 @@ export function RepoFilter() {
 				aria-describedby={ currentFilterDescriptionId }
 			>
 				<span>Repositories</span>
-				<DownIcon className={ styles.inlineIcon } />
+				<DownIcon aria-hidden={ true } className={ styles.inlineIcon } />
 			</button>
 			<span hidden id={ currentFilterDescriptionId }>
 				{ currentFilterDescription }
@@ -136,7 +126,7 @@ export function RepoFilter() {
 							<SegmentedControl
 								options={ filterModeOptions }
 								selectedOption={ filterMode }
-								onSelect={ handleSwitchModeClick as ( option: string ) => void }
+								onSelect={ handleSwitchModeClick }
 								controlId="repo-filter-mode"
 								className={ styles.repoFilterModeControl }
 								ariaLabel="Filter mode selector"
@@ -162,4 +152,24 @@ export function RepoFilter() {
 			) }
 		</>
 	);
+}
+
+function usePopoverFloatingConfiguration(
+	isPopoverOpen: boolean,
+	onPopoverToggle: ( newIsPopoverOpenValue: boolean ) => void
+) {
+	const { x, y, refs, strategy, context } = useFloating( {
+		placement: 'bottom-start',
+		open: isPopoverOpen,
+		onOpenChange: onPopoverToggle,
+		middleware: [ shift() ],
+		whileElementsMounted: autoUpdate,
+	} );
+
+	const click = useClick( context );
+	const dismiss = useDismiss( context );
+	const role = useRole( context );
+
+	const { getReferenceProps, getFloatingProps } = useInteractions( [ click, dismiss, role ] );
+	return { x, y, refs, strategy, context, getReferenceProps, getFloatingProps };
 }
