@@ -1,7 +1,12 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import styles from '../duplicate-search-controls.module.css';
 import { useAppSelector } from '../../app/hooks';
-import { selectAvailableRepoFilters } from '../../static-data/available-repo-filters/available-repo-filters-slice';
+import {
+	selectAvailableRepoFilters,
+	selectAvailableRepoFiltersLoadError,
+} from '../../static-data/available-repo-filters/available-repo-filters-slice';
+import { useMonitoring } from '../../monitoring/monitoring-provider';
+import { useLoggerWithCache } from '../../monitoring/use-logger-with-cache';
 
 interface Props {
 	activeRepos: string[];
@@ -14,6 +19,7 @@ interface ReposByOrg {
 
 export function ManualRepoFilter( { activeRepos, setActiveRepos }: Props ) {
 	const availableRepos = useAppSelector( selectAvailableRepoFilters );
+
 	const sortedAvailableRepos = useMemo( () => [ ...availableRepos ].sort(), [ availableRepos ] );
 
 	const reposByOrg: ReposByOrg = useMemo( () => {
@@ -61,6 +67,33 @@ export function ManualRepoFilter( { activeRepos, setActiveRepos }: Props ) {
 
 	const massActionButton =
 		activeRepos.length === availableRepos.length ? deselectAllButton : selectAllButton;
+
+	const monitoringClient = useMonitoring();
+	const availableReposLoadError = useAppSelector( selectAvailableRepoFiltersLoadError );
+	const logError = useLoggerWithCache( monitoringClient.logger.error, [] );
+	useEffect( () => {
+		if ( availableReposLoadError ) {
+			logError( 'Error loading available repo filters', {
+				error: availableReposLoadError,
+			} );
+		}
+	}, [ availableReposLoadError, logError ] );
+
+	if ( availableReposLoadError ) {
+		return (
+			<div>
+				<h3 className="screenReaderOnly">Manual filter mode</h3>
+				<p
+					role="alert"
+					className={ `${ styles.repoFilterModeDescription } ${ styles.repoFilterError } ` }
+				>
+					Uh oh! It looks like there was an error loading the list of available repository filters.
+					We have logged this error and will fix it soon. In the meantime, you can still search for
+					issues using the default filter mode.
+				</p>
+			</div>
+		);
+	}
 
 	return (
 		<div>

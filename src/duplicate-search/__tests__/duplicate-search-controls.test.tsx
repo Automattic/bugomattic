@@ -5,6 +5,9 @@ import { renderWithProviders } from '../../test-utils/render-with-providers';
 import { DuplicateSearchControls } from '../duplicate-search-controls';
 import { screen } from '@testing-library/react';
 import { DuplicateSearchState } from '../types';
+import { RootState } from '../../app/store';
+import { AvailableRepoFiltersState } from '../../static-data/available-repo-filters/types';
+import { createMockMonitoringClient } from '../../test-utils/mock-monitoring-client';
 
 // For some list assertions, this is really our best option, so ignoring in this file.
 /* eslint-disable testing-library/no-node-access */
@@ -19,6 +22,10 @@ globalThis.ResizeObserver = MockResizeObserver as unknown as typeof ResizeObserv
 
 describe( '[DuplicateSearchControls]', () => {
 	const availableRepoFilters = [ 'xyzOrg/xyzRepo', 'xyzOrg/abcRepo', 'abcOrg/otherRepo' ];
+	const defaultAvailableRepoFiltersState: AvailableRepoFiltersState = {
+		repos: availableRepoFilters,
+		loadError: null,
+	};
 	const defaultInitialSearchState: DuplicateSearchState = {
 		searchTerm: 'foo bar',
 		statusFilter: 'all',
@@ -26,23 +33,27 @@ describe( '[DuplicateSearchControls]', () => {
 		sort: 'relevance',
 	};
 
-	function setup( component: ReactElement, initialSearchState?: DuplicateSearchState ) {
+	function setup( component: ReactElement, preLoadedState?: Partial< RootState > ) {
 		const apiClient = createMockApiClient();
+		const monitoringClient = createMockMonitoringClient();
 		const user = userEvent.setup();
+
+		const initialSearchState = preLoadedState?.duplicateSearch ?? defaultInitialSearchState;
+		const availableRepoFilterState =
+			preLoadedState?.availableRepoFilters ?? defaultAvailableRepoFiltersState;
 		const view = renderWithProviders( component, {
 			apiClient,
+			monitoringClient,
 			preloadedState: {
-				duplicateSearch: initialSearchState ?? defaultInitialSearchState,
-				availableRepoFilters: {
-					repos: availableRepoFilters,
-					loadError: null,
-				},
+				duplicateSearch: initialSearchState,
+				availableRepoFilters: availableRepoFilterState,
 			},
 		} );
 
 		return {
 			user,
 			apiClient,
+			monitoringClient,
 			...view,
 		};
 	}
@@ -113,8 +124,7 @@ describe( '[DuplicateSearchControls]', () => {
 		test( 'If repos are selected, popover launches to manual mode, with the filters checked', async () => {
 			const selectedRepos = [ availableRepoFilters[ 0 ], availableRepoFilters[ 2 ] ];
 			setup( <DuplicateSearchControls />, {
-				...defaultInitialSearchState,
-				activeRepoFilters: selectedRepos,
+				duplicateSearch: { ...defaultInitialSearchState, activeRepoFilters: selectedRepos },
 			} );
 
 			await userEvent.click( screen.getByRole( 'button', { name: 'Repository filter' } ) );
@@ -306,8 +316,7 @@ describe( '[DuplicateSearchControls]', () => {
 		test( 'With saved repos selected, the repo filter button has "data-active" attribute set to "true", and correct description', async () => {
 			const selectedRepos = [ availableRepoFilters[ 0 ], availableRepoFilters[ 2 ] ];
 			setup( <DuplicateSearchControls />, {
-				...defaultInitialSearchState,
-				activeRepoFilters: selectedRepos,
+				duplicateSearch: { ...defaultInitialSearchState, activeRepoFilters: selectedRepos },
 			} );
 
 			expect( screen.getByRole( 'button', { name: 'Repository filter' } ) ).toHaveAttribute(
@@ -335,6 +344,24 @@ describe( '[DuplicateSearchControls]', () => {
 					description: 'Default repository filter is active.',
 				} )
 			).toBeInTheDocument();
+		} );
+
+		test( 'If there was an error loading available filters, we show an error message and log an error', async () => {
+			const errorMessage = 'Repo filter load error.';
+			const { monitoringClient } = setup( <DuplicateSearchControls />, {
+				availableRepoFilters: { repos: [], loadError: errorMessage },
+			} );
+
+			await userEvent.click( screen.getByRole( 'button', { name: 'Repository filter' } ) );
+			await userEvent.click( screen.getByRole( 'option', { name: 'Manual' } ) );
+
+			expect( screen.getByRole( 'alert' ) ).toHaveTextContent(
+				'error loading the list of available repository filters'
+			);
+			expect( monitoringClient.logger.error ).toHaveBeenCalledWith(
+				'Error loading available repo filters',
+				{ error: 'Repo filter load error.' }
+			);
 		} );
 	} );
 } );

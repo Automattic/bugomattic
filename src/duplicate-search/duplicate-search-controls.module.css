@@ -118,6 +118,11 @@ button.dropdownButton[data-active='true']:active {
 	margin: 0 0 0.5rem 0;
 }
 
+.repoFilterError {
+	color: var( --color-error );
+	font-style: italic;
+}
+
 .repoFilterIllustration {
 	display: block;
 	width: 190px;
