@@ -21,6 +21,7 @@ import { DefaultRepoFilter } from './default-repo-filter';
 import { ManualRepoFilter } from './manual-repo-filter';
 import { ReactComponent as DownIcon } from '../../common/svgs/chevron-down.svg';
 import { ReactComponent as FilterIcon } from '../../common/svgs/filter.svg';
+import { ActiveRepos } from './types';
 
 type FilterMode = 'Default' | 'Manual';
 
@@ -35,19 +36,27 @@ export function RepoFilter() {
 	);
 	const [ filterMode, setFilterMode ] = useState< FilterMode >( initialFilterMode );
 
-	const [ workingActiveRepos, setWorkingActiveRepos ] = useState( savedActiveRepos );
+	const initialWorkingActiveRepos: ActiveRepos = useMemo(
+		() =>
+			savedActiveRepos.reduce( ( workingActiveRepos: ActiveRepos, repo: string ) => {
+				workingActiveRepos[ repo ] = true;
+				return workingActiveRepos;
+			}, {} ),
+		[ savedActiveRepos ]
+	);
+	const [ workingActiveRepos, setWorkingActiveRepos ] = useState( initialWorkingActiveRepos );
 
 	const [ isPopoverOpen, setIsPopoverOpen ] = useState( false );
 
 	const handlePopoverToggle = useCallback(
 		( newIsPopoverOpenValue: boolean ) => {
 			if ( newIsPopoverOpenValue ) {
-				setWorkingActiveRepos( savedActiveRepos );
+				setWorkingActiveRepos( initialWorkingActiveRepos );
 				setFilterMode( initialFilterMode );
 			}
 			setIsPopoverOpen( newIsPopoverOpenValue );
 		},
-		[ initialFilterMode, savedActiveRepos ]
+		[ initialFilterMode, initialWorkingActiveRepos ]
 	);
 
 	const { x, y, refs, strategy, context, getReferenceProps, getFloatingProps } =
@@ -58,7 +67,7 @@ export function RepoFilter() {
 	}, [] );
 
 	const handleFilterClick = useCallback( () => {
-		const newRepoFilters = filterMode === 'Default' ? [] : workingActiveRepos;
+		const newRepoFilters = filterMode === 'Default' ? [] : Object.keys( workingActiveRepos );
 		dispatch( setSearchParam( setActiveRepoFilters( newRepoFilters ) ) );
 		setIsPopoverOpen( false );
 	}, [ dispatch, filterMode, workingActiveRepos ] );

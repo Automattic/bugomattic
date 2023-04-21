@@ -7,10 +7,11 @@ import {
 } from '../../static-data/available-repo-filters/available-repo-filters-slice';
 import { useMonitoring } from '../../monitoring/monitoring-provider';
 import { useLoggerWithCache } from '../../monitoring/use-logger-with-cache';
+import { ActiveRepos } from './types';
 
 interface Props {
-	activeRepos: string[];
-	setActiveRepos: ( activeRepos: string[] ) => void;
+	activeRepos: ActiveRepos;
+	setActiveRepos: ( activeRepos: ActiveRepos ) => void;
 }
 
 interface ReposByOrg {
@@ -22,7 +23,7 @@ export function ManualRepoFilter( { activeRepos, setActiveRepos }: Props ) {
 
 	const sortedAvailableRepos = useMemo( () => [ ...availableRepos ].sort(), [ availableRepos ] );
 
-	const reposByOrg: ReposByOrg = useMemo( () => {
+	const availableReposByOrg: ReposByOrg = useMemo( () => {
 		return sortedAvailableRepos.reduce( ( reposByOrg: ReposByOrg, repo: string ) => {
 			const [ org ] = repo.split( '/' );
 			if ( ! reposByOrg[ org ] ) {
@@ -36,11 +37,12 @@ export function ManualRepoFilter( { activeRepos, setActiveRepos }: Props ) {
 	const createCheckboxChangeHandler =
 		( repo: string ) => ( event: React.ChangeEvent< HTMLInputElement > ) => {
 			const { checked } = event.target;
-			let newActiveRepos: string[];
+			let newActiveRepos: ActiveRepos;
 			if ( checked ) {
-				newActiveRepos = [ ...activeRepos, repo ];
+				newActiveRepos = { ...activeRepos, [ repo ]: true };
 			} else {
-				newActiveRepos = activeRepos.filter( ( activeRepo ) => activeRepo !== repo );
+				newActiveRepos = { ...activeRepos };
+				delete newActiveRepos[ repo ];
 			}
 			setActiveRepos( newActiveRepos );
 		};
@@ -49,7 +51,14 @@ export function ManualRepoFilter( { activeRepos, setActiveRepos }: Props ) {
 		<button
 			type="button"
 			className={ styles.repoFilterMassActionButton }
-			onClick={ () => setActiveRepos( [ ...availableRepos ] ) }
+			onClick={ () =>
+				setActiveRepos(
+					availableRepos.reduce( ( newActiveRepos: ActiveRepos, repo: string ) => {
+						newActiveRepos[ repo ] = true;
+						return newActiveRepos;
+					}, {} )
+				)
+			}
 		>
 			Select all
 		</button>
@@ -59,15 +68,19 @@ export function ManualRepoFilter( { activeRepos, setActiveRepos }: Props ) {
 		<button
 			type="button"
 			className={ styles.repoFilterMassActionButton }
-			onClick={ () => setActiveRepos( [] ) }
+			onClick={ () => setActiveRepos( {} ) }
 		>
 			Deselect all
 		</button>
 	);
 
 	const massActionButton =
-		activeRepos.length === availableRepos.length ? deselectAllButton : selectAllButton;
+		Object.keys( activeRepos ).length === availableRepos.length
+			? deselectAllButton
+			: selectAllButton;
 
+	// We handle static data errors in real time where they occur. This is where we need to handle any
+	// potential repository filter load error.
 	const monitoringClient = useMonitoring();
 	const availableReposLoadError = useAppSelector( selectAvailableRepoFiltersLoadError );
 	const logError = useLoggerWithCache( monitoringClient.logger.error, [] );
@@ -106,7 +119,7 @@ export function ManualRepoFilter( { activeRepos, setActiveRepos }: Props ) {
 				aria-label="List of repository filters by organization"
 				className={ styles.repoFilterOrgList }
 			>
-				{ Object.entries( reposByOrg ).map( ( [ org, fullRepoNamesForOrg ] ) => (
+				{ Object.entries( availableReposByOrg ).map( ( [ org, fullRepoNamesForOrg ] ) => (
 					<li key={ org }>
 						{ org }
 						<ul
@@ -118,7 +131,7 @@ export function ManualRepoFilter( { activeRepos, setActiveRepos }: Props ) {
 									<label className={ styles.repoFilterCheckboxWrapper }>
 										<input
 											type="checkbox"
-											checked={ activeRepos.includes( fullRepoName ) }
+											checked={ activeRepos[ fullRepoName ] ?? false }
 											onChange={ createCheckboxChangeHandler( fullRepoName ) }
 											className={ styles.repoFilterCheckbox }
 										/>
