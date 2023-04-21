@@ -62,6 +62,7 @@ export function ManualRepoFilter( { availableRepos, activeRepos, setActiveRepos 
 
 	return (
 		<div>
+			<h3 className="screenReaderOnly">Manual filter mode</h3>
 			<p className={ styles.repoFilterModeDescription }>
 				Restricts results to only the repositories selected.
 			</p>

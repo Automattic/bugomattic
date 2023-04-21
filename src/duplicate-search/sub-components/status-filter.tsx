@@ -27,6 +27,7 @@ export function StatusFilter() {
 			selectedOption={ currentStatusFilter }
 			onSelect={ onStatusFilterSelect as ( value: string ) => void }
 			controlId="status-filter"
+			ariaLabel="Issue status filter"
 		/>
 	);
 }

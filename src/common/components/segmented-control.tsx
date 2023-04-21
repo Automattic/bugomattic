@@ -12,6 +12,7 @@ interface Props {
 	onSelect: ( option: string ) => void;
 	controlId: string;
 	className?: string;
+	ariaLabel?: string;
 }
 
 function optionIsString( option: string | OptionWithDisplayText ): option is string {
@@ -32,6 +33,7 @@ export function SegmentedControl( {
 	onSelect,
 	controlId,
 	className,
+	ariaLabel,
 }: Props ) {
 	const createId = ( option: string | OptionWithDisplayText ) =>
 		`${ controlId }-${ getOptionValue( option ) }`;
@@ -55,7 +57,7 @@ export function SegmentedControl( {
 		// leave a single pixel of whitespace within the control.
 		<div className={ wrapperClasses }>
 			<div
-				aria-label="Segmented control"
+				aria-label={ ariaLabel }
 				role="listbox"
 				aria-activedescendant={ createId( selectedOption ) }
 				className={ styles.control }

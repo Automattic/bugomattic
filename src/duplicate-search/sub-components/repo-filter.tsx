@@ -97,6 +97,12 @@ export function RepoFilter() {
 		popoverBodyClasses.push( styles.repoPopoverManualModeBody );
 	}
 
+	const currentFilterDescriptionId = 'current-repo-filter';
+	const currentFilterDescription =
+		savedActiveRepos.length > 0
+			? 'Manual custom repository filter is active.'
+			: 'Default repository filter is active.';
+
 	return (
 		<>
 			<button
@@ -104,10 +110,15 @@ export function RepoFilter() {
 				ref={ refs.setReference }
 				{ ...getReferenceProps() }
 				data-active={ savedActiveRepos.length > 0 }
+				aria-label="Repository filter"
+				aria-describedby={ currentFilterDescriptionId }
 			>
 				<span>Repositories</span>
 				<DownIcon className={ styles.inlineIcon } />
 			</button>
+			<span hidden id={ currentFilterDescriptionId }>
+				{ currentFilterDescription }
+			</span>
 			{ isPopoverOpen && (
 				<FloatingFocusManager context={ context } modal={ false }>
 					<div
@@ -119,6 +130,7 @@ export function RepoFilter() {
 							left: x ?? 0,
 						} }
 						{ ...getFloatingProps() }
+						aria-label="Repository filter popover"
 					>
 						<div className={ styles.repoPopoverHeader }>
 							<SegmentedControl
@@ -127,6 +139,7 @@ export function RepoFilter() {
 								onSelect={ handleSwitchModeClick as ( option: string ) => void }
 								controlId="repo-filter-mode"
 								className={ styles.repoFilterModeControl }
+								ariaLabel="Filter mode selector"
 							/>
 						</div>
 						<div className={ popoverBodyClasses.join( ' ' ) }>{ filterModeDisplay }</div>
