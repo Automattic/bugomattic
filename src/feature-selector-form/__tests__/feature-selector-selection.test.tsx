@@ -20,6 +20,7 @@ describe( '[FeatureSelector -- Feature Selection]', () => {
 		description: 'Test Feature Under Group Description',
 		parentType: 'featureGroup',
 		parentId: 'feature_group',
+		keywords: [ 'ABC keyword' ],
 	};
 
 	const featureUnderProduct: Feature = {
@@ -145,18 +146,11 @@ describe( '[FeatureSelector -- Feature Selection]', () => {
 			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 			featureUnderGroup.description!
 		);
-		// Breadcrumb
-		expect(
-			screen.getByText( ( content ) => {
-				// This is kinda gross, but matching the text node of the breadcrumb exactly is a bit wonky -- this is more stable.
-				return (
-					content.includes( product.name ) &&
-					content.includes( featureGroup.name ) &&
-					content.includes( featureUnderGroup.name ) &&
-					content.indexOf( product.name ) < content.indexOf( featureGroup.name ) &&
-					content.indexOf( featureGroup.name ) < content.indexOf( featureUnderGroup.name )
-				);
-			} )
+
+		// Keywords
+		expect( screen.getByTestId( 'selected-feature-keywords' ) ).toHaveTextContent(
+			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+			featureUnderGroup.keywords![ 0 ]
 		);
 
 		await user.click(
@@ -178,17 +172,15 @@ describe( '[FeatureSelector -- Feature Selection]', () => {
 			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 			featureUnderProduct.description!
 		);
-		// Breadcrumb
-		expect(
-			screen.getByText( ( content ) => {
-				// This is kinda gross, but matching the text node of the breadcrumb exactly is a bit wonky -- this is more stable.
-				return (
-					content.includes( product.name ) &&
-					content.includes( featureUnderProduct.name ) &&
-					content.indexOf( product.name ) < content.indexOf( featureUnderProduct.name )
-				);
-			} )
-		);
+		// Keywords
+		if ( featureUnderProduct.keywords ) {
+			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+			featureUnderProduct.keywords!.forEach( ( keyword ) => {
+				expect( screen.getByTestId( 'selected-feature-keywords' ) ).toHaveTextContent( keyword );
+			} );
+		} else {
+			expect( screen.getByText( 'None' ) ).toBeInTheDocument();
+		}
 	} );
 
 	test( 'Selecting a feature records the "feature_select" event with feature and product name', async () => {
