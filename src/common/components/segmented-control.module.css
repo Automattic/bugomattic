@@ -14,9 +14,17 @@
 	overflow: hidden; /* Hide the border radius on the buttons */
 }
 
-.control:focus-within {
+.control:has( :focus-visible ) {
 	border-color: var( --color-primary );
 	outline: 1px solid var( --color-primary );
+}
+
+@supports not selector( :has( a, b ) ) {
+	/* For browsers that don't support :has, we'll fallback to :focus-within */
+	.control:focus-within {
+		border-color: var( --color-primary );
+		outline: 1px solid var( --color-primary );
+	}
 }
 
 button.option {
