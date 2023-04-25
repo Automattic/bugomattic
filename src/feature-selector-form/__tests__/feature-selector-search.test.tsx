@@ -27,6 +27,7 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 			ABC: {
 				id: 'ABC',
 				name: 'ABC Product',
+				description: 'The stats tools showing traffic and engagement.',
 				featureGroupIds: [ 'DEF', 'MNO' ],
 				featureIds: [],
 			},
@@ -41,6 +42,7 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 			DEF: {
 				id: 'DEF',
 				name: 'DEF Group',
+				description: 'The paid site backup package.',
 				productId: 'ABC',
 				featureIds: [ 'GHI', 'JKL' ],
 			},
@@ -67,6 +69,7 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 			STU: {
 				id: 'STU',
 				name: 'STU Feature',
+				description: 'Blocks that come from the Newspack plugin (e.g. Blog Posts, Post Carousel)',
 				parentType: 'product',
 				parentId: 'PQR',
 			},
@@ -185,6 +188,52 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 			expect(
 				screen.getByRole( 'button', { expanded: false, name: 'PQR Product' } )
 			).toBeInTheDocument();
+		} );
+
+		test( 'Matching a product description filters to that product collapsed', async () => {
+			const { user } = setup( <FeatureSelectorForm /> );
+			await search( user, 'traffic' );
+
+			expect(
+				screen.getByRole( 'button', { expanded: false, name: 'ABC Product' } )
+			).toBeInTheDocument();
+
+			// Test important exclusions
+			expect( screen.queryByRole( 'button', { name: 'PQR Product' } ) ).not.toBeInTheDocument();
+			expect( screen.queryByRole( 'button', { name: /Group/ } ) ).not.toBeInTheDocument();
+			expect( screen.queryByRole( 'option', { name: /Feature/ } ) ).not.toBeInTheDocument();
+		} );
+
+		test( 'Matching a feature group description filters to that feature group and its product', async () => {
+			const { user } = setup( <FeatureSelectorForm /> );
+			await search( user, 'site backup' );
+
+			expect(
+				screen.getByRole( 'button', { expanded: false, name: 'DEF Group' } )
+			).toBeInTheDocument();
+			expect(
+				screen.getByRole( 'button', { expanded: false, name: 'ABC Product' } )
+			).toBeInTheDocument();
+
+			// Test important exclusions
+			expect( screen.queryByRole( 'button', { name: 'PQR Product' } ) ).not.toBeInTheDocument();
+			expect( screen.queryByRole( 'option', { name: 'GHI Feature' } ) ).not.toBeInTheDocument();
+			expect( screen.queryByRole( 'option', { name: 'JKL Feature' } ) ).not.toBeInTheDocument();
+		} );
+
+		test( 'Matching a feature description under product filters to that feature and its parent product', async () => {
+			const { user } = setup( <FeatureSelectorForm /> );
+			await search( user, 'blog posts' );
+
+			expect( screen.getByRole( 'option', { name: 'STU Feature' } ) ).toBeInTheDocument();
+			expect(
+				screen.getByRole( 'button', { expanded: false, name: 'PQR Product' } )
+			).toBeInTheDocument();
+
+			// Test important exclusions
+			expect( screen.queryByRole( 'button', { name: 'ABC Product' } ) ).not.toBeInTheDocument();
+			expect( screen.queryByRole( 'button', { name: /Group/ } ) ).not.toBeInTheDocument();
+			expect( screen.queryByRole( 'option', { name: 'VWX Feature' } ) ).not.toBeInTheDocument();
 		} );
 
 		test( 'If no matches are found, shows a no results message', async () => {
