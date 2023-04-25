@@ -1,3 +1,5 @@
+@import '../../variables.css';
+
 .errorMessage {
 	font-size: var( --font-body-small );
 	color: var( --color-error );

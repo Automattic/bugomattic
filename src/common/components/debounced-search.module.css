@@ -1,3 +1,5 @@
+@import '../../variables.css';
+
 .wrapper {
 	position: relative;
 	display: flex;
@@ -10,19 +12,21 @@ input[type='text'].search {
 
 button.button {
 	position: absolute;
-	height: 100%;
 	background: transparent;
 	border: none;
-	right: 0;
-	top: 0;
+	/* Account for the input borders */
+	right: 1px;
+	top: 1px;
+	bottom: 1px;
 	padding: 0 0.5rem;
-	border: 2px solid transparent;
 }
 
-button.button:hover,
-button.button:focus {
-	border: 2px solid var( --color-primary );
-	outline: none;
+button.button:hover {
+	background-color: var( --color-neutral-extra-light );
+}
+
+button.button:active {
+	background-color: var( --color-neutral-light );
 }
 
 .searchIcon {
