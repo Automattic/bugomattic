@@ -10,11 +10,13 @@ import styles from './duplicate-results.module.css';
 import { ReactComponent as InitialIllustration } from './svgs/initial-illustration.svg';
 import { ReactComponent as NoResultsIllustration } from '../common/svgs/missing-info.svg';
 import { LoadingIndicator } from '../common/components';
+import { selectDuplicateSearchFiltersAreActive } from '../combined-selectors/duplicate-search-filters-are-active';
 
 export function DuplicateResults() {
 	const results = useAppSelector( selectDuplicateResults );
 	const resultsRequestStatus = useAppSelector( selectDuplicateResultsRequestStatus );
 	const requestsWereMade = useAppSelector( selectDuplicateRequestsWereMade );
+	const filtersAreActive = useAppSelector( selectDuplicateSearchFiltersAreActive );
 	const showBanner = useShowBanner();
 
 	// This ref and corresponding useEffect hook are used to preserve the height of the
@@ -57,6 +59,9 @@ export function DuplicateResults() {
 				illustration={ NoResultsIllustration }
 				header="No results found."
 				message="Try a different search or change your filters. You can also report a new issue below."
+				additionalScreenReaderText={
+					filtersAreActive ? 'Search filters are currently active.' : undefined
+				}
 				ariaLive="polite"
 			/>
 		);
@@ -65,6 +70,7 @@ export function DuplicateResults() {
 			<>
 				<h3 className="screenReaderOnly" aria-live="polite">
 					Potential duplicate issues found. Results are below.
+					{ filtersAreActive && ' Search filters are currently active.' }
 				</h3>
 				<IssueList issues={ results.slice( 0, resultsLimit ) } />
 			</>
