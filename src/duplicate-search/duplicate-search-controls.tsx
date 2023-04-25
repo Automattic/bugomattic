@@ -17,7 +17,7 @@ export function DuplicateSearchControls() {
 		<section>
 			<div className={ styles.searchWrapper }>
 				<DebouncedSearch
-					placeholder="Search"
+					placeholder="Search for duplicate issues"
 					callback={ handleSearchTerm }
 					inputAriaLabel="Search for duplicate issues"
 					debounceMs={ 500 }

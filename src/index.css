@@ -44,7 +44,7 @@ body {
 .root input[type='text']:hover,
 .root input[type='search']:hover,
 .root input[type='email']:hover {
-	outline: 1px solid var( --color-border-dark );
+	background-color: var( --color-neutral-extra-light );
 }
 
 .root input[type='text']:focus,
