@@ -92,8 +92,7 @@ So, we'll enable a global class option.
 .root button.primaryButton {
 	color: var( --color-white );
 	background-color: var( --color-primary );
-	font-weight: 500;
-	border-radius: 4px;
+	border-radius: 2px;
 }
 
 .root button.primaryButton:hover {

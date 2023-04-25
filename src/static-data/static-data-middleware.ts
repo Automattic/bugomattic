@@ -1,7 +1,7 @@
 import { AnyAction, Middleware } from '@reduxjs/toolkit';
 import { RootState } from '../app/store';
-import { selectActiveRepoFilters } from '../duplicate-search/duplicate-search-slice';
 import { selectNormalizedReportingConfig } from './reporting-config/reporting-config-slice';
+import { selectAvailableRepoFilters } from './available-repo-filters/available-repo-filters-slice';
 
 /**
  * This middleware adds a pointer to the app's static data (e.g. reporting config, repo filters) to all actions' meta.
@@ -13,7 +13,7 @@ export const surfaceStaticDataMiddleware: Middleware< {}, RootState > =
 	( store ) => ( next ) => ( action: AnyAction ) => {
 		const state = store.getState();
 		const reportingConfig = selectNormalizedReportingConfig( state );
-		const availableRepoFilters = selectActiveRepoFilters( state );
+		const availableRepoFilters = selectAvailableRepoFilters( state );
 
 		action = {
 			...action,

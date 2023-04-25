@@ -1,49 +1,33 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { selectStatusFilter, setSearchParam, setStatusFilter } from '../duplicate-search-slice';
 import { IssueStatusFilter } from '../types';
-import styles from '../duplicate-search-controls.module.css';
+import { SegmentedControl } from '../../common/components';
 
 export function StatusFilter() {
 	const dispatch = useAppDispatch();
 	const currentStatusFilter = useAppSelector( selectStatusFilter );
 
-	const createId = ( statusFilter: IssueStatusFilter ) => `status-filter-${ statusFilter }`;
+	const statusFilterOptions: { value: IssueStatusFilter; displayText: string }[] = [
+		{ value: 'all', displayText: 'All' },
+		{ value: 'open', displayText: 'Open' },
+		{ value: 'closed', displayText: 'Closed' },
+	];
 
-	const createDisplayText = ( statusFilter: IssueStatusFilter ) =>
-		statusFilter.charAt( 0 ).toUpperCase() + statusFilter.slice( 1 );
-
-	const createClickHandler = ( selectedStatusFilter: IssueStatusFilter ) => () => {
-		if ( selectedStatusFilter !== currentStatusFilter ) {
-			dispatch( setSearchParam( setStatusFilter( selectedStatusFilter ) ) );
-		}
-	};
-
-	const currentStatusFilterOptions: IssueStatusFilter[] = [ 'all', 'open', 'closed' ];
+	const onStatusFilterSelect = useCallback(
+		( newStatusFilter: IssueStatusFilter ) => {
+			dispatch( setSearchParam( setStatusFilter( newStatusFilter ) ) );
+		},
+		[ dispatch ]
+	);
 
 	return (
-		// This extra wrapper helps with a weird paint glitch in Chromium browsers that can sometimes
-		// leave a single pixel of whitespace within the control.
-		<div className={ styles.statusFilterWrapper }>
-			<div
-				aria-label="Issue status filter"
-				role="listbox"
-				aria-activedescendant={ createId( currentStatusFilter ) }
-				className={ styles.statusFilterControl }
-			>
-				{ currentStatusFilterOptions.map( ( statusFilter ) => (
-					<button
-						id={ createId( statusFilter ) }
-						key={ statusFilter }
-						onClick={ createClickHandler( statusFilter ) }
-						aria-selected={ currentStatusFilter === statusFilter }
-						role="option"
-						className={ styles.statusFilterOption }
-					>
-						{ createDisplayText( statusFilter ) }
-					</button>
-				) ) }
-			</div>
-		</div>
+		<SegmentedControl
+			options={ statusFilterOptions }
+			selectedOption={ currentStatusFilter }
+			onSelect={ onStatusFilterSelect as ( value: string ) => void }
+			controlId="status-filter"
+			ariaLabel="Issue status filter"
+		/>
 	);
 }

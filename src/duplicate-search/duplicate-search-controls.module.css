@@ -1,53 +1,190 @@
 @import '../variables.css';
 
-.statusFilterWrapper {
-	width: 16rem;
+.inlineIcon {
+	height: 1.5rem;
+	width: 1.5rem;
 }
 
-.statusFilterControl {
-	border: 1px solid var( --color-border-dark );
-	border-radius: 2px;
+.filterSortBar {
 	display: flex;
 	flex-direction: row;
+	justify-content: space-between;
 	align-items: center;
-	overflow: hidden; /* Hide the border radius on the buttons */
+	margin-bottom: 1.625rem;
 }
 
-.statusFilterControl:focus-within {
-	border-color: var( --color-primary );
+.filterControls {
+	display: flex;
+	flex-direction: row;
+	column-gap: 0.625rem;
+	justify-content: flex-start;
+	align-items: center;
 }
 
-button.statusFilterOption {
-	flex: 1;
-	padding: 0.375rem;
-	border: 1px solid transparent;
-	text-align: center;
-	color: var( --color-text-primary );
+/* TODO: Move to its own app-wide styles in CSS or through a shared component */
+button.dropdownButton {
+	padding: 0.375rem 0.5625rem 0.375rem 0.5625rem;
+	display: flex;
+	align-items: center;
 	background-color: var( --color-white );
+	border-radius: 2px;
+	border: 1px solid var( --color-border-dark );
 }
 
-button.statusFilterOption:focus-visible {
-	outline: none;
-	border: 1px solid var( --color-primary-extra-dark );
-}
-
-button.statusFilterOption:hover {
+button.dropdownButton:hover {
 	background-color: var( --color-neutral-extra-light );
 }
 
-button.statusFilterOption:active {
+button.dropdownButton:active {
 	background-color: var( --color-neutral-light );
 }
 
-button.statusFilterOption[aria-selected='true'] {
-	color: var( --color-white );
+button.dropdownButton:focus-visible {
+	border-color: var( --color-primary );
+	outline: 1px solid var( --color-primary );
+}
+
+button.dropdownButton[data-active='true'] {
 	background-color: var( --color-primary );
+	border-color: var( --color-primary );
+	color: var( --color-white );
 }
 
-button.statusFilterOption[aria-selected='true']:hover {
+button.dropdownButton[data-active='true'] .inlineIcon path {
+	fill: var( --color-white );
+}
+
+button.dropdownButton[data-active='true']:hover {
 	background-color: var( --color-primary-dark );
+	border-color: var( --color-primary-dark );
 }
 
-button.statusFilterOption[aria-selected='true']:active {
+button.dropdownButton[data-active='true']:active {
 	background-color: var( --color-primary-extra-dark );
+	border-color: var( --color-primary-extra-dark );
+}
+
+.repoPopover {
+	z-index: 2;
+	background-color: var( --color-white );
+	border: 1px solid var( --color-border );
+	box-shadow: 0px 2px 3px -1px rgba( 0, 0, 0, 0.1 );
+	padding: 1rem;
+	overflow: auto;
+	width: 20rem;
+	height: auto;
+	min-height: 16rem;
+	min-width: 12rem;
+	resize: both;
+	display: flex;
+	flex-direction: column;
+}
+
+.repoPopoverHeader {
+	flex-shrink: 0;
+	margin-bottom: 1rem;
+}
+
+.repoPopoverBody {
+	flex-grow: 1;
+	overflow: auto;
+}
+
+.repoPopoverManualModeBody {
+	/* This height tends to cut a filter in half, which is good for showing scroll ability */
+	height: 22rem;
+}
+
+.repoPopoverFooter {
+	flex-shrink: 0;
+	padding: 1rem 0 0 0;
+	margin: 1rem 0 0 0;
+	border-top: 1px solid var( --color-border );
+}
+
+.repoFilterButtonWrapper {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-end;
+	column-gap: 0.75rem;
+}
+
+.repoFilterModeControl {
+	margin: 0 auto;
+}
+
+.repoFilterModeDescription {
+	margin: 0 0 0.5rem 0;
+}
+
+.repoFilterError {
+	color: var( --color-error );
+	font-style: italic;
+}
+
+.repoFilterIllustration {
+	display: block;
+	width: 190px;
+	height: auto;
+	margin: 1rem auto 1rem auto;
+}
+
+/* TODO: Move to its own app-wide styles in CSS or through a shared component */
+.repoFilterCancelButton {
+	color: var( --color-primary );
+	background-color: var( --color-white );
+}
+
+.repoFilterCancelButton:hover {
+	background-color: var( --color-neutral-extra-light );
+}
+
+.repoFilterCancelButton:active {
+	background-color: var( --color-neutral-light );
+}
+
+.repoFilterOrgList {
+	list-style: none;
+	padding-left: 0;
+	font-weight: 300;
+	margin-top: 0;
+}
+
+.repoFilterOrgList > li {
+	margin-top: 0.75rem;
+	padding-top: 0.75rem;
+}
+
+.repoFilterRepoList {
+	list-style: none;
+	padding-left: 1.875rem;
+	font-weight: 400;
+	margin: 0.75rem 0;
+}
+
+.repoFilterCheckbox {
+	margin-right: 0.625rem;
+	height: 1.25rem;
+	width: 1.25rem;
+}
+
+.repoFilterCheckboxWrapper {
+	padding: 0.5rem 0;
+	display: flex;
+	align-items: center;
+	width: max-content;
+}
+
+button.repoFilterMassActionButton {
+	color: var( --color-primary );
+	background-color: transparent;
+	padding: 0;
+}
+
+.repoFilterMassActionButton:hover {
+	color: var( --color-primary-dark );
+}
+
+.repoFilterMassActionButton:active {
+	color: var( --color-primary-extra-dark );
 }
