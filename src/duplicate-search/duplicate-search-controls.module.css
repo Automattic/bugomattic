@@ -92,7 +92,7 @@ button.dropdownButton[data-active='true']:active {
 
 .repoPopoverManualModeBody {
 	/* This height tends to cut a filter in half, which is good for showing scroll ability */
-	height: 23rem;
+	height: 22rem;
 }
 
 .repoPopoverFooter {
@@ -114,7 +114,6 @@ button.dropdownButton[data-active='true']:active {
 }
 
 .repoFilterModeDescription {
-	font-size: var( --font-body-small );
 	margin: 0 0 0.5rem 0;
 }
 
@@ -148,6 +147,7 @@ button.dropdownButton[data-active='true']:active {
 	list-style: none;
 	padding-left: 0;
 	font-weight: 300;
+	margin-top: 0;
 }
 
 .repoFilterOrgList > li {
@@ -179,7 +179,6 @@ button.repoFilterMassActionButton {
 	color: var( --color-primary );
 	background-color: transparent;
 	padding: 0;
-	font-size: var( --font-body-small );
 }
 
 .repoFilterMassActionButton:hover {
