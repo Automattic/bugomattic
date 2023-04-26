@@ -196,3 +196,28 @@ button.repoFilterMassActionButton {
 .repoFilterMassActionButton:active {
 	color: var( --color-primary-extra-dark );
 }
+
+.sortOption {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+
+.sortCheckIconWrapper {
+	width: 1.5rem;
+	height: 1.5rem;
+	margin-right: 0.5rem;
+}
+
+.sortCheckIcon {
+	height: 1.5rem;
+	width: 1.5rem;
+}
+
+.sortCheckIcon path {
+	fill: var( --color-primary );
+}
+
+.sortOptionLabelWrapper {
+	padding-right: 0.5rem;
+}

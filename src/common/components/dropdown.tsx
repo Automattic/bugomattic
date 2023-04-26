@@ -22,15 +22,20 @@ import {
 	FloatingList,
 	useListItem,
 	useListNavigation,
+	Placement,
 } from '@floating-ui/react';
 import styles from './dropdown.module.css';
 
-export function useDropdown() {
+interface DropdownFloatingConfig {
+	placement?: Placement;
+}
+
+export function useDropdown( { placement }: DropdownFloatingConfig ) {
 	const [ isDropdownOpen, setIsDropdownOpen ] = useState( false );
 	const [ activeListIndex, setActiveListIndex ] = useState< number | null >( null );
 
 	const floatingData = useFloating( {
-		placement: 'bottom-start',
+		placement: placement || 'bottom-start',
 		open: isDropdownOpen,
 		onOpenChange: setIsDropdownOpen,
 		middleware: [ shift() ],
@@ -88,12 +93,12 @@ export const useDropdownContext = () => {
 	return context;
 };
 
-interface DropdownProps {
+interface DropdownProps extends DropdownFloatingConfig {
 	children: ReactNode;
 }
 
-export function Dropdown( { children }: DropdownProps ) {
-	const dropdownData = useDropdown();
+export function Dropdown( { children, ...floatingConfig }: DropdownProps ) {
+	const dropdownData = useDropdown( floatingConfig );
 
 	return <DropdownContext.Provider value={ dropdownData }>{ children }</DropdownContext.Provider>;
 }
@@ -147,6 +152,7 @@ export function DropdownContent( { children, style, ...props }: HTMLProps< HTMLD
 export function DropdownItem( {
 	children,
 	onClick,
+	className,
 	...props
 }: ButtonHTMLAttributes< HTMLButtonElement > ) {
 	const { setIsDropdownOpen, activeListIndex } = useDropdownContext();
@@ -161,12 +167,14 @@ export function DropdownItem( {
 		setIsDropdownOpen( false );
 	};
 
+	const combinedClassName = [ styles.item, className ].join( ' ' );
+
 	return (
 		<button
 			ref={ ref }
 			onClick={ handleClick }
 			tabIndex={ isActive ? 0 : -1 }
-			className={ styles.item }
+			className={ combinedClassName }
 			{ ...props }
 		>
 			{ children }
