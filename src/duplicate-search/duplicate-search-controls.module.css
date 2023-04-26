@@ -5,6 +5,14 @@
 	width: 1.5rem;
 }
 
+.searchWrapper {
+	margin: 0.5rem 0;
+}
+
+.statusFilterWrapper {
+	width: 16rem;
+}
+
 .filterSortBar {
 	display: flex;
 	flex-direction: row;

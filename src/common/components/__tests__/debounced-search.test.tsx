@@ -7,13 +7,20 @@ describe( '[DebouncedSearch]', () => {
 	const placeholderText = 'Search for something...';
 	const searchText = 'foo bar';
 
-	function setup( { debounceMs }: { debounceMs: number } ) {
+	function setup( {
+		debounceMs,
+		debounceCharacterMinimum,
+	}: {
+		debounceMs: number;
+		debounceCharacterMinimum?: number;
+	} ) {
 		const mockCallBack = jest.fn();
 		const user = userEvent.setup();
 		const view = render(
 			<DebouncedSearch
 				placeholder={ placeholderText }
 				debounceMs={ debounceMs }
+				debounceCharacterMinimum={ debounceCharacterMinimum }
 				callback={ mockCallBack }
 			/>
 		);
@@ -85,5 +92,40 @@ describe( '[DebouncedSearch]', () => {
 			/>
 		);
 		expect( screen.getByPlaceholderText( placeholderText ) ).toHaveClass( className );
+	} );
+
+	it( 'If a character minimum is provided, only calls debounced callback when that many characters are entered', async () => {
+		const { mockCallBack, user } = setup( { debounceMs: 0, debounceCharacterMinimum: 3 } );
+		await user.click( screen.getByPlaceholderText( placeholderText ) );
+
+		await user.keyboard( 'a' );
+		// Not over minimum yet
+		expect( mockCallBack ).not.toHaveBeenCalled();
+
+		await user.keyboard( 'b' );
+		// Still not over... hooooooold...
+		expect( mockCallBack ).not.toHaveBeenCalled();
+
+		await user.keyboard( 'c' );
+		// AT MINIMUM, GO GO GO GO
+		expect( mockCallBack ).toHaveBeenLastCalledWith( 'abc' );
+		expect( mockCallBack ).toHaveBeenCalledTimes( 1 );
+	} );
+
+	it( 'Typing "enter" or clicking search button bypasses the character minimum', async () => {
+		const { mockCallBack, user } = setup( { debounceMs: 0, debounceCharacterMinimum: 3 } );
+		await user.click( screen.getByPlaceholderText( placeholderText ) );
+
+		await user.keyboard( 'a' );
+		expect( mockCallBack ).not.toHaveBeenCalled();
+
+		await user.keyboard( '{Enter}' );
+		expect( mockCallBack ).toHaveBeenLastCalledWith( 'a' );
+
+		await user.keyboard( 'b' );
+		expect( mockCallBack ).not.toHaveBeenLastCalledWith( 'ab' );
+
+		await user.click( screen.getByRole( 'button', { hidden: true } ) );
+		expect( mockCallBack ).toHaveBeenLastCalledWith( 'ab' );
 	} );
 } );
