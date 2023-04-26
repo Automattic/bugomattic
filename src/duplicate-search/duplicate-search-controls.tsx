@@ -4,6 +4,7 @@ import { useAppDispatch } from '../app/hooks';
 import { setSearchTerm, setSearchParam } from './duplicate-search-slice';
 import { DebouncedSearch } from '../common/components';
 import styles from './duplicate-search-controls.module.css';
+import { SortSelect } from './sub-components/sort-select';
 
 // TODO: This is a placeholder component for the duplicate search controls. Modify and tweak however needed! :)
 export function DuplicateSearchControls() {
@@ -28,6 +29,7 @@ export function DuplicateSearchControls() {
 				<div className={ styles.filterControls }>
 					<StatusFilter />
 					<RepoFilter />
+					<SortSelect />
 				</div>
 			</div>
 		</section>
