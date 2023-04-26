@@ -6,6 +6,7 @@ import { ReactComponent as SearchIcon } from '../svgs/search.svg';
 interface Props {
 	callback: ( searchTerm: string ) => void;
 	debounceMs?: number;
+	debounceCharacterMinimum?: number;
 	placeholder?: string;
 	className?: string;
 	inputAriaControls?: string;
@@ -15,6 +16,7 @@ interface Props {
 export function DebouncedSearch( {
 	callback,
 	debounceMs = 300,
+	debounceCharacterMinimum = 0,
 	placeholder = 'Search',
 	className,
 	inputAriaControls,
@@ -26,18 +28,23 @@ export function DebouncedSearch( {
 		[ callback, debounceMs ]
 	);
 
-	const flushDebounce = () => debouncedCallback.flush();
+	const searchImmediately = () => {
+		debouncedCallback.cancel();
+		callback( searchTerm );
+	};
 
 	const handleEnter = ( event: React.KeyboardEvent ) => {
 		if ( event.key === 'Enter' ) {
-			flushDebounce();
+			searchImmediately();
 		}
 	};
 
 	const handleChange = ( event: React.ChangeEvent< HTMLInputElement > ) => {
 		const newSearchTerm = event.target.value;
 		setSearchTerm( newSearchTerm );
-		debouncedCallback( newSearchTerm );
+		if ( newSearchTerm.length >= debounceCharacterMinimum ) {
+			debouncedCallback( newSearchTerm );
+		}
 	};
 
 	const classNames = [ styles.search ];
@@ -52,14 +59,14 @@ export function DebouncedSearch( {
 				placeholder={ placeholder }
 				type="text"
 				value={ searchTerm }
-				onBlur={ flushDebounce }
+				onBlur={ searchImmediately }
 				onChange={ handleChange }
 				onKeyUp={ handleEnter }
 				aria-label={ inputAriaLabel }
 				aria-controls={ inputAriaControls }
 			/>
 			<button
-				onClick={ flushDebounce }
+				onClick={ searchImmediately }
 				className={ styles.button }
 				tabIndex={ -1 }
 				aria-hidden={ true }

@@ -21,6 +21,7 @@ export function DuplicateSearchControls() {
 					callback={ handleSearchTerm }
 					inputAriaLabel="Search for duplicate issues"
 					debounceMs={ 500 }
+					debounceCharacterMinimum={ 3 }
 				/>
 			</div>
 			<div className={ styles.filterSortBar }>
