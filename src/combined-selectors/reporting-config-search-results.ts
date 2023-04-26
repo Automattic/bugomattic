@@ -21,6 +21,25 @@ function searchReportingConfig(
 	if ( ! searchTerm ) {
 		return searchResults;
 	}
+
+	const addFeatureGroupAndParents = ( featureGroupId: string ) => {
+		searchResults.featureGroups.add( featureGroupId );
+		searchResults.products.add( featureGroups[ featureGroupId ].productId );
+	};
+
+	const addFeatureAndParents = ( featureId: string ) => {
+		searchResults.features.add( featureId );
+
+		const feature = features[ featureId ];
+		if ( feature.parentType === 'product' ) {
+			searchResults.products.add( feature.parentId );
+		} else {
+			searchResults.featureGroups.add( feature.parentId );
+			const parentFeatureGroup = featureGroups[ feature.parentId ];
+			searchResults.products.add( parentFeatureGroup.productId );
+		}
+	};
+
 	for ( const productId in products ) {
 		const product = products[ productId ];
 		if ( includesIgnoringCase( product.name, searchTerm ) ) {
@@ -31,8 +50,7 @@ function searchReportingConfig(
 	for ( const featureGroupId in featureGroups ) {
 		const featureGroup = featureGroups[ featureGroupId ];
 		if ( includesIgnoringCase( featureGroup.name, searchTerm ) ) {
-			searchResults.featureGroups.add( featureGroupId );
-			searchResults.products.add( featureGroup.productId );
+			addFeatureGroupAndParents( featureGroupId );
 		}
 	}
 
@@ -42,16 +60,7 @@ function searchReportingConfig(
 			feature.keywords?.some( ( keyword ) => includesIgnoringCase( keyword, searchTerm ) );
 
 		if ( includesIgnoringCase( feature.name, searchTerm ) || keywordsIncludeSearchTerm() ) {
-			searchResults.features.add( featureId );
-
-			const feature = features[ featureId ];
-			if ( feature.parentType === 'product' ) {
-				searchResults.products.add( feature.parentId );
-			} else {
-				searchResults.featureGroups.add( feature.parentId );
-				const parentFeatureGroup = featureGroups[ feature.parentId ];
-				searchResults.products.add( parentFeatureGroup.productId );
-			}
+			addFeatureAndParents( featureId );
 		}
 	}
 
@@ -77,17 +86,9 @@ function searchReportingConfig(
 			if ( products[ entityId ] ) {
 				searchResults.products.add( entityId );
 			} else if ( featureGroups[ entityId ] ) {
-				searchResults.featureGroups.add( entityId );
-				searchResults.products.add( featureGroups[ entityId ].productId );
+				addFeatureGroupAndParents( entityId );
 			} else if ( features[ entityId ] ) {
-				searchResults.features.add( entityId );
-				if ( features[ entityId ].parentType === 'product' ) {
-					searchResults.products.add( features[ entityId ].parentId );
-				} else {
-					searchResults.featureGroups.add( features[ entityId ].parentId );
-					const parentFeatureGroup = featureGroups[ features[ entityId ].parentId ];
-					searchResults.products.add( parentFeatureGroup.productId );
-				}
+				addFeatureAndParents( entityId );
 			}
 		}
 	}
