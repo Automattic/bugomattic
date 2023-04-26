@@ -1,9 +1,10 @@
 import React, {
+	ButtonHTMLAttributes,
 	HTMLProps,
+	MouseEventHandler,
 	ReactNode,
 	cloneElement,
 	createContext,
-	forwardRef,
 	isValidElement,
 	useMemo,
 	useRef,
@@ -13,17 +14,16 @@ import {
 	useFloating,
 	shift,
 	autoUpdate,
-	flip,
 	useClick,
 	useDismiss,
 	useRole,
 	useInteractions,
-	useMergeRefs,
 	FloatingFocusManager,
 	FloatingList,
 	useListItem,
 	useListNavigation,
 } from '@floating-ui/react';
+import styles from './dropdown.module.css';
 
 export function useDropdown() {
 	const [ isDropdownOpen, setIsDropdownOpen ] = useState( false );
@@ -33,7 +33,7 @@ export function useDropdown() {
 		placement: 'bottom-start',
 		open: isDropdownOpen,
 		onOpenChange: setIsDropdownOpen,
-		middleware: [ shift(), flip() ],
+		middleware: [ shift() ],
 		whileElementsMounted: autoUpdate,
 	} );
 
@@ -98,16 +98,8 @@ export function Dropdown( { children }: DropdownProps ) {
 	return <DropdownContext.Provider value={ dropdownData }>{ children }</DropdownContext.Provider>;
 }
 
-interface DropdownTriggerProps {
-	children: ReactNode;
-}
-
-export const DropdownTrigger = forwardRef<
-	HTMLElement,
-	HTMLProps< HTMLElement > & DropdownTriggerProps
->( function DropdownTrigger( { children, ...props }, propRef ) {
+export function DropdownTrigger( { children, ...props }: HTMLProps< HTMLElement > ) {
 	const dropdownContext = useDropdownContext();
-	const mergedRef = useMergeRefs( [ propRef, dropdownContext.refs.setReference ] );
 
 	if ( ! isValidElement( children ) ) {
 		throw new Error( '<DropdownTrigger /> must have a single, valid child element' );
@@ -116,66 +108,68 @@ export const DropdownTrigger = forwardRef<
 	return cloneElement(
 		children,
 		dropdownContext.getReferenceProps( {
-			ref: mergedRef,
+			ref: dropdownContext.refs.setReference,
 			...props,
 			...children.props,
 			'data-state': dropdownContext.isDropdownOpen ? 'open' : 'closed',
 		} )
 	);
-} );
+}
 
-export const DropdownContent = forwardRef< HTMLDivElement, HTMLProps< HTMLDivElement > >(
-	function DropdownContent( { children, style, ...props }, propRef ) {
-		const dropdownContext = useDropdownContext();
+export function DropdownContent( { children, style, ...props }: HTMLProps< HTMLDivElement > ) {
+	const dropdownContext = useDropdownContext();
 
-		const { x, y, strategy, context, getFloatingProps, refs, listElementsRef } = dropdownContext;
+	const { x, y, strategy, context, getFloatingProps, refs, listElementsRef } = dropdownContext;
 
-		const mergedRef = useMergeRefs( [ propRef, refs.setFloating ] );
+	return (
+		<>
+			{ dropdownContext.isDropdownOpen && (
+				<FloatingFocusManager context={ context } modal={ false }>
+					<div
+						ref={ refs.setFloating }
+						style={ {
+							position: strategy,
+							top: y ?? 0,
+							left: x ?? 0,
+							...style,
+						} }
+						{ ...getFloatingProps( props ) }
+						className={ styles.wrapper }
+					>
+						<FloatingList elementsRef={ listElementsRef }>{ children }</FloatingList>
+					</div>
+				</FloatingFocusManager>
+			) }
+		</>
+	);
+}
 
-		return (
-			<>
-				{ dropdownContext.isDropdownOpen && (
-					<FloatingFocusManager context={ context } modal={ false }>
-						<div
-							ref={ mergedRef }
-							style={ {
-								position: strategy,
-								top: y ?? 0,
-								left: x ?? 0,
-								...style,
-							} }
-							{ ...getFloatingProps( props ) }
-						>
-							<FloatingList elementsRef={ listElementsRef }>{ children }</FloatingList>
-						</div>
-					</FloatingFocusManager>
-				) }
-			</>
-		);
-	}
-);
+export function DropdownItem( {
+	children,
+	onClick,
+	...props
+}: ButtonHTMLAttributes< HTMLButtonElement > ) {
+	const { setIsDropdownOpen, activeListIndex } = useDropdownContext();
+	const { ref, index } = useListItem();
 
-export const DropdownItem = forwardRef< HTMLElement, HTMLProps< HTMLElement > >(
-	function DropdownItem( { children, ...props }, propRef ) {
-		const { setIsDropdownOpen, activeListIndex } = useDropdownContext();
-		const { ref, index } = useListItem();
+	const isActive = activeListIndex === index;
 
-		const mergedRef = useMergeRefs( [ ref, propRef ] );
-		const isActive = activeListIndex === index;
-
-		if ( ! isValidElement( children ) ) {
-			throw new Error( '<DropdownItem /> must have a single, valid child element' );
+	const handleClick: MouseEventHandler< HTMLButtonElement > = ( event ) => {
+		if ( onClick ) {
+			onClick( event );
 		}
+		setIsDropdownOpen( false );
+	};
 
-		return cloneElement( children, {
-			ref: mergedRef,
-			onClick: () => {
-				children.props.onClick?.();
-				setIsDropdownOpen( false );
-			},
-			tabIndex: isActive ? 0 : -1,
-			...props,
-			...children.props,
-		} );
-	}
-);
+	return (
+		<button
+			ref={ ref }
+			onClick={ handleClick }
+			tabIndex={ isActive ? 0 : -1 }
+			className={ styles.item }
+			{ ...props }
+		>
+			{ children }
+		</button>
+	);
+}

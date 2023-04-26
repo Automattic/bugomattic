@@ -5,15 +5,11 @@ export function SortSelect() {
 	return (
 		<Dropdown>
 			<DropdownTrigger>
-				<button>Sort</button>
+				<button aria-haspopup="listbox">Sort</button>
 			</DropdownTrigger>
-			<DropdownContent>
-				<DropdownItem>
-					<button>Relevance</button>
-				</DropdownItem>
-				<DropdownItem>
-					<button>Date Created</button>
-				</DropdownItem>
+			<DropdownContent role="listbox">
+				<DropdownItem role="option">Relevance</DropdownItem>
+				<DropdownItem role="option">Date Created</DropdownItem>
 			</DropdownContent>
 		</Dropdown>
 	);
