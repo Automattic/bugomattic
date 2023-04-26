@@ -41,12 +41,6 @@ body {
 	box-sizing: border-box;
 }
 
-.root input[type='text']:hover,
-.root input[type='search']:hover,
-.root input[type='email']:hover {
-	background-color: var( --color-neutral-extra-light );
-}
-
 .root input[type='text']:focus,
 .root input[type='search']:focus,
 .root input[type='email']:focus {
