@@ -2,14 +2,17 @@ import { createSelector } from '@reduxjs/toolkit';
 import { includesIgnoringCase } from '../common/lib';
 import { selectFeatureSearchTerm } from '../feature-selector-form/feature-selector-form-slice';
 import { selectNormalizedReportingConfig } from '../static-data/reporting-config/reporting-config-slice';
-import { NormalizedReportingConfig } from '../static-data/reporting-config/types';
+import {
+	NormalizedReportingConfig,
+	TaskParentEntityType,
+} from '../static-data/reporting-config/types';
 import { ReportingConfigSearchResults } from './types';
 import { tokenizeAndNormalize } from '../common/lib';
 
 function searchReportingConfig(
 	searchTerm: string,
 	reportingConfig: NormalizedReportingConfig,
-	invertedIndex: Map< string, Array< { id: string; weight: number } > >
+	invertedIndex: Map< string, Array< { type: TaskParentEntityType; id: string; weight: number } > >
 ): ReportingConfigSearchResults {
 	const { features, featureGroups, products } = reportingConfig;
 	const searchResults: ReportingConfigSearchResults = {
@@ -66,30 +69,31 @@ function searchReportingConfig(
 
 	// Finally, search for the search term in the description of the products and feature areas
 	const searchTermTokens = tokenizeAndNormalize( searchTerm );
-	const scores: Record< string, number > = {};
+	const scores: Record< string, { type: TaskParentEntityType; score: number } > = {};
 
 	for ( const token of searchTermTokens ) {
 		const matchingEntities = invertedIndex.get( token ) || [];
 
-		for ( const { id, weight } of matchingEntities ) {
+		for ( const { type, id, weight } of matchingEntities ) {
 			if ( ! scores[ id ] ) {
-				scores[ id ] = 0;
+				scores[ id ] = { type, score: 0 };
 			}
-			scores[ id ] += weight;
+			scores[ id ].score += weight;
 		}
 	}
 
 	const scoreThreshold = 1;
+	const addToSearchResultsByType = {
+		product: ( entityId: string ) => searchResults.products.add( entityId ),
+		featureGroup: ( entityId: string ) => addFeatureGroupAndParents( entityId ),
+		feature: ( entityId: string ) => addFeatureAndParents( entityId ),
+	};
 
 	for ( const entityId in scores ) {
-		if ( scores[ entityId ] >= scoreThreshold ) {
-			if ( products[ entityId ] ) {
-				searchResults.products.add( entityId );
-			} else if ( featureGroups[ entityId ] ) {
-				addFeatureGroupAndParents( entityId );
-			} else if ( features[ entityId ] ) {
-				addFeatureAndParents( entityId );
-			}
+		if ( scores[ entityId ].score >= scoreThreshold ) {
+			const entityType = scores[ entityId ].type;
+			const addToSearchResults = addToSearchResultsByType[ entityType ];
+			addToSearchResults( entityId );
 		}
 	}
 
@@ -97,9 +101,10 @@ function searchReportingConfig(
 }
 
 function addTokensToInvertedIndex(
+	entityType: TaskParentEntityType,
 	entityId: string,
 	description: string | undefined,
-	invertedIndex: Map< string, Array< { id: string; weight: number } > >
+	invertedIndex: Map< string, Array< { type: TaskParentEntityType; id: string; weight: number } > >
 ) {
 	const descriptionTokens = description ? tokenizeAndNormalize( description ) : [];
 	const tokensWithWeights = [ ...descriptionTokens.map( ( token ) => ( { token, weight: 1 } ) ) ];
@@ -111,7 +116,7 @@ function addTokensToInvertedIndex(
 
 		const tokenList = invertedIndex.get( token );
 		if ( tokenList ) {
-			tokenList.push( { id: entityId, weight } );
+			tokenList.push( { type: entityType, id: entityId, weight } );
 		}
 	}
 }
@@ -123,17 +128,22 @@ function createDescriptionInvertedIndex( reportingConfig: NormalizedReportingCon
 
 	for ( const productId in products ) {
 		const product = products[ productId ];
-		addTokensToInvertedIndex( productId, product.description, invertedIndex );
+		addTokensToInvertedIndex( 'product', productId, product.description, invertedIndex );
 	}
 
 	for ( const featureGroupId in featureGroups ) {
 		const featureGroup = featureGroups[ featureGroupId ];
-		addTokensToInvertedIndex( featureGroupId, featureGroup.description, invertedIndex );
+		addTokensToInvertedIndex(
+			'featureGroup',
+			featureGroupId,
+			featureGroup.description,
+			invertedIndex
+		);
 	}
 
 	for ( const featureId in features ) {
 		const feature = features[ featureId ];
-		addTokensToInvertedIndex( featureId, feature.description, invertedIndex );
+		addTokensToInvertedIndex( 'feature', featureId, feature.description, invertedIndex );
 	}
 
 	return invertedIndex;
