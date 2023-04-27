@@ -1,7 +1,6 @@
 import React, {
 	ButtonHTMLAttributes,
 	HTMLProps,
-	KeyboardEventHandler,
 	MouseEventHandler,
 	ReactNode,
 	cloneElement,
@@ -28,6 +27,28 @@ import {
 } from '@floating-ui/react';
 import styles from './dropdown.module.css';
 
+/**
+ * This is a re-usable, composable children API for creating components that have some kind of dropdown functionality.
+ * The main two usecases for this kind of API are:
+ * 1. A dropdown menu -- like selecting menu items from a list.
+ * 2. A custom select -- for creating a select-only combo box that launches a popover listbox.
+ *
+ * The API looks like so...
+ * <Drowpdown role='menu'>
+ * 		<DropdownTrigger>
+ *   		{Your trigger element}
+ * 		</DropdownTrigger>
+ * 		<DropdownContent>
+ *  		<DropdownItem label="Item 1" role='menuitem'>Item 1</DropdownItem>
+ * 			<DropdownItem label="Item 2" role='menuitem'>Item 2</DropdownItem>
+ * 			{... and so on}
+ * 		</DropdownContent>
+ * </Dropdown>
+ *
+ * You must provide which role the dropdown should have. This is either 'menu' or 'listbox' (the case of a select-only combobox).
+ *
+ */
+
 type DropdownRole = 'menu' | 'listbox';
 
 interface DropdownFloatingConfig {
@@ -35,9 +56,12 @@ interface DropdownFloatingConfig {
 	role: DropdownRole;
 }
 
-export function useDropdown( { placement, role }: DropdownFloatingConfig ) {
+/**
+ * This is the main shared hook that sets up all the Floating UI behavior.
+ */
+function useDropdown( { placement, role }: DropdownFloatingConfig ) {
 	const [ isDropdownOpen, setIsDropdownOpen ] = useState( false );
-	const [ activeListIndex, setActiveListIndex ] = useState< number | null >( null );
+	const [ activeItemIndex, setActiveItemIndex ] = useState< number | null >( null );
 
 	const floatingData = useFloating( {
 		placement: placement || 'bottom-start',
@@ -50,20 +74,25 @@ export function useDropdown( { placement, role }: DropdownFloatingConfig ) {
 	const { context } = floatingData;
 	const click = useClick( context );
 	const dismiss = useDismiss( context );
+	// This intelligently takes the provided role and applies the right role and aria attributes.
 	const interactionsRole = useRole( context, { role } );
 
+	// List navigation is used for keyboard navigation of the list items.
+	// The empty ref array may seem weird, but those refs are updated dynamically later as the popover opens.
 	const listElementsRef = useRef< Array< HTMLElement | null > >( [] );
 	const listNavigation = useListNavigation( context, {
 		listRef: listElementsRef,
-		activeIndex: activeListIndex,
-		onNavigate: setActiveListIndex,
+		activeIndex: activeItemIndex,
+		onNavigate: setActiveItemIndex,
 	} );
 
+	// Typeahead lets you type while the popover is open to switch between items.
+	// Same note on the empty ref array as above -- it is updated dynamically later.
 	const listLabelsRef = useRef< Array< string | null > >( [] );
 	const typeahead = useTypeahead( context, {
 		listRef: listLabelsRef,
-		activeIndex: activeListIndex,
-		onMatch: setActiveListIndex,
+		activeIndex: activeItemIndex,
+		onMatch: isDropdownOpen ? setActiveItemIndex : undefined,
 	} );
 
 	// Merge all the interactions into prop getters
@@ -82,8 +111,8 @@ export function useDropdown( { placement, role }: DropdownFloatingConfig ) {
 			role,
 			listElementsRef,
 			listLabelsRef,
-			activeListIndex,
-			setActiveListIndex,
+			activeListIndex: activeItemIndex,
+			setActiveListIndex: setActiveItemIndex,
 			...floatingData,
 			...interactions,
 		};
@@ -93,18 +122,20 @@ export function useDropdown( { placement, role }: DropdownFloatingConfig ) {
 		role,
 		listElementsRef,
 		listLabelsRef,
-		activeListIndex,
-		setActiveListIndex,
+		activeItemIndex,
+		setActiveItemIndex,
 		floatingData,
 		interactions,
 	] );
 }
 
+// We're using the React Context API to effectively surface all the FloatingUI data to child components.
+
 type DropdownContext = ReturnType< typeof useDropdown > | null;
 
 const DropdownContext = createContext< DropdownContext >( null );
 
-export const useDropdownContext = () => {
+const useDropdownContext = () => {
 	const context = React.useContext( DropdownContext );
 	if ( ! context ) {
 		throw new Error(
@@ -118,36 +149,32 @@ interface DropdownProps extends DropdownFloatingConfig {
 	children: ReactNode;
 }
 
+/**
+ * This is the main wrapper component. You must provide the a role for the dropdown,.
+ */
 export function Dropdown( { children, ...floatingConfig }: DropdownProps ) {
 	const dropdownData = useDropdown( floatingConfig );
 
 	return <DropdownContext.Provider value={ dropdownData }>{ children }</DropdownContext.Provider>;
 }
 
+/**
+ * The component for the trigger element. For now, we will allow any kind of element for flexibility.
+ * In most cases, it should be a button, or maybe a link.
+ */
 export function DropdownTrigger( { children, ...props }: HTMLProps< HTMLElement > ) {
-	const dropdownContext = useDropdownContext();
-	const { refs, isDropdownOpen, setIsDropdownOpen, role } = dropdownContext;
+	const { refs, isDropdownOpen, getReferenceProps } = useDropdownContext();
 
 	if ( ! isValidElement( children ) ) {
 		throw new Error( '<DropdownTrigger /> must have a single, valid child element' );
 	}
 
-	let handleKeyDown: KeyboardEventHandler | undefined;
-	if ( role === 'listbox' ) {
-		handleKeyDown = ( event ) => {
-			const isPrintableCharacter = event.key.length === 1 && event.key.match( /\S/ );
-
-			if ( isPrintableCharacter ) {
-				setIsDropdownOpen( true );
-			}
-		};
-	}
-
 	return cloneElement(
 		children,
-		dropdownContext.getReferenceProps( {
+		// In FloatingUI terms, the "reference" is the trigger element for the floating piece.
+		getReferenceProps( {
 			ref: refs.setReference,
-			onKeyDown: handleKeyDown,
+			tabIndex: 0,
 			...props,
 			...children.props,
 			'data-state': isDropdownOpen ? 'open' : 'closed',
@@ -156,16 +183,24 @@ export function DropdownTrigger( { children, ...props }: HTMLProps< HTMLElement 
 }
 
 export function DropdownContent( { children, style, ...props }: HTMLProps< HTMLDivElement > ) {
-	const dropdownContext = useDropdownContext();
-
-	const { x, y, strategy, context, getFloatingProps, refs, listElementsRef, listLabelsRef } =
-		dropdownContext;
+	const {
+		x,
+		y,
+		strategy,
+		context,
+		getFloatingProps,
+		refs,
+		listElementsRef,
+		listLabelsRef,
+		isDropdownOpen,
+	} = useDropdownContext();
 
 	return (
 		<>
-			{ dropdownContext.isDropdownOpen && (
+			{ isDropdownOpen && (
 				<FloatingFocusManager context={ context } modal={ false }>
 					<div
+						// In FloatingUI terms, the "floating" element is the popover element.
 						ref={ refs.setFloating }
 						style={ {
 							position: strategy,
@@ -176,6 +211,7 @@ export function DropdownContent( { children, style, ...props }: HTMLProps< HTMLD
 						{ ...getFloatingProps( props ) }
 						className={ styles.wrapper }
 					>
+						{ /* The FloatingList is a Context wrapper that surfaces list index information to child components */ }
 						<FloatingList elementsRef={ listElementsRef } labelsRef={ listLabelsRef }>
 							{ children }
 						</FloatingList>
