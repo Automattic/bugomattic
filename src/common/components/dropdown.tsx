@@ -1,6 +1,7 @@
 import React, {
 	ButtonHTMLAttributes,
 	HTMLProps,
+	KeyboardEventHandler,
 	MouseEventHandler,
 	ReactNode,
 	cloneElement,
@@ -23,14 +24,18 @@ import {
 	useListItem,
 	useListNavigation,
 	Placement,
+	useTypeahead,
 } from '@floating-ui/react';
 import styles from './dropdown.module.css';
 
+type DropdownRole = 'menu' | 'listbox';
+
 interface DropdownFloatingConfig {
 	placement?: Placement;
+	role: DropdownRole;
 }
 
-export function useDropdown( { placement }: DropdownFloatingConfig ) {
+export function useDropdown( { placement, role }: DropdownFloatingConfig ) {
 	const [ isDropdownOpen, setIsDropdownOpen ] = useState( false );
 	const [ activeListIndex, setActiveListIndex ] = useState< number | null >( null );
 
@@ -45,8 +50,7 @@ export function useDropdown( { placement }: DropdownFloatingConfig ) {
 	const { context } = floatingData;
 	const click = useClick( context );
 	const dismiss = useDismiss( context );
-	// TODO: set the right role, likely based on props.
-	const role = useRole( context );
+	const interactionsRole = useRole( context, { role } );
 
 	const listElementsRef = useRef< Array< HTMLElement | null > >( [] );
 	const listNavigation = useListNavigation( context, {
@@ -55,14 +59,29 @@ export function useDropdown( { placement }: DropdownFloatingConfig ) {
 		onNavigate: setActiveListIndex,
 	} );
 
+	const listLabelsRef = useRef< Array< string | null > >( [] );
+	const typeahead = useTypeahead( context, {
+		listRef: listLabelsRef,
+		activeIndex: activeListIndex,
+		onMatch: setActiveListIndex,
+	} );
+
 	// Merge all the interactions into prop getters
-	const interactions = useInteractions( [ click, dismiss, role, listNavigation ] );
+	const interactions = useInteractions( [
+		click,
+		dismiss,
+		interactionsRole,
+		listNavigation,
+		typeahead,
+	] );
 
 	return useMemo( () => {
 		return {
 			isDropdownOpen,
 			setIsDropdownOpen,
+			role,
 			listElementsRef,
+			listLabelsRef,
 			activeListIndex,
 			setActiveListIndex,
 			...floatingData,
@@ -71,7 +90,9 @@ export function useDropdown( { placement }: DropdownFloatingConfig ) {
 	}, [
 		isDropdownOpen,
 		setIsDropdownOpen,
+		role,
 		listElementsRef,
+		listLabelsRef,
 		activeListIndex,
 		setActiveListIndex,
 		floatingData,
@@ -105,18 +126,31 @@ export function Dropdown( { children, ...floatingConfig }: DropdownProps ) {
 
 export function DropdownTrigger( { children, ...props }: HTMLProps< HTMLElement > ) {
 	const dropdownContext = useDropdownContext();
+	const { refs, isDropdownOpen, setIsDropdownOpen, role } = dropdownContext;
 
 	if ( ! isValidElement( children ) ) {
 		throw new Error( '<DropdownTrigger /> must have a single, valid child element' );
 	}
 
+	let handleKeyDown: KeyboardEventHandler | undefined;
+	if ( role === 'listbox' ) {
+		handleKeyDown = ( event ) => {
+			const isPrintableCharacter = event.key.length === 1 && event.key.match( /\S/ );
+
+			if ( isPrintableCharacter ) {
+				setIsDropdownOpen( true );
+			}
+		};
+	}
+
 	return cloneElement(
 		children,
 		dropdownContext.getReferenceProps( {
-			ref: dropdownContext.refs.setReference,
+			ref: refs.setReference,
+			onKeyDown: handleKeyDown,
 			...props,
 			...children.props,
-			'data-state': dropdownContext.isDropdownOpen ? 'open' : 'closed',
+			'data-state': isDropdownOpen ? 'open' : 'closed',
 		} )
 	);
 }
@@ -124,7 +158,8 @@ export function DropdownTrigger( { children, ...props }: HTMLProps< HTMLElement 
 export function DropdownContent( { children, style, ...props }: HTMLProps< HTMLDivElement > ) {
 	const dropdownContext = useDropdownContext();
 
-	const { x, y, strategy, context, getFloatingProps, refs, listElementsRef } = dropdownContext;
+	const { x, y, strategy, context, getFloatingProps, refs, listElementsRef, listLabelsRef } =
+		dropdownContext;
 
 	return (
 		<>
@@ -141,7 +176,9 @@ export function DropdownContent( { children, style, ...props }: HTMLProps< HTMLD
 						{ ...getFloatingProps( props ) }
 						className={ styles.wrapper }
 					>
-						<FloatingList elementsRef={ listElementsRef }>{ children }</FloatingList>
+						<FloatingList elementsRef={ listElementsRef } labelsRef={ listLabelsRef }>
+							{ children }
+						</FloatingList>
 					</div>
 				</FloatingFocusManager>
 			) }
@@ -149,14 +186,19 @@ export function DropdownContent( { children, style, ...props }: HTMLProps< HTMLD
 	);
 }
 
+interface DropdownItemProps extends ButtonHTMLAttributes< HTMLButtonElement > {
+	label: string;
+}
+
 export function DropdownItem( {
 	children,
+	label,
 	onClick,
 	className,
 	...props
-}: ButtonHTMLAttributes< HTMLButtonElement > ) {
-	const { setIsDropdownOpen, activeListIndex } = useDropdownContext();
-	const { ref, index } = useListItem();
+}: DropdownItemProps ) {
+	const { setIsDropdownOpen, activeListIndex, getItemProps } = useDropdownContext();
+	const { ref, index } = useListItem( { label } );
 
 	const isActive = activeListIndex === index;
 
@@ -171,11 +213,13 @@ export function DropdownItem( {
 
 	return (
 		<button
-			ref={ ref }
-			onClick={ handleClick }
-			tabIndex={ isActive ? 0 : -1 }
-			className={ combinedClassName }
-			{ ...props }
+			{ ...getItemProps( {
+				ref,
+				onClick: handleClick,
+				tabIndex: isActive ? 0 : -1,
+				className: combinedClassName,
+				...props,
+			} ) }
 		>
 			{ children }
 		</button>

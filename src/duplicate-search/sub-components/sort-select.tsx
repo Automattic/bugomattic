@@ -18,7 +18,7 @@ export function SortSelect() {
 	const currentSortOption = useAppSelector( selectSort );
 	const sortOptions: SortOptions[] = [
 		{
-			label: 'Default',
+			label: 'Relevance (default)',
 			value: 'relevance',
 		},
 		{
@@ -30,7 +30,7 @@ export function SortSelect() {
 	let sortDropdownTriggerLabel = sortOptions.find(
 		( sortOption ) => sortOption.value === currentSortOption
 	)?.label;
-	if ( ! sortDropdownTriggerLabel || sortDropdownTriggerLabel === 'Default' ) {
+	if ( ! sortDropdownTriggerLabel || sortDropdownTriggerLabel === 'Relevance (default)' ) {
 		sortDropdownTriggerLabel = 'Sort';
 	}
 
@@ -42,26 +42,27 @@ export function SortSelect() {
 	);
 
 	return (
-		<Dropdown placement="bottom-end">
-			<DropdownTrigger>
-				<button aria-haspopup="listbox" className={ styles.dropdownButton }>
+		<Dropdown placement="bottom-end" role="listbox">
+			<DropdownTrigger aria-label="Sort results by…">
+				<button className={ styles.dropdownButton }>
 					<SortIcon aria-hidden={ true } className={ styles.inlineIcon } />
 					<span>{ sortDropdownTriggerLabel }</span>
 					<DownIcon aria-hidden={ true } className={ styles.inlineIcon } />
 				</button>
 			</DropdownTrigger>
-			<DropdownContent role="listbox">
+			<DropdownContent aria-label="Sort options">
 				{ sortOptions.map( ( sortOption ) => (
 					<DropdownItem
 						key={ sortOption.value }
 						role="option"
+						label={ sortOption.label }
 						aria-selected={ currentSortOption === sortOption.value }
 						className={ styles.sortOption }
 						onClick={ () => handleSortOptionClick( sortOption.value ) }
 					>
 						<span className={ styles.sortCheckIconWrapper }>
 							{ currentSortOption === sortOption.value && (
-								<CheckIcon className={ styles.sortCheckIcon } />
+								<CheckIcon aria-hidden="true" className={ styles.sortCheckIcon } />
 							) }
 						</span>
 						<span className={ styles.sortOptionLabelWrapper }>{ sortOption.label }</span>
