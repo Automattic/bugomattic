@@ -12,9 +12,7 @@ const initialNormalizedReportingConfig: NormalizedReportingConfig = {
 	tasks: {},
 };
 
-const initialIndexedReportingConfig: IndexedReportingConfig = {
-	foo: 'bar',
-};
+const initialIndexedReportingConfig: IndexedReportingConfig = {};
 
 const initialState: ReportingConfigState = {
 	normalized: initialNormalizedReportingConfig,

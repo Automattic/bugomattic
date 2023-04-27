@@ -1,5 +1,8 @@
 import React, { ReactElement } from 'react';
-import { NormalizedReportingConfig } from '../../static-data/reporting-config/types';
+import {
+	NormalizedReportingConfig,
+	IndexedReportingConfig,
+} from '../../static-data/reporting-config/types';
 import userEvent from '@testing-library/user-event';
 import { screen } from '@testing-library/react';
 import { FeatureSelectorForm } from '../feature-selector-form';
@@ -83,6 +86,14 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 		},
 	};
 
+	const indexedReportingConfig: IndexedReportingConfig = {
+		backup: [ { type: 'featureGroup', id: 'DEF', weight: 1 } ],
+		blog: [ { type: 'feature', id: 'STU', weight: 1 } ],
+		posts: [ { type: 'feature', id: 'STU', weight: 1 } ],
+		site: [ { type: 'featureGroup', id: 'DEF', weight: 1 } ],
+		traffic: [ { type: 'product', id: 'ABC', weight: 1 } ],
+	};
+
 	async function search( user: ReturnType< typeof userEvent.setup >, searchTerm: string ) {
 		await user.click( screen.getByRole( 'textbox', { name: 'Search for a feature' } ) );
 		await user.keyboard( searchTerm );
@@ -98,7 +109,7 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 			preloadedState: {
 				reportingConfig: {
 					normalized: reportingConfig,
-					indexed: {},
+					indexed: indexedReportingConfig,
 					loadError: null,
 				},
 			},
