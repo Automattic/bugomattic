@@ -26,7 +26,7 @@ export function DuplicateSearchControls() {
 				/>
 			</div>
 			<div className={ styles.filterSortBar }>
-				<div className={ styles.filterControls }>
+				<div className={ styles.filtersWrapper }>
 					<StatusFilter />
 					<RepoFilter />
 				</div>

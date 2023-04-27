@@ -21,7 +21,7 @@
 	margin-bottom: 1.625rem;
 }
 
-.filterControls {
+.filtersWrapper {
 	display: flex;
 	flex-direction: row;
 	column-gap: 0.625rem;
@@ -220,4 +220,18 @@ button.repoFilterMassActionButton {
 
 .sortOptionLabelWrapper {
 	padding-right: 0.5rem;
+}
+
+@media only screen and ( max-width: 600px ) {
+	.filterSortBar {
+		flex-direction: column;
+		row-gap: 0.625rem;
+		align-items: flex-start;
+	}
+
+	.filtersWrapper {
+		flex-direction: column;
+		row-gap: 0.625rem;
+		align-items: flex-start;
+	}
 }

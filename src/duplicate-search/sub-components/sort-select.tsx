@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Dropdown, DropdownContent, DropdownItem, DropdownTrigger } from '../../common/components';
 import styles from '../duplicate-search-controls.module.css';
 import { IssueSortOption } from '../types';
@@ -7,6 +7,7 @@ import { selectSort, setSearchParam, setSort } from '../duplicate-search-slice';
 import { ReactComponent as CheckIcon } from '../../common/svgs/check.svg';
 import { ReactComponent as DownIcon } from '../../common/svgs/chevron-down.svg';
 import { ReactComponent as SortIcon } from '../../common/svgs/sort.svg';
+import { Placement } from '@floating-ui/react';
 
 interface SortOptions {
 	label: string;
@@ -37,8 +38,22 @@ export function SortSelect() {
 		[ dispatch ]
 	);
 
+	const [ placement, setPlacement ] = useState< Placement >( getPlacementBasedOnViewport() );
+
+	useEffect( () => {
+		const handleResize = () => {
+			setPlacement( getPlacementBasedOnViewport() );
+		};
+
+		window.addEventListener( 'resize', handleResize );
+
+		return () => {
+			window.removeEventListener( 'resize', handleResize );
+		};
+	}, [] );
+
 	return (
-		<Dropdown placement="bottom-end" role="listbox">
+		<Dropdown placement={ placement } role="listbox">
 			<DropdownTrigger aria-label="Sort results by…">
 				<button className={ styles.dropdownButton }>
 					<SortIcon aria-hidden={ true } className={ styles.inlineIcon } />
@@ -67,4 +82,12 @@ export function SortSelect() {
 			</DropdownContent>
 		</Dropdown>
 	);
+}
+
+function getPlacementBasedOnViewport(): Placement {
+	if ( window.innerWidth <= 600 ) {
+		return 'bottom-start';
+	} else {
+		return 'bottom-end';
+	}
 }
