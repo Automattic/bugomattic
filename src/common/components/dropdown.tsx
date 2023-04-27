@@ -38,8 +38,8 @@ import styles from './dropdown.module.css';
  *   		{Your trigger element}
  * 		</DropdownTrigger>
  * 		<DropdownContent>
- *  		<DropdownItem label="Item 1" role='menuitem'>Item 1</DropdownItem>
- * 			<DropdownItem label="Item 2" role='menuitem'>Item 2</DropdownItem>
+ *  		<DropdownItem typeaheadLabel="Item 1" role='menuitem'>Item 1</DropdownItem>
+ * 			<DropdownItem typeaheadLabel="Item 2" role='menuitem'>Item 2</DropdownItem>
  * 			{... and so on}
  * 		</DropdownContent>
  * </Dropdown>
@@ -225,7 +225,7 @@ interface DropdownItemProps extends HTMLProps< HTMLElement > {
 	/**
 	 * The label is what is used for matching items when typing.
 	 */
-	label: string;
+	typeaheadLabel: string;
 	/**
 	 * The items can be rendered as buttons or links. Default is button.
 	 */
@@ -234,14 +234,14 @@ interface DropdownItemProps extends HTMLProps< HTMLElement > {
 
 export function DropdownItem( {
 	children,
-	label,
+	typeaheadLabel,
 	onClick,
 	className,
 	as: Component = 'button',
 	...props
 }: DropdownItemProps ) {
 	const { setIsDropdownOpen, activeListIndex, getItemProps } = useDropdownContext();
-	const { ref, index } = useListItem( { label } );
+	const { ref, index } = useListItem( { label: typeaheadLabel } );
 
 	const isActive = activeListIndex === index;
 

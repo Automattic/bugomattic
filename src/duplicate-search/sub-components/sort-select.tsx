@@ -18,7 +18,7 @@ export function SortSelect() {
 	const currentSortOption = useAppSelector( selectSort );
 	const sortOptions: SortOptions[] = [
 		{
-			label: 'Relevance (default)',
+			label: 'Relevance',
 			value: 'relevance',
 		},
 		{
@@ -27,12 +27,8 @@ export function SortSelect() {
 		},
 	];
 
-	let sortDropdownTriggerLabel = sortOptions.find(
-		( sortOption ) => sortOption.value === currentSortOption
-	)?.label;
-	if ( ! sortDropdownTriggerLabel || sortDropdownTriggerLabel === 'Relevance (default)' ) {
-		sortDropdownTriggerLabel = 'Sort';
-	}
+	const sortDropdownTriggerLabel =
+		sortOptions.find( ( sortOption ) => sortOption.value === currentSortOption )?.label || 'Sort';
 
 	const handleSortOptionClick = useCallback(
 		( sortOptionValue: string ) => {
@@ -55,7 +51,7 @@ export function SortSelect() {
 					<DropdownItem
 						key={ sortOption.value }
 						role="option"
-						label={ sortOption.label }
+						typeaheadLabel={ sortOption.label }
 						aria-selected={ currentSortOption === sortOption.value }
 						className={ styles.sortOption }
 						onClick={ () => handleSortOptionClick( sortOption.value ) }
