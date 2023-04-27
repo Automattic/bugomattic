@@ -7,7 +7,6 @@ import {
 } from '../static-data/reporting-config/reporting-config-slice';
 import {
 	NormalizedReportingConfig,
-	TaskParentEntityType,
 	IndexedReportingConfig,
 } from '../static-data/reporting-config/types';
 import { ReportingConfigSearchResults } from './types';
@@ -73,31 +72,40 @@ function searchReportingConfig(
 
 	// Finally, search for the search term in the description of the products and feature areas
 	const searchTermTokens = tokenizeAndNormalize( searchTerm );
-	const scores: Record< string, { type: TaskParentEntityType; score: number } > = {};
+	const scores = {
+		product: {} as Record< string, number >,
+		featureGroup: {} as Record< string, number >,
+		feature: {} as Record< string, number >,
+	};
 
 	for ( const token of searchTermTokens ) {
 		const matchingEntities = invertedIndex[ token ] || [];
 
 		for ( const { type, id, weight } of matchingEntities ) {
-			if ( ! scores[ id ] ) {
-				scores[ id ] = { type, score: 0 };
+			if ( ! scores[ type ][ id ] ) {
+				scores[ type ][ id ] = 0;
 			}
-			scores[ id ].score += weight;
+			scores[ type ][ id ] += weight;
 		}
 	}
 
 	const scoreThreshold = 1;
-	const addToSearchResultsByType = {
-		product: ( entityId: string ) => searchResults.products.add( entityId ),
-		featureGroup: ( entityId: string ) => addFeatureGroupAndParents( entityId ),
-		feature: ( entityId: string ) => addFeatureAndParents( entityId ),
-	};
 
-	for ( const entityId in scores ) {
-		if ( scores[ entityId ].score >= scoreThreshold ) {
-			const entityType = scores[ entityId ].type;
-			const addToSearchResults = addToSearchResultsByType[ entityType ];
-			addToSearchResults( entityId );
+	for ( const entityId in scores.product ) {
+		if ( scores.product[ entityId ] >= scoreThreshold ) {
+			searchResults.products.add( entityId );
+		}
+	}
+
+	for ( const entityId in scores.featureGroup ) {
+		if ( scores.featureGroup[ entityId ] >= scoreThreshold ) {
+			addFeatureGroupAndParents( entityId );
+		}
+	}
+
+	for ( const entityId in scores.feature ) {
+		if ( scores.feature[ entityId ] >= scoreThreshold ) {
+			addFeatureAndParents( entityId );
 		}
 	}
 
