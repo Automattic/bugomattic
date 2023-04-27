@@ -11,7 +11,8 @@
 	width: max-content;
 }
 
-button.item {
+button.item,
+a.item {
 	background-color: var( --color-white );
 	border: 2px solid transparent;
 	cursor: pointer;
@@ -19,14 +20,17 @@ button.item {
 	padding: 0.5rem 1rem;
 }
 
-button.item:hover {
+button.item:hover,
+a.item:hover {
 	background-color: var( --color-neutral-extra-light );
 }
 
-button.item:active {
+button.item:active,
+a.item:active {
 	background-color: var( --color-neutral-light );
 }
 
-button.item:focus-visible {
+button.item:focus-visible,
+a.item:focus-visible {
 	border-color: var( --color-primary );
 }

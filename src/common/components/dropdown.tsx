@@ -1,5 +1,4 @@
 import React, {
-	ButtonHTMLAttributes,
 	HTMLProps,
 	MouseEventHandler,
 	ReactNode,
@@ -222,8 +221,15 @@ export function DropdownContent( { children, style, ...props }: HTMLProps< HTMLD
 	);
 }
 
-interface DropdownItemProps extends ButtonHTMLAttributes< HTMLButtonElement > {
+interface DropdownItemProps extends HTMLProps< HTMLElement > {
+	/**
+	 * The label is what is used for matching items when typing.
+	 */
 	label: string;
+	/**
+	 * The items can be rendered as buttons or links. Default is button.
+	 */
+	as?: 'button' | 'a';
 }
 
 export function DropdownItem( {
@@ -231,6 +237,7 @@ export function DropdownItem( {
 	label,
 	onClick,
 	className,
+	as: Component = 'button',
 	...props
 }: DropdownItemProps ) {
 	const { setIsDropdownOpen, activeListIndex, getItemProps } = useDropdownContext();
@@ -248,7 +255,7 @@ export function DropdownItem( {
 	const combinedClassName = [ styles.item, className ].join( ' ' );
 
 	return (
-		<button
+		<Component
 			{ ...getItemProps( {
 				ref,
 				onClick: handleClick,
@@ -258,6 +265,6 @@ export function DropdownItem( {
 			} ) }
 		>
 			{ children }
-		</button>
+		</Component>
 	);
 }
