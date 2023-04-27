@@ -3,7 +3,7 @@ import { createMockApiClient } from '../../test-utils/mock-api-client';
 import userEvent from '@testing-library/user-event';
 import { renderWithProviders } from '../../test-utils/render-with-providers';
 import { DuplicateSearchControls } from '../duplicate-search-controls';
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import { DuplicateSearchState } from '../types';
 import { RootState } from '../../app/store';
 import { AvailableRepoFiltersState } from '../../static-data/available-repo-filters/types';
@@ -423,6 +423,97 @@ describe( '[DuplicateSearchControls]', () => {
 			expect( monitoringClient.logger.error ).toHaveBeenCalledWith(
 				'Error loading available repo filters',
 				{ error: 'Repo filter load error.' }
+			);
+		} );
+	} );
+
+	describe( 'Sort selection', () => {
+		test( 'By default, we sort by Relevance', async () => {
+			setup( <DuplicateSearchControls /> );
+
+			expect( screen.getByRole( 'combobox', { name: 'Sort results by…' } ) ).toHaveTextContent(
+				'Relevance'
+			);
+		} );
+
+		test( 'Clicking "Sort results by…" opens a popover with sort options', async () => {
+			const { user } = setup( <DuplicateSearchControls /> );
+
+			await user.click( screen.getByRole( 'combobox', { name: 'Sort results by…' } ) );
+
+			expect( screen.getByRole( 'listbox', { name: 'Sort options' } ) ).toBeInTheDocument();
+
+			const expectedSortOptions = [ 'Relevance', 'Date added' ];
+			for ( const expectedSortOption of expectedSortOptions ) {
+				expect( screen.getByRole( 'option', { name: expectedSortOption } ) ).toBeInTheDocument();
+			}
+		} );
+
+		test( 'Selecting a sort option, closes popover, saves option, and fires search', async () => {
+			const { user, apiClient } = setup( <DuplicateSearchControls />, {
+				duplicateSearch: searchStateWithSearchTerm,
+			} );
+
+			await user.click( screen.getByRole( 'combobox', { name: 'Sort results by…' } ) );
+			await user.click( screen.getByRole( 'option', { name: 'Date added' } ) );
+
+			expect( screen.queryByRole( 'listbox', { name: 'Sort options' } ) ).not.toBeInTheDocument();
+			expect( apiClient.searchIssues ).toHaveBeenCalledWith(
+				searchStateWithSearchTerm.searchTerm,
+				expect.objectContaining( {
+					sort: 'date-created',
+				} )
+			);
+			expect( screen.getByRole( 'combobox', { name: 'Sort results by…' } ) ).toHaveTextContent(
+				'Date added'
+			);
+		} );
+
+		test( 'The currently saved sort option is selected in the dropdown', async () => {
+			const { user } = setup( <DuplicateSearchControls />, {
+				duplicateSearch: { ...defaultInitialSearchState, sort: 'date-created' },
+			} );
+
+			await user.click( screen.getByRole( 'combobox', { name: 'Sort results by…' } ) );
+
+			expect(
+				screen.getByRole( 'option', { name: 'Date added', selected: true } )
+			).toBeInTheDocument();
+		} );
+
+		test( 'The control supports keyboard arrow navigation', async () => {
+			const { user } = setup( <DuplicateSearchControls /> );
+
+			const sortButton = screen.getByRole( 'combobox', { name: 'Sort results by…' } );
+			sortButton.focus();
+
+			await user.keyboard( '{arrowdown}' );
+			expect( screen.getByRole( 'listbox', { name: 'Sort options' } ) ).toBeInTheDocument();
+			await waitFor( () =>
+				expect( screen.getByRole( 'option', { name: 'Relevance', selected: true } ) ).toHaveFocus()
+			);
+
+			await user.keyboard( '{arrowdown}' );
+			await waitFor( () =>
+				expect(
+					screen.getByRole( 'option', { name: 'Date added', selected: false } )
+				).toHaveFocus()
+			);
+		} );
+
+		test( 'When open, the control supports type-ahead searching', async () => {
+			const { user } = setup( <DuplicateSearchControls /> );
+
+			const sortButton = screen.getByRole( 'combobox', { name: 'Sort results by…' } );
+			sortButton.focus();
+
+			// Using space to open the listbox as this would be a common workflow for screen reader users
+			await user.keyboard( ' ' );
+			await user.keyboard( 'd' );
+			await waitFor( () =>
+				expect(
+					screen.getByRole( 'option', { name: 'Date added', selected: false } )
+				).toHaveFocus()
 			);
 		} );
 	} );
