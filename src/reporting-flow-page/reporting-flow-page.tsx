@@ -8,7 +8,7 @@ import { selectIssueFeatureId } from '../issue-details/issue-details-slice';
 import { ActiveReportingStep } from './types';
 import { setActiveReportingStep } from './active-reporting-step-slice';
 import { updateHistoryWithState } from '../url-history/actions';
-import { StartOverCard } from '../start-over/start-over-card';
+import { StartOverBanner } from '../start-over/start-over-banner';
 import { setActivePage } from '../active-page/active-page-slice';
 import { selectReportingConfigLoadError } from '../static-data/reporting-config/reporting-config-slice';
 import { useMonitoring } from '../monitoring/monitoring-provider';
@@ -61,7 +61,7 @@ function ReportingFlow() {
 			<TypeStep stepNumber={ 1 } goToNextStep={ handleTypeNextStep } />
 			<FeatureSelectionStep stepNumber={ 2 } goToNextStep={ handleFeatureSelectionNextStep } />
 			<NextStepsStep stepNumber={ 3 } />
-			<StartOverCard />
+			<StartOverBanner />
 		</section>
 	);
 }

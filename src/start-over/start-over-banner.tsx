@@ -5,9 +5,10 @@ import { selectRelevantTaskIds } from '../combined-selectors/relevant-task-ids';
 import { useMonitoring } from '../monitoring/monitoring-provider';
 import { startOver } from './start-over-counter-slice';
 import { updateHistoryWithState } from '../url-history/actions';
-import styles from './start-over-card.module.css';
+import styles from './start-over-banner.module.css';
+import { Banner } from '../common/components';
 
-export function StartOverCard() {
+export function StartOverBanner() {
 	const dispatch = useAppDispatch();
 	const monitoringClient = useMonitoring();
 
@@ -34,11 +35,11 @@ export function StartOverCard() {
 	const message = messages[ randomIndex ];
 
 	return (
-		<section className={ styles.card } aria-label="Start Over">
+		<Banner className={ styles.banner } aria-label="Start Over">
 			<p className={ styles.message }>{ message }</p>
 			<button onClick={ handleStartOverClick } className="primaryButton">
 				Start Over
 			</button>
-		</section>
+		</Banner>
 	);
 }
