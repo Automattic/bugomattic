@@ -5,7 +5,7 @@ import {
 	selectDuplicateResultsRequestStatus,
 	selectDuplicateRequestsWereMade,
 } from './duplicate-results-slice';
-import { IssueList, PlaceholderMessage, useShowBanner } from './sub-components';
+import { IssueList, PlaceholderMessage, ReportIssueBanner, useShowBanner } from './sub-components';
 import styles from './duplicate-results.module.css';
 import { ReactComponent as InitialIllustration } from './svgs/initial-illustration.svg';
 import { ReactComponent as NoResultsIllustration } from '../common/svgs/missing-info.svg';
@@ -88,7 +88,7 @@ export function DuplicateResults() {
 				{ /* We need another wrapper here to accurately get the height of the display content */ }
 				<div ref={ resultsContainerContentRef }>{ resultsContainerDisplay }</div>
 			</div>
-			{ showBanner && <p>Banner Placeholder</p> }
+			{ showBanner && <ReportIssueBanner /> }
 		</section>
 	);
 }
