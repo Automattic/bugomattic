@@ -46,6 +46,11 @@ import styles from './dropdown.module.css';
  *
  * You must provide which role the dropdown should have. This is either 'menu' or 'listbox' (the case of a select-only combobox).
  *
+ * TODO: I would love to find a way to implement the typing behavior from this WAI ARIA example:
+ * https://www.w3.org/WAI/ARIA/apg/patterns/combobox/examples/combobox-select-only/
+ * But... I'm having a really hard time getting it to play nicely with the FloatingUI API.
+ * Add a KeyDown handler right on the trigger was messing with some of the auto-focus.
+ * Also, because this follows a composable children pattern, we don't know all the labels upfront to pass to useTypeahead.
  */
 
 type DropdownRole = 'menu' | 'listbox';
