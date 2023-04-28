@@ -1,8 +1,67 @@
 @import '../../variables.css';
 
 .banner {
+	margin-top: 2rem;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	position: relative;
 	padding: 0.75rem 1.25rem;
 	border: 1px solid var( --color-border );
 	border-radius: 6px;
 	background-color: var( --color-shaded-background );
+}
+
+.textAndImageWrapper {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	margin-right: 1rem;
+}
+
+.illustration {
+	height: 100%;
+	width: auto;
+	margin-left: -1.25rem; /* Add negative margin equal to banner's left padding */
+	margin-top: -0.75rem; /* Add negative margin equal to banner's top padding */
+	margin-bottom: -0.75rem; /* Add negative margin equal to banner's bottom padding */
+	margin-right: 1.25rem;
+}
+
+h3.header {
+	font-size: var( --font-header );
+	font-weight: 500;
+	margin-top: 0;
+	margin-bottom: 0.375rem;
+}
+
+p.message {
+	font-size: var( --font-body );
+	margin-top: 0;
+	margin-bottom: 0;
+	font-weight: 300;
+}
+
+.actionButtonWrapper {
+	flex-shrink: 0;
+}
+
+@media only screen and ( max-width: 750px ) {
+	/* This just starts taking up pointless space below this size */
+	.illustration {
+		display: none;
+	}
+}
+
+@media only screen and ( max-width: 600px ) {
+	.banner {
+		flex-direction: column;
+		text-align: center;
+	}
+
+	.textAndImageWrapper {
+		margin-right: 0;
+		margin-bottom: 1rem;
+	}
 }

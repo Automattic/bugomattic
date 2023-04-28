@@ -162,49 +162,6 @@ p.placeholderText {
 	--rt-opacity: 1;
 }
 
-.banner {
-	margin-top: 2rem;
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: space-between;
-	position: relative;
-}
-
-.bannerTextAndImage {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	margin-right: 1rem;
-}
-
-.bannerIllustration {
-	height: 100%;
-	width: auto;
-	margin-left: -1.25rem; /* Add negative margin equal to banner's left padding */
-	margin-top: -0.75rem; /* Add negative margin equal to banner's top padding */
-	margin-bottom: -0.75rem; /* Add negative margin equal to banner's bottom padding */
-	margin-right: 1.25rem;
-}
-
-h3.bannerHeader {
-	font-size: var( --font-header );
-	font-weight: 500;
-	margin-top: 0;
-	margin-bottom: 0.375rem;
-}
-
-p.bannerMessage {
-	font-size: var( --font-body );
-	margin-top: 0;
-	margin-bottom: 0;
-	font-weight: 300;
-}
-
-.bannerButtonWrapper {
-	flex-shrink: 0;
-}
-
 button.bannerButton {
 	display: flex;
 	flex-direction: row;
@@ -236,13 +193,6 @@ button.bannerButton:active {
 	fill: var( --color-primary );
 }
 
-@media only screen and ( max-width: 750px ) {
-	/* This just starts taking up pointless space below this size */
-	.bannerIllustration {
-		display: none;
-	}
-}
-
 @media only screen and ( max-width: 600px ) {
 	.issueMeta {
 		display: grid;
@@ -250,15 +200,5 @@ button.bannerButton:active {
 		grid-auto-rows: auto;
 		row-gap: 0.5rem;
 		align-items: start;
-	}
-
-	.banner {
-		flex-direction: column;
-		text-align: center;
-	}
-
-	.bannerTextAndImage {
-		margin-right: 0;
-		margin-bottom: 1rem;
 	}
 }

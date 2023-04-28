@@ -5,8 +5,8 @@ import { selectRelevantTaskIds } from '../combined-selectors/relevant-task-ids';
 import { useMonitoring } from '../monitoring/monitoring-provider';
 import { startOver } from './start-over-counter-slice';
 import { updateHistoryWithState } from '../url-history/actions';
-import styles from './start-over-banner.module.css';
 import { Banner } from '../common/components';
+import { ReactComponent as ChecklistIllustration } from './checklist-illustration.svg';
 
 export function StartOverBanner() {
 	const dispatch = useAppDispatch();
@@ -26,20 +26,27 @@ export function StartOverBanner() {
 		monitoringClient.analytics.recordEvent( 'start_over_click' );
 	};
 
-	const messages = [
+	const headers = [
 		'Thank you for reporting the issue!',
 		'We appreciate your issue report! Every bit helps!',
 		'Thanks for helping improve our software!',
 	];
-	const randomIndex = Math.floor( Math.random() * messages.length );
-	const message = messages[ randomIndex ];
+	const randomIndex = Math.floor( Math.random() * headers.length );
+	const header = headers[ randomIndex ];
+
+	const actionButton = (
+		<button onClick={ handleStartOverClick } className="primaryButton">
+			Start Over
+		</button>
+	);
 
 	return (
-		<Banner className={ styles.banner } aria-label="Start Over">
-			<p className={ styles.message }>{ message }</p>
-			<button onClick={ handleStartOverClick } className="primaryButton">
-				Start Over
-			</button>
-		</Banner>
+		<Banner
+			aria-label="Start Over"
+			illustration={ <ChecklistIllustration /> }
+			header={ header }
+			message={ 'Start over to report a new issue or go back to duplicate search' }
+			actionButton={ actionButton }
+		/>
 	);
 }
