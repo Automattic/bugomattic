@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import styles from './debounced-search.module.css';
 import debounce from 'lodash.debounce';
 import { ReactComponent as SearchIcon } from '../svgs/search.svg';
@@ -23,14 +23,33 @@ export function DebouncedSearch( {
 	inputAriaLabel,
 }: Props ) {
 	const [ searchTerm, setSearchTerm ] = useState( '' );
+	const [ lastEmittedSearchTerm, setLastEmittedSearchTerm ] = useState( '' );
+
+	const callCallback = useCallback(
+		( searchTerm: string ) => {
+			setLastEmittedSearchTerm( searchTerm );
+			callback( searchTerm );
+		},
+		[ callback ]
+	);
+
+	const conditionallyCallCallback = useCallback(
+		( searchTerm: string ) => {
+			if ( searchTerm.length >= debounceCharacterMinimum && searchTerm !== lastEmittedSearchTerm ) {
+				callCallback( searchTerm );
+			}
+		},
+		[ callCallback, debounceCharacterMinimum, lastEmittedSearchTerm ]
+	);
+
 	const debouncedCallback = useMemo(
-		() => debounce( callback, debounceMs ),
-		[ callback, debounceMs ]
+		() => debounce( conditionallyCallCallback, debounceMs ),
+		[ conditionallyCallCallback, debounceMs ]
 	);
 
 	const searchImmediately = () => {
 		debouncedCallback.cancel();
-		callback( searchTerm );
+		callCallback( searchTerm );
 	};
 
 	const handleEnter = ( event: React.KeyboardEvent ) => {
@@ -42,9 +61,7 @@ export function DebouncedSearch( {
 	const handleChange = ( event: React.ChangeEvent< HTMLInputElement > ) => {
 		const newSearchTerm = event.target.value;
 		setSearchTerm( newSearchTerm );
-		if ( newSearchTerm.length >= debounceCharacterMinimum ) {
-			debouncedCallback( newSearchTerm );
-		}
+		debouncedCallback( newSearchTerm );
 	};
 
 	const classNames = [ styles.search ];
@@ -59,7 +76,6 @@ export function DebouncedSearch( {
 				placeholder={ placeholder }
 				type="text"
 				value={ searchTerm }
-				onBlur={ searchImmediately }
 				onChange={ handleChange }
 				onKeyUp={ handleEnter }
 				aria-label={ inputAriaLabel }

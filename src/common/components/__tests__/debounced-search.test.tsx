@@ -40,6 +40,7 @@ describe( '[DebouncedSearch]', () => {
 	} );
 
 	it( 'Waits for the debounced time before calling callback', async () => {
+		// The 50ms is a good time to keep tests fast, but stable with the delays that come with react testing library.
 		const debounceMs = 50;
 		const { mockCallBack, user } = setup( { debounceMs: debounceMs } );
 		await user.click( screen.getByPlaceholderText( placeholderText ) );
@@ -127,5 +128,33 @@ describe( '[DebouncedSearch]', () => {
 
 		await user.click( screen.getByRole( 'button', { hidden: true } ) );
 		expect( mockCallBack ).toHaveBeenLastCalledWith( 'ab' );
+	} );
+
+	it( "If the same term is entered within the debounce window, won't call callback again unless forced action is taken", async () => {
+		const testText = 'abc';
+		const debounceMs = 50;
+		const { mockCallBack, user } = setup( { debounceMs } );
+		await user.click( screen.getByPlaceholderText( placeholderText ) );
+		await user.keyboard( testText );
+
+		// First debounce fires
+		await waitFor( () => expect( mockCallBack ).toHaveBeenLastCalledWith( testText ), {
+			timeout: debounceMs + 10,
+		} );
+
+		// Remove last character and quickly add it back within debounce window
+		await user.keyboard( '{Backspace}c' );
+
+		// Wait for the debounce window, the callback should not be called again
+		await new Promise( ( resolve ) => setTimeout( resolve, debounceMs + 10 ) );
+		expect( mockCallBack ).toHaveBeenCalledTimes( 1 );
+
+		// Hit enter, the callback should be called again, even though term is the same
+		await user.keyboard( '{Enter}' );
+		expect( mockCallBack ).toHaveBeenCalledTimes( 2 );
+
+		// Hit search button, the callback should be called again, even though term is the same
+		await user.click( screen.getByRole( 'button', { hidden: true } ) );
+		expect( mockCallBack ).toHaveBeenCalledTimes( 3 );
 	} );
 } );
