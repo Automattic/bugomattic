@@ -341,11 +341,11 @@ function addTokensToInvertedIndex(
 }
 
 export function indexReportingConfig(
-	_response: ReportingConfigApiResponse
+	normalizedReportingConfig: NormalizedReportingConfig
 ): IndexedReportingConfig {
 	const invertedIndex: IndexedReportingConfig = {};
 
-	const { features, featureGroups, products } = normalizeReportingConfig( _response );
+	const { features, featureGroups, products } = normalizedReportingConfig;
 
 	for ( const productId in products ) {
 		const product = products[ productId ];
