@@ -12,9 +12,7 @@ const initialNormalizedReportingConfig: NormalizedReportingConfig = {
 	tasks: {},
 };
 
-const initialIndexedReportingConfig: IndexedReportingConfig = {
-	foo: 'bar',
-};
+const initialIndexedReportingConfig: IndexedReportingConfig = {};
 
 const initialState: ReportingConfigState = {
 	normalized: initialNormalizedReportingConfig,
@@ -49,7 +47,7 @@ export const reportingConfigSlice = createSlice( {
 
 				try {
 					normalized = normalizeReportingConfig( payload );
-					indexed = indexReportingConfig( payload );
+					indexed = indexReportingConfig( normalized );
 				} catch ( err ) {
 					const error = err as Error;
 					return {

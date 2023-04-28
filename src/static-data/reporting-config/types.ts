@@ -9,7 +9,7 @@ export interface ReportingConfigState {
 }
 
 /**
- * The issue reporting config noramlized, or "flattened", for easier client operations.
+ * The issue reporting config normalized, or "flattened", for easier client operations.
  */
 export interface NormalizedReportingConfig {
 	features: Features;
@@ -19,12 +19,14 @@ export interface NormalizedReportingConfig {
 }
 
 /**
- * Indices built from the reporting configuration to facilitate searching for features.
- * TODO: Implement, once we know what kind of searching we will support
- */
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
+ * Represents an inverted index that allows for searching features by their descriptions.
+ * The index is built by extracting tokens from the description of each product and feature group in the reporting configuration. 
+ * The resulting index is an object whose keys are the extracted tokens, 
+ * and whose values are arrays of objects representing entities containing the token. 
+e
+*/
 export interface IndexedReportingConfig {
-	// TODO: figure out what indices we need.
+	[ key: string ]: Array< { type: TaskParentEntityType; id: string; weight: number } >;
 }
 
 export type FeatureParentEntityType = 'product' | 'featureGroup';
