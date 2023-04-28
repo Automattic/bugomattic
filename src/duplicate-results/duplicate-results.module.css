@@ -179,16 +179,12 @@ p.placeholderText {
 }
 
 .bannerIllustration {
-	position: absolute;
-	top: 0;
-	left: 0;
-	bottom: 0;
 	height: 100%;
 	width: auto;
-}
-
-.bannerTextWrapper {
-	margin-left: 6rem;
+	margin-left: -1.25rem; /* Add negative margin equal to banner's left padding */
+	margin-top: -0.75rem; /* Add negative margin equal to banner's top padding */
+	margin-bottom: -0.75rem; /* Add negative margin equal to banner's bottom padding */
+	margin-right: 1.25rem;
 }
 
 h3.bannerHeader {
@@ -209,6 +205,13 @@ p.bannerMessage {
 	flex-shrink: 0;
 }
 
+@media only screen and ( max-width: 750px ) {
+	/* This just starts taking up pointless space below this size */
+	.bannerIllustration {
+		display: none;
+	}
+}
+
 @media only screen and ( max-width: 600px ) {
 	.issueMeta {
 		display: grid;
@@ -216,5 +219,15 @@ p.bannerMessage {
 		grid-auto-rows: auto;
 		row-gap: 0.5rem;
 		align-items: start;
+	}
+
+	.banner {
+		flex-direction: column;
+		text-align: center;
+	}
+
+	.bannerTextAndImage {
+		margin-right: 0;
+		margin-bottom: 1rem;
 	}
 }

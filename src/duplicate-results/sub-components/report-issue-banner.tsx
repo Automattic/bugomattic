@@ -7,7 +7,7 @@ export function ReportIssueBanner() {
 	return (
 		<Banner className={ styles.banner }>
 			<div className={ styles.bannerTextAndImage }>
-				<MegaphoneIllustration className={ styles.bannerIllustration } />
+				<MegaphoneIllustration aria-hidden="true" className={ styles.bannerIllustration } />
 				<div className={ styles.bannerTextWrapper }>
 					<h3 className={ styles.bannerHeader }>{ "Couldn't find what you were looking for?" }</h3>
 					<p className={ styles.bannerMessage }>
