@@ -37,7 +37,7 @@ button.treeNode {
 	width: 100%;
 	text-align: left;
 	padding: 0.75rem 0.5rem;
-	display: flex;
+	display: inline;
 	align-items: center;
 }
 
@@ -160,6 +160,29 @@ button.clearButton:active {
 	font-size: var( --font-body-small );
 }
 
+.keywordPill {
+	background-color: var( --color-neutral );
+	display: inline-block;
+}
+
+.matchedPill {
+	background-color: var( --color-neutral-light );
+	margin: 0.5rem;
+}
+
+.appIcon {
+	display: inline-block;
+	position: relative;
+	height: 1.25rem;
+	width: 1.25rem;
+}
+
+.appIcon,
+.linkText {
+	margin-right: 0.5rem;
+	vertical-align: middle;
+}
+
 @media only screen and ( max-width: 600px ) {
 	.bottomPanel {
 		align-items: flex-start;
@@ -176,6 +199,10 @@ button.clearButton:active {
 
 	.tooltip {
 		max-width: 50vw;
+	}
+
+	.matchedPill {
+		display: inline-block;
 	}
 }
 

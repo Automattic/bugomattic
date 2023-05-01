@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { useAppSelector } from '../../app/hooks';
 import { selectNormalizedReportingConfig } from '../../static-data/reporting-config/reporting-config-slice';
 import { SortedFeatureList } from './sorted-feature-list';
@@ -6,6 +6,12 @@ import { ExpandableTreeNode } from './expandable-tree-node';
 import { SearchHighlighter } from './search-hightlighter';
 import { useExpansionWithSearch } from './use-expansion-with-search';
 import { selectReportingConfigSearchResults } from '../../combined-selectors/reporting-config-search-results';
+import { selectFeatureSearchTerm } from '../feature-selector-form-slice';
+import {
+	selectMatchedDescriptionTerms,
+	selectStrongestDescriptionMatch,
+} from '../../combined-selectors/reporting-config-search-results';
+import { MatchedTermsDisplay } from './matched-terms-display';
 
 interface Props {
 	id: string;
@@ -14,6 +20,11 @@ interface Props {
 export function FeatureGroup( { id }: Props ) {
 	const { featureGroups } = useAppSelector( selectNormalizedReportingConfig );
 	const { name, featureIds, description } = featureGroups[ id ];
+	const { matchedDescriptionTerms, strongestDescriptionMatch } = useAppSelector( ( state ) => ( {
+		matchedDescriptionTerms: selectMatchedDescriptionTerms( state, 'featureGroup', id ),
+		strongestDescriptionMatch: selectStrongestDescriptionMatch( state, 'featureGroup', id ),
+	} ) );
+	const searchTerm = useAppSelector( selectFeatureSearchTerm );
 
 	const { isExpanded, handleCollapseExpandToggle } = useExpansionWithSearch();
 
@@ -21,13 +32,29 @@ export function FeatureGroup( { id }: Props ) {
 
 	const label = <SearchHighlighter>{ name }</SearchHighlighter>;
 
+	let labelDisplay: ReactNode = label;
+
+	if ( searchTerm !== '' && description && matchedDescriptionTerms.length ) {
+		labelDisplay = (
+			<>
+				{ label }
+				<MatchedTermsDisplay
+					searchTerm={ searchTerm }
+					matchedTerms={ matchedDescriptionTerms }
+					strongestMatchTerm={ strongestDescriptionMatch }
+					matchType={ 'description' }
+				/>
+			</>
+		);
+	}
+
 	const featureIdsToDisplay = isExpanded
 		? featureIds
 		: featureIds.filter( ( featureId ) => searchResults.features.has( featureId ) );
 
 	return (
 		<ExpandableTreeNode
-			label={ label }
+			label={ labelDisplay }
 			isExpanded={ isExpanded }
 			handleToggle={ handleCollapseExpandToggle }
 			description={ description }

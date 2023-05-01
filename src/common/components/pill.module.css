@@ -1,12 +1,10 @@
 @import '../../variables.css';
 
 .pill {
-	background-color: var( --color-primary-light );
 	font-size: var( --font-body-small );
 	color: var( --color-text-light );
 	font-weight: 400;
-	display: inline-block;
+	border-radius: 61px;
 	padding: 0.34375rem 0.625rem;
 	margin: 0.5rem 0.5rem 0 0;
-	border-radius: 61px;
 }
