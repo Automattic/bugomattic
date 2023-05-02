@@ -11,11 +11,13 @@ import { ReactComponent as InitialIllustration } from './svgs/initial-illustrati
 import { ReactComponent as NoResultsIllustration } from '../common/svgs/missing-info.svg';
 import { LoadingIndicator } from '../common/components';
 import { selectDuplicateSearchFiltersAreActive } from '../combined-selectors/duplicate-search-filters-are-active';
+import { selectDuplicateSearchTerm } from '../duplicate-search/duplicate-search-slice';
 
 export function DuplicateResults() {
 	const results = useAppSelector( selectDuplicateResults );
 	const resultsRequestStatus = useAppSelector( selectDuplicateResultsRequestStatus );
 	const requestsWereMade = useAppSelector( selectDuplicateRequestsWereMade );
+	const searchTerm = useAppSelector( selectDuplicateSearchTerm );
 	const filtersAreActive = useAppSelector( selectDuplicateSearchFiltersAreActive );
 	const showBanner = useShowBanner();
 
@@ -27,16 +29,16 @@ export function DuplicateResults() {
 	>( undefined );
 
 	useEffect( () => {
-		if ( resultsRequestStatus === 'fulfilled' ) {
+		if ( resultsRequestStatus === 'fulfilled' || searchTerm === '' ) {
 			const newHeight = resultsContainerContentRef.current?.clientHeight;
 			setResultsContainerContentHeightPx( newHeight );
 		}
-	}, [ resultsRequestStatus ] );
+	}, [ resultsRequestStatus, searchTerm ] );
 
 	const resultsLimit = 20; // We can tweak this as needed!
 
 	let resultsContainerDisplay: ReactNode;
-	if ( ! requestsWereMade ) {
+	if ( ! requestsWereMade || searchTerm === '' ) {
 		resultsContainerDisplay = (
 			<PlaceholderMessage
 				illustration={ InitialIllustration }

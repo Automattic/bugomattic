@@ -32,8 +32,8 @@ export function SortSelect() {
 		sortOptions.find( ( sortOption ) => sortOption.value === currentSortOption )?.label || 'Sort';
 
 	const handleSortOptionClick = useCallback(
-		( sortOptionValue: string ) => {
-			dispatch( setSearchParam( setSort( sortOptionValue as IssueSortOption ) ) );
+		( sortOptionValue: IssueSortOption ) => {
+			dispatch( setSearchParam( setSort( sortOptionValue ) ) );
 		},
 		[ dispatch ]
 	);

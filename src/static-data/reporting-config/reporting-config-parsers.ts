@@ -15,6 +15,7 @@ import {
 	TaskParentEntityType,
 	Tasks,
 } from './types';
+import { tokenizeAndNormalize } from '../../common/lib';
 
 // Defining all the core logic for how we normalize and index reporting configs here.
 // We are keeping this separate from how this logic is used in reducers and thunks.
@@ -316,11 +317,55 @@ function throwReportingConfigError( message: string ): never {
 	throw new Error( `Invalid reporting config: ${ message }` );
 }
 
-export function indexReportingConfig(
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	_response: ReportingConfigApiResponse
-): IndexedReportingConfig {
-	// TODO: create real implementation once we know the indices we need!
+function addTokensToInvertedIndex(
+	entityType: TaskParentEntityType,
+	entityId: string,
+	description: string | undefined,
+	invertedIndex: {
+		[ key: string ]: Array< { type: TaskParentEntityType; id: string; weight: number } >;
+	}
+) {
+	const descriptionTokens = description ? tokenizeAndNormalize( description ) : [];
+	const tokensWithWeights = [ ...descriptionTokens.map( ( token ) => ( { token, weight: 1 } ) ) ];
 
-	return {};
+	for ( const { token, weight } of tokensWithWeights ) {
+		if ( ! Object.prototype.hasOwnProperty.call( invertedIndex, token ) ) {
+			invertedIndex[ token ] = [];
+		}
+
+		const tokenList = invertedIndex[ token ];
+		if ( tokenList ) {
+			tokenList.push( { type: entityType, id: entityId, weight } );
+		}
+	}
+}
+
+export function indexReportingConfig(
+	normalizedReportingConfig: NormalizedReportingConfig
+): IndexedReportingConfig {
+	const invertedIndex: IndexedReportingConfig = {};
+
+	const { features, featureGroups, products } = normalizedReportingConfig;
+
+	for ( const productId in products ) {
+		const product = products[ productId ];
+		addTokensToInvertedIndex( 'product', productId, product.description, invertedIndex );
+	}
+
+	for ( const featureGroupId in featureGroups ) {
+		const featureGroup = featureGroups[ featureGroupId ];
+		addTokensToInvertedIndex(
+			'featureGroup',
+			featureGroupId,
+			featureGroup.description,
+			invertedIndex
+		);
+	}
+
+	for ( const featureId in features ) {
+		const feature = features[ featureId ];
+		addTokensToInvertedIndex( 'feature', featureId, feature.description, invertedIndex );
+	}
+
+	return invertedIndex;
 }
