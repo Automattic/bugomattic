@@ -38,6 +38,13 @@ module.exports = {
 			files: [ '**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[jt]s?(x)' ],
 			extends: [ 'plugin:testing-library/react', 'plugin:jest-dom/recommended' ],
 		},
+		{
+			// The prop-types rule isn't very helpful with TypeScript and can make noise.
+			files: [ '**/*.ts', '**/*.tsx' ],
+			rules: {
+				'react/prop-types': 'off',
+			},
+		},
 	],
 	parserOptions: {
 		ecmaVersion: 'latest',

@@ -21,7 +21,7 @@
 	margin-bottom: 1.625rem;
 }
 
-.filterControls {
+.filtersWrapper {
 	display: flex;
 	flex-direction: row;
 	column-gap: 0.625rem;
@@ -195,4 +195,43 @@ button.repoFilterMassActionButton {
 
 .repoFilterMassActionButton:active {
 	color: var( --color-primary-extra-dark );
+}
+
+.sortOption {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+
+.sortCheckIconWrapper {
+	width: 1.5rem;
+	height: 1.5rem;
+	margin-right: 0.5rem;
+}
+
+.sortCheckIcon {
+	height: 1.5rem;
+	width: 1.5rem;
+}
+
+.sortCheckIcon path {
+	fill: var( --color-primary );
+}
+
+.sortOptionLabelWrapper {
+	padding-right: 0.5rem;
+}
+
+@media only screen and ( max-width: 600px ) {
+	.filterSortBar {
+		flex-direction: column;
+		row-gap: 0.625rem;
+		align-items: flex-start;
+	}
+
+	.filtersWrapper {
+		flex-direction: column;
+		row-gap: 0.625rem;
+		align-items: flex-start;
+	}
 }
