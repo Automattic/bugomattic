@@ -5,6 +5,7 @@ import React, {
 	cloneElement,
 	createContext,
 	isValidElement,
+	useContext,
 	useMemo,
 	useRef,
 	useState,
@@ -140,7 +141,7 @@ type DropdownContext = ReturnType< typeof useDropdown > | null;
 const DropdownContext = createContext< DropdownContext >( null );
 
 const useDropdownContext = () => {
-	const context = React.useContext( DropdownContext );
+	const context = useContext( DropdownContext );
 	if ( ! context ) {
 		throw new Error(
 			'Any Dropdown child components must be wrapped in a parent <Dropdown /> component'
