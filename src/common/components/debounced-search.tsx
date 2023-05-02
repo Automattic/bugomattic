@@ -49,7 +49,11 @@ export function DebouncedSearch( {
 
 	const searchImmediately = () => {
 		debouncedCallback.cancel();
-		callCallback( searchTerm );
+		const trimmedSearchTerm = searchTerm.trim();
+		// See the comment below on trimming -- after hitting enter, the user would expect to
+		// see the trimmed input in the actual input field.
+		setSearchTerm( trimmedSearchTerm );
+		callCallback( trimmedSearchTerm );
 	};
 
 	const handleEnter = ( event: React.KeyboardEvent ) => {
@@ -61,7 +65,15 @@ export function DebouncedSearch( {
 	const handleChange = ( event: React.ChangeEvent< HTMLInputElement > ) => {
 		const newSearchTerm = event.target.value;
 		setSearchTerm( newSearchTerm );
-		debouncedCallback( newSearchTerm );
+		debouncedCallback( newSearchTerm.trim() );
+	};
+
+	// We only ever call the callback with a trimmed search term.
+	// However, trimming the actual value in the input on change, or even on debouncing
+	// feels really weird and clunky to the user. So we only trim the actual value in the
+	// input field on enter (or search button) and on blur.
+	const handleBlur = () => {
+		setSearchTerm( searchTerm.trim() );
 	};
 
 	const classNames = [ styles.search ];
@@ -78,6 +90,7 @@ export function DebouncedSearch( {
 				value={ searchTerm }
 				onChange={ handleChange }
 				onKeyUp={ handleEnter }
+				onBlur={ handleBlur }
 				aria-label={ inputAriaLabel }
 				aria-controls={ inputAriaControls }
 			/>
