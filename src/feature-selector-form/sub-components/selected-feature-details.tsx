@@ -8,12 +8,13 @@ import { SortedKeywordList } from './sorted-keyword-list';
 
 interface Props {
 	featureId: string;
+	relevantTaskIds: string[];
 }
 
-export function SelectedFeatureDetails( { featureId }: Props ) {
+export function SelectedFeatureDetails( { featureId, relevantTaskIds }: Props ) {
 	const dispatch = useAppDispatch();
 	const monitoringClient = useMonitoring();
-	const { features } = useAppSelector( selectNormalizedReportingConfig );
+	const { features, tasks } = useAppSelector( selectNormalizedReportingConfig );
 	const { name: featureName, description, keywords } = features[ featureId ];
 
 	const handleClearClick = () => {
@@ -22,16 +23,47 @@ export function SelectedFeatureDetails( { featureId }: Props ) {
 	};
 
 	let keywordsDisplay: ReactNode;
-	if ( keywords ) {
+	if ( keywords && keywords.length > 0 ) {
 		keywordsDisplay = <SortedKeywordList keywords={ keywords } />;
 	} else {
-		keywordsDisplay = <span className={ styles.noKeywords }>None</span>;
+		keywordsDisplay = (
+			<span data-testid={ 'keywords-no-result' } className={ styles.noResults }>
+				None
+			</span>
+		);
+	}
+
+	const repositories = [];
+
+	for ( const taskId of relevantTaskIds ) {
+		const task = tasks[ taskId ];
+
+		if ( task?.link?.type === 'github' && task.link.repository ) {
+			repositories.push( task.link.repository );
+		}
+	}
+
+	let repositoriesDisplay: ReactNode;
+	const dataTestId = 'selected-feature-repositories';
+
+	if ( repositories.length > 0 ) {
+		const repositoriesList = repositories.join( ', ' );
+		repositoriesDisplay = (
+			<span data-testid={ dataTestId } className={ styles.repositoriesList }>
+				{ repositoriesList }{ ' ' }
+			</span>
+		);
+	} else {
+		repositoriesDisplay = (
+			<span data-testid={ dataTestId } className={ styles.noResults }>
+				None
+			</span>
+		);
 	}
 
 	return (
 		<div>
 			<h3 className="screenReaderOnly">Currently selected feature:</h3>
-
 			<div>
 				<span className={ styles.selectedFeatureName }>{ featureName }</span>
 				<button
@@ -43,7 +75,6 @@ export function SelectedFeatureDetails( { featureId }: Props ) {
 					Clear
 				</button>
 			</div>
-
 			{ description && (
 				<p
 					data-testid={ 'selected-feature-description' }
@@ -52,6 +83,11 @@ export function SelectedFeatureDetails( { featureId }: Props ) {
 					{ description }
 				</p>
 			) }
+			<div className={ styles.selectedFeatureRepositories }>
+				<h4 className="screenReaderOnly">Repositories for currently selected feature:</h4>
+				<p className={ styles.selectedFeatureRepositoriesTitle }>Repositories</p>
+				{ repositoriesDisplay }
+			</div>
 
 			<div className={ styles.selectedFeatureKeywords }>
 				<h4 className="screenReaderOnly">Keywords for currently selected feature:</h4>

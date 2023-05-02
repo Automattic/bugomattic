@@ -1,7 +1,18 @@
-import React, { FormEventHandler, ReactNode, useCallback, useEffect, useState } from 'react';
+import React, {
+	FormEventHandler,
+	ReactNode,
+	useCallback,
+	useEffect,
+	useState,
+	useMemo,
+} from 'react';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { DebouncedSearch, FormErrorMessage } from '../common/components';
-import { selectIssueFeatureId, setIssueFeatureId } from '../issue-details/issue-details-slice';
+import {
+	selectIssueDetails,
+	selectIssueFeatureId,
+	setIssueFeatureId,
+} from '../issue-details/issue-details-slice';
 import { useMonitoring } from '../monitoring/monitoring-provider';
 import {
 	selectNormalizedReportingConfig,
@@ -15,6 +26,7 @@ import {
 import styles from './feature-selector-form.module.css';
 import { FeatureSelectorTree } from './sub-components';
 import { SelectedFeatureDetails } from './sub-components/selected-feature-details';
+import { getRelevantTaskIds } from '../combined-selectors/relevant-task-ids';
 
 interface Props {
 	onContinue?: () => void;
@@ -23,6 +35,8 @@ interface Props {
 export function FeatureSelectorForm( { onContinue }: Props ) {
 	const dispatch = useAppDispatch();
 	const monitoringClient = useMonitoring();
+	const issueDetails = useAppSelector( selectIssueDetails );
+	const reportingConfig = useAppSelector( selectNormalizedReportingConfig );
 	const issueFeatureId = useAppSelector( selectIssueFeatureId );
 
 	// On mount, we effectively should 'reset' the form state.
@@ -34,6 +48,16 @@ export function FeatureSelectorForm( { onContinue }: Props ) {
 	}, [ dispatch, issueFeatureId ] );
 
 	const selectedFeatureId = useAppSelector( selectSelectedFeatureId );
+
+	const localRelevantTaskIds = useMemo( () => {
+		if ( selectedFeatureId ) {
+			return getRelevantTaskIds(
+				{ ...issueDetails, featureId: selectedFeatureId },
+				reportingConfig
+			);
+		}
+		return [];
+	}, [ selectedFeatureId, issueDetails, reportingConfig ] );
 
 	const { products, features } = useAppSelector( selectNormalizedReportingConfig );
 	const selectedFeatureProductId = useAppSelector( selectProductIdForFeature( selectedFeatureId ) );
@@ -84,7 +108,12 @@ export function FeatureSelectorForm( { onContinue }: Props ) {
 			</div>
 		);
 	} else if ( selectedFeatureId ) {
-		bottomPanelDisplay = <SelectedFeatureDetails featureId={ selectedFeatureId } />;
+		bottomPanelDisplay = (
+			<SelectedFeatureDetails
+				featureId={ selectedFeatureId }
+				relevantTaskIds={ localRelevantTaskIds }
+			/>
+		);
 	} else {
 		bottomPanelDisplay = null;
 	}

@@ -19,7 +19,7 @@ export const selectRelevantTaskIds = createSelector(
 	}
 );
 
-function getRelevantTaskIds(
+export function getRelevantTaskIds(
 	issueDetails: IssueDetails,
 	reportingConfig: NormalizedReportingConfig
 ): string[] {
