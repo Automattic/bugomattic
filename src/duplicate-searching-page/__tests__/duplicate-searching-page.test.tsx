@@ -96,5 +96,21 @@ describe( '[DuplicateSearchingPage]', () => {
 				await screen.findByRole( 'heading', { name: 'No results found.' } )
 			).toBeInTheDocument();
 		} );
+
+		test( "If user clears their search and presses enter, shows the search results placeholder but still doesn't fire a search", async () => {
+			const { apiClient, user } = setup( <DuplicateSearchingPage /> );
+			apiClient.searchIssues.mockResolvedValue( [ fakeIssue ] );
+
+			await search( user, 'foo' );
+
+			await user.clear( screen.getByRole( 'textbox', { name: 'Search for duplicate issues' } ) );
+			await user.keyboard( '{Enter}' );
+
+			expect(
+				screen.getByRole( 'heading', { name: 'Enter some keywords to search for duplicates.' } )
+			).toBeInTheDocument();
+
+			expect( apiClient.searchIssues ).toHaveBeenCalledTimes( 1 );
+		} );
 	} );
 } );
