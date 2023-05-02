@@ -12,14 +12,6 @@ import { createMockMonitoringClient } from '../../test-utils/mock-monitoring-cli
 // For some list assertions, this is really our best option, so ignoring in this file.
 /* eslint-disable testing-library/no-node-access */
 
-// Needed for the repo filter popover
-class MockResizeObserver {
-	observe = jest.fn();
-	unobserve = jest.fn();
-	disconnect = jest.fn();
-}
-globalThis.ResizeObserver = MockResizeObserver as unknown as typeof ResizeObserver;
-
 describe( '[DuplicateSearchControls]', () => {
 	const availableRepoFilters = [ 'xyzOrg/xyzRepo', 'xyzOrg/abcRepo', 'abcOrg/otherRepo' ];
 	const defaultAvailableRepoFiltersState: AvailableRepoFiltersState = {

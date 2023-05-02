@@ -59,7 +59,7 @@ export function ReportIssueDropdownMenu( { children, reportingFlowStep }: Props 
 	return (
 		<Dropdown role="menu" placement="bottom">
 			<DropdownTrigger>{ children }</DropdownTrigger>
-			<DropdownContent aria-label="Types of issues to report">
+			<DropdownContent>
 				{ issueTypeOptions.map( ( { value, label, icon: Icon } ) => (
 					<DropdownItem
 						key={ value }
@@ -68,7 +68,7 @@ export function ReportIssueDropdownMenu( { children, reportingFlowStep }: Props 
 						onClick={ () => handleIssueTypeClick( value ) }
 						className={ styles.menuItem }
 					>
-						<Icon className={ styles.icon }></Icon>
+						<Icon aria-hidden="true" className={ styles.icon }></Icon>
 						<span>{ label }</span>
 					</DropdownItem>
 				) ) }

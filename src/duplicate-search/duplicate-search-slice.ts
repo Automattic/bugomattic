@@ -6,6 +6,7 @@ import { AppThunk, RootState } from '../app/store';
 import { ActionWithStaticData } from '../static-data/types';
 import { updateHistoryWithState, updateStateFromHistory } from '../url-history/actions';
 import { DuplicateSearchState, IssueSortOption, IssueStatusFilter } from './types';
+import { startOver } from '../start-over/start-over-counter-slice';
 
 const initialState: DuplicateSearchState = {
 	searchTerm: '',
@@ -66,65 +67,69 @@ export const duplicateSearchSlice = createSlice( {
 		},
 	},
 	extraReducers: ( builder ) => {
-		builder.addCase( updateStateFromHistory, ( _state, action ) => {
-			const duplicateSearchParamsFromUrl = action.payload.duplicateSearch;
-			if ( ! duplicateSearchParamsFromUrl || typeof duplicateSearchParamsFromUrl !== 'object' ) {
+		builder
+			.addCase( updateStateFromHistory, ( _state, action ) => {
+				const duplicateSearchParamsFromUrl = action.payload.duplicateSearch;
+				if ( ! duplicateSearchParamsFromUrl || typeof duplicateSearchParamsFromUrl !== 'object' ) {
+					return { ...initialState };
+				}
+
+				// Validate the payload from history, and fall back to the initial state if invalid.
+
+				let searchTerm: string;
+				if (
+					! duplicateSearchParamsFromUrl.searchTerm ||
+					typeof duplicateSearchParamsFromUrl.searchTerm !== 'string'
+				) {
+					searchTerm = initialState.searchTerm;
+				} else {
+					searchTerm = duplicateSearchParamsFromUrl.searchTerm;
+				}
+
+				const actionWithStaticData = action as ActionWithStaticData;
+				const avaliableRepoFiltersSet = new Set( actionWithStaticData.meta.availableRepoFilters );
+				let activeRepoFilters: string[];
+				if (
+					! duplicateSearchParamsFromUrl.activeRepoFilters ||
+					! Array.isArray( duplicateSearchParamsFromUrl.activeRepoFilters )
+				) {
+					activeRepoFilters = [ ...initialState.activeRepoFilters ];
+				} else {
+					activeRepoFilters = duplicateSearchParamsFromUrl.activeRepoFilters.filter( ( repo ) =>
+						avaliableRepoFiltersSet.has( repo )
+					);
+				}
+
+				let statusFilter: IssueStatusFilter;
+				if (
+					! duplicateSearchParamsFromUrl.statusFilter ||
+					! validIssueStatusFilters.has( duplicateSearchParamsFromUrl.statusFilter )
+				) {
+					statusFilter = initialState.statusFilter;
+				} else {
+					statusFilter = duplicateSearchParamsFromUrl.statusFilter;
+				}
+
+				let sort: IssueSortOption;
+				if (
+					! duplicateSearchParamsFromUrl.sort ||
+					! validIssueSortOptions.has( duplicateSearchParamsFromUrl.sort )
+				) {
+					sort = initialState.sort;
+				} else {
+					sort = duplicateSearchParamsFromUrl.sort;
+				}
+
+				return {
+					searchTerm,
+					activeRepoFilters,
+					statusFilter,
+					sort,
+				};
+			} )
+			.addCase( startOver, () => {
 				return { ...initialState };
-			}
-
-			// Validate the payload from history, and fall back to the initial state if invalid.
-
-			let searchTerm: string;
-			if (
-				! duplicateSearchParamsFromUrl.searchTerm ||
-				typeof duplicateSearchParamsFromUrl.searchTerm !== 'string'
-			) {
-				searchTerm = initialState.searchTerm;
-			} else {
-				searchTerm = duplicateSearchParamsFromUrl.searchTerm;
-			}
-
-			const actionWithStaticData = action as ActionWithStaticData;
-			const avaliableRepoFiltersSet = new Set( actionWithStaticData.meta.availableRepoFilters );
-			let activeRepoFilters: string[];
-			if (
-				! duplicateSearchParamsFromUrl.activeRepoFilters ||
-				! Array.isArray( duplicateSearchParamsFromUrl.activeRepoFilters )
-			) {
-				activeRepoFilters = [ ...initialState.activeRepoFilters ];
-			} else {
-				activeRepoFilters = duplicateSearchParamsFromUrl.activeRepoFilters.filter( ( repo ) =>
-					avaliableRepoFiltersSet.has( repo )
-				);
-			}
-
-			let statusFilter: IssueStatusFilter;
-			if (
-				! duplicateSearchParamsFromUrl.statusFilter ||
-				! validIssueStatusFilters.has( duplicateSearchParamsFromUrl.statusFilter )
-			) {
-				statusFilter = initialState.statusFilter;
-			} else {
-				statusFilter = duplicateSearchParamsFromUrl.statusFilter;
-			}
-
-			let sort: IssueSortOption;
-			if (
-				! duplicateSearchParamsFromUrl.sort ||
-				! validIssueSortOptions.has( duplicateSearchParamsFromUrl.sort )
-			) {
-				sort = initialState.sort;
-			} else {
-				sort = duplicateSearchParamsFromUrl.sort;
-			}
-
-			return {
-				searchTerm,
-				activeRepoFilters,
-				statusFilter,
-				sort,
-			};
-		} );
+			} );
 	},
 } );
 

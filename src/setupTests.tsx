@@ -14,3 +14,14 @@ jest.mock( 'react-confetti', () => {
 		return <div data-testid="mock-confetti"></div>;
 	};
 } );
+
+// Needed for the various popovers from FloatingUI
+class MockResizeObserver {
+	observe = jest.fn();
+	unobserve = jest.fn();
+	disconnect = jest.fn();
+}
+globalThis.ResizeObserver = MockResizeObserver as unknown as typeof ResizeObserver;
+
+// We have a couple of scroll to the tops
+globalThis.scrollTo = jest.fn();

@@ -295,6 +295,7 @@ describe( 'history updates', () => {
 			// We have to complete all tasks to get the Start Over button to appear
 			await user.click( screen.getByRole( 'checkbox', { name: taskName, checked: false } ) );
 			await user.click( screen.getByRole( 'button', { name: 'Start Over' } ) );
+			await user.click( screen.getByRole( 'menuitem', { name: 'Report a new issue' } ) );
 
 			await validations.onStartOver();
 

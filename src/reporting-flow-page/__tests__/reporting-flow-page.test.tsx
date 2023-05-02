@@ -19,8 +19,6 @@ import { ReportingFlowPage } from '../reporting-flow-page';
 import { UserEvent } from '@testing-library/user-event/dist/types/setup/setup';
 import { createMockMonitoringClient } from '../../test-utils/mock-monitoring-client';
 
-globalThis.scrollTo = jest.fn();
-
 /* To test the full flow, we write this test in an E2E testing style.
 We render the component once, and then break actions out into individual test steps.
 This is still fast though because it's all run in memory with jsdom! */
@@ -428,8 +426,9 @@ describe( '[Reporting Flow]', () => {
 		);
 	} );
 
-	test( 'Click the Start Over button, which is now visible', async () => {
+	test( 'Click the Start Over button, which is now visible, and start on the reporting flow', async () => {
 		await user.click( screen.getByRole( 'button', { name: 'Start Over' } ) );
+		await user.click( screen.getByRole( 'menuitem', { name: 'Report a new issue' } ) );
 	} );
 
 	test( 'Everything resets to its initial state', async () => {
@@ -440,7 +439,6 @@ describe( '[Reporting Flow]', () => {
 			screen.queryByRole( 'list', { name: 'Steps to report issue' } )
 		).not.toBeInTheDocument();
 
-		// No selected feature area
-		expect( screen.queryByText( featureB.name ) ).not.toBeInTheDocument();
+		// More details are in the StartOverBanner tests
 	} );
 } );

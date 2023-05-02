@@ -1,0 +1,41 @@
+@import '../variables.css';
+
+button.menuItem {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	padding: 0.375rem 1.5rem 0.375rem 1rem;
+}
+
+.menuIcon {
+	height: 1.5rem;
+	width: 1.5rem;
+	margin-right: 0.5rem;
+}
+
+button.triggerButton {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	color: var( --color-primary );
+	background-color: var( --color-white );
+	border: 1px solid var( --color-primary );
+	padding: 0.625rem 0.625rem 0.625rem 1rem;
+}
+
+button.triggerButton:hover {
+	background-color: var( --color-neutral-extra-light );
+}
+
+button.triggerButton:active {
+	background-color: var( --color-neutral-light );
+}
+
+.triggerButtonIcon {
+	height: 1.5rem;
+	width: 1.5rem;
+}
+
+.triggerButtonIcon path {
+	fill: var( --color-primary );
+}
