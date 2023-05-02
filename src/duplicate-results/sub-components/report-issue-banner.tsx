@@ -2,7 +2,6 @@ import React, { useCallback } from 'react';
 import { ReactComponent as MegaphoneIllustration } from '../svgs/megaphone.svg';
 import { Banner } from '../../common/components';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { selectNextReportingStep } from '../../combined-selectors/next-reporting-step';
 import { ReportIssueDropdownMenu } from '../../common/components/report-issue-dropdown-menu';
 import { selectIssueType } from '../../issue-details/issue-details-slice';
 import { ReactComponent as RightArrowIcon } from '../../common/svgs/arrow-right.svg';
@@ -14,12 +13,12 @@ import { updateHistoryWithState } from '../../url-history/actions';
 
 export function ReportIssueBanner() {
 	const dispatch = useAppDispatch();
-	const nextReportingStep = useAppSelector( selectNextReportingStep );
 	const reportingIssueType = useAppSelector( selectIssueType );
 
 	const handleSimpleButtonClick = useCallback( () => {
 		dispatch( setActivePage( 'reportingFlow' ) );
 		dispatch( updateHistoryWithState() );
+		window.scrollTo( 0, 0 );
 	}, [ dispatch ] );
 
 	const simpleButton = (
@@ -29,8 +28,12 @@ export function ReportIssueBanner() {
 		</button>
 	);
 
+	const additionalHandleIssueTypeSelect = useCallback( () => {
+		window.scrollTo( 0, 0 );
+	}, [] );
+
 	const buttonWithDropdown = (
-		<ReportIssueDropdownMenu reportingFlowStep={ nextReportingStep }>
+		<ReportIssueDropdownMenu additionalOnIssueTypeSelect={ additionalHandleIssueTypeSelect }>
 			<button className={ styles.bannerButton }>
 				<PlusIcon aria-hidden="true" className={ styles.bannerButtonIcon } />
 				<span>Report an Issue</span>

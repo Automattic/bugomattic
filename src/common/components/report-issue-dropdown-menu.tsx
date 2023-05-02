@@ -4,18 +4,18 @@ import { IssueType } from '../../issue-details/types';
 import { ReactComponent as BugIcon } from '../svgs/bug-icon.svg';
 import { ReactComponent as FeatureIcon } from '../svgs/megaphone-icon.svg';
 import { ReactComponent as UrgentIcon } from '../svgs/warning-circle.svg';
-import { useAppDispatch } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setIssueType } from '../../issue-details/issue-details-slice';
 import { setActiveReportingStep } from '../../reporting-flow-page/active-reporting-step-slice';
 import { setActivePage } from '../../active-page/active-page-slice';
 import { updateHistoryWithState } from '../../url-history/actions';
-import { ActiveReportingStep } from '../../reporting-flow-page/types';
 
 import styles from './report-issue-dropdown-menu.module.css';
+import { selectNextReportingStep } from '../../combined-selectors/next-reporting-step';
 
 interface Props {
 	children: ReactElement;
-	reportingFlowStep?: ActiveReportingStep;
+	additionalOnIssueTypeSelect?: ( issueType: IssueType ) => void;
 }
 
 interface IssueTypeDetails {
@@ -24,8 +24,9 @@ interface IssueTypeDetails {
 	icon: FunctionComponent< SVGProps< SVGSVGElement > >;
 }
 
-export function ReportIssueDropdownMenu( { children, reportingFlowStep }: Props ) {
+export function ReportIssueDropdownMenu( { children, additionalOnIssueTypeSelect }: Props ) {
 	const dispatch = useAppDispatch();
+	const nextReportingFlowStep = useAppSelector( selectNextReportingStep );
 	const issueTypeOptions: IssueTypeDetails[] = [
 		{
 			value: 'bug',
@@ -45,15 +46,19 @@ export function ReportIssueDropdownMenu( { children, reportingFlowStep }: Props 
 	];
 
 	const handleIssueTypeClick = useCallback(
-		( issueType: string ) => {
-			dispatch( setIssueType( issueType as IssueType ) );
-			if ( reportingFlowStep ) {
-				dispatch( setActiveReportingStep( 'featureSelection' ) );
-			}
+		( issueType: IssueType ) => {
+			// In the future, if we re-use this dropdown apart from navigation from duplicate searching,
+			// we may have defer more of these actions to calling components.
+			dispatch( setIssueType( issueType ) );
+			dispatch( setActiveReportingStep( nextReportingFlowStep ) );
 			dispatch( setActivePage( 'reportingFlow' ) );
 			dispatch( updateHistoryWithState() );
+
+			if ( additionalOnIssueTypeSelect ) {
+				additionalOnIssueTypeSelect( issueType );
+			}
 		},
-		[ dispatch, reportingFlowStep ]
+		[ dispatch, nextReportingFlowStep, additionalOnIssueTypeSelect ]
 	);
 
 	return (
