@@ -43,7 +43,7 @@ export function DuplicateResults() {
 			<PlaceholderMessage
 				illustration={ InitialIllustration }
 				header="Enter some keywords to search for duplicates."
-				message="Click on “Report an Issue” to open a bug, request a few feature, and more."
+				message="Click on “Report an Issue” to open a bug, request a new feature, and more."
 			/>
 		);
 	} else if ( resultsRequestStatus === 'pending' ) {
