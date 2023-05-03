@@ -18,7 +18,6 @@ export function ReportIssueBanner() {
 	const handleSimpleButtonClick = useCallback( () => {
 		dispatch( setActivePage( 'reportingFlow' ) );
 		dispatch( updateHistoryWithState() );
-		window.scrollTo( 0, 0 );
 	}, [ dispatch ] );
 
 	const simpleButton = (
@@ -28,12 +27,8 @@ export function ReportIssueBanner() {
 		</button>
 	);
 
-	const additionalHandleIssueTypeSelect = useCallback( () => {
-		window.scrollTo( 0, 0 );
-	}, [] );
-
 	const buttonWithDropdown = (
-		<ReportIssueDropdownMenu additionalOnIssueTypeSelect={ additionalHandleIssueTypeSelect }>
+		<ReportIssueDropdownMenu>
 			<button className={ styles.bannerButton }>
 				<PlusIcon aria-hidden="true" className={ styles.bannerButtonIcon } />
 				<span>Report an Issue</span>
