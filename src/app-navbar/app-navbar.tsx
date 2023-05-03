@@ -1,4 +1,4 @@
-import React, { createRef, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { selectActivePage, setActivePage } from '../active-page/active-page-slice';
 import { ActivePage } from '../active-page/types';
@@ -16,13 +16,10 @@ export function AppNavbar() {
 
 	const [ focusedItem, setFocusedItem ] = useState( currentActivePage );
 
-	const duplicateSearchingRef = createRef< HTMLButtonElement >();
+	const duplicateSearchingRef = useRef< HTMLButtonElement >( null );
 
-	const simpleReportIssueRef = createRef< HTMLButtonElement >();
-	const dropdownReportIssueRef = createRef< HTMLButtonElement >();
-	const currentReportingFlowRef = useMemo( () => {
-		return issueType === 'unset' ? dropdownReportIssueRef : simpleReportIssueRef;
-	}, [ issueType, dropdownReportIssueRef, simpleReportIssueRef ] );
+	const simpleReportIssueRef = useRef< HTMLButtonElement >( null );
+	const dropdownReportIssueRef = useRef< HTMLButtonElement >( null );
 
 	const handleMenuItemClick = ( page: ActivePage ) => () => {
 		// TODO: actually, according to the spec, we're supposed to focus the hidden heading element for each page
@@ -83,10 +80,9 @@ export function AppNavbar() {
 	);
 
 	const dropDownReportIssue = (
-		<ReportIssueDropdownMenu>
+		<ReportIssueDropdownMenu ref={ dropdownReportIssueRef }>
 			<button
 				role="menuitem"
-				ref={ dropdownReportIssueRef }
 				aria-current={ currentActivePage === 'reportingFlow' ? 'page' : undefined }
 				tabIndex={ focusedItem === 'reportingFlow' ? 0 : -1 }
 				className={ styles.menuItem }
@@ -104,9 +100,14 @@ export function AppNavbar() {
 		if ( focusedItem === 'duplicateSearching' ) {
 			duplicateSearchingRef.current?.focus();
 		} else if ( focusedItem === 'reportingFlow' ) {
-			currentReportingFlowRef.current?.focus();
+			if ( issueType === 'unset' ) {
+				console.log( dropdownReportIssueRef.current );
+				dropdownReportIssueRef.current?.focus();
+			} else {
+				simpleReportIssueRef.current?.focus();
+			}
 		}
-	}, [ focusedItem, duplicateSearchingRef, currentReportingFlowRef ] );
+	}, [ focusedItem, issueType ] );
 
 	return (
 		<nav aria-label="Bugomattic site navigation" className={ styles.navWrapper }>
