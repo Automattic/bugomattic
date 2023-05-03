@@ -18,6 +18,7 @@ import { renderWithProviders } from '../../test-utils/render-with-providers';
 import { ReportingFlowPage } from '../reporting-flow-page';
 import { UserEvent } from '@testing-library/user-event/dist/types/setup/setup';
 import { createMockMonitoringClient } from '../../test-utils/mock-monitoring-client';
+import { PageNavigationProvider } from '../../active-page/page-navigation-provider';
 
 /* To test the full flow, we write this test in an E2E testing style.
 We render the component once, and then break actions out into individual test steps.
@@ -110,18 +111,23 @@ describe( '[Reporting Flow]', () => {
 		monitoringClient = createMockMonitoringClient();
 		user = userEvent.setup();
 		// eslint-disable-next-line testing-library/no-render-in-setup
-		renderWithProviders( <ReportingFlowPage />, {
-			apiClient,
-			monitoringClient,
-			preloadedState: {
-				reportingConfig: {
-					normalized: reportingConfig,
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any
-					indexed: {} as any,
-					loadError: null,
+		renderWithProviders(
+			<PageNavigationProvider>
+				<ReportingFlowPage />
+			</PageNavigationProvider>,
+			{
+				apiClient,
+				monitoringClient,
+				preloadedState: {
+					reportingConfig: {
+						normalized: reportingConfig,
+						// eslint-disable-next-line @typescript-eslint/no-explicit-any
+						indexed: {} as any,
+						loadError: null,
+					},
 				},
-			},
-		} );
+			}
+		);
 	} );
 
 	test( 'The steps are arranged in the correct order', async () => {

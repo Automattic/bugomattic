@@ -56,7 +56,7 @@ export function usePageNavigation(): PageNavigationDetails {
 	return { pageHeadingRef };
 }
 
-export function PageHeadingFocusProvider( { children }: { children: React.ReactNode } ) {
+export function PageNavigationProvider( { children }: { children: React.ReactNode } ) {
 	const pageHeadingRef = useRef< HTMLHeadingElement >( null );
 	const isInitialLoadRef = useRef( true );
 

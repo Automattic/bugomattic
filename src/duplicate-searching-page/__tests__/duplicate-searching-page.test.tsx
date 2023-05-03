@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import React from 'react';
 import { createMockApiClient } from '../../test-utils/mock-api-client';
 import userEvent from '@testing-library/user-event';
 import { renderWithProviders } from '../../test-utils/render-with-providers';
@@ -7,6 +7,7 @@ import { screen, waitForElementToBeRemoved } from '@testing-library/react';
 import { DuplicateSearchingPage } from '../duplicate-searching-page';
 import { SearchIssueApiResponse } from '../../api/types';
 import { Issue } from '../../duplicate-results/types';
+import { PageNavigationProvider } from '../../active-page/page-navigation-provider';
 
 describe( '[DuplicateSearchingPage]', () => {
 	const fakeIssue: Issue = {
@@ -26,15 +27,20 @@ describe( '[DuplicateSearchingPage]', () => {
 		loadError: null,
 	};
 
-	function setup( component: ReactElement ) {
+	function setup() {
 		const apiClient = createMockApiClient();
 		const user = userEvent.setup();
-		const view = renderWithProviders( component, {
-			apiClient,
-			preloadedState: {
-				availableRepoFilters: availableRepoFiltersState,
-			},
-		} );
+		const view = renderWithProviders(
+			<PageNavigationProvider>
+				<DuplicateSearchingPage />
+			</PageNavigationProvider>,
+			{
+				apiClient,
+				preloadedState: {
+					availableRepoFilters: availableRepoFiltersState,
+				},
+			}
+		);
 
 		return {
 			user,
@@ -52,7 +58,7 @@ describe( '[DuplicateSearchingPage]', () => {
 
 	describe( 'Search results lifecycle', () => {
 		test( 'Initially, shows the search results placeholder', () => {
-			setup( <DuplicateSearchingPage /> );
+			setup();
 
 			expect(
 				screen.getByRole( 'heading', { name: 'Enter some keywords to search for duplicates.' } )
@@ -60,7 +66,7 @@ describe( '[DuplicateSearchingPage]', () => {
 		} );
 
 		test( 'When searching, shows loading indicator, then results when search is done', async () => {
-			const { apiClient, user } = setup( <DuplicateSearchingPage /> );
+			const { apiClient, user } = setup();
 
 			let resolveSearchIssuesPromise: ( results: SearchIssueApiResponse ) => void;
 			const searchIssuesPromise = new Promise< SearchIssueApiResponse >( ( resolve ) => {
@@ -87,7 +93,7 @@ describe( '[DuplicateSearchingPage]', () => {
 		} );
 
 		test( 'If no search results are found, shows message about no results', async () => {
-			const { apiClient, user } = setup( <DuplicateSearchingPage /> );
+			const { apiClient, user } = setup();
 
 			apiClient.searchIssues.mockResolvedValue( [] );
 
@@ -98,7 +104,7 @@ describe( '[DuplicateSearchingPage]', () => {
 		} );
 
 		test( "If user clears their search and presses enter, shows the search results placeholder but still doesn't fire a search", async () => {
-			const { apiClient, user } = setup( <DuplicateSearchingPage /> );
+			const { apiClient, user } = setup();
 			apiClient.searchIssues.mockResolvedValue( [ fakeIssue ] );
 
 			await search( user, 'foo' );

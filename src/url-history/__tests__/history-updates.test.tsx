@@ -53,7 +53,6 @@ describe( 'history updates', () => {
 	const pointsInTime = [
 		'onStart',
 		'onReportingFlowStart',
-		'onTypeComplete',
 		'onFeatureSelectionComplete',
 		'onFirstTaskComplete',
 		'onFirstTaskUnComplete',
@@ -74,30 +73,14 @@ describe( 'history updates', () => {
 		},
 
 		onReportingFlowStart: async () => {
-			expect( screen.getByRole( 'form', { name: 'Set issue type' } ) ).toBeInTheDocument();
-			expect(
-				screen.queryByRole( 'button', { name: 'Steps to report issue' } )
-			).not.toBeInTheDocument();
-
-			expect( screen.queryByRole( 'form', { name: 'Select a feature' } ) ).not.toBeInTheDocument();
-			expect(
-				screen.queryByRole( 'list', { name: 'Clear currently selected feature' } )
-			).not.toBeInTheDocument();
-
+			expect( screen.getByRole( 'heading', { name: 'Report a new issue' } ) ).toBeInTheDocument();
 			expect(
 				screen.queryByRole( 'heading', { name: 'Search for duplicate issues' } )
 			).not.toBeInTheDocument();
-		},
 
-		onTypeComplete: async () => {
+			// Coming from duplicate searching, we start with the type already filled in, and on feature selection
 			expect( screen.getByRole( 'heading', { name: 'Completed step: Type' } ) ).toBeInTheDocument();
-
 			expect( screen.getByRole( 'form', { name: 'Select a feature' } ) ).toBeInTheDocument();
-			expect( screen.getByText( 'Feature Request' ) ).toBeInTheDocument();
-
-			expect(
-				screen.queryByRole( 'list', { name: 'Steps to report issue' } )
-			).not.toBeInTheDocument();
 		},
 
 		onFeatureSelectionComplete: async () => {
@@ -176,7 +159,6 @@ describe( 'history updates', () => {
 		onStart: 'WILL BE SET IN TEST',
 		onReportingFlowStart: 'WILL BE SET IN TEST',
 		onFeatureSelectionComplete: 'WILL BE SET IN TEST',
-		onTypeComplete: 'WILL BE SET IN TEST',
 		onFirstTaskComplete: 'WILL BE SET IN TEST',
 		onFirstTaskUnComplete: 'WILL BE SET IN TEST',
 		onFeatureSelectionEdit: 'WILL BE SET IN TEST',
@@ -203,24 +185,13 @@ describe( 'history updates', () => {
 		} );
 
 		test( 'onReportingFlowStart', async () => {
-			await user.click( screen.getByRole( 'button', { name: 'Go to reporting flow' } ) );
+			await user.click( screen.getByRole( 'menuitem', { name: 'Report an Issue' } ) );
+			await user.click( screen.getByRole( 'menuitem', { name: 'Request a new feature' } ) );
 
 			await validations.onReportingFlowStart();
 
 			referenceUrlQueries.onReportingFlowStart = history.location.search;
 			expect( referenceUrlQueries.onReportingFlowStart ).not.toBe( referenceUrlQueries.onStart );
-		} );
-
-		test( 'onTypeComplete', async () => {
-			await user.click( screen.getByRole( 'radio', { name: 'Feature Request' } ) );
-			await user.click( screen.getByRole( 'button', { name: 'Continue' } ) );
-
-			await validations.onTypeComplete();
-
-			referenceUrlQueries.onTypeComplete = history.location.search;
-			expect( referenceUrlQueries.onTypeComplete ).not.toBe(
-				referenceUrlQueries.onFeatureSelectionComplete
-			);
 		} );
 
 		test( 'onFeatureSelectionComplete', async () => {
@@ -244,7 +215,7 @@ describe( 'history updates', () => {
 
 			referenceUrlQueries.onFirstTaskComplete = history.location.search;
 			expect( referenceUrlQueries.onFirstTaskComplete ).not.toBe(
-				referenceUrlQueries.onTypeComplete
+				referenceUrlQueries.onReportingFlowStart
 			);
 		} );
 
