@@ -1,9 +1,10 @@
 import React from 'react';
 import { DuplicateResults } from '../duplicate-results/duplicate-results';
 import { DuplicateSearchControls } from '../duplicate-search/duplicate-search-controls';
+import { usePageHeadingFocus } from '../active-page/page-heading-focus-provider';
 
-// TODO: This is a placeholder component for the duplicate searching page. Modify and tweak however needed! :)
 export function DuplicateSearchingPage() {
+	const headingRef = usePageHeadingFocus();
 	return (
 		<section
 			// TODO: update with a real CSS module for this overall page.
@@ -12,7 +13,9 @@ export function DuplicateSearchingPage() {
 				margin: '0 auto',
 			} }
 		>
-			<h2 className="screenReaderOnly">Search for duplicate issues</h2>
+			<h2 ref={ headingRef } className="screenReaderOnly" tabIndex={ -1 }>
+				Search for duplicate issues
+			</h2>
 			<DuplicateSearchControls />
 			<DuplicateResults />
 		</section>

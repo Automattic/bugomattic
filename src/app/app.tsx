@@ -10,6 +10,7 @@ import { ReportingFlowPage } from '../reporting-flow-page/reporting-flow-page';
 import { useAppDataHydration } from './use-app-data-hydration';
 import { LoadingIndicator } from '../common/components';
 import { AppNavbar } from '../app-navbar/app-navbar';
+import { PageHeadingFocusProvider } from '../active-page/page-heading-focus-provider';
 
 export function App() {
 	const monitoringClient = useMonitoring();
@@ -49,10 +50,10 @@ function MainDisplay() {
 	}
 
 	return (
-		<>
+		<PageHeadingFocusProvider>
 			<AppNavbar />
 			{ mainDisplay }
-		</>
+		</PageHeadingFocusProvider>
 	);
 }
 

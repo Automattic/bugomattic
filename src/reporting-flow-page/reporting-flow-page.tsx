@@ -11,6 +11,7 @@ import { selectReportingConfigLoadError } from '../static-data/reporting-config/
 import { useMonitoring } from '../monitoring/monitoring-provider';
 import { AppErrorDisplay } from '../errors/app-error-display';
 import { selectNextReportingStep } from '../combined-selectors/next-reporting-step';
+import { usePageHeadingFocus } from '../active-page/page-heading-focus-provider';
 
 export function ReportingFlowPage() {
 	const configLoadError = useAppSelector( selectReportingConfigLoadError );
@@ -27,6 +28,7 @@ export function ReportingFlowPage() {
 }
 
 function ReportingFlow() {
+	const headingRef = usePageHeadingFocus();
 	const dispatch = useAppDispatch();
 	const currentExpectedNextStep = useAppSelector( selectNextReportingStep );
 
@@ -37,7 +39,9 @@ function ReportingFlow() {
 
 	return (
 		<section className={ styles.flowContainer }>
-			<h2 className="screenReaderOnly">Report a new issue</h2>
+			<h2 ref={ headingRef } className="screenReaderOnly" tabIndex={ -1 }>
+				Report a new issue
+			</h2>
 			<TypeStep stepNumber={ 1 } goToNextStep={ handleNextStep } />
 			<FeatureSelectionStep stepNumber={ 2 } goToNextStep={ handleNextStep } />
 			<NextStepsStep stepNumber={ 3 } />

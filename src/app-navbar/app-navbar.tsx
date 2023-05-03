@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { selectActivePage, setActivePage } from '../active-page/active-page-slice';
 import { ActivePage } from '../active-page/types';
@@ -14,34 +14,58 @@ export function AppNavbar() {
 	const issueType = useAppSelector( selectIssueType );
 	const currentActivePage = useAppSelector( selectActivePage );
 
-	const [ focusedItem, setFocusedItem ] = useState( currentActivePage );
+	/*
+	The key to this component is managing focus. How fun! :)
+	For reference, see these two WAI ARIA articles:
+	https://www.w3.org/WAI/ARIA/apg/patterns/menubar/ - rules for menubars.
+	https://www.w3.org/WAI/ARIA/apg/patterns/menubar/examples/menubar-navigation/ - example we're following.
+
+	In short, we need to make sure keyboard and tabbing focus is handled correctly within the menubar.
+	And, after we've navigated to a new page, we need to make sure the heading for that page is focused.
+
+	The page heading focus happens in a hook elsewhere, but it's the main reason for an imperative focus
+	approach here. I.e., we are focusing refs directly on keydown events, rather than relying on a useEffect hook.
+	That imperative approach is here way more resilient to focus race conditions.
+	*/
+
+	// We still need this local state variable because it helps us track the "Roving tabindex"
+	// See: https://www.w3.org/WAI/ARIA/apg/practices/keyboard-interface/#kbd_general_within
+	const [ focusedMenuItem, setFocusedMenuItem ] = useState( currentActivePage );
 
 	const duplicateSearchingRef = useRef< HTMLButtonElement >( null );
 
 	const simpleReportIssueRef = useRef< HTMLButtonElement >( null );
 	const dropdownReportIssueRef = useRef< HTMLButtonElement >( null );
+	const currentReportIssueRef =
+		issueType === 'unset' ? dropdownReportIssueRef : simpleReportIssueRef;
 
-	const handleMenuItemClick = ( page: ActivePage ) => () => {
-		// TODO: actually, according to the spec, we're supposed to focus the hidden heading element for each page
-		setFocusedItem( page );
-		dispatch( setActivePage( page ) );
-		dispatch( updateHistoryWithState() );
+	const focusMenuItem = ( menuItem: ActivePage ) => {
+		setFocusedMenuItem( menuItem );
+
+		switch ( menuItem ) {
+			case 'duplicateSearching':
+				duplicateSearchingRef.current?.focus();
+				break;
+			case 'reportingFlow':
+				currentReportIssueRef.current?.focus();
+				break;
+		}
 	};
 
 	const goToNextItem = () => {
-		setFocusedItem( 'reportingFlow' );
+		focusMenuItem( 'reportingFlow' );
 	};
 
 	const goToPreviousItem = () => {
-		setFocusedItem( 'duplicateSearching' );
+		focusMenuItem( 'duplicateSearching' );
 	};
 
 	const goToFirstItem = () => {
-		setFocusedItem( 'duplicateSearching' );
+		focusMenuItem( 'duplicateSearching' );
 	};
 
 	const goToLastItem = () => {
-		setFocusedItem( 'reportingFlow' );
+		focusMenuItem( 'reportingFlow' );
 	};
 
 	const handleKeyDown = ( event: React.KeyboardEvent< HTMLUListElement > ) => {
@@ -66,12 +90,17 @@ export function AppNavbar() {
 		}
 	};
 
+	const handleMenuItemClick = ( page: ActivePage ) => () => {
+		dispatch( setActivePage( page ) );
+		dispatch( updateHistoryWithState() );
+	};
+
 	const simpleReportIssue = (
 		<button
 			role="menuitem"
 			ref={ simpleReportIssueRef }
 			aria-current={ currentActivePage === 'reportingFlow' ? 'page' : undefined }
-			tabIndex={ focusedItem === 'reportingFlow' ? 0 : -1 }
+			tabIndex={ focusedMenuItem === 'reportingFlow' ? 0 : -1 }
 			onClick={ handleMenuItemClick( 'reportingFlow' ) }
 			className={ styles.menuItem }
 		>
@@ -79,12 +108,12 @@ export function AppNavbar() {
 		</button>
 	);
 
-	const dropDownReportIssue = (
+	const dropdownReportIssue = (
 		<ReportIssueDropdownMenu ref={ dropdownReportIssueRef }>
 			<button
 				role="menuitem"
 				aria-current={ currentActivePage === 'reportingFlow' ? 'page' : undefined }
-				tabIndex={ focusedItem === 'reportingFlow' ? 0 : -1 }
+				tabIndex={ focusedMenuItem === 'reportingFlow' ? 0 : -1 }
 				className={ styles.menuItem }
 			>
 				<PlusIcon aria-hidden="true" className={ styles.plusIcon } />
@@ -94,20 +123,7 @@ export function AppNavbar() {
 		</ReportIssueDropdownMenu>
 	);
 
-	const reportIssueMenuItem = issueType === 'unset' ? dropDownReportIssue : simpleReportIssue;
-
-	useEffect( () => {
-		if ( focusedItem === 'duplicateSearching' ) {
-			duplicateSearchingRef.current?.focus();
-		} else if ( focusedItem === 'reportingFlow' ) {
-			if ( issueType === 'unset' ) {
-				console.log( dropdownReportIssueRef.current );
-				dropdownReportIssueRef.current?.focus();
-			} else {
-				simpleReportIssueRef.current?.focus();
-			}
-		}
-	}, [ focusedItem, issueType ] );
+	const reportIssueMenuItem = issueType === 'unset' ? dropdownReportIssue : simpleReportIssue;
 
 	return (
 		<nav aria-label="Bugomattic site navigation" className={ styles.navWrapper }>
@@ -123,7 +139,7 @@ export function AppNavbar() {
 						role="menuitem"
 						ref={ duplicateSearchingRef }
 						aria-current={ currentActivePage === 'duplicateSearching' ? 'page' : undefined }
-						tabIndex={ focusedItem === 'duplicateSearching' ? 0 : -1 }
+						tabIndex={ focusedMenuItem === 'duplicateSearching' ? 0 : -1 }
 						onClick={ handleMenuItemClick( 'duplicateSearching' ) }
 						className={ styles.menuItem }
 					>
