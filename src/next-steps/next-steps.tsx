@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useAppSelector } from '../app/hooks';
-import { selectRelevantTaskIds } from '../combined-selectors/relevant-task-ids';
+import { selectTaskIdsForCurrentIssueDetails } from '../combined-selectors/relevant-task-ids';
 import { Task } from './sub-components/task';
 import styles from './next-steps.module.css';
 import { MoreInfo } from './more-info';
@@ -20,7 +20,7 @@ export function NextSteps() {
 
 	const { tasks } = useAppSelector( selectNormalizedReportingConfig );
 	const issueFeatureId = useAppSelector( selectIssueFeatureId );
-	const relevantTaskIds = useAppSelector( selectRelevantTaskIds );
+	const relevantTaskIds = useAppSelector( selectTaskIdsForCurrentIssueDetails );
 	const allTasksAreComplete = useAppSelector( selectAllTasksAreComplete );
 
 	useEffect( () => {

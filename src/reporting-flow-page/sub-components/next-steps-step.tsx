@@ -1,7 +1,7 @@
 import React, { ReactNode, useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { selectAllTasksAreComplete } from '../../combined-selectors/all-tasks-are-complete';
-import { selectRelevantTaskIds } from '../../combined-selectors/relevant-task-ids';
+import { selectTaskIdsForCurrentIssueDetails } from '../../combined-selectors/relevant-task-ids';
 import { selectIssueFeatureId, selectIssueType } from '../../issue-details/issue-details-slice';
 import { NextSteps } from '../../next-steps/next-steps';
 import { selectActiveReportingStep } from '../active-reporting-step-slice';
@@ -20,7 +20,7 @@ interface Props {
 
 export function NextStepsStep( { stepNumber }: Props ) {
 	const monitoringClient = useMonitoring();
-	const relevantTaskIds = useAppSelector( selectRelevantTaskIds );
+	const relevantTaskIds = useAppSelector( selectTaskIdsForCurrentIssueDetails );
 	const allTasksAreComplete = useAppSelector( selectAllTasksAreComplete );
 	const issueFeatureId = useAppSelector( selectIssueFeatureId );
 	const issueType = useAppSelector( selectIssueType );

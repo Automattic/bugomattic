@@ -1,5 +1,5 @@
 import { createSelector } from '@reduxjs/toolkit';
-import { IssueDetails } from '../issue-details/types';
+import { FeatureId, IssueType } from '../issue-details/types';
 import { selectIssueDetails } from '../issue-details/issue-details-slice';
 import { selectNormalizedReportingConfig } from '../static-data/reporting-config/reporting-config-slice';
 import {
@@ -9,21 +9,86 @@ import {
 	TaskParentEntityType,
 	Tasks,
 } from '../static-data/reporting-config/types';
+import { selectSelectedFeatureId } from '../feature-selector-form/feature-selector-form-slice';
 
-// The "createSelector" function lets you memo-ize potentially expensive selectors:
-// https://redux.js.org/usage/deriving-data-selectors#optimizing-selectors-with-memoization
-export const selectRelevantTaskIds = createSelector(
-	[ selectIssueDetails, selectNormalizedReportingConfig ],
-	( issueDetails, reportingConfig ) => {
-		return getRelevantTaskIds( issueDetails, reportingConfig );
+// This one is for getting the task IDs for displaying in Next Steps
+export const selectTaskIdsForCurrentIssueDetails = createSelector(
+	[ selectNormalizedReportingConfig, selectIssueDetails ],
+	( reportingConfig, issueDetails ) => {
+		const { featureId, issueType } = issueDetails;
+		return getTaskIdsForFeatureAndType( reportingConfig, featureId, issueType );
 	}
 );
 
-export function getRelevantTaskIds(
-	issueDetails: IssueDetails,
-	reportingConfig: NormalizedReportingConfig
+// This one is for getting getting all the repos to display in the feature selector form.
+export const selectAllReposForFormSelectedFeature = createSelector(
+	[ selectNormalizedReportingConfig, selectSelectedFeatureId ],
+	( reportingConfig, featureId ) => {
+		return getAllReposForFeature( reportingConfig, featureId );
+	}
+);
+
+// TODO: can delete -- just showing how we could then make a new selector if we wanted to show the repos for
+// the final saved feature ID, like if we wanted to show the repos in  "More Info"
+export const selectAllReposForCurrentIssueDetails = createSelector(
+	[ selectNormalizedReportingConfig, selectIssueDetails ],
+	( reportingConfig, issueDetails ) => {
+		const { featureId } = issueDetails;
+		return getAllReposForFeature( reportingConfig, featureId );
+	}
+);
+
+// TODO: can delete -- showing an example of how we could make a selector that takes in the feature ID
+// If we tracked the feature ID in local state instead of the redux store, this is how we could pass it in.
+// In a component, this would look like...
+// const fakeLocalFeatureId = 'local-feature';
+// const reposForFeature = useAppSelector( ( state ) =>
+// 	  selectAllReposForFeature( state, fakeLocalFeatureId )
+// );
+export const selectAllReposForFeature = createSelector(
+	[ selectNormalizedReportingConfig, ( _, featureId: FeatureId ) => featureId ],
+	( reportingConfig, featureId ) => {
+		return getAllReposForFeature( reportingConfig, featureId );
+	}
+);
+
+function getAllReposForFeature(
+	reportingConfig: NormalizedReportingConfig,
+	featureId: FeatureId
 ): string[] {
-	const { featureId, issueType } = issueDetails;
+	const allTaskIds = getAllTaskIdsForFeature( reportingConfig, featureId );
+	const { tasks } = reportingConfig;
+
+	const repositories = new Set< string >();
+	for ( const taskId of allTaskIds ) {
+		const task = tasks[ taskId ];
+		if ( task?.link?.type === 'github' && task.link.repository ) {
+			repositories.add( task.link.repository );
+		}
+	}
+
+	return Array.from( repositories );
+}
+
+function getAllTaskIdsForFeature(
+	reportingConfig: NormalizedReportingConfig,
+	featureId: FeatureId
+): string[] {
+	const { tasks } = reportingConfig;
+	const taskIds = [
+		...getTaskIdsForFeatureAndType( reportingConfig, featureId, 'bug' ),
+		...getTaskIdsForFeatureAndType( reportingConfig, featureId, 'featureRequest' ),
+		...getTaskIdsForFeatureAndType( reportingConfig, featureId, 'urgent' ),
+	];
+
+	return deduplicateTasksIds( tasks, taskIds );
+}
+
+function getTaskIdsForFeatureAndType(
+	reportingConfig: NormalizedReportingConfig,
+	featureId: FeatureId,
+	issueType: IssueType
+): string[] {
 	const { products, featureGroups, features, tasks } = reportingConfig;
 
 	if ( featureId === null || issueType === 'unset' ) {

@@ -1,4 +1,4 @@
-import { selectRelevantTaskIds } from '../relevant-task-ids';
+import { selectTaskIdsForCurrentIssueDetails } from '../relevant-task-ids';
 import { NormalizedReportingConfig, TaskDetails } from '../../static-data/reporting-config/types';
 import { createFakeRootState } from '../../test-utils/fake-root-state';
 
@@ -50,7 +50,7 @@ describe( '[selectRelevantTaskIds]', () => {
 			},
 		} );
 
-		const output = selectRelevantTaskIds( state );
+		const output = selectTaskIdsForCurrentIssueDetails( state );
 		expect( output ).toEqual( [] );
 	} );
 
@@ -101,7 +101,7 @@ describe( '[selectRelevantTaskIds]', () => {
 			},
 		} );
 
-		const output = selectRelevantTaskIds( state );
+		const output = selectTaskIdsForCurrentIssueDetails( state );
 		expect( output ).toEqual( [] );
 	} );
 
@@ -193,7 +193,7 @@ describe( '[selectRelevantTaskIds]', () => {
 			},
 		} );
 
-		const output = selectRelevantTaskIds( state );
+		const output = selectTaskIdsForCurrentIssueDetails( state );
 		expect( output ).toEqual( [
 			firstFeatureTaskId,
 			secondFeatureTaskId,
@@ -290,7 +290,7 @@ describe( '[selectRelevantTaskIds]', () => {
 			},
 		} );
 
-		const output = selectRelevantTaskIds( state );
+		const output = selectTaskIdsForCurrentIssueDetails( state );
 		expect( output ).toEqual( [ featureTaskId ] );
 	} );
 
@@ -366,7 +366,7 @@ describe( '[selectRelevantTaskIds]', () => {
 			},
 		} );
 
-		const output = selectRelevantTaskIds( state );
+		const output = selectTaskIdsForCurrentIssueDetails( state );
 		expect( output ).toEqual( [ featureTaskId ] );
 	} );
 } );
