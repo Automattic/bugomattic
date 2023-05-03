@@ -28,13 +28,13 @@ const store = setupStore( apiClient );
 
 const root = ReactDOM.createRoot( document.getElementById( 'root' ) as HTMLElement );
 root.render(
-	// <React.StrictMode>
-	<MonitoringProvider monitoringClient={ monitoringClient }>
-		<Provider store={ store }>
-			<App />
-		</Provider>
-	</MonitoringProvider>
-	// </React.StrictMode>
+	<React.StrictMode>
+		<MonitoringProvider monitoringClient={ monitoringClient }>
+			<Provider store={ store }>
+				<App />
+			</Provider>
+		</MonitoringProvider>
+	</React.StrictMode>
 );
 
 function isProduction() {
