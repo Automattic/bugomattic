@@ -26,8 +26,7 @@ button.menuItem {
 
 	/* We want the buttons to stay the same height/width regardless of whether the report an issue
 	button is a dropdown or a plain button. To do this, we are setting fixed dimensions, and then
-	placing in the center with flex placements.
-	*/
+	placing in the center with flex placements. */
 	display: flex;
 	flex-direction: row;
 	align-items: center;
@@ -39,10 +38,9 @@ button.menuItem {
 }
 
 /* For small mobile devices, we can just take up the full space, and force the button contents
-   to adapt. For the current size of the menu bar, and with the dropped plus icon, we can support all the way
-   down to 320px wide screens! This seems preferable for now than redesigning an entire mobile-version navbar.
-   If we need to in the future, we can implement that.
-*/
+to adapt. For the current size of the menu bar, and with the dropped plus icon, we can support all the way
+down to 320px wide screens! This seems preferable for now than redesigning an entire mobile-version navbar.
+If we need to in the future, we can implement that. */
 @media only screen and ( max-width: 24rem ) {
 	ul.menuBar {
 		min-width: 0;
