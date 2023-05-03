@@ -13,6 +13,7 @@ ul.menuBar {
 	margin: 0 auto;
 	padding: 0;
 	width: max-content;
+	height: 3rem;
 }
 
 button.menuItem {
@@ -22,7 +23,12 @@ button.menuItem {
 	/* TODO: we need to standardize how this color fits in the app variables */
 	border-bottom: 4px solid #f0f0f0;
 	width: 100%;
+	height: 100%;
 	position: relative;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
 }
 
 button.menuItem:hover {

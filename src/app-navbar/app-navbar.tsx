@@ -1,18 +1,28 @@
-import React, { createRef, useEffect, useState } from 'react';
+import React, { createRef, useEffect, useMemo, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { selectActivePage, setActivePage } from '../active-page/active-page-slice';
 import { ActivePage } from '../active-page/types';
 import { updateHistoryWithState } from '../url-history/actions';
 import styles from './app-navbar.module.css';
+import { ReportIssueDropdownMenu } from '../common/components/report-issue-dropdown-menu';
+import { ReactComponent as PlusIcon } from '../common/svgs/plus.svg';
+import { ReactComponent as DownChevronIcon } from '../common/svgs/chevron-down.svg';
+import { selectIssueType } from '../issue-details/issue-details-slice';
 
 export function AppNavbar() {
 	const dispatch = useAppDispatch();
+	const issueType = useAppSelector( selectIssueType );
 	const currentActivePage = useAppSelector( selectActivePage );
 
 	const [ focusedItem, setFocusedItem ] = useState( currentActivePage );
 
 	const duplicateSearchingRef = createRef< HTMLButtonElement >();
-	const reportingFlowRef = createRef< HTMLButtonElement >();
+
+	const simpleReportIssueRef = createRef< HTMLButtonElement >();
+	const dropdownReportIssueRef = createRef< HTMLButtonElement >();
+	const currentReportingFlowRef = useMemo( () => {
+		return issueType === 'unset' ? dropdownReportIssueRef : simpleReportIssueRef;
+	}, [ issueType, dropdownReportIssueRef, simpleReportIssueRef ] );
 
 	const handleMenuItemClick = ( page: ActivePage ) => () => {
 		// TODO: actually, according to the spec, we're supposed to focus the hidden heading element for each page
@@ -59,13 +69,44 @@ export function AppNavbar() {
 		}
 	};
 
+	const simpleReportIssue = (
+		<button
+			role="menuitem"
+			ref={ simpleReportIssueRef }
+			aria-current={ currentActivePage === 'reportingFlow' ? 'page' : undefined }
+			tabIndex={ focusedItem === 'reportingFlow' ? 0 : -1 }
+			onClick={ handleMenuItemClick( 'reportingFlow' ) }
+			className={ styles.menuItem }
+		>
+			Report an Issue
+		</button>
+	);
+
+	const dropDownReportIssue = (
+		<ReportIssueDropdownMenu>
+			<button
+				role="menuitem"
+				ref={ dropdownReportIssueRef }
+				aria-current={ currentActivePage === 'reportingFlow' ? 'page' : undefined }
+				tabIndex={ focusedItem === 'reportingFlow' ? 0 : -1 }
+				className={ styles.menuItem }
+			>
+				<PlusIcon aria-hidden="true" />
+				<span>Report an Issue</span>
+				<DownChevronIcon aria-hidden="true" />
+			</button>
+		</ReportIssueDropdownMenu>
+	);
+
+	const reportIssueMenuItem = issueType === 'unset' ? dropDownReportIssue : simpleReportIssue;
+
 	useEffect( () => {
 		if ( focusedItem === 'duplicateSearching' ) {
 			duplicateSearchingRef.current?.focus();
 		} else if ( focusedItem === 'reportingFlow' ) {
-			reportingFlowRef.current?.focus();
+			currentReportingFlowRef.current?.focus();
 		}
-	}, [ focusedItem, duplicateSearchingRef, reportingFlowRef ] );
+	}, [ focusedItem, duplicateSearchingRef, currentReportingFlowRef ] );
 
 	return (
 		<nav aria-label="Bugomattic site navigation" className={ styles.navWrapper }>
@@ -88,18 +129,7 @@ export function AppNavbar() {
 						Duplicate Search
 					</button>
 				</li>
-				<li role="none">
-					<button
-						role="menuitem"
-						ref={ reportingFlowRef }
-						aria-current={ currentActivePage === 'reportingFlow' ? 'page' : undefined }
-						tabIndex={ focusedItem === 'reportingFlow' ? 0 : -1 }
-						onClick={ handleMenuItemClick( 'reportingFlow' ) }
-						className={ styles.menuItem }
-					>
-						Report an Issue
-					</button>
-				</li>
+				<li role="none">{ reportIssueMenuItem }</li>
 			</ul>
 		</nav>
 	);
