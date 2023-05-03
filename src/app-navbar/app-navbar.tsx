@@ -87,7 +87,7 @@ export function AppNavbar() {
 				tabIndex={ focusedItem === 'reportingFlow' ? 0 : -1 }
 				className={ styles.menuItem }
 			>
-				<PlusIcon aria-hidden="true" />
+				<PlusIcon aria-hidden="true" className={ styles.plusIcon } />
 				<span>Report an Issue</span>
 				<DownChevronIcon aria-hidden="true" />
 			</button>
