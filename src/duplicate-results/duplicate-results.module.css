@@ -129,6 +129,10 @@ p.issueContent {
 	height: auto;
 }
 
+.errorIllustration {
+	width: 80px;
+}
+
 h3.placeholderHeader {
 	font-size: var( --font-header );
 	margin-top: 0;

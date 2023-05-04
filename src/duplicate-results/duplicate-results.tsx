@@ -4,22 +4,29 @@ import {
 	selectDuplicateResults,
 	selectDuplicateResultsRequestStatus,
 	selectDuplicateRequestsWereMade,
+	selectDuplicateResultsRequestError,
 } from './duplicate-results-slice';
 import { IssueList, PlaceholderMessage, useShowBanner } from './sub-components';
 import styles from './duplicate-results.module.css';
 import { ReactComponent as InitialIllustration } from './svgs/initial-illustration.svg';
 import { ReactComponent as NoResultsIllustration } from '../common/svgs/missing-info.svg';
+import { ReactComponent as ErrorIllustration } from '../common/svgs/warning.svg';
 import { LoadingIndicator } from '../common/components';
 import { selectDuplicateSearchFiltersAreActive } from '../combined-selectors/duplicate-search-filters-are-active';
 import { selectDuplicateSearchTerm } from '../duplicate-search/duplicate-search-slice';
+import { useMonitoring } from '../monitoring/monitoring-provider';
+import { useLoggerWithCache } from '../monitoring/use-logger-with-cache';
 
 export function DuplicateResults() {
 	const results = useAppSelector( selectDuplicateResults );
 	const resultsRequestStatus = useAppSelector( selectDuplicateResultsRequestStatus );
+	const resultsRequestError = useAppSelector( selectDuplicateResultsRequestError );
 	const requestsWereMade = useAppSelector( selectDuplicateRequestsWereMade );
 	const searchTerm = useAppSelector( selectDuplicateSearchTerm );
 	const filtersAreActive = useAppSelector( selectDuplicateSearchFiltersAreActive );
 	const showBanner = useShowBanner();
+	const monitoringClient = useMonitoring();
+	const logError = useLoggerWithCache( monitoringClient.logger.error, [] );
 
 	// This ref and corresponding useEffect hook are used to preserve the height of the
 	// results container between searches. This keeps the UI from jumping around while searching.
@@ -29,7 +36,11 @@ export function DuplicateResults() {
 	>( undefined );
 
 	useEffect( () => {
-		if ( resultsRequestStatus === 'fulfilled' || searchTerm === '' ) {
+		if (
+			resultsRequestStatus === 'fulfilled' ||
+			resultsRequestStatus === 'error' ||
+			searchTerm === ''
+		) {
 			const newHeight = resultsContainerContentRef.current?.clientHeight;
 			setResultsContainerContentHeightPx( newHeight );
 		}
@@ -41,7 +52,7 @@ export function DuplicateResults() {
 	if ( ! requestsWereMade || searchTerm === '' ) {
 		resultsContainerDisplay = (
 			<PlaceholderMessage
-				illustration={ InitialIllustration }
+				illustration={ <InitialIllustration /> }
 				header="Enter some keywords to search for duplicates."
 				message="Click on “Report an Issue” to open a bug, request a few feature, and more."
 			/>
@@ -55,10 +66,20 @@ export function DuplicateResults() {
 				/>
 			</div>
 		);
+	} else if ( resultsRequestStatus === 'error' ) {
+		logError( 'Error in duplicate search request', { errorMessage: resultsRequestError } );
+		resultsContainerDisplay = (
+			<PlaceholderMessage
+				illustration={ <ErrorIllustration className={ styles.errorIllustration } /> }
+				header="Uh oh! Something went wrong."
+				message="We've logged this error and will look into it. In the meantime, you can retry the search or report a new issue below."
+				ariaLive="assertive"
+			/>
+		);
 	} else if ( results.length === 0 ) {
 		resultsContainerDisplay = (
 			<PlaceholderMessage
-				illustration={ NoResultsIllustration }
+				illustration={ <NoResultsIllustration /> }
 				header="No results found."
 				message="Try a different search or change your filters. You can also report a new issue below."
 				additionalScreenReaderText={
