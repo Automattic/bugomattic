@@ -7,7 +7,8 @@ export function AppHeader() {
 		<header className={ styles.wrapper }>
 			<a href={ globalThis.location.pathname }>
 				<h1 className={ styles.heading }>
-					<HeaderLogo role="img" />
+					<HeaderLogo role="img" aria-hidden="true" />
+					<span className="screenReaderOnly">Bugomattic</span>
 				</h1>
 			</a>
 		</header>

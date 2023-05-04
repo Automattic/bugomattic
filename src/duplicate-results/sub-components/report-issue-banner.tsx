@@ -41,6 +41,7 @@ export function ReportIssueBanner() {
 
 	return (
 		<Banner
+			aria-label="Report a new issue"
 			illustration={ <MegaphoneIllustration /> }
 			header="Couldn't find what you were looking for?"
 			message="File a bug or request a feature using our reporting tool"
