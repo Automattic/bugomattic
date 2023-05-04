@@ -11,8 +11,7 @@ import {
 } from '../static-data/reporting-config/types';
 import { selectSelectedFeatureId } from '../feature-selector-form/feature-selector-form-slice';
 
-// This one is for getting the task IDs for displaying in Next Steps
-export const selectTaskIdsForCurrentIssueDetails = createSelector(
+export const selectTaskIdsForIssueDetails = createSelector(
 	[ selectNormalizedReportingConfig, selectIssueDetails ],
 	( reportingConfig, issueDetails ) => {
 		const { featureId, issueType } = issueDetails;
@@ -20,47 +19,22 @@ export const selectTaskIdsForCurrentIssueDetails = createSelector(
 	}
 );
 
-// This one is for getting getting all the repos to display in the feature selector form.
-export const selectAllReposForFormSelectedFeature = createSelector(
+export const selectReposForFeature = createSelector(
 	[ selectNormalizedReportingConfig, selectSelectedFeatureId ],
 	( reportingConfig, featureId ) => {
-		return getAllReposForFeature( reportingConfig, featureId );
+		return getReposForFeature( reportingConfig, featureId );
 	}
 );
 
-// TODO: can delete -- just showing how we could then make a new selector if we wanted to show the repos for
-// the final saved feature ID, like if we wanted to show the repos in  "More Info"
-export const selectAllReposForCurrentIssueDetails = createSelector(
-	[ selectNormalizedReportingConfig, selectIssueDetails ],
-	( reportingConfig, issueDetails ) => {
-		const { featureId } = issueDetails;
-		return getAllReposForFeature( reportingConfig, featureId );
-	}
-);
-
-// TODO: can delete -- showing an example of how we could make a selector that takes in the feature ID
-// If we tracked the feature ID in local state instead of the redux store, this is how we could pass it in.
-// In a component, this would look like...
-// const fakeLocalFeatureId = 'local-feature';
-// const reposForFeature = useAppSelector( ( state ) =>
-// 	  selectAllReposForFeature( state, fakeLocalFeatureId )
-// );
-export const selectAllReposForFeature = createSelector(
-	[ selectNormalizedReportingConfig, ( _, featureId: FeatureId ) => featureId ],
-	( reportingConfig, featureId ) => {
-		return getAllReposForFeature( reportingConfig, featureId );
-	}
-);
-
-function getAllReposForFeature(
+function getReposForFeature(
 	reportingConfig: NormalizedReportingConfig,
 	featureId: FeatureId
 ): string[] {
-	const allTaskIds = getAllTaskIdsForFeature( reportingConfig, featureId );
 	const { tasks } = reportingConfig;
+	const taskIds = getTaskIdsForFeature( reportingConfig, featureId );
 
 	const repositories = new Set< string >();
-	for ( const taskId of allTaskIds ) {
+	for ( const taskId of taskIds ) {
 		const task = tasks[ taskId ];
 		if ( task?.link?.type === 'github' && task.link.repository ) {
 			repositories.add( task.link.repository );
@@ -70,16 +44,15 @@ function getAllReposForFeature(
 	return Array.from( repositories );
 }
 
-function getAllTaskIdsForFeature(
+function getTaskIdsForFeature(
 	reportingConfig: NormalizedReportingConfig,
 	featureId: FeatureId
 ): string[] {
 	const { tasks } = reportingConfig;
-	const taskIds = [
-		...getTaskIdsForFeatureAndType( reportingConfig, featureId, 'bug' ),
-		...getTaskIdsForFeatureAndType( reportingConfig, featureId, 'featureRequest' ),
-		...getTaskIdsForFeatureAndType( reportingConfig, featureId, 'urgent' ),
-	];
+	const allIssueTypes: IssueType[] = [ 'bug', 'featureRequest', 'urgent' ];
+	const taskIds = allIssueTypes.flatMap( ( issueType ) =>
+		getTaskIdsForFeatureAndType( reportingConfig, featureId, issueType )
+	);
 
 	return deduplicateTasksIds( tasks, taskIds );
 }

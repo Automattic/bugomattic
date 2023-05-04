@@ -5,13 +5,13 @@ import styles from '../feature-selector-form.module.css';
 import { selectSelectedFeatureId, setSelectedFeatureId } from '../feature-selector-form-slice';
 import { useMonitoring } from '../../monitoring/monitoring-provider';
 import { SortedKeywordList } from './sorted-keyword-list';
-import { selectAllReposForFormSelectedFeature } from '../../combined-selectors/relevant-task-ids';
+import { selectReposForFeature } from '../../combined-selectors/relevant-task-ids';
 
 export function SelectedFeatureDetails() {
 	const dispatch = useAppDispatch();
 	const monitoringClient = useMonitoring();
 	const featureId = useAppSelector( selectSelectedFeatureId );
-	const repositories = useAppSelector( selectAllReposForFormSelectedFeature );
+	const repositories = useAppSelector( selectReposForFeature );
 	const { features } = useAppSelector( selectNormalizedReportingConfig );
 
 	// This should be handled in parent components, but adding for safety, and to keep typing happy.
