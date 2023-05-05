@@ -161,7 +161,7 @@ button.clearButton:active {
 }
 
 .keywordPill {
-	background-color: var( --color-neutral );
+	background-color: var( --color-primary-light );
 	display: inline-block;
 }
 
