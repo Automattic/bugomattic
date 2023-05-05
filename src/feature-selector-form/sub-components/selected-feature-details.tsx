@@ -44,7 +44,7 @@ export function SelectedFeatureDetails() {
 		const repositoriesList = repositories.join( ', ' );
 		repositoriesDisplay = (
 			<span data-testid={ dataTestId } className={ styles.repositoriesList }>
-				{ repositoriesList }{ ' ' }
+				{ repositoriesList }
 			</span>
 		);
 	} else {
