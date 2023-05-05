@@ -4,6 +4,7 @@ import {
 	FeatureGroup,
 	NormalizedReportingConfig,
 	Product,
+	TaskDetails,
 } from '../../static-data/reporting-config/types';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -21,6 +22,11 @@ describe( '[FeatureSelector -- Feature Selection]', () => {
 		parentType: 'featureGroup',
 		parentId: 'feature_group',
 		keywords: [ 'ABC keyword' ],
+		taskMapping: {
+			bug: [ 'feature_under_group_task' ],
+			featureRequest: [],
+			urgent: [],
+		},
 	};
 
 	const featureUnderProduct: Feature = {
@@ -45,8 +51,51 @@ describe( '[FeatureSelector -- Feature Selection]', () => {
 		featureIds: [ 'feature_under_product' ],
 	};
 
+	const githubTask: TaskDetails = {
+		title: 'Title',
+		details: 'Instructions',
+		link: {
+			type: 'github',
+			repository: 'Automattic/themes',
+		},
+	};
+
+	const slackTask: TaskDetails = {
+		title: 'Duplicate title',
+		details: 'Duplicate instructions',
+		link: {
+			type: 'slack',
+			channel: 'fake-channel',
+		},
+	};
+
 	const reportingConfig: NormalizedReportingConfig = {
-		tasks: {},
+		tasks: {
+			product_task: {
+				id: 'product_task',
+				parentType: 'product',
+				parentId: product.id,
+				...githubTask,
+			},
+			feature_group_task: {
+				id: 'feature_group_task',
+				parentType: 'featureGroup',
+				parentId: featureGroup.id,
+				...slackTask,
+			},
+			feature_under_product_task: {
+				id: 'feature_under_product_task',
+				parentType: 'feature',
+				parentId: featureUnderProduct.id,
+				...githubTask,
+			},
+			feature_under_group_task: {
+				id: 'feature_under_group_task',
+				parentType: 'feature',
+				parentId: featureUnderGroup.id,
+				...githubTask,
+			},
+		},
 		products: {
 			[ product.id ]: product,
 		},
@@ -124,7 +173,7 @@ describe( '[FeatureSelector -- Feature Selection]', () => {
 		).toBeInTheDocument();
 	} );
 
-	test( 'Selecting a feature displays name, description, and breadcrumb for that feature', async () => {
+	test( 'Selecting a feature displays name, description, repositories, and keywords for that feature', async () => {
 		// We'll test with both features under products and those under groups for completeness.
 
 		const { user } = setup( <FeatureSelectorForm /> );
@@ -141,10 +190,15 @@ describe( '[FeatureSelector -- Feature Selection]', () => {
 				return content === featureUnderGroup.name && element?.className === 'selectedFeatureName';
 			} )
 		).toBeInTheDocument();
+
 		// Selected feature description
 		expect( screen.getByTestId( 'selected-feature-description' ) ).toHaveTextContent(
 			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 			featureUnderGroup.description!
+		);
+
+		expect( screen.getByTestId( 'selected-feature-repositories' ) ).toHaveTextContent(
+			'Automattic/themes'
 		);
 
 		// Keywords
@@ -172,6 +226,7 @@ describe( '[FeatureSelector -- Feature Selection]', () => {
 			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 			featureUnderProduct.description!
 		);
+
 		// Keywords
 		if ( featureUnderProduct.keywords ) {
 			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -179,7 +234,7 @@ describe( '[FeatureSelector -- Feature Selection]', () => {
 				expect( screen.getByTestId( 'selected-feature-keywords' ) ).toHaveTextContent( keyword );
 			} );
 		} else {
-			expect( screen.getByText( 'None' ) ).toBeInTheDocument();
+			expect( screen.getByTestId( 'keywords-no-result' ) ).toHaveTextContent( 'None' );
 		}
 	} );
 

@@ -1,5 +1,5 @@
 import { createSelector } from '@reduxjs/toolkit';
-import { IssueDetails } from '../issue-details/types';
+import { FeatureId, IssueType } from '../issue-details/types';
 import { selectIssueDetails } from '../issue-details/issue-details-slice';
 import { selectNormalizedReportingConfig } from '../static-data/reporting-config/reporting-config-slice';
 import {
@@ -9,21 +9,59 @@ import {
 	TaskParentEntityType,
 	Tasks,
 } from '../static-data/reporting-config/types';
+import { selectSelectedFeatureId } from '../feature-selector-form/feature-selector-form-slice';
 
-// The "createSelector" function lets you memo-ize potentially expensive selectors:
-// https://redux.js.org/usage/deriving-data-selectors#optimizing-selectors-with-memoization
-export const selectRelevantTaskIds = createSelector(
-	[ selectIssueDetails, selectNormalizedReportingConfig ],
-	( issueDetails, reportingConfig ) => {
-		return getRelevantTaskIds( issueDetails, reportingConfig );
+export const selectTaskIdsForIssueDetails = createSelector(
+	[ selectNormalizedReportingConfig, selectIssueDetails ],
+	( reportingConfig, issueDetails ) => {
+		const { featureId, issueType } = issueDetails;
+		return getTaskIdsForFeatureAndType( reportingConfig, featureId, issueType );
 	}
 );
 
-function getRelevantTaskIds(
-	issueDetails: IssueDetails,
-	reportingConfig: NormalizedReportingConfig
+export const selectReposForFeature = createSelector(
+	[ selectNormalizedReportingConfig, selectSelectedFeatureId ],
+	( reportingConfig, featureId ) => {
+		return getReposForFeature( reportingConfig, featureId );
+	}
+);
+
+function getReposForFeature(
+	reportingConfig: NormalizedReportingConfig,
+	featureId: FeatureId
 ): string[] {
-	const { featureId, issueType } = issueDetails;
+	const { tasks } = reportingConfig;
+	const taskIds = getTaskIdsForFeature( reportingConfig, featureId );
+
+	const repositories = new Set< string >();
+	for ( const taskId of taskIds ) {
+		const task = tasks[ taskId ];
+		if ( task?.link?.type === 'github' && task.link.repository ) {
+			repositories.add( task.link.repository );
+		}
+	}
+
+	return Array.from( repositories );
+}
+
+function getTaskIdsForFeature(
+	reportingConfig: NormalizedReportingConfig,
+	featureId: FeatureId
+): string[] {
+	const { tasks } = reportingConfig;
+	const allIssueTypes: IssueType[] = [ 'bug', 'featureRequest', 'urgent' ];
+	const taskIds = allIssueTypes.flatMap( ( issueType ) =>
+		getTaskIdsForFeatureAndType( reportingConfig, featureId, issueType )
+	);
+
+	return deduplicateTasksIds( tasks, taskIds );
+}
+
+function getTaskIdsForFeatureAndType(
+	reportingConfig: NormalizedReportingConfig,
+	featureId: FeatureId,
+	issueType: IssueType
+): string[] {
 	const { products, featureGroups, features, tasks } = reportingConfig;
 
 	if ( featureId === null || issueType === 'unset' ) {
