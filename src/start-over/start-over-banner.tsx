@@ -1,7 +1,7 @@
 import React, { FunctionComponent, SVGProps, useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { selectAllTasksAreComplete } from '../combined-selectors/all-tasks-are-complete';
-import { selectRelevantTaskIds } from '../combined-selectors/relevant-task-ids';
+import { selectTaskIdsForIssueDetails } from '../combined-selectors/relevant-task-ids';
 import { useMonitoring } from '../monitoring/monitoring-provider';
 import { startOver } from './start-over-counter-slice';
 import { updateHistoryWithState } from '../url-history/actions';
@@ -21,7 +21,7 @@ import { ReactComponent as PlusIcon } from '../common/svgs/plus.svg';
 import { ReactComponent as DownChevronIcon } from '../common/svgs/chevron-down.svg';
 
 export function StartOverBanner() {
-	const relevantTaskIds = useAppSelector( selectRelevantTaskIds );
+	const relevantTaskIds = useAppSelector( selectTaskIdsForIssueDetails );
 	const allTasksAreComplete = useAppSelector( selectAllTasksAreComplete );
 
 	if ( relevantTaskIds.length === 0 || ! allTasksAreComplete ) {
