@@ -84,7 +84,7 @@ export function FeatureSelectorForm( { onContinue }: Props ) {
 			</div>
 		);
 	} else if ( selectedFeatureId ) {
-		bottomPanelDisplay = <SelectedFeatureDetails featureId={ selectedFeatureId } />;
+		bottomPanelDisplay = <SelectedFeatureDetails />;
 	} else {
 		bottomPanelDisplay = null;
 	}

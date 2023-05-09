@@ -1,8 +1,8 @@
-import { selectRelevantTaskIds } from '../relevant-task-ids';
+import { selectTaskIdsForIssueDetails, selectReposForFeature } from '../relevant-task-ids';
 import { NormalizedReportingConfig, TaskDetails } from '../../static-data/reporting-config/types';
 import { createFakeRootState } from '../../test-utils/fake-root-state';
 
-describe( '[selectRelevantTaskIds]', () => {
+describe( '[selectTaskIdsForIssueDetails]', () => {
 	test( 'Returns empty array if there is no feature id in the state', () => {
 		const normalized: NormalizedReportingConfig = {
 			tasks: {
@@ -50,7 +50,7 @@ describe( '[selectRelevantTaskIds]', () => {
 			},
 		} );
 
-		const output = selectRelevantTaskIds( state );
+		const output = selectTaskIdsForIssueDetails( state );
 		expect( output ).toEqual( [] );
 	} );
 
@@ -101,7 +101,7 @@ describe( '[selectRelevantTaskIds]', () => {
 			},
 		} );
 
-		const output = selectRelevantTaskIds( state );
+		const output = selectTaskIdsForIssueDetails( state );
 		expect( output ).toEqual( [] );
 	} );
 
@@ -193,7 +193,7 @@ describe( '[selectRelevantTaskIds]', () => {
 			},
 		} );
 
-		const output = selectRelevantTaskIds( state );
+		const output = selectTaskIdsForIssueDetails( state );
 		expect( output ).toEqual( [
 			firstFeatureTaskId,
 			secondFeatureTaskId,
@@ -290,7 +290,7 @@ describe( '[selectRelevantTaskIds]', () => {
 			},
 		} );
 
-		const output = selectRelevantTaskIds( state );
+		const output = selectTaskIdsForIssueDetails( state );
 		expect( output ).toEqual( [ featureTaskId ] );
 	} );
 
@@ -366,7 +366,195 @@ describe( '[selectRelevantTaskIds]', () => {
 			},
 		} );
 
-		const output = selectRelevantTaskIds( state );
+		const output = selectTaskIdsForIssueDetails( state );
 		expect( output ).toEqual( [ featureTaskId ] );
+	} );
+} );
+
+describe( '[selectReposForFeature]', () => {
+	const featureId = 'feature_id';
+
+	test( 'Returns empty array if feature has no tasks', () => {
+		const normalized: NormalizedReportingConfig = {
+			tasks: {},
+			products: {
+				product_id: {
+					id: 'product_id',
+					name: 'Product',
+					featureGroupIds: [],
+					featureIds: [ featureId ],
+				},
+			},
+			featureGroups: {},
+			features: {
+				feature_id: {
+					id: featureId,
+					name: 'Feature',
+					parentType: 'product',
+					parentId: 'product_id',
+					taskMapping: {
+						bug: [],
+						featureRequest: [],
+						urgent: [],
+					},
+				},
+			},
+		};
+
+		const state = createFakeRootState( {
+			reportingConfig: {
+				normalized,
+				indexed: {},
+				loadError: null,
+			},
+
+			issueDetails: {
+				issueType: 'urgent',
+				featureId: featureId,
+				issueTitle: '',
+			},
+			featureSelectorForm: {
+				searchTerm: '',
+				selectedFeatureId: featureId,
+			},
+		} );
+
+		const output = selectReposForFeature( state );
+		expect( output ).toEqual( [] );
+	} );
+
+	test( 'Return empty array if feature has no GitHub tasks', () => {
+		const normalized: NormalizedReportingConfig = {
+			tasks: {
+				feature_task: {
+					id: 'feature_task',
+					parentType: 'feature',
+					parentId: featureId,
+					details: 'Task instructions',
+				},
+			},
+			products: {
+				product_id: {
+					id: 'product_id',
+					name: 'Product',
+					featureGroupIds: [],
+					featureIds: [ featureId ],
+				},
+			},
+			featureGroups: {},
+			features: {
+				feature_id: {
+					id: featureId,
+					name: 'Feature',
+					parentType: 'product',
+					parentId: 'product_id',
+					taskMapping: {
+						bug: [],
+						featureRequest: [],
+						urgent: [],
+					},
+				},
+			},
+		};
+
+		const state = createFakeRootState( {
+			reportingConfig: {
+				normalized,
+				indexed: {},
+				loadError: null,
+			},
+			issueDetails: {
+				issueType: 'urgent',
+				featureId: featureId,
+				issueTitle: '',
+			},
+			featureSelectorForm: {
+				searchTerm: '',
+				selectedFeatureId: featureId,
+			},
+		} );
+
+		const output = selectReposForFeature( state );
+		expect( output ).toEqual( [] );
+	} );
+
+	test( 'Returns the repos for a given feature ID', () => {
+		const featureId = 'feature_id';
+		const featureTaskId = 'feature_task_id';
+		const repo = 'FakeOrg/fake-repo';
+
+		const normalized: NormalizedReportingConfig = {
+			tasks: {
+				[ featureTaskId ]: {
+					id: featureTaskId,
+					parentType: 'feature',
+					parentId: featureId,
+					details: 'Feature GitHub task',
+					link: {
+						type: 'github',
+						labels: [ 'priority-label' ],
+						repository: repo,
+					},
+				},
+				product_task: {
+					id: 'product_task',
+					parentType: 'product',
+					parentId: 'product_id',
+					details: 'Product GitHub task',
+					link: {
+						type: 'github',
+						labels: [ 'other-label' ],
+						repository: repo,
+					},
+				},
+			},
+			products: {
+				product_id: {
+					id: 'product_id',
+					name: 'Product',
+					taskMapping: {
+						bug: [],
+						featureRequest: [],
+						urgent: [ 'product_task' ],
+					},
+					featureGroupIds: [],
+					featureIds: [ featureId ],
+				},
+			},
+			featureGroups: {},
+			features: {
+				[ featureId ]: {
+					id: featureId,
+					name: 'Feature',
+					parentType: 'product',
+					parentId: 'product_id',
+					taskMapping: {
+						bug: [],
+						featureRequest: [],
+						urgent: [ featureTaskId ],
+					},
+				},
+			},
+		};
+
+		const state = createFakeRootState( {
+			reportingConfig: {
+				normalized: normalized,
+				indexed: {},
+				loadError: null,
+			},
+			issueDetails: {
+				issueType: 'bug',
+				featureId: featureId,
+				issueTitle: '',
+			},
+			featureSelectorForm: {
+				searchTerm: '',
+				selectedFeatureId: featureId,
+			},
+		} );
+
+		const output = selectReposForFeature( state );
+		expect( output ).toEqual( [ repo ] );
 	} );
 } );

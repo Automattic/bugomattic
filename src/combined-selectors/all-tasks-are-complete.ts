@@ -1,10 +1,10 @@
 import { createSelector } from '@reduxjs/toolkit';
 import { RootState } from '../app/store';
 import { selectCompletedTasks } from '../next-steps/completed-tasks-slice';
-import { selectRelevantTaskIds } from './relevant-task-ids';
+import { selectTaskIdsForIssueDetails } from './relevant-task-ids';
 
 export const selectAllTasksAreComplete = createSelector(
-	[ selectRelevantTaskIds, selectCompletedTasks ],
+	[ selectTaskIdsForIssueDetails, selectCompletedTasks ],
 	( relevantTaskIds, completedTaskIds ) => {
 		return allTasksAreComplete( relevantTaskIds, completedTaskIds );
 	}
@@ -13,7 +13,7 @@ export const selectAllTasksAreComplete = createSelector(
 export const makeSelectorToPredictCompletingAllTasks = () =>
 	createSelector(
 		[
-			selectRelevantTaskIds,
+			selectTaskIdsForIssueDetails,
 			selectCompletedTasks,
 			( _state: RootState, currentTaskId: string ) => currentTaskId,
 		],
