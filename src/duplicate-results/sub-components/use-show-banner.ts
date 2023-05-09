@@ -14,7 +14,10 @@ export function useShowBanner() {
 	const [ showBanner, setShowBanner ] = useState( requestsWereMade );
 
 	useEffect( () => {
-		if ( requestsWereMade && resultsRequestStatus === 'fulfilled' ) {
+		if (
+			requestsWereMade &&
+			( resultsRequestStatus === 'fulfilled' || resultsRequestStatus === 'error' )
+		) {
 			setShowBanner( true );
 		}
 	}, [ requestsWereMade, resultsRequestStatus ] );

@@ -1,8 +1,8 @@
-import React, { FunctionComponent, SVGProps, createElement } from 'react';
+import React, { ReactElement, cloneElement } from 'react';
 import styles from '../duplicate-results.module.css';
 
 interface Props {
-	illustration: FunctionComponent< SVGProps< SVGSVGElement > >;
+	illustration: ReactElement;
 	header: string;
 	message: string;
 	ariaLive?: 'assertive' | 'polite';
@@ -18,8 +18,8 @@ export function PlaceholderMessage( {
 }: Props ) {
 	return (
 		<div className={ styles.placeholderWrapper } aria-live={ ariaLive }>
-			{ createElement( illustration, {
-				className: styles.placeholderIllustration,
+			{ cloneElement( illustration, {
+				className: `${ styles.placeholderIllustration } ${ illustration.props.className }`,
 				'aria-hidden': 'true',
 			} ) }
 			<h3 className={ styles.placeholderHeader }>{ header }</h3>

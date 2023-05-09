@@ -7,6 +7,7 @@ import { screen, waitForElementToBeRemoved } from '@testing-library/react';
 import { DuplicateSearchingPage } from '../duplicate-searching-page';
 import { SearchIssueApiResponse } from '../../api/types';
 import { Issue } from '../../duplicate-results/types';
+import { createMockMonitoringClient } from '../../test-utils/mock-monitoring-client';
 
 describe( '[DuplicateSearchingPage]', () => {
 	const fakeIssue: Issue = {
@@ -28,9 +29,11 @@ describe( '[DuplicateSearchingPage]', () => {
 
 	function setup( component: ReactElement ) {
 		const apiClient = createMockApiClient();
+		const monitoringClient = createMockMonitoringClient();
 		const user = userEvent.setup();
 		const view = renderWithProviders( component, {
 			apiClient,
+			monitoringClient,
 			preloadedState: {
 				availableRepoFilters: availableRepoFiltersState,
 			},
@@ -39,6 +42,7 @@ describe( '[DuplicateSearchingPage]', () => {
 		return {
 			user,
 			apiClient,
+			monitoringClient,
 			...view,
 		};
 	}
@@ -111,6 +115,32 @@ describe( '[DuplicateSearchingPage]', () => {
 			).toBeInTheDocument();
 
 			expect( apiClient.searchIssues ).toHaveBeenCalledTimes( 1 );
+		} );
+
+		test( 'If the request throws an error, shows error message and logs one error, even if error recurs', async () => {
+			const { apiClient, monitoringClient, user } = setup( <DuplicateSearchingPage /> );
+			const errorMessage = 'Request error message';
+			apiClient.searchIssues.mockRejectedValue( new Error( errorMessage ) );
+
+			await search( user, 'foo' );
+
+			expect(
+				await screen.findByRole( 'heading', { name: 'Uh oh! Something went wrong.' } )
+			).toBeInTheDocument();
+
+			expect( monitoringClient.logger.error ).toHaveBeenCalledWith(
+				'Error in duplicate search request',
+				{
+					errorMessage: `Error: ${ errorMessage }`,
+				}
+			);
+
+			await search( user, 'bar' );
+			expect(
+				await screen.findByRole( 'heading', { name: 'Uh oh! Something went wrong.' } )
+			).toBeInTheDocument();
+
+			expect( monitoringClient.logger.error ).toHaveBeenCalledTimes( 1 );
 		} );
 	} );
 } );
