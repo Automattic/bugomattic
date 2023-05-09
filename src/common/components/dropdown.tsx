@@ -4,6 +4,7 @@ import React, {
 	ReactNode,
 	cloneElement,
 	createContext,
+	forwardRef,
 	isValidElement,
 	useContext,
 	useMemo,
@@ -24,6 +25,7 @@ import {
 	useListNavigation,
 	Placement,
 	useTypeahead,
+	useMergeRefs,
 } from '@floating-ui/react';
 import styles from './dropdown.module.css';
 
@@ -166,26 +168,30 @@ export function Dropdown( { children, ...floatingConfig }: DropdownProps ) {
 /**
  * The component for the trigger element. For now, we will allow any kind of element for flexibility.
  * In most cases, it should be a button, or maybe a link.
+ * We are forwarding the ref here because in some parent components, we need to force focus on the trigger element.
  */
-export function DropdownTrigger( { children, ...props }: HTMLProps< HTMLElement > ) {
-	const { refs, isDropdownOpen, getReferenceProps } = useDropdownContext();
+export const DropdownTrigger = forwardRef< HTMLElement, HTMLProps< HTMLElement > >(
+	function DropdownTrigger( { children, ...props }, ref ) {
+		const { refs, isDropdownOpen, getReferenceProps } = useDropdownContext();
+		const mergedRef = useMergeRefs( [ refs.setReference, ref ] );
 
-	if ( ! isValidElement( children ) ) {
-		throw new Error( '<DropdownTrigger /> must have a single, valid child element' );
+		if ( ! isValidElement( children ) ) {
+			throw new Error( '<DropdownTrigger /> must have a single, valid child element' );
+		}
+
+		return cloneElement(
+			children,
+			// In FloatingUI terms, the "reference" is the trigger element for the floating piece.
+			getReferenceProps( {
+				ref: mergedRef,
+				tabIndex: 0,
+				...props,
+				...children.props,
+				'data-state': isDropdownOpen ? 'open' : 'closed',
+			} )
+		);
 	}
-
-	return cloneElement(
-		children,
-		// In FloatingUI terms, the "reference" is the trigger element for the floating piece.
-		getReferenceProps( {
-			ref: refs.setReference,
-			tabIndex: 0,
-			...props,
-			...children.props,
-			'data-state': isDropdownOpen ? 'open' : 'closed',
-		} )
-	);
-}
+);
 
 export function DropdownContent( { children, style, ...props }: HTMLProps< HTMLDivElement > ) {
 	const {

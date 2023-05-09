@@ -6,11 +6,11 @@ import {
 	selectDuplicateRequestsWereMade,
 	selectDuplicateResultsRequestError,
 } from './duplicate-results-slice';
-import { IssueList, PlaceholderMessage, useShowBanner } from './sub-components';
+import { IssueList, PlaceholderMessage, ReportIssueBanner, useShowBanner } from './sub-components';
 import styles from './duplicate-results.module.css';
 import { ReactComponent as InitialIllustration } from './svgs/initial-illustration.svg';
 import { ReactComponent as NoResultsIllustration } from '../common/svgs/missing-info.svg';
-import { ReactComponent as ErrorIllustration } from '../common/svgs/warning.svg';
+import { ReactComponent as ErrorIllustration } from '../common/svgs/warning-triangle.svg';
 import { LoadingIndicator } from '../common/components';
 import { selectDuplicateSearchFiltersAreActive } from '../combined-selectors/duplicate-search-filters-are-active';
 import { selectDuplicateSearchTerm } from '../duplicate-search/duplicate-search-slice';
@@ -54,7 +54,7 @@ export function DuplicateResults() {
 			<PlaceholderMessage
 				illustration={ <InitialIllustration /> }
 				header="Enter some keywords to search for duplicates."
-				message="Click on “Report an Issue” to open a bug, request a few feature, and more."
+				message="Click on “Report an Issue” to open a bug, request a new feature, and more."
 			/>
 		);
 	} else if ( resultsRequestStatus === 'pending' ) {
@@ -111,7 +111,7 @@ export function DuplicateResults() {
 				{ /* We need another wrapper here to accurately get the height of the display content */ }
 				<div ref={ resultsContainerContentRef }>{ resultsContainerDisplay }</div>
 			</div>
-			{ showBanner && <p>Banner Placeholder</p> }
+			{ showBanner && <ReportIssueBanner /> }
 		</section>
 	);
 }

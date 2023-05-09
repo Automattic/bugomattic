@@ -96,4 +96,19 @@ describe( '[app]', () => {
 		);
 		expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'page_view' );
 	} );
+
+	// This main seem silly, but this is an important test!
+	// We set focus on page headers on page navigation, and have to make sure we don't do that on initial load.
+	// This test verifies that! The page heading focus is tested elsewhere.
+	test( 'On app boot, focus is on the body element', async () => {
+		const apiClient = createMockApiClient();
+
+		setup( <App />, apiClient );
+
+		await waitForElementToBeRemoved( () =>
+			screen.queryByRole( 'alert', { name: 'Loading required app data' } )
+		);
+
+		expect( document.body ).toHaveFocus();
+	} );
 } );

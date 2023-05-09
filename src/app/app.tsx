@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { ReactNode, useEffect } from 'react';
 import { AppHeader } from '../app-header/app-header';
 import { useMonitoring } from '../monitoring/monitoring-provider';
 import styles from './app.module.css';
@@ -9,6 +9,8 @@ import { DuplicateSearchingPage } from '../duplicate-searching-page/duplicate-se
 import { ReportingFlowPage } from '../reporting-flow-page/reporting-flow-page';
 import { useAppDataHydration } from './use-app-data-hydration';
 import { LoadingIndicator } from '../common/components';
+import { AppNavbar } from '../app-navbar/app-navbar';
+import { PageNavigationProvider } from '../active-page/page-navigation-provider';
 
 export function App() {
 	const monitoringClient = useMonitoring();
@@ -40,11 +42,19 @@ function MainDisplay() {
 		return <AppLoadingIndicator />;
 	}
 
+	let mainDisplay: ReactNode;
 	if ( activePage === 'duplicateSearching' ) {
-		return <DuplicateSearchingPage />;
+		mainDisplay = <DuplicateSearchingPage />;
+	} else {
+		mainDisplay = <ReportingFlowPage />;
 	}
 
-	return <ReportingFlowPage />;
+	return (
+		<PageNavigationProvider>
+			<AppNavbar />
+			{ mainDisplay }
+		</PageNavigationProvider>
+	);
 }
 
 function AppLoadingIndicator() {
