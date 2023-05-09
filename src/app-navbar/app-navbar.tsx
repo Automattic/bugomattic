@@ -104,7 +104,7 @@ export function AppNavbar() {
 			onClick={ handleMenuItemClick( 'reportingFlow' ) }
 			className={ styles.menuItem }
 		>
-			Report an Issue
+			<span className={ styles.menuItemLabel }>Report an Issue</span>
 		</button>
 	);
 
@@ -116,9 +116,11 @@ export function AppNavbar() {
 				tabIndex={ focusedMenuItem === 'reportingFlow' ? 0 : -1 }
 				className={ styles.menuItem }
 			>
-				<PlusIcon aria-hidden="true" className={ styles.plusIcon } />
-				<span>Report an Issue</span>
-				<DownChevronIcon aria-hidden="true" />
+				<span className={ styles.menuItemLabel }>
+					<PlusIcon aria-hidden="true" className={ styles.plusIcon } />
+					<span>Report an Issue</span>
+					<DownChevronIcon aria-hidden="true" />
+				</span>
 			</button>
 		</ReportIssueDropdownMenu>
 	);
@@ -143,7 +145,7 @@ export function AppNavbar() {
 						onClick={ handleMenuItemClick( 'duplicateSearching' ) }
 						className={ styles.menuItem }
 					>
-						Duplicate Search
+						<span className={ styles.menuItemLabel }>Duplicate Search</span>
 					</button>
 				</li>
 				<li role="none">{ reportIssueMenuItem }</li>

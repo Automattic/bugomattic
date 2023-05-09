@@ -17,7 +17,6 @@ ul.menuBar {
 }
 
 button.menuItem {
-	font-weight: 500;
 	background-color: var( --color-white );
 	border: none;
 	/* TODO: we need to standardize how this color fits in the app variables */
@@ -53,32 +52,38 @@ If we need to in the future, we can implement that. */
 }
 
 button.menuItem:hover {
-	background-color: var( --color-neutral-extra-light );
+	color: var( --color-primary );
+}
+
+button.menuItem:hover path {
+	fill: var( --color-primary );
 }
 
 button.menuItem:active {
-	background-color: var( --color-neutral-light );
+	color: var( --color-primary-dark );
+}
+
+button.menuItem:active path {
+	fill: var( --color-primary-dark );
 }
 
 button.menuItem[aria-current='page'] {
 	border-bottom: 4px solid var( --color-primary );
 }
 
-/* This combo below is a way to draw a focus outline that doesn't get cut off by the neighboring button */
-
 button.menuItem:focus-visible {
 	outline: none;
 }
 
-button.menuItem:focus-visible::before {
-	content: '';
-	position: absolute;
-	top: -2px;
-	left: -2px;
-	right: -2px;
-	bottom: -6px; /* Draw below that bottom border! */
-	border: 2px solid var( --color-primary );
-	z-index: 1;
-	border-radius: 2px;
-	box-sizing: border-box; /* Add this property to prevent the pseudo-element from affecting the button's dimensions */
+button.menuItem:focus-visible .menuItemLabel {
+	outline: 2px solid var( --color-primary );
+	outline-offset: 4px;
+}
+
+.menuItemLabel {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	font-weight: 500;
+	height: 1.5rem;
 }
