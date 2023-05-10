@@ -15,135 +15,159 @@ import {
 import { ReportingConfigSearchResults } from './types';
 import { tokenizeAndNormalize } from '../common/lib';
 
-function addFeatureGroupAndParents(
-	featureGroupId: string,
-	searchResults: ReportingConfigSearchResults,
-	featureGroups: FeatureGroups
-): void {
-	searchResults.featureGroups.add( featureGroupId );
-	searchResults.products.add( featureGroups[ featureGroupId ].productId );
-}
+class ReportingConfigSearcher {
+	private searchResults: ReportingConfigSearchResults;
+	private products: Products;
+	private featureGroups: FeatureGroups;
+	private features: Features;
+	private invertedIndex: IndexedReportingConfig;
+	private searchTerm: string;
 
-function addFeatureAndParents(
-	featureId: string,
-	searchResults: ReportingConfigSearchResults,
-	features: Features,
-	featureGroups: FeatureGroups
-) {
-	searchResults.features.add( featureId );
+	constructor(
+		searchTerm: string,
+		reportingConfig: NormalizedReportingConfig,
+		invertedIndex: IndexedReportingConfig
+	) {
+		const { products, featureGroups, features } = reportingConfig;
+		this.products = products;
+		this.featureGroups = featureGroups;
+		this.features = features;
 
-	const feature = features[ featureId ];
-	if ( feature.parentType === 'product' ) {
-		searchResults.products.add( feature.parentId );
-	} else {
-		searchResults.featureGroups.add( feature.parentId );
-		const parentFeatureGroup = featureGroups[ feature.parentId ];
-		searchResults.products.add( parentFeatureGroup.productId );
+		this.invertedIndex = invertedIndex;
+
+		this.searchResults = {
+			products: new Set(),
+			featureGroups: new Set(),
+			features: new Set(),
+			descriptionMatchedTerms: {},
+			strongestMatch: { product: {}, featureGroup: {}, feature: {} },
+		};
+
+		this.searchTerm = searchTerm;
 	}
-}
 
-function searchByName(
-	searchTerm: string,
-	products: Products,
-	featureGroups: FeatureGroups,
-	features: Features,
-	searchResults: ReportingConfigSearchResults
-) {
-	for ( const productId in products ) {
-		const product = products[ productId ];
-		if ( includesIgnoringCase( product.name, searchTerm ) ) {
-			searchResults.products.add( productId );
+	private addFeatureGroupAndParents( featureGroupId: string ): void {
+		this.searchResults.featureGroups.add( featureGroupId );
+		this.searchResults.products.add( this.featureGroups[ featureGroupId ].productId );
+	}
+
+	private addFeatureAndParents( featureId: string ) {
+		this.searchResults.features.add( featureId );
+
+		const feature = this.features[ featureId ];
+		if ( feature.parentType === 'product' ) {
+			this.searchResults.products.add( feature.parentId );
+		} else {
+			this.searchResults.featureGroups.add( feature.parentId );
+			const parentFeatureGroup = this.featureGroups[ feature.parentId ];
+			this.searchResults.products.add( parentFeatureGroup.productId );
 		}
 	}
 
-	for ( const featureGroupId in featureGroups ) {
-		const featureGroup = featureGroups[ featureGroupId ];
-		if ( includesIgnoringCase( featureGroup.name, searchTerm ) ) {
-			addFeatureGroupAndParents( featureGroupId, searchResults, featureGroups );
-		}
-	}
-
-	for ( const featureId in features ) {
-		const feature = features[ featureId ];
-		const keywordsIncludeSearchTerm = () =>
-			feature.keywords?.some( ( keyword: string ) => includesIgnoringCase( keyword, searchTerm ) );
-
-		if ( includesIgnoringCase( feature.name, searchTerm ) || keywordsIncludeSearchTerm() ) {
-			addFeatureAndParents( featureId, searchResults, features, featureGroups );
-		}
-	}
-}
-
-function searchInDescription(
-	searchTermTokens: string[],
-	invertedIndex: IndexedReportingConfig,
-	searchResults: ReportingConfigSearchResults,
-	featureGroups: FeatureGroups,
-	features: Features
-) {
-	const scores = {
-		product: {} as Record< string, number >,
-		featureGroup: {} as Record< string, number >,
-		feature: {} as Record< string, number >,
-	};
-
-	for ( const token of searchTermTokens ) {
-		const matchingEntities = invertedIndex[ token ] || [];
-
-		for ( const { type, id, weight } of matchingEntities ) {
-			if ( ! scores[ type ][ id ] ) {
-				scores[ type ][ id ] = 0;
+	searchByName() {
+		for ( const productId in this.products ) {
+			const product = this.products[ productId ];
+			if ( includesIgnoringCase( product.name, this.searchTerm ) ) {
+				this.searchResults.products.add( productId );
 			}
-			scores[ type ][ id ] += weight;
+		}
 
-			// Store the matched terms in the matchedEntities object
-			if ( ! searchResults.descriptionMatchedTerms[ type ] ) {
-				searchResults.descriptionMatchedTerms[ type ] = {};
+		for ( const featureGroupId in this.featureGroups ) {
+			const featureGroup = this.featureGroups[ featureGroupId ];
+			if ( includesIgnoringCase( featureGroup.name, this.searchTerm ) ) {
+				this.addFeatureGroupAndParents( featureGroupId );
 			}
-			if ( ! searchResults.descriptionMatchedTerms[ type ][ id ] ) {
-				searchResults.descriptionMatchedTerms[ type ][ id ] = new Set();
+		}
+
+		for ( const featureId in this.features ) {
+			const feature = this.features[ featureId ];
+			const keywordsIncludeSearchTerm = () =>
+				feature.keywords?.some( ( keyword: string ) =>
+					includesIgnoringCase( keyword, this.searchTerm )
+				);
+
+			if ( includesIgnoringCase( feature.name, this.searchTerm ) || keywordsIncludeSearchTerm() ) {
+				this.addFeatureAndParents( featureId );
 			}
-			searchResults.descriptionMatchedTerms[ type ][ id ].add( token );
 		}
-	}
-	const scoreThreshold = 1;
 
-	for ( const entityId in scores.product ) {
-		if ( scores.product[ entityId ] >= scoreThreshold ) {
-			searchResults.products.add( entityId );
-		}
+		return this;
 	}
 
-	for ( const entityId in scores.featureGroup ) {
-		if ( scores.featureGroup[ entityId ] >= scoreThreshold ) {
-			addFeatureGroupAndParents( entityId, searchResults, featureGroups );
-		}
-	}
+	searchInDescription() {
+		const searchTermTokens = tokenizeAndNormalize( this.searchTerm );
+		const scores = {
+			product: {} as Record< string, number >,
+			featureGroup: {} as Record< string, number >,
+			feature: {} as Record< string, number >,
+		};
 
-	for ( const entityId in scores.feature ) {
-		if ( scores.feature[ entityId ] >= scoreThreshold ) {
-			addFeatureAndParents( entityId, searchResults, features, featureGroups );
-		}
-	}
-}
+		for ( const token of searchTermTokens ) {
+			const matchingEntities = this.invertedIndex[ token ] || [];
 
-function findStrongestMatchInDescription( searchResults: ReportingConfigSearchResults ) {
-	const descriptionMatches = searchResults.descriptionMatchedTerms;
-	for ( const entityType in descriptionMatches ) {
-		for ( const entityId in descriptionMatches[ entityType ] ) {
-			const matchedTerms = descriptionMatches[ entityType ][ entityId ];
-			let strongestMatch = '';
-			let maxScore = 0;
-			for ( const term of matchedTerms ) {
-				const currentScore = descriptionMatches[ entityType ][ entityId ].size;
-
-				if ( currentScore > maxScore ) {
-					strongestMatch = term;
-					maxScore = currentScore;
+			for ( const { type, id, weight } of matchingEntities ) {
+				if ( ! scores[ type ][ id ] ) {
+					scores[ type ][ id ] = 0;
 				}
+				scores[ type ][ id ] += weight;
+
+				// Store the matched terms in the matchedEntities object
+				if ( ! this.searchResults.descriptionMatchedTerms[ type ] ) {
+					this.searchResults.descriptionMatchedTerms[ type ] = {};
+				}
+				if ( ! this.searchResults.descriptionMatchedTerms[ type ][ id ] ) {
+					this.searchResults.descriptionMatchedTerms[ type ][ id ] = new Set();
+				}
+				this.searchResults.descriptionMatchedTerms[ type ][ id ].add( token );
 			}
-			searchResults.strongestMatch[ entityType ][ entityId ] = strongestMatch;
 		}
+		const scoreThreshold = 1;
+
+		for ( const entityId in scores.product ) {
+			if ( scores.product[ entityId ] >= scoreThreshold ) {
+				this.searchResults.products.add( entityId );
+			}
+		}
+
+		for ( const entityId in scores.featureGroup ) {
+			if ( scores.featureGroup[ entityId ] >= scoreThreshold ) {
+				this.addFeatureGroupAndParents( entityId );
+			}
+		}
+
+		for ( const entityId in scores.feature ) {
+			if ( scores.feature[ entityId ] >= scoreThreshold ) {
+				this.addFeatureAndParents( entityId );
+			}
+		}
+
+		return this;
+	}
+
+	findStrongestMatchInDescription() {
+		const descriptionMatches = this.searchResults.descriptionMatchedTerms;
+		for ( const entityType in descriptionMatches ) {
+			for ( const entityId in descriptionMatches[ entityType ] ) {
+				const matchedTerms = descriptionMatches[ entityType ][ entityId ];
+				let strongestMatch = '';
+				let maxScore = 0;
+				for ( const term of matchedTerms ) {
+					const currentScore = descriptionMatches[ entityType ][ entityId ].size;
+
+					if ( currentScore > maxScore ) {
+						strongestMatch = term;
+						maxScore = currentScore;
+					}
+				}
+				this.searchResults.strongestMatch[ entityType ][ entityId ] = strongestMatch;
+			}
+		}
+
+		return this;
+	}
+
+	getSearchResults() {
+		return this.searchResults;
 	}
 }
 
@@ -152,27 +176,17 @@ function searchReportingConfig(
 	reportingConfig: NormalizedReportingConfig,
 	invertedIndex: IndexedReportingConfig
 ): ReportingConfigSearchResults {
-	const { features, featureGroups, products } = reportingConfig;
-	const searchResults: ReportingConfigSearchResults = {
-		products: new Set< string >(),
-		featureGroups: new Set< string >(),
-		features: new Set< string >(),
-		descriptionMatchedTerms: {},
-		strongestMatch: { product: {}, featureGroup: {}, feature: {} },
-	};
+	const searcher = new ReportingConfigSearcher( searchTerm, reportingConfig, invertedIndex );
 
 	if ( ! searchTerm ) {
-		return searchResults;
+		return searcher.getSearchResults();
 	}
 
-	searchByName( searchTerm, products, featureGroups, features, searchResults );
-
-	const searchTermTokens = tokenizeAndNormalize( searchTerm );
-	searchInDescription( searchTermTokens, invertedIndex, searchResults, featureGroups, features );
-
-	findStrongestMatchInDescription( searchResults );
-
-	return searchResults;
+	return searcher
+		.searchByName()
+		.searchInDescription()
+		.findStrongestMatchInDescription()
+		.getSearchResults();
 }
 
 // Searching all of the reporting config is expensive, and these search results are needed by several components.
