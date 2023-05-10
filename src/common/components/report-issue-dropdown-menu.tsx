@@ -36,7 +36,7 @@ export const ReportIssueDropdownMenu = forwardRef< HTMLElement, Props >(
 				icon: BugIcon,
 			},
 			{
-				value: 'featureRequest',
+				value: 'feature-request',
 				label: 'Request a new feature',
 				icon: FeatureIcon,
 			},

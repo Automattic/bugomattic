@@ -284,7 +284,7 @@ describe( '[selectTaskIdsForIssueDetails]', () => {
 				loadError: null,
 			},
 			issueDetails: {
-				issueType: 'featureRequest',
+				issueType: 'feature-request',
 				featureId: featureId,
 				issueTitle: '',
 			},

@@ -11,7 +11,7 @@ const initialState: IssueDetails = {
 	issueTitle: '',
 };
 
-const validIssueTypes = new Set< IssueType >( [ 'unset', 'bug', 'featureRequest', 'urgent' ] );
+const validIssueTypes = new Set< IssueType >( [ 'unset', 'bug', 'feature-request', 'urgent' ] );
 
 export const issueDetailsSlice = createSlice( {
 	name: 'issueDetails',

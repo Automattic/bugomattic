@@ -90,8 +90,8 @@ export function TypeForm( { onContinue }: Props ) {
 					<label className={ styles.radio }>
 						<input
 							type="radio"
-							checked={ type === 'featureRequest' }
-							value="featureRequest"
+							checked={ type === 'feature-request' }
+							value="feature-request"
 							name="type"
 							onChange={ handleTypeChange }
 							onBlur={ handleTypeBlur }

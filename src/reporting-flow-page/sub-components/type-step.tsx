@@ -72,7 +72,7 @@ function getDisplayTextForType( type: IssueType ) {
 			return "It's Urgent!";
 		case 'bug':
 			return 'Bug';
-		case 'featureRequest':
+		case 'feature-request':
 			return 'Feature Request';
 		default:
 			return 'No type set';
