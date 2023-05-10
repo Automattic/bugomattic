@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
 	selectDuplicateSearchTerm,
@@ -19,9 +19,12 @@ export function DuplicateSearchInput() {
 		};
 	}, [ inputSearchTerm ] );
 
-	const handleSearchTermEmitted = ( searchTerm: string ) => {
-		dispatch( setSearchParam( setSearchTerm( searchTerm ) ) );
-	};
+	const handleSearchTermEmitted = useCallback(
+		( searchTerm: string ) => {
+			dispatch( setSearchParam( setSearchTerm( searchTerm ) ) );
+		},
+		[ dispatch ]
+	);
 
 	useEffect( () => {
 		setInputSearchTerm( reduxSearchTerm );
