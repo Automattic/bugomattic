@@ -18,7 +18,7 @@ export function createFakeRootState( partialState: Partial< RootState > = {} ): 
 			},
 		},
 
-		activeReportingStep: 'featureSelection',
+		activeReportingStep: 'feature',
 		completedTasks: [],
 		featureSelectorForm: {
 			searchTerm: '',

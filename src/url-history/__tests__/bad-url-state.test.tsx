@@ -70,7 +70,7 @@ describe( '[Bad URL State]', () => {
 					issueTitle: '',
 				},
 				activePage: 'reportingFlow',
-				activeReportingStep: 'featureSelection',
+				activeReportingStep: 'feature',
 			} as RootState );
 
 			await setup( urlQuery );
@@ -118,7 +118,7 @@ describe( '[Bad URL State]', () => {
 					issueTitle: '',
 				},
 				activePage: 'reportingFlow',
-				activeReportingStep: 'nextSteps',
+				activeReportingStep: 'next-steps',
 				completedTasks: [ 'not-an-id' ],
 			} as RootState );
 
@@ -176,7 +176,7 @@ describe( '[Bad URL State]', () => {
 				issueType: 'bug',
 				issueTitle: '',
 			},
-			activeReportingStep: 'nextSteps',
+			activeReportingStep: 'next-steps',
 			activePage: 'reportingFlow',
 		} as RootState );
 

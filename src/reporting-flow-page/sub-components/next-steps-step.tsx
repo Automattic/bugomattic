@@ -28,8 +28,8 @@ export function NextStepsStep( { stepNumber }: Props ) {
 
 	const tasksExist = relevantTaskIds.length > 0;
 	const requiredInfoIsMissing =
-		( issueFeatureId === null || issueType === 'unset' ) && activeStep === 'nextSteps';
-	const noTasksAreConfigured = ! tasksExist && activeStep === 'nextSteps';
+		( issueFeatureId === null || issueType === 'unset' ) && activeStep === 'next-steps';
+	const noTasksAreConfigured = ! tasksExist && activeStep === 'next-steps';
 
 	const memoizedLogError = useLoggerWithCache( monitoringClient.logger.error, [
 		issueFeatureId,

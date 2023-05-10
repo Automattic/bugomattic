@@ -48,7 +48,7 @@ describe( '[StartOverBanner]', () => {
 	const startingState: RootState = {
 		...createFakeRootState(),
 		activePage: 'reportingFlow',
-		activeReportingStep: 'nextSteps',
+		activeReportingStep: 'next-steps',
 		issueDetails: {
 			issueType: 'bug',
 			featureId: expectedFeatureId,

@@ -21,12 +21,12 @@ export function FeatureSelectionStep( { stepNumber, goToNextStep }: Props ) {
 	const issueFeatureId = useAppSelector( selectIssueFeatureId );
 
 	const onEdit = useCallback( () => {
-		dispatch( setActiveReportingStep( 'featureSelection' ) );
+		dispatch( setActiveReportingStep( 'feature' ) );
 		dispatch( updateHistoryWithState() );
 		monitoringClient.analytics.recordEvent( 'feature_step_edit' );
 	}, [ dispatch, monitoringClient.analytics ] );
 
-	const isActive = activeStep === 'featureSelection';
+	const isActive = activeStep === 'feature';
 	const isComplete = issueFeatureId !== null && ! isActive;
 
 	let stepContentDisplay: ReactNode;

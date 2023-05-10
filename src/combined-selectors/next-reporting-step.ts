@@ -5,15 +5,15 @@ import { selectIssueFeatureId } from '../issue-details/issue-details-slice';
 export const selectNextReportingStep = createSelector(
 	[ selectActiveReportingStep, selectIssueFeatureId ],
 	( currentActiveStep, issueFeatureId ) => {
-		if ( currentActiveStep === 'featureSelection' || currentActiveStep === 'nextSteps' ) {
-			return 'nextSteps';
+		if ( currentActiveStep === 'feature' || currentActiveStep === 'next-steps' ) {
+			return 'next-steps';
 		}
 
 		// We are on the first step - selecting issue type
 		if ( issueFeatureId ) {
-			return 'nextSteps';
+			return 'next-steps';
 		}
 
-		return 'featureSelection';
+		return 'feature';
 	}
 );
