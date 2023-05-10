@@ -89,8 +89,13 @@ export function FeatureSelectorForm( { onContinue }: Props ) {
 		bottomPanelDisplay = null;
 	}
 
+	const subheader = `Explore the tree or use the search function to select a feature. The search results will include exact word matches from descriptions, as well as matches based on related keywords.`;
+
 	return (
 		<section className={ styles.sectionWrapper }>
+			<p data-testid={ 'subheader' } className={ styles.subheader }>
+				{ subheader }
+			</p>
 			<div className={ styles.searchWrapper }>
 				<DebouncedSearch
 					callback={ handleSearch }

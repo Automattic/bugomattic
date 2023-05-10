@@ -79,6 +79,8 @@ export function NextSteps() {
 		setShowConfetti( false );
 	}, [] );
 
+	const subheader = `Review the tasks listed below, carefully curated by our feature team. We've customized the links to speed up your reporting process`;
+
 	return (
 		<section ref={ sectionRef }>
 			{ showConfetti && (
@@ -92,6 +94,10 @@ export function NextSteps() {
 					onConfettiComplete={ handleConfettiComplete }
 				/>
 			) }
+
+			<p data-testid={ 'subheader' } className={ styles.subheader }>
+				{ subheader }
+			</p>
 			<ol aria-label="Steps to report issue" className={ styles.taskList }>
 				{ relevantTaskIds.map( ( taskId ) => (
 					<Task key={ taskId } taskId={ taskId } />

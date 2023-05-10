@@ -47,6 +47,7 @@ export function TypeForm( { onContinue }: Props ) {
 		}
 	};
 
+	const subheader = `Identify the type of issue you're reporting. The type you select will guide the reporting process.`;
 	const urgentDescriptionId = 'urgent-description';
 	const urgentIconId = 'urgent-icon';
 	const urgentDescription =
@@ -64,6 +65,9 @@ export function TypeForm( { onContinue }: Props ) {
 
 	return (
 		<form onSubmit={ handleSubmit } aria-label="Set issue type">
+			<p data-testid={ 'subheader' } className={ styles.subheader }>
+				{ subheader }
+			</p>
 			<fieldset className={ styles.typeFieldset }>
 				<legend className={ styles.typeLabel }>
 					<span>Type</span>

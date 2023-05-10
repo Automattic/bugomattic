@@ -184,6 +184,12 @@ input[type='checkbox'].taskCheckbox:checked::after {
 	margin-top: 1rem;
 }
 
+.subheader {
+	font-size: var( --font-body );
+	color: var( --color-text-light );
+	margin: 0 0 1.5rem 0;
+}
+
 @media only screen and ( max-width: 600px ) {
 	.moreInfoColumns {
 		flex-direction: column;
