@@ -11,6 +11,12 @@ interface Props {
 	className?: string;
 	inputAriaControls?: string;
 	inputAriaLabel?: string;
+	controlledInputState?: InputSearchState;
+}
+
+interface InputSearchState {
+	searchTerm: string;
+	setSearchTerm: ( searchTerm: string ) => void;
 }
 
 export function DebouncedSearch( {
@@ -21,8 +27,11 @@ export function DebouncedSearch( {
 	className,
 	inputAriaControls,
 	inputAriaLabel,
+	controlledInputState: searchStateProp,
 }: Props ) {
-	const [ searchTerm, setSearchTerm ] = useState( '' );
+	const [ localSearchTerm, localSetSearchTerm ] = useState( '' );
+	const searchTerm = searchStateProp?.searchTerm ?? localSearchTerm;
+	const setSearchTerm = searchStateProp?.setSearchTerm ?? localSetSearchTerm;
 	const [ lastEmittedSearchTerm, setLastEmittedSearchTerm ] = useState( '' );
 
 	const callCallback = useCallback(
