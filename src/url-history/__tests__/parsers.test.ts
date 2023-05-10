@@ -15,7 +15,7 @@ describe( 'url-history-parsers', () => {
 			issueDetails: {
 				issueType: 'bug',
 				featureId: 'test_feature_id',
-				issueTitle: '',
+				issueTitle: 'fake title',
 			},
 			featureSelectorForm: {
 				searchTerm: 'should be ignored',
@@ -27,8 +27,8 @@ describe( 'url-history-parsers', () => {
 			duplicateSearch: {
 				searchTerm: 'Test search term',
 				activeRepoFilters: [ 'test_repo_1', 'test_repo_2' ],
-				sort: 'relevance',
-				statusFilter: 'all',
+				sort: 'date-created',
+				statusFilter: 'open',
 			},
 			startOverCounter: 0,
 		};

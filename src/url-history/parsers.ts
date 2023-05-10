@@ -23,10 +23,32 @@ export function stateToQuery( state: RootState ) {
 	for ( const key of trackedStateKeys ) {
 		stateToSerialize[ key ] = state[ key ];
 	}
-	const query = qs.stringify( stateToSerialize );
+	const query = qs.stringify( stateToSerialize, {
+		filter( prefix, value ) {
+			if ( isFalsyOrEmpty( value ) ) {
+				return;
+			}
+
+			if ( defaultStateValues[ prefix ] === value ) {
+				return;
+			}
+
+			return value;
+		},
+	} );
 
 	return query;
 }
+
+function isFalsyOrEmpty( value: unknown ) {
+	return ! value || ( Array.isArray( value ) && value.length === 0 );
+}
+
+const defaultStateValues: { [ key: string ]: string } = {
+	'duplicateSearch[statusFilter]': 'all',
+	'duplicateSearch[sort]': 'relevance',
+	'issueDetails[issueType]': 'unset',
+};
 
 export function queryToState( query: string ): Partial< RootState > {
 	const queryObject = qs.parse( query, {
