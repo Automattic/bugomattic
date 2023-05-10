@@ -148,15 +148,9 @@ type SearchAction =
 // But, I think it will read nicely in the components.
 // E.g. dispatch( setSearchParam( setSearchTerm( 'foo' ) ) );
 export function setSearchParam( action: SearchAction ): AppThunk {
-	return ( dispatch, getState ) => {
+	return ( dispatch ) => {
 		dispatch( action );
 		dispatch( updateHistoryWithState() );
-
-		// We don't want to trigger any searches if we have an empty search term
-		const searchTerm = selectDuplicateSearchTerm( getState() );
-		if ( searchTerm.trim() !== '' ) {
-			dispatch( searchIssues() );
-		}
 	};
 }
 
@@ -178,4 +172,8 @@ export function selectStatusFilter( state: RootState ) {
 
 export function selectSort( state: RootState ) {
 	return state.duplicateSearch.sort;
+}
+
+export function selectDuplicateSearchParams( state: RootState ) {
+	return state.duplicateSearch;
 }

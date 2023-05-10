@@ -3,7 +3,6 @@ import { RootState } from '../app/store';
 import { searchIssues } from '../duplicate-search/duplicate-search-slice';
 import { DuplicateResultsState } from './types';
 import { startOver } from '../start-over/start-over-counter-slice';
-import { updateStateFromHistory } from '../url-history/actions';
 
 const initialState: DuplicateResultsState = {
 	results: [],
@@ -54,9 +53,6 @@ export const duplicateResultsSlice = createSlice( {
 				};
 			} )
 			.addCase( startOver, () => {
-				return { ...initialState };
-			} )
-			.addCase( updateStateFromHistory, () => {
 				return { ...initialState };
 			} );
 	},

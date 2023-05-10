@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { useAppSelector } from '../../app/hooks';
 import {
 	selectDuplicateRequestsWereMade,
@@ -9,16 +9,18 @@ export function useShowBanner() {
 	const resultsRequestStatus = useAppSelector( selectDuplicateResultsRequestStatus );
 	const requestsWereMade = useAppSelector( selectDuplicateRequestsWereMade );
 
-	const showBannerRef = useRef( false );
+	// We want to handle the case when we come back to the duplicate searching page.
+	// Since this is local state, we want to tie it back to the redux state.
+	const [ showBanner, setShowBanner ] = useState( requestsWereMade );
 
 	useEffect( () => {
 		if (
 			requestsWereMade &&
 			( resultsRequestStatus === 'fulfilled' || resultsRequestStatus === 'error' )
 		) {
-			showBannerRef.current = true;
+			setShowBanner( true );
 		}
 	}, [ requestsWereMade, resultsRequestStatus ] );
 
-	return showBannerRef.current;
+	return showBanner;
 }

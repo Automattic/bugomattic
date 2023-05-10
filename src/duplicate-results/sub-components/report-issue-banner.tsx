@@ -15,6 +15,8 @@ export function ReportIssueBanner() {
 	const dispatch = useAppDispatch();
 	const reportingIssueType = useAppSelector( selectIssueType );
 
+	console.log( 'Banner code called' );
+
 	const handleSimpleButtonClick = useCallback( () => {
 		dispatch( setActivePage( 'reportingFlow' ) );
 		dispatch( updateHistoryWithState() );

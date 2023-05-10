@@ -1,5 +1,5 @@
 import React, { ReactNode, useEffect, useRef, useState } from 'react';
-import { useAppSelector } from '../app/hooks';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
 import {
 	selectDuplicateResults,
 	selectDuplicateResultsRequestStatus,
@@ -13,20 +13,27 @@ import { ReactComponent as NoResultsIllustration } from '../common/svgs/missing-
 import { ReactComponent as ErrorIllustration } from '../common/svgs/warning-triangle.svg';
 import { LoadingIndicator } from '../common/components';
 import { selectDuplicateSearchFiltersAreActive } from '../combined-selectors/duplicate-search-filters-are-active';
-import { selectDuplicateSearchTerm } from '../duplicate-search/duplicate-search-slice';
+import {
+	searchIssues,
+	selectDuplicateSearchParams,
+} from '../duplicate-search/duplicate-search-slice';
 import { useMonitoring } from '../monitoring/monitoring-provider';
 import { useLoggerWithCache } from '../monitoring/use-logger-with-cache';
 
 export function DuplicateResults() {
+	const dispatch = useAppDispatch();
 	const results = useAppSelector( selectDuplicateResults );
 	const resultsRequestStatus = useAppSelector( selectDuplicateResultsRequestStatus );
 	const resultsRequestError = useAppSelector( selectDuplicateResultsRequestError );
 	const requestsWereMade = useAppSelector( selectDuplicateRequestsWereMade );
-	const searchTerm = useAppSelector( selectDuplicateSearchTerm );
 	const filtersAreActive = useAppSelector( selectDuplicateSearchFiltersAreActive );
 	const showBanner = useShowBanner();
 	const monitoringClient = useMonitoring();
 	const logError = useLoggerWithCache( monitoringClient.logger.error, [] );
+
+	const { searchTerm, sort, statusFilter, activeRepoFilters } = useAppSelector(
+		selectDuplicateSearchParams
+	);
 
 	// This ref and corresponding useEffect hook are used to preserve the height of the
 	// results container between searches. This keeps the UI from jumping around while searching.
@@ -44,10 +51,13 @@ export function DuplicateResults() {
 			const newHeight = resultsContainerContentRef.current?.clientHeight;
 			setResultsContainerContentHeightPx( newHeight );
 		}
-		// When we take a URL history action, we clear out the request information
-		// So adding "requestsWereMade" to the dependency array allows us to redraw
-		// the results container when we take browser navigation actions.
-	}, [ resultsRequestStatus, searchTerm, requestsWereMade ] );
+	}, [ resultsRequestStatus, searchTerm ] );
+
+	useEffect( () => {
+		if ( searchTerm.trim() !== '' ) {
+			dispatch( searchIssues() );
+		}
+	}, [ searchTerm, sort, statusFilter, activeRepoFilters, dispatch ] );
 
 	const resultsLimit = 20; // We can tweak this as needed!
 
