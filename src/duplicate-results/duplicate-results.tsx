@@ -44,7 +44,10 @@ export function DuplicateResults() {
 			const newHeight = resultsContainerContentRef.current?.clientHeight;
 			setResultsContainerContentHeightPx( newHeight );
 		}
-	}, [ resultsRequestStatus, searchTerm ] );
+		// When we take a URL history action, we clear out the request information
+		// So adding "requestsWereMade" to the dependency array allows us to redraw
+		// the results container when we take browser navigation actions.
+	}, [ resultsRequestStatus, searchTerm, requestsWereMade ] );
 
 	const resultsLimit = 20; // We can tweak this as needed!
 
