@@ -69,9 +69,9 @@ export function PageNavigationProvider( { children }: { children: React.ReactNod
 
 function getDocumentTitleForPage( activePage: ActivePage ): string {
 	switch ( activePage ) {
-		case 'duplicateSearching':
+		case 'duplicate-search':
 			return 'Bugomattic - Search for duplicates';
-		case 'reportingFlow':
+		case 'report-issue':
 			return 'Bugomattic - Report a new issue';
 		default:
 			return 'Bugomattic';

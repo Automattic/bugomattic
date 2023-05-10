@@ -53,7 +53,7 @@ export const ReportIssueDropdownMenu = forwardRef< HTMLElement, Props >(
 				// we may have defer more of these actions to calling components.
 				dispatch( setIssueType( issueType ) );
 				dispatch( setActiveReportingStep( nextReportingFlowStep ) );
-				dispatch( setActivePage( 'reportingFlow' ) );
+				dispatch( setActivePage( 'report-issue' ) );
 				dispatch( updateHistoryWithState() );
 
 				if ( additionalOnIssueTypeSelect ) {

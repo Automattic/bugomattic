@@ -43,29 +43,29 @@ export function AppNavbar() {
 		setFocusedMenuItem( menuItem );
 
 		switch ( menuItem ) {
-			case 'duplicateSearching':
+			case 'duplicate-search':
 				duplicateSearchingRef.current?.focus();
 				break;
-			case 'reportingFlow':
+			case 'report-issue':
 				currentReportIssueRef.current?.focus();
 				break;
 		}
 	};
 
 	const goToNextItem = () => {
-		focusMenuItem( 'reportingFlow' );
+		focusMenuItem( 'report-issue' );
 	};
 
 	const goToPreviousItem = () => {
-		focusMenuItem( 'duplicateSearching' );
+		focusMenuItem( 'duplicate-search' );
 	};
 
 	const goToFirstItem = () => {
-		focusMenuItem( 'duplicateSearching' );
+		focusMenuItem( 'duplicate-search' );
 	};
 
 	const goToLastItem = () => {
-		focusMenuItem( 'reportingFlow' );
+		focusMenuItem( 'report-issue' );
 	};
 
 	const handleKeyDown = ( event: React.KeyboardEvent< HTMLUListElement > ) => {
@@ -99,9 +99,9 @@ export function AppNavbar() {
 		<button
 			role="menuitem"
 			ref={ simpleReportIssueRef }
-			aria-current={ currentActivePage === 'reportingFlow' ? 'page' : undefined }
-			tabIndex={ focusedMenuItem === 'reportingFlow' ? 0 : -1 }
-			onClick={ handleMenuItemClick( 'reportingFlow' ) }
+			aria-current={ currentActivePage === 'report-issue' ? 'page' : undefined }
+			tabIndex={ focusedMenuItem === 'report-issue' ? 0 : -1 }
+			onClick={ handleMenuItemClick( 'report-issue' ) }
 			className={ styles.menuItem }
 		>
 			<span className={ styles.menuItemLabel }>Report an Issue</span>
@@ -112,8 +112,8 @@ export function AppNavbar() {
 		<ReportIssueDropdownMenu ref={ dropdownReportIssueRef }>
 			<button
 				role="menuitem"
-				aria-current={ currentActivePage === 'reportingFlow' ? 'page' : undefined }
-				tabIndex={ focusedMenuItem === 'reportingFlow' ? 0 : -1 }
+				aria-current={ currentActivePage === 'report-issue' ? 'page' : undefined }
+				tabIndex={ focusedMenuItem === 'report-issue' ? 0 : -1 }
 				className={ styles.menuItem }
 			>
 				<span className={ styles.menuItemLabel }>
@@ -140,9 +140,9 @@ export function AppNavbar() {
 					<button
 						role="menuitem"
 						ref={ duplicateSearchingRef }
-						aria-current={ currentActivePage === 'duplicateSearching' ? 'page' : undefined }
-						tabIndex={ focusedMenuItem === 'duplicateSearching' ? 0 : -1 }
-						onClick={ handleMenuItemClick( 'duplicateSearching' ) }
+						aria-current={ currentActivePage === 'duplicate-search' ? 'page' : undefined }
+						tabIndex={ focusedMenuItem === 'duplicate-search' ? 0 : -1 }
+						onClick={ handleMenuItemClick( 'duplicate-search' ) }
 						className={ styles.menuItem }
 					>
 						<span className={ styles.menuItemLabel }>Duplicate Search</span>

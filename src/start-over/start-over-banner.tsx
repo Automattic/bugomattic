@@ -59,12 +59,12 @@ function StartOverDropdownMenu() {
 	const menuOptions: MenuOption[] = [
 		{
 			label: 'Search for duplicates',
-			targetActivePage: 'duplicateSearching',
+			targetActivePage: 'duplicate-search',
 			icon: SearchIcon,
 		},
 		{
 			label: 'Report a new issue',
-			targetActivePage: 'reportingFlow',
+			targetActivePage: 'report-issue',
 			icon: PlusIcon,
 		},
 	];
