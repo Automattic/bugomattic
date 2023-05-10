@@ -7,11 +7,12 @@ import qs from 'qs';
 type KeyableRootState = Omit< RootState, keyof EmptyObject >;
 
 // If you want any redux state to be tracked in the URL, add the top level key here.
+// The order they are in is the order they will appear in the URL
 const trackedStateKeys: ( keyof KeyableRootState )[] = [
 	'activePage',
+	'activeReportingStep',
 	'duplicateSearch',
 	'issueDetails',
-	'activeReportingStep',
 	'completedTasks',
 ];
 
