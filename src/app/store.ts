@@ -18,6 +18,7 @@ import { duplicateResultsReducer } from '../duplicate-results/duplicate-results-
 import { activePageReducer } from '../active-page/active-page-slice';
 import { availableRepoFiltersReducer } from '../static-data/available-repo-filters/available-repo-filters-slice';
 import { surfaceStaticDataMiddleware } from '../static-data/static-data-middleware';
+import { urlHistoryPopCounterReducer } from '../url-history/pop-counter-slice';
 
 function createRootReducer() {
 	return combineReducers( {
@@ -31,6 +32,7 @@ function createRootReducer() {
 		duplicateSearch: duplicateSearchReducer,
 		duplicateResults: duplicateResultsReducer,
 		activePage: activePageReducer,
+		urlHistoryPopCounter: urlHistoryPopCounterReducer,
 	} );
 }
 
