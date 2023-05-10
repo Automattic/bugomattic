@@ -25,6 +25,11 @@ export function stateToQuery( state: RootState ) {
 		stateToSerialize[ key ] = state[ key ];
 	}
 	const query = qs.stringify( stateToSerialize, {
+		// Dots read WAY nicer for objects. We don't have to encode them!
+		allowDots: true,
+		// To keep the URL clean, we only store relevant state values.
+		// This means we skip anything falsy/empty, and avoid defaults that aren't meaningful.
+		// It is up the reducer to provide defaults and to handle missing values.
 		filter( prefix, value ) {
 			if ( isFalsyOrEmpty( value ) ) {
 				return;
@@ -46,14 +51,16 @@ function isFalsyOrEmpty( value: unknown ) {
 }
 
 const defaultStateValues: { [ key: string ]: string } = {
-	'duplicateSearch[statusFilter]': 'all',
-	'duplicateSearch[sort]': 'relevance',
-	'issueDetails[issueType]': 'unset',
+	'duplicateSearch.statusFilter': 'all',
+	'duplicateSearch.sort': 'relevance',
+	'issueDetails.issueType': 'unset',
 };
 
 export function queryToState( query: string ): Partial< RootState > {
 	const queryObject = qs.parse( query, {
 		ignoreQueryPrefix: true,
+		// Dots read WAY nicer for objects. We don't have to encode them!
+		allowDots: true,
 		// Adding the ability to store and read booleans/nulls/undefineds.
 		// For now, we'll parse numbers as strings. We don't really use numbers in our state.
 		// See discussion here: https://github.com/ljharb/qs/issues/91
