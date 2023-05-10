@@ -39,11 +39,12 @@ export function MatchedTermsDisplay( {
 		<span className={ styles.termMatchesWrapper }>
 			<Pill key={ matchType } highlightClassName={ styles.matchedPill }>
 				<MatchIcon data-testid="match-icon" aria-hidden={ true } className={ styles.appIcon } />
+				{ `${ matchType } match: ` }
 				<TextMatchHighlighter
 					textMatch={ searchTermRegExp }
 					highlightClassName={ styles.searchSubstringMatch }
 				>
-					{ `${ matchType } match: ${ matches }` }
+					{ matches }
 				</TextMatchHighlighter>
 			</Pill>
 		</span>
