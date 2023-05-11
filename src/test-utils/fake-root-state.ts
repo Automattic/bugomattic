@@ -30,7 +30,6 @@ export function createFakeRootState( partialState: Partial< RootState > = {} ): 
 			issueTitle: '',
 		},
 		startOverCounter: 0,
-		urlHistoryPopCounter: 0,
 
 		duplicateSearch: {
 			searchTerm: '',
