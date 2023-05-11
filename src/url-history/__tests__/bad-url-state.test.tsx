@@ -5,7 +5,7 @@ import { createMockApiClient } from '../../test-utils/mock-api-client';
 import { renderWithProviders } from '../../test-utils/render-with-providers';
 import { App } from '../../app/app';
 import { waitForElementToBeRemoved, screen } from '@testing-library/react';
-import { ReportingConfigApiResponse } from '../../api/types';
+import { AvailableRepoFiltersApiResponse, ReportingConfigApiResponse } from '../../api/types';
 import { stateToQuery } from '../parsers';
 import { RootState } from '../../app/store';
 import { normalizeReportingConfig } from '../../static-data/reporting-config/reporting-config-parsers';
@@ -32,10 +32,13 @@ describe( '[Bad URL State]', () => {
 	const normalizedReference = normalizeReportingConfig( fakeReportingConfigApiResponse );
 	const expectedFeatureId = Object.keys( normalizedReference.features )[ 0 ];
 
+	const fakeAvailableRepoFiltersResponse: AvailableRepoFiltersApiResponse = [ 'fakeOrg/fakeRepo' ];
+
 	async function setup( urlQuery: string ) {
 		history.replace( `?${ urlQuery }` );
 		const apiClient = createMockApiClient();
-		apiClient.loadReportingConfig = jest.fn().mockResolvedValue( fakeReportingConfigApiResponse );
+		apiClient.loadReportingConfig.mockResolvedValue( fakeReportingConfigApiResponse );
+		apiClient.loadAvailableRepoFilters.mockResolvedValue( fakeAvailableRepoFiltersResponse );
 		renderWithProviders( <App />, { apiClient } );
 		await waitForElementToBeRemoved(
 			screen.queryByRole( 'alert', { name: 'Loading required app data' } )
@@ -57,6 +60,31 @@ describe( '[Bad URL State]', () => {
 		expect(
 			screen.queryByRole( 'alert', { name: 'Uh oh! Something went wrong :(' } )
 		).not.toBeInTheDocument();
+	}
+
+	function validateDefaultDuplicateSearchState() {
+		// Page
+		expect(
+			screen.getByRole( 'heading', { name: 'Search for duplicate issues' } )
+		).toBeInTheDocument();
+
+		// Controls
+		expect( screen.getByRole( 'textbox', { name: 'Search for duplicate issues' } ) ).toHaveValue(
+			''
+		);
+		expect( screen.getByRole( 'option', { name: 'All', selected: true } ) ).toBeInTheDocument();
+		expect( screen.getByRole( 'button', { name: 'Repository filter' } ) ).toHaveAttribute(
+			'data-active',
+			'false'
+		);
+		expect( screen.getByRole( 'combobox', { name: 'Sort results by…' } ) ).toHaveTextContent(
+			'Relevance'
+		);
+
+		// Results
+		expect(
+			screen.getByRole( 'heading', { name: 'Enter some keywords to search for duplicates.' } )
+		).toBeInTheDocument();
 	}
 
 	describe( 'Falls back to initial state when recieves bad URL state with...', () => {
@@ -128,7 +156,24 @@ describe( '[Bad URL State]', () => {
 			expect( screen.queryByRole( 'checkbox', { checked: true } ) ).not.toBeInTheDocument();
 		} );
 
-		test( 'Invalid types for all the tracked state fields', async () => {
+		test( 'Duplicate search options that are invalid options', async () => {
+			const urlQuery = stateToQuery( {
+				duplicateSearch: {
+					searchTerm: [],
+					activeRepoFilters: [ 'not-available-repo' ],
+					sort: 'not-a-valid-sort-option',
+					statusFilter: 'not-a-valid-status-filter',
+				} as any,
+			} as RootState );
+
+			await setup( urlQuery );
+
+			expectNoErrorThrown();
+
+			validateDefaultDuplicateSearchState();
+		} );
+
+		test( 'Invalid types for all the top-level tracked state fields', async () => {
 			const urlQuery = stateToQuery( {
 				issueDetails: { foo: 'bar' } as any,
 				activeReportingStep: { foo: 'bar' } as any,
@@ -141,14 +186,10 @@ describe( '[Bad URL State]', () => {
 
 			expectNoErrorThrown();
 
-			// Basically the default starting look of the app.
-			expect(
-				screen.getByRole( 'heading', { name: 'Search for duplicate issues' } )
-			).toBeInTheDocument();
-			// TODO: Expand the duplcicate assertions here, and find ways to assert the default look of the reporting flow too.
+			validateDefaultDuplicateSearchState();
 		} );
 
-		test( 'Undefined for all the tracked state fields', async () => {
+		test( 'Undefined for all the top-level tracked state fields', async () => {
 			const urlQuery = stateToQuery( {
 				issueDetails: undefined as any,
 				activeReportingStep: undefined as any,
@@ -161,11 +202,7 @@ describe( '[Bad URL State]', () => {
 
 			expectNoErrorThrown();
 
-			// Basically the default starting look of the app.
-			expect(
-				screen.getByRole( 'heading', { name: 'Search for duplicate issues' } )
-			).toBeInTheDocument();
-			// TODO: Expand the duplcicate assertions here, and find ways to assert the default look of the reporting flow too.
+			validateDefaultDuplicateSearchState();
 		} );
 	} );
 

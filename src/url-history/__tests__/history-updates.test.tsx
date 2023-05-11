@@ -9,9 +9,19 @@ import React from 'react';
 import { createMockApiClient } from '../../test-utils/mock-api-client';
 import { renderWithProviders } from '../../test-utils/render-with-providers';
 import { UserEvent } from '@testing-library/user-event/dist/types/setup/setup';
-import { ReportingConfigApiResponse } from '../../api/types';
+import {
+	AvailableRepoFiltersApiResponse,
+	ReportingConfigApiResponse,
+	SearchIssueOptions,
+} from '../../api/types';
 import { App } from '../../app/app';
 import history from 'history/browser';
+import {
+	DuplicateSearchState,
+	IssueSortOption,
+	IssueStatusFilter,
+} from '../../duplicate-search/types';
+import { Issue } from '../../duplicate-results/types';
 
 globalThis.scrollTo = jest.fn();
 
@@ -48,10 +58,18 @@ describe( 'history updates', () => {
 			},
 		},
 	};
+	const fakeAvailableRepoFiltersResponse: AvailableRepoFiltersApiResponse = [ 'fakeOrg/fakeRepo' ];
+	const newSearchTerm = 'foo';
+	const newStatusFilter: IssueStatusFilter = 'open';
+	const newRepoFilters: string[] = [ ...fakeAvailableRepoFiltersResponse ];
+	const newSort: IssueSortOption = 'date-created';
 
-	// TODO: Expand with some more steps in duplicate searching
 	const pointsInTime = [
 		'onStart',
+		'onSearchTermChange',
+		'onStatusFilterChange',
+		'onRepoFilterChange',
+		'onSortChange',
 		'onReportingFlowStart',
 		'onFeatureSelectionComplete',
 		'onFirstTaskComplete',
@@ -63,13 +81,135 @@ describe( 'history updates', () => {
 
 	type PointInTime = typeof pointsInTime[ number ];
 
+	function createFakeIssueContentFromSearchState( searchState: DuplicateSearchState ) {
+		const { searchTerm, statusFilter, activeRepoFilters, sort } = searchState;
+
+		return `search:${ searchTerm } status:${ statusFilter } repos:${ activeRepoFilters.join(
+			','
+		) } sort:${ sort }`;
+	}
+
+	const mockSearchIssuesImplementation = async ( search: string, options?: SearchIssueOptions ) => {
+		const fakeIssue: Issue = {
+			title: 'fake title',
+			url: 'https://github.com/test/test/issues/1',
+			content: createFakeIssueContentFromSearchState( {
+				searchTerm: search,
+				statusFilter: options?.status || 'all',
+				activeRepoFilters: options?.repos || [],
+				sort: options?.sort || 'relevance',
+			} ),
+			status: 'open',
+			dateCreated: new Date().toISOString(),
+			dateUpdated: new Date().toISOString(),
+			author: 'fake author',
+			repo: 'fakeOrg/fakeRepo',
+		};
+
+		return [ fakeIssue ];
+	};
+
+	function toTitleCase( str: string ) {
+		return str.charAt( 0 ).toUpperCase() + str.slice( 1 );
+	}
+
+	function validateSearchControlsForExpectedState( searchState: DuplicateSearchState ) {
+		const { searchTerm, statusFilter, activeRepoFilters, sort } = searchState;
+
+		expect( screen.getByRole( 'textbox', { name: 'Search for duplicate issues' } ) ).toHaveValue(
+			searchTerm
+		);
+
+		expect(
+			screen.getByRole( 'option', { name: toTitleCase( statusFilter ), selected: true } )
+		).toBeInTheDocument();
+
+		expect( screen.getByRole( 'button', { name: 'Repository filter' } ) ).toHaveAttribute(
+			'data-active',
+			activeRepoFilters.length > 0 ? 'true' : 'false'
+		);
+
+		const expectedSortText = sort === 'relevance' ? 'Relevance' : 'Date added';
+		expect( screen.getByRole( 'combobox', { name: 'Sort results by…' } ) ).toHaveTextContent(
+			expectedSortText
+		);
+	}
+
+	function validateSearchResultsForExpectedState( searchState: DuplicateSearchState ) {
+		if ( searchState.searchTerm === '' ) {
+			expect(
+				screen.getByRole( 'heading', { name: 'Enter some keywords to search for duplicates.' } )
+			).toBeInTheDocument();
+		} else {
+			expect(
+				screen.getByText( createFakeIssueContentFromSearchState( searchState ) )
+			).toBeInTheDocument();
+		}
+	}
+
 	const validations: { [ key in PointInTime ]: () => Promise< void > } = {
 		onStart: async () => {
 			expect(
 				screen.getByRole( 'heading', { name: 'Search for duplicate issues' } )
 			).toBeInTheDocument();
 
-			expect( screen.queryByRole( 'form', { name: 'Set issue type' } ) ).not.toBeInTheDocument();
+			const expectedSearchState: DuplicateSearchState = {
+				searchTerm: '',
+				statusFilter: 'all',
+				activeRepoFilters: [],
+				sort: 'relevance',
+			};
+
+			validateSearchControlsForExpectedState( expectedSearchState );
+			validateSearchResultsForExpectedState( expectedSearchState );
+		},
+
+		onSearchTermChange: async () => {
+			const expectedSearchState: DuplicateSearchState = {
+				searchTerm: newSearchTerm,
+				statusFilter: 'all',
+				activeRepoFilters: [],
+				sort: 'relevance',
+			};
+
+			validateSearchControlsForExpectedState( expectedSearchState );
+			validateSearchResultsForExpectedState( expectedSearchState );
+		},
+
+		onStatusFilterChange: async () => {
+			const expectedSearchState: DuplicateSearchState = {
+				searchTerm: newSearchTerm,
+				statusFilter: newStatusFilter,
+				activeRepoFilters: [],
+				sort: 'relevance',
+			};
+
+			validateSearchControlsForExpectedState( expectedSearchState );
+			validateSearchResultsForExpectedState( expectedSearchState );
+		},
+
+		onRepoFilterChange: async () => {
+			const expectedSearchState: DuplicateSearchState = {
+				searchTerm: newSearchTerm,
+				statusFilter: newStatusFilter,
+				activeRepoFilters: newRepoFilters,
+				sort: 'relevance',
+			};
+
+			validateSearchControlsForExpectedState( expectedSearchState );
+			validateSearchResultsForExpectedState( expectedSearchState );
+		},
+
+		onSortChange: async () => {
+			const expectedSearchState: DuplicateSearchState = {
+				searchTerm: newSearchTerm,
+				statusFilter: newStatusFilter,
+				activeRepoFilters: newRepoFilters,
+				sort: newSort,
+			};
+
+			validateSearchControlsForExpectedState( expectedSearchState );
+			validateSearchResultsForExpectedState( expectedSearchState );
 		},
 
 		onReportingFlowStart: async () => {
@@ -157,6 +297,10 @@ describe( 'history updates', () => {
 
 	const referenceUrlQueries: { [ key in PointInTime ]: string } = {
 		onStart: 'WILL BE SET IN TEST',
+		onSearchTermChange: 'WILL BE SET IN TEST',
+		onStatusFilterChange: 'WILL BE SET IN TEST',
+		onRepoFilterChange: 'WILL BE SET IN TEST',
+		onSortChange: 'WILL BE SET IN TEST',
 		onReportingFlowStart: 'WILL BE SET IN TEST',
 		onFeatureSelectionComplete: 'WILL BE SET IN TEST',
 		onFirstTaskComplete: 'WILL BE SET IN TEST',
@@ -170,7 +314,9 @@ describe( 'history updates', () => {
 	beforeAll( async () => {
 		const apiClient = createMockApiClient();
 		user = userEvent.setup();
-		apiClient.loadReportingConfig = jest.fn().mockResolvedValue( fakeReportingConfigApiResponse );
+		apiClient.loadReportingConfig.mockResolvedValue( fakeReportingConfigApiResponse );
+		apiClient.loadAvailableRepoFilters.mockResolvedValue( fakeAvailableRepoFiltersResponse );
+		apiClient.searchIssues.mockImplementation( mockSearchIssuesImplementation );
 		// eslint-disable-next-line testing-library/no-render-in-setup
 		renderWithProviders( <App />, { apiClient } );
 		await waitForElementToBeRemoved(
@@ -184,6 +330,54 @@ describe( 'history updates', () => {
 			referenceUrlQueries.onStart = history.location.search;
 		} );
 
+		test( 'onSearchTermChange', async () => {
+			await user.click( screen.getByRole( 'textbox', { name: 'Search for duplicate issues' } ) );
+			await user.keyboard( newSearchTerm );
+			await user.keyboard( '{enter}' );
+
+			await validations.onSearchTermChange();
+
+			referenceUrlQueries.onSearchTermChange = history.location.search;
+			expect( referenceUrlQueries.onSearchTermChange ).not.toBe( referenceUrlQueries.onStart );
+		} );
+
+		test( 'onStatusFilterChange', async () => {
+			await user.click( screen.getByRole( 'option', { name: 'Open' } ) );
+
+			await validations.onStatusFilterChange();
+
+			referenceUrlQueries.onStatusFilterChange = history.location.search;
+			expect( referenceUrlQueries.onStatusFilterChange ).not.toBe(
+				referenceUrlQueries.onSearchTermChange
+			);
+		} );
+
+		test( 'onRepoFilterChange', async () => {
+			await user.click( screen.getByRole( 'button', { name: 'Repository filter' } ) );
+			await user.click( screen.getByRole( 'option', { name: 'Manual' } ) );
+			await user.click(
+				screen.getByRole( 'checkbox', { name: newRepoFilters[ 0 ].split( '/' )[ 1 ] } )
+			);
+			await user.click( screen.getByRole( 'button', { name: 'Filter' } ) );
+
+			await validations.onRepoFilterChange();
+
+			referenceUrlQueries.onRepoFilterChange = history.location.search;
+			expect( referenceUrlQueries.onRepoFilterChange ).not.toBe(
+				referenceUrlQueries.onStatusFilterChange
+			);
+		} );
+
+		test( 'onSortChange', async () => {
+			await user.click( screen.getByRole( 'combobox', { name: 'Sort results by…' } ) );
+			await user.click( screen.getByRole( 'option', { name: 'Date added' } ) );
+
+			await validations.onSortChange();
+
+			referenceUrlQueries.onSortChange = history.location.search;
+			expect( referenceUrlQueries.onSortChange ).not.toBe( referenceUrlQueries.onRepoFilterChange );
+		} );
+
 		test( 'onReportingFlowStart', async () => {
 			await user.click( screen.getByRole( 'menuitem', { name: 'Report an Issue' } ) );
 			await user.click( screen.getByRole( 'menuitem', { name: 'Request a new feature' } ) );
@@ -191,7 +385,9 @@ describe( 'history updates', () => {
 			await validations.onReportingFlowStart();
 
 			referenceUrlQueries.onReportingFlowStart = history.location.search;
-			expect( referenceUrlQueries.onReportingFlowStart ).not.toBe( referenceUrlQueries.onStart );
+			expect( referenceUrlQueries.onReportingFlowStart ).not.toBe(
+				referenceUrlQueries.onSortChange
+			);
 		} );
 
 		test( 'onFeatureSelectionComplete', async () => {
@@ -285,6 +481,8 @@ describe( 'history updates', () => {
 			history.replace( urlQuery );
 			const apiClient = createMockApiClient();
 			apiClient.loadReportingConfig = jest.fn().mockResolvedValue( fakeReportingConfigApiResponse );
+			apiClient.loadAvailableRepoFilters.mockResolvedValue( fakeAvailableRepoFiltersResponse );
+			apiClient.searchIssues.mockImplementation( mockSearchIssuesImplementation );
 			renderWithProviders( <App />, { apiClient } );
 			await waitForElementToBeRemoved(
 				screen.queryByRole( 'alert', { name: 'Loading required app data' } )

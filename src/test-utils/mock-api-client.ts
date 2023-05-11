@@ -1,11 +1,18 @@
-import { AvailableRepoFiltersApiResponse, SearchIssueApiResponse } from '../api/types';
+import {
+	AvailableRepoFiltersApiResponse,
+	SearchIssueApiResponse,
+	SearchIssueOptions,
+} from '../api/types';
 
 export function createMockApiClient() {
 	return {
 		loadReportingConfig: jest.fn( async () => {
 			return {};
 		} ),
-		searchIssues: jest.fn( async () => [] as SearchIssueApiResponse ),
+		searchIssues: jest.fn(
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+			async ( _search: string, _options?: SearchIssueOptions ) => [] as SearchIssueApiResponse
+		),
 		loadAvailableRepoFilters: jest.fn( async () => [] as AvailableRepoFiltersApiResponse ),
 	};
 }
