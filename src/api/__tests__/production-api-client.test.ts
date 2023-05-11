@@ -6,6 +6,7 @@ import {
 	SearchIssueApiResponse,
 } from '../types';
 import { LogPayload } from '../../monitoring/types';
+import { _clearSearchIssuesCache } from '../shared-helpers/search-issues-cache';
 
 describe( '[ProductionApiClient]', () => {
 	const fakeNonce = 'abc123';
@@ -208,6 +209,10 @@ describe( '[ProductionApiClient]', () => {
 	} );
 
 	describe( 'searchIssues()', () => {
+		beforeEach( () => {
+			_clearSearchIssuesCache();
+		} );
+
 		test( 'Calls the correct endpoint and returns the issue list', async () => {
 			const apiClient = createProductionApiClient();
 			const issues = await apiClient.searchIssues( 'test' );

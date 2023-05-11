@@ -46,6 +46,11 @@ describe( '[DuplicateSearchControls]', () => {
 			},
 		} );
 
+		if ( preLoadedState?.duplicateSearch ) {
+			// When we start with pre-loaded state, we kick off an initial search.
+			apiClient.searchIssues.mockClear();
+		}
+
 		return {
 			user,
 			apiClient,

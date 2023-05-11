@@ -106,6 +106,7 @@ describe( '[DuplicateSearchingPage]', () => {
 			apiClient.searchIssues.mockResolvedValue( [] );
 
 			await search( user, 'foo' );
+
 			expect(
 				await screen.findByRole( 'heading', { name: 'No results found.' } )
 			).toBeInTheDocument();
@@ -157,7 +158,10 @@ describe( '[DuplicateSearchingPage]', () => {
 	describe( 'Report an issue banner', () => {
 		// Since this banner involves navigation to another page, it makes sense to render the whole app.
 		async function setup( preloadedState?: Partial< RootState > ) {
+			// Clear old history
+			history.replace( '' );
 			if ( preloadedState ) {
+				// Set the new one if needed
 				const preloadedStateInUrl = stateToQuery( preloadedState as RootState );
 				history.replace( `?${ preloadedStateInUrl }` );
 			}

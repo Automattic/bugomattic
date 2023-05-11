@@ -1,8 +1,16 @@
 import React from 'react';
-import { DuplicateSearchInput, RepoFilter, SortSelect, StatusFilter } from './sub-components';
+import {
+	DuplicateSearchInput,
+	RepoFilter,
+	SortSelect,
+	StatusFilter,
+	useSearchIssuesOnParamChange,
+} from './sub-components';
 import styles from './duplicate-search-controls.module.css';
 
 export function DuplicateSearchControls() {
+	useSearchIssuesOnParamChange();
+
 	return (
 		<section>
 			<div className={ styles.searchWrapper }>

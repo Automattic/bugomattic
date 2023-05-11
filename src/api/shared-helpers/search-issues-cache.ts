@@ -11,8 +11,8 @@ interface SearchParams {
 
 const MAX_CACHE_SIZE = 25;
 
-export const searchIssuesCache: SearchIssuesCache = {};
-const cacheKeyQueue: string[] = [];
+let searchIssuesCache: SearchIssuesCache = {};
+let cacheKeyQueue: string[] = [];
 
 export function getSearchIssuesCache( {
 	search,
@@ -39,4 +39,9 @@ export function setSearchIssuesCache(
 
 function serializeParams( params: SearchParams ): string {
 	return JSON.stringify( params );
+}
+
+export function _clearSearchIssuesCache(): void {
+	searchIssuesCache = {};
+	cacheKeyQueue = [];
 }

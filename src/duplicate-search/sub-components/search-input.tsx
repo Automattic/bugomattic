@@ -12,6 +12,15 @@ export function DuplicateSearchInput() {
 	const reduxSearchTerm = useAppSelector( selectDuplicateSearchTerm );
 	const [ inputSearchTerm, setInputSearchTerm ] = useState( reduxSearchTerm );
 
+	// This is the main reason why we are controlling the local input state here, rather than
+	// leaving it as "uncontrolled" (contained in the DebouncedSearch component).
+	// We want to keep the value of the input in sync with the redux state, mostly for changes that come
+	// from URL history changes.
+	useEffect( () => {
+		setInputSearchTerm( reduxSearchTerm );
+	}, [ reduxSearchTerm ] );
+
+	// Because this is passed as object, it's essential to memoize to prevent unnecessary re-renders.
 	const controlledInputState = useMemo( () => {
 		return {
 			searchTerm: inputSearchTerm,
@@ -19,16 +28,13 @@ export function DuplicateSearchInput() {
 		};
 	}, [ inputSearchTerm ] );
 
+	// This callback must be memoized for the debouncing to work!
 	const handleSearchTermEmitted = useCallback(
 		( searchTerm: string ) => {
 			dispatch( setSearchParam( setSearchTerm( searchTerm ) ) );
 		},
 		[ dispatch ]
 	);
-
-	useEffect( () => {
-		setInputSearchTerm( reduxSearchTerm );
-	}, [ reduxSearchTerm ] );
 
 	return (
 		<DebouncedSearch
