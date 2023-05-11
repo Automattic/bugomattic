@@ -1,12 +1,13 @@
 // Redux slice for duplicate search
 
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, Middleware, PayloadAction } from '@reduxjs/toolkit';
 import { ApiClient, SearchIssueApiResponse } from '../api/types';
-import { AppThunk, RootState } from '../app/store';
+import { AppDispatch, AppThunk, RootState } from '../app/store';
 import { ActionWithStaticData } from '../static-data/types';
 import { updateHistoryWithState, updateStateFromHistory } from '../url-history/actions';
 import { DuplicateSearchState, IssueSortOption, IssueStatusFilter } from './types';
 import { startOver } from '../start-over/start-over-counter-slice';
+import deepEqual from 'deep-equal';
 
 const initialState: DuplicateSearchState = {
 	searchTerm: '',
@@ -177,3 +178,41 @@ export function selectSort( state: RootState ) {
 export function selectDuplicateSearchParams( state: RootState ) {
 	return state.duplicateSearch;
 }
+
+const searchTriggeringActions: Set< string > = new Set( [
+	setSearchTerm.type,
+	setActiveRepoFilters.type,
+	setStatusFilter.type,
+	setSort.type,
+	updateStateFromHistory.type,
+] );
+
+export const searchIssuesMiddleware: Middleware< {}, RootState > =
+	( store ) => ( next ) => ( action ) => {
+		if ( ! searchTriggeringActions.has( action.type ) ) {
+			return next( action );
+		}
+
+		const startingSearchParams = selectDuplicateSearchParams( store.getState() );
+		next( action );
+		const newSearchParams = selectDuplicateSearchParams( store.getState() );
+
+		const searchParamsDidNotChangeFromHistoryUpdate =
+			action.type === updateStateFromHistory.type &&
+			deepEqual( startingSearchParams, newSearchParams );
+
+		if ( searchParamsDidNotChangeFromHistoryUpdate ) {
+			// We don't want to fire off a search on every history update, that would be a lot!
+			// We only care if the history change actually affected the search param state.
+			return;
+		}
+
+		// For all other search parameter actions, we want to always search, even if they don't change!
+		// This is consistent with common search engine behavior. Even if the user enters the same search content as before,
+		// they expect a new search to fire.
+		if ( newSearchParams.searchTerm.trim() !== '' ) {
+			// Deferring the typing here so there's not a circular type dependency with the store.
+			const dispatch = store.dispatch as AppDispatch;
+			dispatch( searchIssues() );
+		}
+	};

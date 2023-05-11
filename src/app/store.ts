@@ -13,7 +13,10 @@ import { completedTasksReducer } from '../next-steps/completed-tasks-slice';
 import { activeReportingStepReducer } from '../reporting-flow-page/active-reporting-step-slice';
 import { urlHistoryMiddleware, registerHistoryListener } from '../url-history/redux-handlers';
 import { startOverCounterReducer } from '../start-over/start-over-counter-slice';
-import { duplicateSearchReducer } from '../duplicate-search/duplicate-search-slice';
+import {
+	duplicateSearchReducer,
+	searchIssuesMiddleware,
+} from '../duplicate-search/duplicate-search-slice';
 import { duplicateResultsReducer } from '../duplicate-results/duplicate-results-slice';
 import { activePageReducer } from '../active-page/active-page-slice';
 import { availableRepoFiltersReducer } from '../static-data/available-repo-filters/available-repo-filters-slice';
@@ -46,7 +49,7 @@ export function setupStore( apiClient: ApiClient, preloadedState?: PreloadedStat
 				thunk: {
 					extraArgument: { apiClient },
 				},
-			} ).concat( surfaceStaticDataMiddleware, urlHistoryMiddleware ),
+			} ).concat( surfaceStaticDataMiddleware, urlHistoryMiddleware, searchIssuesMiddleware ),
 		preloadedState,
 	} );
 
