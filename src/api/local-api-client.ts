@@ -29,7 +29,6 @@ export const localApiClient: ApiClient = {
 	},
 
 	searchIssues: async ( search, options ) => {
-		console.log( 'search called' );
 		const cachedResponse = getSearchIssuesCache( { search, options } );
 		if ( cachedResponse ) {
 			return cachedResponse;
