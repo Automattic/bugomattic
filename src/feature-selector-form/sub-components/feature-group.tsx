@@ -20,7 +20,7 @@ interface Props {
 export function FeatureGroup( { id }: Props ) {
 	const { featureGroups } = useAppSelector( selectNormalizedReportingConfig );
 	const { name, featureIds, description } = featureGroups[ id ];
-	const { matchedDescriptionTerms, strongestDescriptionMatch } = useAppSelector( ( state ) => ( {
+	const { matchedDescriptionTerms } = useAppSelector( ( state ) => ( {
 		matchedDescriptionTerms: selectMatchedDescriptionTerms( state, 'featureGroup', id ),
 		strongestDescriptionMatch: selectStrongestDescriptionMatch( state, 'featureGroup', id ),
 	} ) );
@@ -38,12 +38,7 @@ export function FeatureGroup( { id }: Props ) {
 		labelDisplay = (
 			<>
 				{ label }
-				<MatchedTermsDisplay
-					searchTerm={ searchTerm }
-					matchedTerms={ matchedDescriptionTerms }
-					strongestMatchTerm={ strongestDescriptionMatch }
-					matchType={ 'description' }
-				/>
+				<MatchedTermsDisplay searchTerm={ searchTerm } matchType={ 'description' } />
 			</>
 		);
 	}

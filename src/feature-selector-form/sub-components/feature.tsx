@@ -32,7 +32,7 @@ export function Feature( { id }: Props ) {
 	const productName = productId ? products[ productId ].name : 'Unknown';
 	const { name: featureName } = features[ id ];
 	const { keywords, description } = features[ id ];
-	const { matchedDescriptionTerms, strongestDescriptionMatch } = useAppSelector( ( state ) => ( {
+	const { matchedDescriptionTerms } = useAppSelector( ( state ) => ( {
 		matchedDescriptionTerms: selectMatchedDescriptionTerms( state, 'feature', id ),
 		strongestDescriptionMatch: selectStrongestDescriptionMatch( state, 'feature', id ),
 	} ) );
@@ -61,22 +61,13 @@ export function Feature( { id }: Props ) {
 			if ( matchingKeyword ) {
 				matchedDisplay = (
 					<>
-						<MatchedTermsDisplay
-							searchTerm={ searchTerm }
-							matchedTerms={ [ matchingKeyword ] }
-							matchType={ 'keyword' }
-						/>
+						<MatchedTermsDisplay searchTerm={ searchTerm } matchType={ 'keyword' } />
 					</>
 				);
 			} else if ( description && matchedDescriptionTerms.length ) {
 				matchedDisplay = (
 					<>
-						<MatchedTermsDisplay
-							searchTerm={ searchTerm }
-							matchedTerms={ matchedDescriptionTerms }
-							strongestMatchTerm={ strongestDescriptionMatch }
-							matchType={ 'description' }
-						/>
+						<MatchedTermsDisplay searchTerm={ searchTerm } matchType={ 'description' } />
 					</>
 				);
 			}

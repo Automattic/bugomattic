@@ -196,7 +196,7 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 			// around the accessible name for the keyword match result. This doesn't reproduce in an actual browser.
 			// We work around by checking out the text node.
 			expect( screen.getByRole( 'option', { name: /VWX Feature/ } ) ).toHaveTextContent(
-				'keyword match: YZZ Keyword'
+				'keyword match'
 			);
 			expect(
 				screen.getByRole( 'button', { expanded: false, name: 'PQR Product' } )
@@ -212,7 +212,7 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 			).toBeInTheDocument();
 
 			expect( screen.getByRole( 'button', { name: /ABC Product/ } ) ).toHaveTextContent(
-				'description match: traffic'
+				'description match'
 			);
 
 			// Test important exclusions
@@ -231,7 +231,7 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 
 			expect(
 				screen.getByRole( 'button', { expanded: false, name: /DEF Group/ } )
-			).toHaveTextContent( 'description match: site, backup' );
+			).toHaveTextContent( 'description match' );
 
 			expect(
 				screen.getByRole( 'button', { expanded: false, name: /ABC Product/ } )
@@ -263,7 +263,7 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 			await search( user, 'blog posts' );
 
 			expect( screen.getByRole( 'option', { name: /STU Feature/ } ) ).toHaveTextContent(
-				'description match: blog, posts'
+				'description match'
 			);
 		} );
 
@@ -272,7 +272,7 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 			await search( user, 'blog posts carousel' );
 
 			expect( screen.getByRole( 'option', { name: /STU Feature/ } ) ).toHaveTextContent(
-				'description match: blog +2 more'
+				'description match'
 			);
 		} );
 
@@ -281,7 +281,7 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 			await search( user, 'blog' );
 
 			expect( screen.getByRole( 'option', { name: /STU Feature/ } ) ).toHaveTextContent(
-				'keyword match: blog'
+				'keyword match'
 			);
 		} );
 

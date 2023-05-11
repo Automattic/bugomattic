@@ -21,7 +21,7 @@ interface Props {
 export function Product( { id }: Props ) {
 	const { products } = useAppSelector( selectNormalizedReportingConfig );
 	const { name, featureGroupIds, featureIds, description } = products[ id ];
-	const { matchedDescriptionTerms, strongestDescriptionMatch } = useAppSelector( ( state ) => ( {
+	const { matchedDescriptionTerms } = useAppSelector( ( state ) => ( {
 		matchedDescriptionTerms: selectMatchedDescriptionTerms( state, 'product', id ),
 		strongestDescriptionMatch: selectStrongestDescriptionMatch( state, 'product', id ),
 	} ) );
@@ -39,12 +39,7 @@ export function Product( { id }: Props ) {
 		labelDisplay = (
 			<>
 				{ label }
-				<MatchedTermsDisplay
-					searchTerm={ searchTerm }
-					matchedTerms={ matchedDescriptionTerms }
-					strongestMatchTerm={ strongestDescriptionMatch }
-					matchType={ 'description' }
-				/>
+				<MatchedTermsDisplay searchTerm={ searchTerm } matchType={ 'description' } />
 			</>
 		);
 	}
