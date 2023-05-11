@@ -1,11 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import {
-	selectDuplicateSearchTerm,
-	setSearchParam,
-	setSearchTerm,
-} from '../duplicate-search-slice';
+import { selectDuplicateSearchTerm, setSearchTerm } from '../duplicate-search-slice';
 import { DebouncedSearch } from '../../common/components';
+import { updateHistoryWithState } from '../../url-history/actions';
 
 export function DuplicateSearchInput() {
 	const dispatch = useAppDispatch();
@@ -31,7 +28,8 @@ export function DuplicateSearchInput() {
 	// This callback must be memoized for the debouncing to work!
 	const handleSearchTermEmitted = useCallback(
 		( searchTerm: string ) => {
-			dispatch( setSearchParam( setSearchTerm( searchTerm ) ) );
+			dispatch( setSearchTerm( searchTerm ) );
+			dispatch( updateHistoryWithState() );
 		},
 		[ dispatch ]
 	);

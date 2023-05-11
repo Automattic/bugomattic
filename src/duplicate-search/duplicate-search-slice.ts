@@ -2,9 +2,9 @@
 
 import { createAsyncThunk, createSlice, Middleware, PayloadAction } from '@reduxjs/toolkit';
 import { ApiClient, SearchIssueApiResponse } from '../api/types';
-import { AppDispatch, AppThunk, RootState } from '../app/store';
+import { AppDispatch, RootState } from '../app/store';
 import { ActionWithStaticData } from '../static-data/types';
-import { updateHistoryWithState, updateStateFromHistory } from '../url-history/actions';
+import { updateStateFromHistory } from '../url-history/actions';
 import { DuplicateSearchState, IssueSortOption, IssueStatusFilter } from './types';
 import { startOver } from '../start-over/start-over-counter-slice';
 import deepEqual from 'deep-equal';
@@ -136,24 +136,6 @@ export const duplicateSearchSlice = createSlice( {
 
 export const { setSearchTerm, setActiveRepoFilters, setStatusFilter, setSort } =
 	duplicateSearchSlice.actions;
-
-type SearchAction =
-	| ReturnType< typeof setSearchTerm >
-	| ReturnType< typeof setActiveRepoFilters >
-	| ReturnType< typeof setStatusFilter >
-	| ReturnType< typeof setSort >;
-
-// This is the action (actually, a thunk) creator that we will use in most components,
-// as we will want to update history and change after any change to the search parameters.
-// It's really just syntax sugar for dipatching the action and then the history and search action.
-// But, I think it will read nicely in the components.
-// E.g. dispatch( setSearchParam( setSearchTerm( 'foo' ) ) );
-export function setSearchParam( action: SearchAction ): AppThunk {
-	return ( dispatch ) => {
-		dispatch( action );
-		dispatch( updateHistoryWithState() );
-	};
-}
 
 export const duplicateSearchReducer = duplicateSearchSlice.reducer;
 
