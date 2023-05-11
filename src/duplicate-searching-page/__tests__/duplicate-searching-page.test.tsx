@@ -342,7 +342,7 @@ describe( '[DuplicateSearchingPage]', () => {
 			apiClient.searchIssues.mockClear();
 
 			// Popping the history doesn't work in the jest-dom environment, but replacing it does.
-			// So we'll test by replacement!
+			// So we'll test by replacement! Not ideal, but runs the same code paths, so is a good proxy.
 
 			const newStateWithNoSearchChanges: Partial< RootState > = {
 				duplicateSearch: startingSearchState,

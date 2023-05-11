@@ -192,6 +192,7 @@ export const searchIssuesMiddleware: Middleware< {}, RootState > =
 		// For all other search parameter actions, we want to always search, even if they don't change!
 		// This is consistent with common search engine behavior. Even if the user enters the same search content as before,
 		// they expect a new search to fire.
+		// The only exception is if the search term is empty, searching is meaningless in that case!
 		if ( newSearchParams.searchTerm.trim() !== '' ) {
 			// Deferring the typing here so there's not a circular type dependency with the store.
 			const dispatch = store.dispatch as AppDispatch;
