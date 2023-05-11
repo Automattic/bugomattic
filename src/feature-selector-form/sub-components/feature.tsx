@@ -14,7 +14,7 @@ import { includesIgnoringCase, replaceSpaces } from '../../common/lib';
 import { SearchHighlighter } from './search-hightlighter';
 import { useMonitoring } from '../../monitoring/monitoring-provider';
 import { Tooltip } from 'react-tooltip';
-import { MatchedTermsDisplay } from './matched-terms-display';
+import { MatchedTypeDisplay } from './matched-terms-display';
 
 interface Props {
 	id: string;
@@ -49,7 +49,7 @@ export function Feature( { id }: Props ) {
 		if ( ! includesIgnoringCase( featureName, searchTerm ) ) {
 			matchedDisplay = (
 				<>
-					<MatchedTermsDisplay entityId={ id } entityType={ 'features' } />
+					<MatchedTypeDisplay entityId={ id } entityType={ 'features' } />
 				</>
 			);
 		}

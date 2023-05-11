@@ -1,4 +1,5 @@
-export type MatchType = NameMatch | KeywordMatch | DescriptionMatch;
+export type MatchType = 'name' | 'keyword' | 'description';
+export type MatchesOption = NameMatch | KeywordMatch | DescriptionMatch;
 
 interface NameMatch {
 	matchType: 'name';
@@ -15,7 +16,7 @@ export interface DescriptionMatch {
 }
 
 interface Matches {
-	[ entityId: string ]: MatchType;
+	[ entityId: string ]: NameMatch | KeywordMatch | DescriptionMatch;
 }
 
 export interface ReportingConfigSearchResults {

@@ -37,7 +37,7 @@ button.treeNode {
 	width: 100%;
 	text-align: left;
 	padding: 0.75rem 0.5rem;
-	display: inline;
+	display: flex;
 	align-items: center;
 }
 
@@ -177,7 +177,9 @@ button.clearButton:active {
 	width: 1.25rem;
 }
 
-.appIcon,
+.appIcon {
+	vertical-align: middle;
+}
 .linkText {
 	margin-right: 0.5rem;
 	vertical-align: middle;
@@ -203,6 +205,10 @@ button.clearButton:active {
 
 	.matchedPill {
 		display: inline-block;
+	}
+
+	.searchMatchedType {
+		display: none;
 	}
 }
 

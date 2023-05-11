@@ -12,7 +12,7 @@ import {
 	Features,
 	Products,
 } from '../static-data/reporting-config/types';
-import { ReportingConfigSearchResults, MatchType, DescriptionMatch } from './types';
+import { ReportingConfigSearchResults, MatchType, MatchesOption, DescriptionMatch } from './types';
 import { tokenizeAndNormalize } from '../common/lib';
 
 class ReportingConfigSearcher {
@@ -44,40 +44,49 @@ class ReportingConfigSearcher {
 		this.searchTerm = searchTerm;
 	}
 
-	private updateMatchIfNotKeyword(
+	private updateMatchEntity(
 		entityType: keyof ReportingConfigSearchResults,
 		entityId: string,
-		match: MatchType
+		match: MatchesOption
 	): void {
 		const entity = this.searchResults[ entityType ][ entityId ];
-		if ( ! entity || entity.matchType !== 'keyword' ) {
+		if ( ! entity || this.isPriorityMatch( entity.matchType, match.matchType ) ) {
 			this.searchResults[ entityType ][ entityId ] = match;
 		}
+	}
+
+	private isPriorityMatch( existingMatchType: MatchType, newMatchType: MatchType ): boolean {
+		const priority = {
+			name: 3,
+			keyword: 2,
+			description: 1,
+		};
+		return priority[ newMatchType ] >= priority[ existingMatchType ];
 	}
 
 	private addEntityAndParents(
 		entityType: keyof ReportingConfigSearchResults,
 		entityId: string,
-		match: MatchType,
+		match: MatchesOption,
 		parentId?: string
 	): void {
 		if ( ! this.searchResults[ entityType ] ) {
 			this.searchResults[ entityType ] = {};
 		}
 
-		this.updateMatchIfNotKeyword( entityType, entityId, match );
+		this.updateMatchEntity( entityType, entityId, match );
 
 		if ( parentId ) {
 			if ( entityType === 'features' && this.features[ entityId ]?.parentType === 'product' ) {
-				this.updateMatchIfNotKeyword( 'products', parentId, match );
+				this.updateMatchEntity( 'products', parentId, match );
 			} else if ( entityType === 'featureGroups' ) {
 				// Explicitly handle the addition of parent products for feature groups
-				this.updateMatchIfNotKeyword( 'products', parentId, match );
+				this.updateMatchEntity( 'products', parentId, match );
 			} else {
-				this.updateMatchIfNotKeyword( 'featureGroups', parentId, match );
+				this.updateMatchEntity( 'featureGroups', parentId, match );
 				const parentFeatureGroup = this.featureGroups[ parentId ];
 				if ( parentFeatureGroup ) {
-					this.updateMatchIfNotKeyword( 'products', parentFeatureGroup.productId, match );
+					this.updateMatchEntity( 'products', parentFeatureGroup.productId, match );
 				}
 			}
 		}

@@ -10,7 +10,7 @@ interface Props {
 	entityType: 'features' | 'featureGroups' | 'products';
 }
 
-export function MatchedTermsDisplay( { entityId, entityType }: Props ) {
+export function MatchedTypeDisplay( { entityId, entityType }: Props ) {
 	const searchResults = useAppSelector( selectReportingConfigSearchResults );
 
 	// Get the MatchType object for this entity
@@ -26,8 +26,15 @@ export function MatchedTermsDisplay( { entityId, entityType }: Props ) {
 		matchedDisplay = (
 			<span className={ styles.termMatchesWrapper }>
 				<Pill key={ entityId } highlightClassName={ styles.matchedPill }>
-					<MatchIcon data-testid="match-icon" aria-hidden={ true } className={ styles.appIcon } />
-					<span>{ `${ entityMatch.matchType } match` }</span>
+					<MatchIcon
+						data-testid="search-match-icon"
+						aria-hidden={ true }
+						className={ styles.appIcon }
+					/>
+					<span
+						data-testid="search-matched-type"
+						className={ styles.searchMatchedType }
+					>{ `${ entityMatch.matchType } match` }</span>
 				</Pill>
 			</span>
 		);

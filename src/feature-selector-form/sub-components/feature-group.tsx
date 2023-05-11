@@ -6,7 +6,7 @@ import { ExpandableTreeNode } from './expandable-tree-node';
 import { SearchHighlighter } from './search-hightlighter';
 import { useExpansionWithSearch } from './use-expansion-with-search';
 import { selectReportingConfigSearchResults } from '../../combined-selectors/reporting-config-search-results';
-import { MatchedTermsDisplay } from './matched-terms-display';
+import { MatchedTypeDisplay } from './matched-terms-display';
 
 interface Props {
 	id: string;
@@ -27,7 +27,7 @@ export function FeatureGroup( { id }: Props ) {
 	const labelDisplay = (
 		<>
 			<SearchHighlighter>{ name }</SearchHighlighter>
-			<MatchedTermsDisplay entityId={ id } entityType={ 'featureGroups' } />
+			<MatchedTypeDisplay entityId={ id } entityType={ 'featureGroups' } />
 		</>
 	);
 

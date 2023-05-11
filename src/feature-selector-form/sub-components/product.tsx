@@ -8,7 +8,7 @@ import { SearchHighlighter } from './search-hightlighter';
 import { useExpansionWithSearch } from './use-expansion-with-search';
 import { selectReportingConfigSearchResults } from '../../combined-selectors/reporting-config-search-results';
 import { selectFeatureSearchTerm } from '../feature-selector-form-slice';
-import { MatchedTermsDisplay } from './matched-terms-display';
+import { MatchedTypeDisplay } from './matched-terms-display';
 
 interface Props {
 	id: string;
@@ -32,7 +32,7 @@ export function Product( { id }: Props ) {
 		labelDisplay = (
 			<>
 				{ label }
-				<MatchedTermsDisplay entityId={ id } entityType={ 'products' } />
+				<MatchedTypeDisplay entityId={ id } entityType={ 'products' } />
 			</>
 		);
 	}
