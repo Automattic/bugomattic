@@ -147,6 +147,81 @@ describe( 'history updates', () => {
 		}
 	}
 
+	const actions: { [ key in PointInTime ]: () => Promise< void > } = {
+		onStart: async () => {
+			return;
+		},
+
+		onSearchTermChange: async () => {
+			await user.click( screen.getByRole( 'textbox', { name: 'Search for duplicate issues' } ) );
+			await user.keyboard( newSearchTerm );
+			await user.keyboard( '{enter}' );
+		},
+
+		onStatusFilterChange: async () => {
+			await user.click( screen.getByRole( 'option', { name: 'Open' } ) );
+		},
+
+		onRepoFilterChange: async () => {
+			await user.click( screen.getByRole( 'button', { name: 'Repository filter' } ) );
+			await user.click( screen.getByRole( 'option', { name: 'Manual' } ) );
+			await user.click(
+				screen.getByRole( 'checkbox', { name: newRepoFilters[ 0 ].split( '/' )[ 1 ] } )
+			);
+			await user.click( screen.getByRole( 'button', { name: 'Filter' } ) );
+		},
+
+		onSortChange: async () => {
+			await user.click( screen.getByRole( 'combobox', { name: 'Sort results by…' } ) );
+			await user.click( screen.getByRole( 'option', { name: 'Date added' } ) );
+		},
+
+		onReportingFlowStart: async () => {
+			await user.click( screen.getByRole( 'menuitem', { name: 'Report an Issue' } ) );
+			await user.click( screen.getByRole( 'menuitem', { name: 'Request a new feature' } ) );
+		},
+
+		onFeatureSelectionComplete: async () => {
+			await user.click( screen.getByRole( 'button', { name: productName } ) );
+			await user.click( screen.getByRole( 'option', { name: featureName } ) );
+			await user.click( screen.getByRole( 'button', { name: 'Continue' } ) );
+		},
+
+		onFirstTaskComplete: async () => {
+			await user.click( screen.getByRole( 'checkbox', { name: taskName, checked: false } ) );
+			await screen.findByRole( 'checkbox', { name: taskName, checked: true } );
+		},
+
+		onFirstTaskUnComplete: async () => {
+			await user.click( screen.getByRole( 'checkbox', { name: taskName, checked: true } ) );
+		},
+
+		onFeatureSelectionEdit: async () => {
+			await user.click(
+				screen.getByRole( 'button', {
+					name: 'Edit',
+					description: /Product and Feature/,
+				} )
+			);
+		},
+
+		onTypeEdit: async () => {
+			await user.click(
+				screen.getByRole( 'button', {
+					name: 'Edit',
+					description: /Type/,
+				} )
+			);
+		},
+
+		onStartOver: async () => {
+			// We have to complete all tasks to get the Start Over button to appear
+			await user.click( screen.getByRole( 'checkbox', { name: taskName, checked: false } ) );
+			await user.click( screen.getByRole( 'button', { name: 'Start Over' } ) );
+			await user.click( screen.getByRole( 'menuitem', { name: 'Report a new issue' } ) );
+		},
+	};
+
 	const validations: { [ key in PointInTime ]: () => Promise< void > } = {
 		onStart: async () => {
 			expect(
@@ -325,149 +400,19 @@ describe( 'history updates', () => {
 	} );
 
 	describe( 'Set point in time reference url queries and ensure history change', () => {
-		test( 'onStart', async () => {
-			await validations.onStart();
-			referenceUrlQueries.onStart = history.location.search;
-		} );
+		pointsInTime.forEach( ( pointInTime, index ) => {
+			test( pointInTime, async () => {
+				await actions[ pointInTime ]();
+				await validations[ pointInTime ]();
 
-		test( 'onSearchTermChange', async () => {
-			await user.click( screen.getByRole( 'textbox', { name: 'Search for duplicate issues' } ) );
-			await user.keyboard( newSearchTerm );
-			await user.keyboard( '{enter}' );
-
-			await validations.onSearchTermChange();
-
-			referenceUrlQueries.onSearchTermChange = history.location.search;
-			expect( referenceUrlQueries.onSearchTermChange ).not.toBe( referenceUrlQueries.onStart );
-		} );
-
-		test( 'onStatusFilterChange', async () => {
-			await user.click( screen.getByRole( 'option', { name: 'Open' } ) );
-
-			await validations.onStatusFilterChange();
-
-			referenceUrlQueries.onStatusFilterChange = history.location.search;
-			expect( referenceUrlQueries.onStatusFilterChange ).not.toBe(
-				referenceUrlQueries.onSearchTermChange
-			);
-		} );
-
-		test( 'onRepoFilterChange', async () => {
-			await user.click( screen.getByRole( 'button', { name: 'Repository filter' } ) );
-			await user.click( screen.getByRole( 'option', { name: 'Manual' } ) );
-			await user.click(
-				screen.getByRole( 'checkbox', { name: newRepoFilters[ 0 ].split( '/' )[ 1 ] } )
-			);
-			await user.click( screen.getByRole( 'button', { name: 'Filter' } ) );
-
-			await validations.onRepoFilterChange();
-
-			referenceUrlQueries.onRepoFilterChange = history.location.search;
-			expect( referenceUrlQueries.onRepoFilterChange ).not.toBe(
-				referenceUrlQueries.onStatusFilterChange
-			);
-		} );
-
-		test( 'onSortChange', async () => {
-			await user.click( screen.getByRole( 'combobox', { name: 'Sort results by…' } ) );
-			await user.click( screen.getByRole( 'option', { name: 'Date added' } ) );
-
-			await validations.onSortChange();
-
-			referenceUrlQueries.onSortChange = history.location.search;
-			expect( referenceUrlQueries.onSortChange ).not.toBe( referenceUrlQueries.onRepoFilterChange );
-		} );
-
-		test( 'onReportingFlowStart', async () => {
-			await user.click( screen.getByRole( 'menuitem', { name: 'Report an Issue' } ) );
-			await user.click( screen.getByRole( 'menuitem', { name: 'Request a new feature' } ) );
-
-			await validations.onReportingFlowStart();
-
-			referenceUrlQueries.onReportingFlowStart = history.location.search;
-			expect( referenceUrlQueries.onReportingFlowStart ).not.toBe(
-				referenceUrlQueries.onSortChange
-			);
-		} );
-
-		test( 'onFeatureSelectionComplete', async () => {
-			await user.click( screen.getByRole( 'button', { name: productName } ) );
-			await user.click( screen.getByRole( 'option', { name: featureName } ) );
-			await user.click( screen.getByRole( 'button', { name: 'Continue' } ) );
-
-			await validations.onFeatureSelectionComplete();
-
-			referenceUrlQueries.onFeatureSelectionComplete = history.location.search;
-			expect( referenceUrlQueries.onFeatureSelectionComplete ).not.toBe(
-				referenceUrlQueries.onReportingFlowStart
-			);
-		} );
-
-		test( 'onFirstTaskComplete', async () => {
-			await user.click( screen.getByRole( 'checkbox', { name: taskName, checked: false } ) );
-			await screen.findByRole( 'checkbox', { name: taskName, checked: true } );
-
-			await validations.onFirstTaskComplete();
-
-			referenceUrlQueries.onFirstTaskComplete = history.location.search;
-			expect( referenceUrlQueries.onFirstTaskComplete ).not.toBe(
-				referenceUrlQueries.onReportingFlowStart
-			);
-		} );
-
-		test( 'onFirstTaskUnComplete', async () => {
-			await user.click( screen.getByRole( 'checkbox', { name: taskName, checked: true } ) );
-
-			await validations.onFirstTaskUnComplete();
-
-			referenceUrlQueries.onFirstTaskUnComplete = history.location.search;
-			expect( referenceUrlQueries.onFirstTaskUnComplete ).not.toBe(
-				referenceUrlQueries.onFirstTaskComplete
-			);
-		} );
-
-		test( 'onFeatureSelectionEdit', async () => {
-			await user.click(
-				screen.getByRole( 'button', {
-					name: 'Edit',
-					description: /Product and Feature/,
-				} )
-			);
-
-			await validations.onFeatureSelectionEdit();
-
-			referenceUrlQueries.onFeatureSelectionEdit = history.location.search;
-			expect( referenceUrlQueries.onFeatureSelectionEdit ).not.toBe(
-				referenceUrlQueries.onFirstTaskUnComplete
-			);
-		} );
-
-		test( 'onTypeEdit', async () => {
-			await user.click(
-				screen.getByRole( 'button', {
-					name: 'Edit',
-					description: /Type/,
-				} )
-			);
-
-			await validations.onTypeEdit();
-
-			referenceUrlQueries.onTypeEdit = history.location.search;
-			expect( referenceUrlQueries.onTypeEdit ).not.toBe(
-				referenceUrlQueries.onFeatureSelectionEdit
-			);
-		} );
-
-		test( 'onStartOver', async () => {
-			// We have to complete all tasks to get the Start Over button to appear
-			await user.click( screen.getByRole( 'checkbox', { name: taskName, checked: false } ) );
-			await user.click( screen.getByRole( 'button', { name: 'Start Over' } ) );
-			await user.click( screen.getByRole( 'menuitem', { name: 'Report a new issue' } ) );
-
-			await validations.onStartOver();
-
-			referenceUrlQueries.onStartOver = history.location.search;
-			expect( referenceUrlQueries.onStartOver ).not.toBe( referenceUrlQueries.onTypeEdit );
+				referenceUrlQueries[ pointInTime ] = history.location.search;
+				if ( index > 0 ) {
+					// Nothing to compare for first point in time
+					expect( referenceUrlQueries[ pointInTime ] ).not.toBe(
+						referenceUrlQueries[ pointsInTime[ index - 1 ] ]
+					);
+				}
+			} );
 		} );
 	} );
 
@@ -489,13 +434,13 @@ describe( 'history updates', () => {
 			);
 		}
 
-		for ( const pointInTime of pointsInTime ) {
+		pointsInTime.forEach( ( pointInTime ) => {
 			test( pointInTime, async () => {
 				const urlQuery = referenceUrlQueries[ pointInTime ];
 
 				await setup( urlQuery );
 				await validations[ pointInTime ]();
 			} );
-		}
+		} );
 	} );
 } );
