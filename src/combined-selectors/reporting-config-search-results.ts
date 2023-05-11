@@ -12,7 +12,7 @@ import {
 	Features,
 	Products,
 } from '../static-data/reporting-config/types';
-import { ReportingConfigSearchResults } from './types';
+import { ReportingConfigSearchResults, MatchType, DescriptionMatch } from './types';
 import { tokenizeAndNormalize } from '../common/lib';
 
 class ReportingConfigSearcher {
@@ -36,30 +36,50 @@ class ReportingConfigSearcher {
 		this.invertedIndex = invertedIndex;
 
 		this.searchResults = {
-			products: new Set(),
-			featureGroups: new Set(),
-			features: new Set(),
-			descriptionMatchedTerms: {},
+			products: {},
+			featureGroups: {},
+			features: {},
 		};
 
 		this.searchTerm = searchTerm;
 	}
 
-	private addFeatureGroupAndParents( featureGroupId: string ): void {
-		this.searchResults.featureGroups.add( featureGroupId );
-		this.searchResults.products.add( this.featureGroups[ featureGroupId ].productId );
+	private updateMatchIfNotKeyword(
+		entityType: keyof ReportingConfigSearchResults,
+		entityId: string,
+		match: MatchType
+	): void {
+		const entity = this.searchResults[ entityType ][ entityId ];
+		if ( ! entity || entity.matchType !== 'keyword' ) {
+			this.searchResults[ entityType ][ entityId ] = match;
+		}
 	}
 
-	private addFeatureAndParents( featureId: string ) {
-		this.searchResults.features.add( featureId );
+	private addEntityAndParents(
+		entityType: keyof ReportingConfigSearchResults,
+		entityId: string,
+		match: MatchType,
+		parentId?: string
+	): void {
+		if ( ! this.searchResults[ entityType ] ) {
+			this.searchResults[ entityType ] = {};
+		}
 
-		const feature = this.features[ featureId ];
-		if ( feature.parentType === 'product' ) {
-			this.searchResults.products.add( feature.parentId );
-		} else {
-			this.searchResults.featureGroups.add( feature.parentId );
-			const parentFeatureGroup = this.featureGroups[ feature.parentId ];
-			this.searchResults.products.add( parentFeatureGroup.productId );
+		this.updateMatchIfNotKeyword( entityType, entityId, match );
+
+		if ( parentId ) {
+			if ( entityType === 'features' && this.features[ entityId ]?.parentType === 'product' ) {
+				this.updateMatchIfNotKeyword( 'products', parentId, match );
+			} else if ( entityType === 'featureGroups' ) {
+				// Explicitly handle the addition of parent products for feature groups
+				this.updateMatchIfNotKeyword( 'products', parentId, match );
+			} else {
+				this.updateMatchIfNotKeyword( 'featureGroups', parentId, match );
+				const parentFeatureGroup = this.featureGroups[ parentId ];
+				if ( parentFeatureGroup ) {
+					this.updateMatchIfNotKeyword( 'products', parentFeatureGroup.productId, match );
+				}
+			}
 		}
 	}
 
@@ -67,29 +87,42 @@ class ReportingConfigSearcher {
 		for ( const productId in this.products ) {
 			const product = this.products[ productId ];
 			if ( includesIgnoringCase( product.name, this.searchTerm ) ) {
-				this.searchResults.products.add( productId );
+				this.addEntityAndParents( 'products', productId, { matchType: 'name' } );
 			}
 		}
 
 		for ( const featureGroupId in this.featureGroups ) {
 			const featureGroup = this.featureGroups[ featureGroupId ];
 			if ( includesIgnoringCase( featureGroup.name, this.searchTerm ) ) {
-				this.addFeatureGroupAndParents( featureGroupId );
+				this.addEntityAndParents(
+					'featureGroups',
+					featureGroupId,
+					{ matchType: 'name' },
+					featureGroup.productId
+				);
 			}
 		}
 
 		for ( const featureId in this.features ) {
 			const feature = this.features[ featureId ];
-			const keywordsIncludeSearchTerm = () =>
-				feature.keywords?.some( ( keyword: string ) =>
-					includesIgnoringCase( keyword, this.searchTerm )
-				);
 
-			if ( includesIgnoringCase( feature.name, this.searchTerm ) || keywordsIncludeSearchTerm() ) {
-				this.addFeatureAndParents( featureId );
+			if ( includesIgnoringCase( feature.name, this.searchTerm ) ) {
+				this.addEntityAndParents( 'features', featureId, { matchType: 'name' }, feature.parentId );
 			}
-		}
 
+			feature.keywords?.some( ( keyword: string ) => {
+				const includesSearchTerm = includesIgnoringCase( keyword, this.searchTerm );
+				if ( includesSearchTerm ) {
+					this.addEntityAndParents(
+						'features',
+						featureId,
+						{ matchType: 'keyword', keyword: keyword },
+						feature.parentId
+					);
+				}
+				return includesSearchTerm;
+			} );
+		}
 		return this;
 	}
 
@@ -109,34 +142,34 @@ class ReportingConfigSearcher {
 					scores[ type ][ id ] = 0;
 				}
 				scores[ type ][ id ] += weight;
-
-				// Store the matched terms in the matchedEntities object
-				if ( ! this.searchResults.descriptionMatchedTerms[ type ] ) {
-					this.searchResults.descriptionMatchedTerms[ type ] = {};
-				}
-				if ( ! this.searchResults.descriptionMatchedTerms[ type ][ id ] ) {
-					this.searchResults.descriptionMatchedTerms[ type ][ id ] = new Set();
-				}
-				this.searchResults.descriptionMatchedTerms[ type ][ id ].add( token );
 			}
 		}
+
 		const scoreThreshold = 1;
+		const descriptionMatch: () => DescriptionMatch = () => ( {
+			matchType: 'description',
+			matchedTerms: new Set( searchTermTokens ),
+		} );
 
 		for ( const entityId in scores.product ) {
 			if ( scores.product[ entityId ] >= scoreThreshold ) {
-				this.searchResults.products.add( entityId );
+				this.addEntityAndParents( 'products', entityId, descriptionMatch() );
 			}
 		}
 
 		for ( const entityId in scores.featureGroup ) {
 			if ( scores.featureGroup[ entityId ] >= scoreThreshold ) {
-				this.addFeatureGroupAndParents( entityId );
+				this.addEntityAndParents( 'featureGroups', entityId, descriptionMatch() );
+				const parentFeatureGroup = this.featureGroups[ entityId ];
+				this.addEntityAndParents( 'products', parentFeatureGroup.productId, descriptionMatch() );
 			}
 		}
 
 		for ( const entityId in scores.feature ) {
 			if ( scores.feature[ entityId ] >= scoreThreshold ) {
-				this.addFeatureAndParents( entityId );
+				this.addEntityAndParents( 'features', entityId, descriptionMatch() );
+				const feature = this.features[ entityId ];
+				this.addEntityAndParents( 'products', feature.parentId, descriptionMatch() );
 			}
 		}
 
@@ -170,17 +203,5 @@ export const selectReportingConfigSearchResults = createSelector(
 	[ selectFeatureSearchTerm, selectNormalizedReportingConfig, selectIndexedReportingConfig ],
 	( searchTerm, reportingConfig, indexReportingConfig ) => {
 		return searchReportingConfig( searchTerm, reportingConfig, indexReportingConfig );
-	}
-);
-
-export const selectMatchedDescriptionTerms = createSelector(
-	[ selectReportingConfigSearchResults, ( _, type: string, id: string ) => ( { type, id } ) ],
-	( searchResults, { type, id } ) => {
-		const matchedEntities = searchResults.descriptionMatchedTerms;
-		const matchedTerms = matchedEntities?.[ type ]?.[ id ]
-			? Array.from( matchedEntities[ type ][ id ] )
-			: [];
-
-		return matchedTerms;
 	}
 );

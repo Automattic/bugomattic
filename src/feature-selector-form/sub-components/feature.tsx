@@ -14,7 +14,6 @@ import { includesIgnoringCase, replaceSpaces } from '../../common/lib';
 import { SearchHighlighter } from './search-hightlighter';
 import { useMonitoring } from '../../monitoring/monitoring-provider';
 import { Tooltip } from 'react-tooltip';
-import { selectMatchedDescriptionTerms } from '../../combined-selectors/reporting-config-search-results';
 import { MatchedTermsDisplay } from './matched-terms-display';
 
 interface Props {
@@ -28,10 +27,7 @@ export function Feature( { id }: Props ) {
 	const productId = useAppSelector( selectProductIdForFeature( id ) );
 	const productName = productId ? products[ productId ].name : 'Unknown';
 	const { name: featureName } = features[ id ];
-	const { keywords, description } = features[ id ];
-	const { matchedDescriptionTerms } = useAppSelector( ( state ) => ( {
-		matchedDescriptionTerms: selectMatchedDescriptionTerms( state, 'feature', id ),
-	} ) );
+	const { description } = features[ id ];
 
 	const handleFeatureSelect = () => {
 		dispatch( setSelectedFeatureId( id ) );
@@ -51,22 +47,11 @@ export function Feature( { id }: Props ) {
 
 	if ( searchTerm !== '' ) {
 		if ( ! includesIgnoringCase( featureName, searchTerm ) ) {
-			const matchingKeyword = keywords?.find( ( keyword ) =>
-				includesIgnoringCase( keyword, searchTerm )
+			matchedDisplay = (
+				<>
+					<MatchedTermsDisplay entityId={ id } entityType={ 'features' } />
+				</>
 			);
-			if ( matchingKeyword ) {
-				matchedDisplay = (
-					<>
-						<MatchedTermsDisplay searchTerm={ searchTerm } matchType={ 'keyword' } />
-					</>
-				);
-			} else if ( description && matchedDescriptionTerms.length ) {
-				matchedDisplay = (
-					<>
-						<MatchedTermsDisplay searchTerm={ searchTerm } matchType={ 'description' } />
-					</>
-				);
-			}
 		}
 	}
 

@@ -1,6 +1,25 @@
+export type MatchType = NameMatch | KeywordMatch | DescriptionMatch;
+
+interface NameMatch {
+	matchType: 'name';
+}
+
+interface KeywordMatch {
+	matchType: 'keyword';
+	keyword: string;
+}
+
+export interface DescriptionMatch {
+	matchType: 'description';
+	matchedTerms: Set< string >;
+}
+
+interface Matches {
+	[ entityId: string ]: MatchType;
+}
+
 export interface ReportingConfigSearchResults {
-	products: Set< string >;
-	featureGroups: Set< string >;
-	features: Set< string >;
-	descriptionMatchedTerms: Record< string, Record< string, Set< string > > >;
+	products: Matches;
+	featureGroups: Matches;
+	features: Matches;
 }

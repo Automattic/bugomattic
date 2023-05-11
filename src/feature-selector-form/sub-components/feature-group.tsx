@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React from 'react';
 import { useAppSelector } from '../../app/hooks';
 import { selectNormalizedReportingConfig } from '../../static-data/reporting-config/reporting-config-slice';
 import { SortedFeatureList } from './sorted-feature-list';
@@ -6,8 +6,6 @@ import { ExpandableTreeNode } from './expandable-tree-node';
 import { SearchHighlighter } from './search-hightlighter';
 import { useExpansionWithSearch } from './use-expansion-with-search';
 import { selectReportingConfigSearchResults } from '../../combined-selectors/reporting-config-search-results';
-import { selectFeatureSearchTerm } from '../feature-selector-form-slice';
-import { selectMatchedDescriptionTerms } from '../../combined-selectors/reporting-config-search-results';
 import { MatchedTermsDisplay } from './matched-terms-display';
 
 interface Props {
@@ -17,31 +15,21 @@ interface Props {
 export function FeatureGroup( { id }: Props ) {
 	const { featureGroups } = useAppSelector( selectNormalizedReportingConfig );
 	const { name, featureIds, description } = featureGroups[ id ];
-	const { matchedDescriptionTerms } = useAppSelector( ( state ) => ( {
-		matchedDescriptionTerms: selectMatchedDescriptionTerms( state, 'featureGroup', id ),
-	} ) );
-	const searchTerm = useAppSelector( selectFeatureSearchTerm );
 
 	const { isExpanded, handleCollapseExpandToggle } = useExpansionWithSearch();
 
 	const searchResults = useAppSelector( selectReportingConfigSearchResults );
 
-	const label = <SearchHighlighter>{ name }</SearchHighlighter>;
-
-	let labelDisplay: ReactNode = label;
-
-	if ( searchTerm !== '' && description && matchedDescriptionTerms.length ) {
-		labelDisplay = (
-			<>
-				{ label }
-				<MatchedTermsDisplay searchTerm={ searchTerm } matchType={ 'description' } />
-			</>
-		);
-	}
-
 	const featureIdsToDisplay = isExpanded
 		? featureIds
-		: featureIds.filter( ( featureId ) => searchResults.features.has( featureId ) );
+		: featureIds.filter( ( featureId ) => featureId in searchResults.features );
+
+	const labelDisplay = (
+		<>
+			<SearchHighlighter>{ name }</SearchHighlighter>
+			<MatchedTermsDisplay entityId={ id } entityType={ 'featureGroups' } />
+		</>
+	);
 
 	return (
 		<ExpandableTreeNode

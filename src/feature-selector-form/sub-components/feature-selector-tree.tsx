@@ -18,7 +18,7 @@ export function FeatureSelectorTree( { parentElementId }: Props ) {
 	let searchMessageDisplay: ReactNode;
 	if ( ! searchTerm ) {
 		searchMessageDisplay = null;
-	} else if ( searchResults.products.size > 0 ) {
+	} else if ( Object.keys( searchResults.products ).length > 0 ) {
 		searchMessageDisplay = (
 			<p className="screenReaderOnly" role="alert">
 				Results found. Search results are below.
@@ -34,11 +34,11 @@ export function FeatureSelectorTree( { parentElementId }: Props ) {
 
 	const allProductIds = Object.keys( products );
 	let productsToDisplay: string[];
-	if ( ! searchTerm || searchResults.products.size === 0 ) {
+	if ( ! searchTerm || Object.keys( searchResults.products ).length === 0 ) {
 		productsToDisplay = allProductIds;
 	} else {
-		productsToDisplay = allProductIds.filter( ( productId ) =>
-			searchResults.products.has( productId )
+		productsToDisplay = allProductIds.filter(
+			( productId ) => productId in searchResults.products
 		);
 	}
 

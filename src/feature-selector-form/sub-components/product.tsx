@@ -8,7 +8,6 @@ import { SearchHighlighter } from './search-hightlighter';
 import { useExpansionWithSearch } from './use-expansion-with-search';
 import { selectReportingConfigSearchResults } from '../../combined-selectors/reporting-config-search-results';
 import { selectFeatureSearchTerm } from '../feature-selector-form-slice';
-import { selectMatchedDescriptionTerms } from '../../combined-selectors/reporting-config-search-results';
 import { MatchedTermsDisplay } from './matched-terms-display';
 
 interface Props {
@@ -18,9 +17,7 @@ interface Props {
 export function Product( { id }: Props ) {
 	const { products } = useAppSelector( selectNormalizedReportingConfig );
 	const { name, featureGroupIds, featureIds, description } = products[ id ];
-	const { matchedDescriptionTerms } = useAppSelector( ( state ) => ( {
-		matchedDescriptionTerms: selectMatchedDescriptionTerms( state, 'product', id ),
-	} ) );
+
 	const searchTerm = useAppSelector( selectFeatureSearchTerm );
 
 	const { isExpanded, handleCollapseExpandToggle } = useExpansionWithSearch();
@@ -31,24 +28,22 @@ export function Product( { id }: Props ) {
 
 	let labelDisplay: ReactNode = label;
 
-	if ( searchTerm !== '' && description && matchedDescriptionTerms.length ) {
+	if ( searchTerm !== '' && description ) {
 		labelDisplay = (
 			<>
 				{ label }
-				<MatchedTermsDisplay searchTerm={ searchTerm } matchType={ 'description' } />
+				<MatchedTermsDisplay entityId={ id } entityType={ 'products' } />
 			</>
 		);
 	}
 
 	const featureGroupIdsToDisplay = isExpanded
 		? featureGroupIds
-		: featureGroupIds.filter( ( featureGroupId ) =>
-				searchResults.featureGroups.has( featureGroupId )
-		  );
+		: featureGroupIds.filter( ( featureGroupId ) => featureGroupId in searchResults.featureGroups );
 
 	const featureIdsToDisplay = isExpanded
 		? featureIds
-		: featureIds.filter( ( featureId ) => searchResults.features.has( featureId ) );
+		: featureIds.filter( ( featureId ) => featureId in searchResults.features );
 
 	return (
 		<ExpandableTreeNode
