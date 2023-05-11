@@ -14,10 +14,7 @@ import { includesIgnoringCase, replaceSpaces } from '../../common/lib';
 import { SearchHighlighter } from './search-hightlighter';
 import { useMonitoring } from '../../monitoring/monitoring-provider';
 import { Tooltip } from 'react-tooltip';
-import {
-	selectMatchedDescriptionTerms,
-	selectStrongestDescriptionMatch,
-} from '../../combined-selectors/reporting-config-search-results';
+import { selectMatchedDescriptionTerms } from '../../combined-selectors/reporting-config-search-results';
 import { MatchedTermsDisplay } from './matched-terms-display';
 
 interface Props {
@@ -34,7 +31,6 @@ export function Feature( { id }: Props ) {
 	const { keywords, description } = features[ id ];
 	const { matchedDescriptionTerms } = useAppSelector( ( state ) => ( {
 		matchedDescriptionTerms: selectMatchedDescriptionTerms( state, 'feature', id ),
-		strongestDescriptionMatch: selectStrongestDescriptionMatch( state, 'feature', id ),
 	} ) );
 
 	const handleFeatureSelect = () => {

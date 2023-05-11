@@ -40,7 +40,6 @@ class ReportingConfigSearcher {
 			featureGroups: new Set(),
 			features: new Set(),
 			descriptionMatchedTerms: {},
-			strongestMatch: { product: {}, featureGroup: {}, feature: {} },
 		};
 
 		this.searchTerm = searchTerm;
@@ -144,28 +143,6 @@ class ReportingConfigSearcher {
 		return this;
 	}
 
-	findStrongestMatchInDescription() {
-		const descriptionMatches = this.searchResults.descriptionMatchedTerms;
-		for ( const entityType in descriptionMatches ) {
-			for ( const entityId in descriptionMatches[ entityType ] ) {
-				const matchedTerms = descriptionMatches[ entityType ][ entityId ];
-				let strongestMatch = '';
-				let maxScore = 0;
-				for ( const term of matchedTerms ) {
-					const currentScore = descriptionMatches[ entityType ][ entityId ].size;
-
-					if ( currentScore > maxScore ) {
-						strongestMatch = term;
-						maxScore = currentScore;
-					}
-				}
-				this.searchResults.strongestMatch[ entityType ][ entityId ] = strongestMatch;
-			}
-		}
-
-		return this;
-	}
-
 	getSearchResults() {
 		return this.searchResults;
 	}
@@ -182,11 +159,7 @@ function searchReportingConfig(
 		return searcher.getSearchResults();
 	}
 
-	return searcher
-		.searchByName()
-		.searchInDescription()
-		.findStrongestMatchInDescription()
-		.getSearchResults();
+	return searcher.searchByName().searchInDescription().getSearchResults();
 }
 
 // Searching all of the reporting config is expensive, and these search results are needed by several components.
@@ -209,12 +182,5 @@ export const selectMatchedDescriptionTerms = createSelector(
 			: [];
 
 		return matchedTerms;
-	}
-);
-
-export const selectStrongestDescriptionMatch = createSelector(
-	[ selectReportingConfigSearchResults, ( _, type: string, id: string ) => ( { type, id } ) ],
-	( searchResults, { type, id } ) => {
-		return searchResults.strongestMatch?.[ type ]?.[ id ] || '';
 	}
 );

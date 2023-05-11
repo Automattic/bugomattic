@@ -8,10 +8,7 @@ import { SearchHighlighter } from './search-hightlighter';
 import { useExpansionWithSearch } from './use-expansion-with-search';
 import { selectReportingConfigSearchResults } from '../../combined-selectors/reporting-config-search-results';
 import { selectFeatureSearchTerm } from '../feature-selector-form-slice';
-import {
-	selectMatchedDescriptionTerms,
-	selectStrongestDescriptionMatch,
-} from '../../combined-selectors/reporting-config-search-results';
+import { selectMatchedDescriptionTerms } from '../../combined-selectors/reporting-config-search-results';
 import { MatchedTermsDisplay } from './matched-terms-display';
 
 interface Props {
@@ -23,7 +20,6 @@ export function Product( { id }: Props ) {
 	const { name, featureGroupIds, featureIds, description } = products[ id ];
 	const { matchedDescriptionTerms } = useAppSelector( ( state ) => ( {
 		matchedDescriptionTerms: selectMatchedDescriptionTerms( state, 'product', id ),
-		strongestDescriptionMatch: selectStrongestDescriptionMatch( state, 'product', id ),
 	} ) );
 	const searchTerm = useAppSelector( selectFeatureSearchTerm );
 
