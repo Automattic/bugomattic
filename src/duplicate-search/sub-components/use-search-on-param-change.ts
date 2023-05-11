@@ -12,13 +12,11 @@ import { searchIssues, selectDuplicateSearchParams } from '../duplicate-search-s
  */
 export function useSearchIssuesOnParamChange() {
 	const dispatch = useAppDispatch();
-	const { searchTerm, sort, statusFilter, activeRepoFilters } = useAppSelector(
-		selectDuplicateSearchParams
-	);
+	const searchParams = useAppSelector( selectDuplicateSearchParams );
 
 	useEffect( () => {
-		if ( searchTerm.trim() !== '' ) {
+		if ( searchParams.searchTerm.trim() !== '' ) {
 			dispatch( searchIssues() );
 		}
-	}, [ searchTerm, sort, statusFilter, activeRepoFilters, dispatch ] );
+	}, [ searchParams, dispatch ] );
 }
