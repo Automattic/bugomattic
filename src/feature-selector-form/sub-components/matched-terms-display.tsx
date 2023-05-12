@@ -24,8 +24,8 @@ export function MatchedTypeDisplay( { entityId, entityType }: Props ) {
 			entityMatch.matchType === 'description' )
 	) {
 		matchedDisplay = (
-			<span className={ styles.termMatchesWrapper }>
-				<Pill key={ entityId } highlightClassName={ styles.matchedPill }>
+			<span className={ styles.matchedTypeWrapper }>
+				<Pill key={ entityId } pillClassName={ styles.matchedPill }>
 					<MatchIcon
 						data-testid="search-match-icon"
 						aria-hidden={ true }
