@@ -1,5 +1,5 @@
 export type MatchType = 'name' | 'keyword' | 'description';
-export type MatchesOption = NameMatch | KeywordMatch | DescriptionMatch;
+export type MatchOption = NameMatch | KeywordMatch | DescriptionMatch;
 
 interface NameMatch {
 	matchType: 'name';
@@ -10,7 +10,7 @@ interface KeywordMatch {
 	keyword: string;
 }
 
-export interface DescriptionMatch {
+interface DescriptionMatch {
 	matchType: 'description';
 	matchedTerms: Set< string >;
 }

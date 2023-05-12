@@ -12,7 +12,7 @@ import {
 	Features,
 	Products,
 } from '../static-data/reporting-config/types';
-import { ReportingConfigSearchResults, MatchType, MatchesOption, DescriptionMatch } from './types';
+import { ReportingConfigSearchResults, MatchType, MatchOption } from './types';
 import { tokenizeAndNormalize } from '../common/lib';
 
 class ReportingConfigSearcher {
@@ -47,7 +47,7 @@ class ReportingConfigSearcher {
 	private updateMatchEntity(
 		entityType: keyof ReportingConfigSearchResults,
 		entityId: string,
-		match: MatchesOption
+		match: MatchOption
 	): void {
 		const entity = this.searchResults[ entityType ][ entityId ];
 		if ( ! entity || this.isPriorityMatch( entity.matchType, match.matchType ) ) {
@@ -67,7 +67,7 @@ class ReportingConfigSearcher {
 	private addEntityAndParents(
 		entityType: keyof ReportingConfigSearchResults,
 		entityId: string,
-		match: MatchesOption,
+		match: MatchOption,
 		parentId?: string
 	): void {
 		if ( ! this.searchResults[ entityType ] ) {
@@ -155,7 +155,7 @@ class ReportingConfigSearcher {
 		}
 
 		const scoreThreshold = 1;
-		const descriptionMatch: () => DescriptionMatch = () => ( {
+		const descriptionMatch: () => MatchOption = () => ( {
 			matchType: 'description',
 			matchedTerms: new Set( searchTermTokens ),
 		} );
