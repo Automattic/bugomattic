@@ -50,7 +50,9 @@ export function Feature( { id }: Props ) {
 				aria-describedby={ descriptionId }
 			>
 				<span id={ featureNameId } className={ styles.treeNodeContentWrapper }>
-					<SearchHighlighter>{ featureName }</SearchHighlighter>
+					<span>
+						<SearchHighlighter>{ featureName }</SearchHighlighter>
+					</span>
 					{ matchedDisplay }
 				</span>
 			</button>

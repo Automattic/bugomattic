@@ -26,7 +26,9 @@ export function FeatureGroup( { id }: Props ) {
 
 	const matchesDisplay = (
 		<>
-			<SearchHighlighter>{ name }</SearchHighlighter>
+			<span>
+				<SearchHighlighter>{ name }</SearchHighlighter>
+			</span>
 			<MatchedTypeDisplay entityId={ id } entityType={ 'featureGroups' } />
 		</>
 	);
