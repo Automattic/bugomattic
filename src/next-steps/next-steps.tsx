@@ -80,7 +80,7 @@ export function NextSteps() {
 		setShowConfetti( false );
 	}, [] );
 
-	const subheader = `Review the tasks listed below, carefully curated by our feature team. We've customized the links to speed up your reporting process.`;
+	const subheader = `Review the tasks listed below, carefully curated by the feature team. We've customized the links to speed up your reporting process.`;
 
 	return (
 		<section ref={ sectionRef }>
