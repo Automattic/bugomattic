@@ -173,8 +173,8 @@ button.clearButton:active {
 .appIcon {
 	display: inline-block;
 	position: relative;
-	height: 1.25rem;
-	width: 1.25rem;
+	height: 1.5rem;
+	width: 1.5rem;
 }
 
 .appIcon {
@@ -203,12 +203,13 @@ button.clearButton:active {
 		max-width: 50vw;
 	}
 
-	.matchedPill {
-		display: inline-block;
-	}
-
 	.searchMatchedType {
 		display: none;
+	}
+
+	.appIcon {
+		height: 1.25rem;
+		width: 1.25rem;
 	}
 }
 
