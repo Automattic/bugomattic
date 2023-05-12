@@ -1,0 +1,7 @@
+@import '../../variables.css';
+
+.subheader {
+	font-size: var( --font-body );
+	font-weight: 300;
+	margin: 0 0 1.5rem 0;
+}

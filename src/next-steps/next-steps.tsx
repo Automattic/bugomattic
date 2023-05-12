@@ -9,6 +9,7 @@ import { selectIssueFeatureId } from '../issue-details/issue-details-slice';
 import { selectAllTasksAreComplete } from '../combined-selectors/all-tasks-are-complete';
 import { useMonitoring } from '../monitoring/monitoring-provider';
 import { selectNormalizedReportingConfig } from '../static-data/reporting-config/reporting-config-slice';
+import { StepSubheader } from '../common/components';
 
 export function NextSteps() {
 	const monitoringClient = useMonitoring();
@@ -79,6 +80,8 @@ export function NextSteps() {
 		setShowConfetti( false );
 	}, [] );
 
+	const subheader = `Review the tasks listed below, carefully curated by the feature team. We've customized the links to speed up your reporting process.`;
+
 	return (
 		<section ref={ sectionRef }>
 			{ showConfetti && (
@@ -92,6 +95,8 @@ export function NextSteps() {
 					onConfettiComplete={ handleConfettiComplete }
 				/>
 			) }
+
+			<StepSubheader>{ subheader }</StepSubheader>
 			<ol aria-label="Steps to report issue" className={ styles.taskList }>
 				{ relevantTaskIds.map( ( taskId ) => (
 					<Task key={ taskId } taskId={ taskId } />

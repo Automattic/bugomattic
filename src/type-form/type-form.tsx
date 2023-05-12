@@ -1,6 +1,6 @@
 import React, { ChangeEventHandler, FormEventHandler, ReactNode, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { FormErrorMessage } from '../common/components';
+import { FormErrorMessage, StepSubheader } from '../common/components';
 import { selectIssueDetails, setIssueType } from '../issue-details/issue-details-slice';
 import { IssueType } from '../issue-details/types';
 import { ReactComponent as InfoIcon } from '../common/svgs/info.svg';
@@ -47,6 +47,7 @@ export function TypeForm( { onContinue }: Props ) {
 		}
 	};
 
+	const subheader = `Identify the type of issue you're reporting. The type you select will guide the reporting process.`;
 	const urgentDescriptionId = 'urgent-description';
 	const urgentIconId = 'urgent-icon';
 	const urgentDescription =
@@ -64,6 +65,7 @@ export function TypeForm( { onContinue }: Props ) {
 
 	return (
 		<form onSubmit={ handleSubmit } aria-label="Set issue type">
+			<StepSubheader>{ subheader }</StepSubheader>
 			<fieldset className={ styles.typeFieldset }>
 				<legend className={ styles.typeLabel }>
 					<span>Type</span>
