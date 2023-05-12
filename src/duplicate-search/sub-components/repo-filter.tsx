@@ -11,17 +11,14 @@ import {
 } from '@floating-ui/react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import styles from '../duplicate-search-controls.module.css';
-import {
-	selectActiveRepoFilters,
-	setActiveRepoFilters,
-	setSearchParam,
-} from '../duplicate-search-slice';
+import { selectActiveRepoFilters, setActiveRepoFilters } from '../duplicate-search-slice';
 import { SegmentedControl } from '../../common/components';
 import { DefaultRepoFilter } from './default-repo-filter';
 import { ManualRepoFilter } from './manual-repo-filter';
 import { ReactComponent as DownIcon } from '../../common/svgs/chevron-down.svg';
 import { ReactComponent as FilterIcon } from '../../common/svgs/filter.svg';
 import { ActiveRepos } from './types';
+import { updateHistoryWithState } from '../../url-history/actions';
 
 type FilterMode = 'Default' | 'Manual';
 
@@ -68,7 +65,10 @@ export function RepoFilter() {
 
 	const handleFilterClick = useCallback( () => {
 		const newRepoFilters = filterMode === 'Default' ? [] : Object.keys( workingActiveRepos );
-		dispatch( setSearchParam( setActiveRepoFilters( newRepoFilters ) ) );
+
+		dispatch( setActiveRepoFilters( newRepoFilters ) );
+		dispatch( updateHistoryWithState() );
+
 		setIsPopoverOpen( false );
 	}, [ dispatch, filterMode, workingActiveRepos ] );
 

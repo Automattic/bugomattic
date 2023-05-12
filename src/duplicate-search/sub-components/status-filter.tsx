@@ -1,8 +1,9 @@
 import React, { useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { selectStatusFilter, setSearchParam, setStatusFilter } from '../duplicate-search-slice';
+import { selectStatusFilter, setStatusFilter } from '../duplicate-search-slice';
 import { IssueStatusFilter } from '../types';
 import { SegmentedControl } from '../../common/components';
+import { updateHistoryWithState } from '../../url-history/actions';
 
 export function StatusFilter() {
 	const dispatch = useAppDispatch();
@@ -16,7 +17,8 @@ export function StatusFilter() {
 
 	const onStatusFilterSelect = useCallback(
 		( newStatusFilter: IssueStatusFilter ) => {
-			dispatch( setSearchParam( setStatusFilter( newStatusFilter ) ) );
+			dispatch( setStatusFilter( newStatusFilter ) );
+			dispatch( updateHistoryWithState() );
 		},
 		[ dispatch ]
 	);

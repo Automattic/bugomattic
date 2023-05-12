@@ -15,7 +15,7 @@ export const urlHistoryMiddleware: Middleware< {}, RootState > =
 		const result = next( action );
 		const newState = store.getState();
 
-		const currentStateQuery = history.location.search;
+		const currentStateQuery = history.location.search.slice( 1 ); // remove the '?' prefix
 		const newStateQuery = stateToQuery( newState );
 
 		// We only want to push a state query history entry if it's new.

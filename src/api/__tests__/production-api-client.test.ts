@@ -4,8 +4,10 @@ import {
 	AvailableRepoFiltersApiResponse,
 	ReportingConfigApiResponse,
 	SearchIssueApiResponse,
+	SearchIssueOptions,
 } from '../types';
 import { LogPayload } from '../../monitoring/types';
+import { _clearSearchIssuesCache } from '../shared-helpers/search-issues-cache';
 
 describe( '[ProductionApiClient]', () => {
 	const fakeNonce = 'abc123';
@@ -88,7 +90,14 @@ describe( '[ProductionApiClient]', () => {
 	function getLastRequest(): Request {
 		// The types are borked here, see: https://github.com/pretenderjs/pretender/pull/353
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		return ( server.pretender as any ).handledRequests?.[ 0 ];
+		const handledRequests = ( server.pretender as any ).handledRequests;
+		return handledRequests?.[ handledRequests.length - 1 ];
+	}
+
+	function getRequestCount(): number {
+		// See similar type issue above
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		return ( server.pretender as any ).handledRequests?.length;
 	}
 
 	describe( 'loadReportingConfig()', () => {
@@ -208,6 +217,10 @@ describe( '[ProductionApiClient]', () => {
 	} );
 
 	describe( 'searchIssues()', () => {
+		beforeEach( () => {
+			_clearSearchIssuesCache();
+		} );
+
 		test( 'Calls the correct endpoint and returns the issue list', async () => {
 			const apiClient = createProductionApiClient();
 			const issues = await apiClient.searchIssues( 'test' );
@@ -270,6 +283,62 @@ describe( '[ProductionApiClient]', () => {
 					errorBody
 				) }`
 			);
+		} );
+
+		test( 'Uses a cached response if the params are the same', async () => {
+			const apiClient = createProductionApiClient();
+			const searchTerm = 'test';
+			const searchIssuesOptions: SearchIssueOptions = {
+				status: 'open',
+				sort: 'date-created',
+				repos: [ 'repo1', 'repo2' ],
+			};
+
+			const differentSearchIssuesOptions: SearchIssueOptions = {
+				...searchIssuesOptions,
+				repos: [ 'repo1' ],
+			};
+
+			await apiClient.searchIssues( searchTerm, searchIssuesOptions );
+			// This should use the cached response.
+			await apiClient.searchIssues( searchTerm, searchIssuesOptions );
+			// We should have only made one request.
+			expect( getRequestCount() ).toBe( 1 );
+
+			await apiClient.searchIssues( searchTerm, differentSearchIssuesOptions );
+			expect( getRequestCount() ).toBe( 2 );
+			const lastRequest = getLastRequest();
+			expect( lastRequest.queryParams.repos ).toEqual( differentSearchIssuesOptions.repos );
+
+			// And for good measure, both requests should now be in the cache!
+			await apiClient.searchIssues( searchTerm, searchIssuesOptions );
+			await apiClient.searchIssues( searchTerm, differentSearchIssuesOptions );
+			expect( getRequestCount() ).toBe( 2 );
+		} );
+
+		test( 'When the max cache is hit, the oldest request is removed from the cache', async () => {
+			const EXPECTED_MAX_CACHE_SIZE = 25;
+			const apiClient = createProductionApiClient();
+			for ( let i = 1; i <= EXPECTED_MAX_CACHE_SIZE; i++ ) {
+				await apiClient.searchIssues( `${ i }` );
+			}
+
+			expect( getRequestCount() ).toBe( EXPECTED_MAX_CACHE_SIZE );
+			// At this point, if we call the first request again, it should still be cached.
+			await apiClient.searchIssues( '1' );
+			expect( getRequestCount() ).toBe( EXPECTED_MAX_CACHE_SIZE );
+
+			// Go one over the cache limit, pushing the first request out of the cache.
+			await apiClient.searchIssues( `${ EXPECTED_MAX_CACHE_SIZE + 1 }` );
+			expect( getRequestCount() ).toBe( EXPECTED_MAX_CACHE_SIZE + 1 );
+
+			// The second ever call should still be cached, we should still have only removed the first one.
+			await apiClient.searchIssues( '2' );
+			expect( getRequestCount() ).toBe( EXPECTED_MAX_CACHE_SIZE + 1 );
+
+			// But now if we call the first one again, the cache should be gone, and a new request should be made.
+			await apiClient.searchIssues( '1' );
+			expect( getRequestCount() ).toBe( EXPECTED_MAX_CACHE_SIZE + 2 );
 		} );
 	} );
 

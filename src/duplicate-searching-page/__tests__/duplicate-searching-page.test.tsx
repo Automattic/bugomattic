@@ -3,7 +3,7 @@ import { createMockApiClient } from '../../test-utils/mock-api-client';
 import userEvent from '@testing-library/user-event';
 import { renderWithProviders } from '../../test-utils/render-with-providers';
 import { AvailableRepoFiltersState } from '../../static-data/available-repo-filters/types';
-import { screen, waitForElementToBeRemoved } from '@testing-library/react';
+import { act, screen, waitForElementToBeRemoved } from '@testing-library/react';
 import { DuplicateSearchingPage } from '../duplicate-searching-page';
 import { SearchIssueApiResponse } from '../../api/types';
 import { Issue } from '../../duplicate-results/types';
@@ -13,6 +13,7 @@ import { RootState } from '../../app/store';
 import history from 'history/browser';
 import { stateToQuery } from '../../url-history/parsers';
 import { createMockMonitoringClient } from '../../test-utils/mock-monitoring-client';
+import { DuplicateSearchState } from '../../duplicate-search/types';
 
 describe( '[DuplicateSearchingPage]', () => {
 	const fakeIssue: Issue = {
@@ -106,6 +107,7 @@ describe( '[DuplicateSearchingPage]', () => {
 			apiClient.searchIssues.mockResolvedValue( [] );
 
 			await search( user, 'foo' );
+
 			expect(
 				await screen.findByRole( 'heading', { name: 'No results found.' } )
 			).toBeInTheDocument();
@@ -157,7 +159,10 @@ describe( '[DuplicateSearchingPage]', () => {
 	describe( 'Report an issue banner', () => {
 		// Since this banner involves navigation to another page, it makes sense to render the whole app.
 		async function setup( preloadedState?: Partial< RootState > ) {
+			// Clear old history
+			history.replace( '' );
 			if ( preloadedState ) {
+				// Set the new one if needed
 				const preloadedStateInUrl = stateToQuery( preloadedState as RootState );
 				history.replace( `?${ preloadedStateInUrl }` );
 			}
@@ -249,6 +254,131 @@ describe( '[DuplicateSearchingPage]', () => {
 			await user.click( screen.getByRole( 'button', { name: 'Report an Issue' } ) );
 
 			expect( screen.getByRole( 'heading', { name: 'Report a new issue' } ) ).toBeInTheDocument();
+		} );
+	} );
+
+	describe( 'Searching from URL history', () => {
+		// We're working with loading the app and other history updates -- let's render the whole app.
+		async function setup( preloadedState?: Partial< RootState > ) {
+			// Clear old history
+			history.replace( '' );
+			if ( preloadedState ) {
+				// Set the new one if needed
+				const preloadedStateInUrl = stateToQuery( preloadedState as RootState );
+				history.replace( `?${ preloadedStateInUrl }` );
+			}
+
+			const apiClient = createMockApiClient();
+			apiClient.loadReportingConfig.mockResolvedValue( {} );
+			apiClient.loadAvailableRepoFilters.mockResolvedValue( availableRepoFilters );
+			apiClient.searchIssues.mockResolvedValue( [] );
+
+			const user = userEvent.setup();
+			const view = renderWithProviders( <App />, {
+				apiClient,
+			} );
+
+			await waitForElementToBeRemoved(
+				screen.queryByRole( 'alert', { name: 'Loading required app data' } )
+			);
+
+			return {
+				user,
+				apiClient,
+				...view,
+			};
+		}
+
+		test( 'When the app loads, if there is a non-empty search term, we fire a search', async () => {
+			const startingState: Partial< RootState > = {
+				duplicateSearch: {
+					searchTerm: 'foo',
+					sort: 'relevance',
+					statusFilter: 'all',
+					activeRepoFilters: [],
+				},
+			};
+
+			const { apiClient } = await setup( startingState );
+
+			expect( apiClient.searchIssues ).toHaveBeenCalledTimes( 1 );
+			expect( apiClient.searchIssues ).toHaveBeenCalledWith(
+				startingState.duplicateSearch?.searchTerm,
+				{
+					sort: startingState.duplicateSearch?.sort,
+					status: startingState.duplicateSearch?.statusFilter,
+					repos: startingState.duplicateSearch?.activeRepoFilters,
+				}
+			);
+		} );
+
+		test( 'When the app loads, if the search term is empty, we do not search', async () => {
+			const startingState: Partial< RootState > = {
+				duplicateSearch: {
+					searchTerm: '',
+					sort: 'date-created',
+					statusFilter: 'open',
+					activeRepoFilters: availableRepoFilters,
+				},
+			};
+
+			const { apiClient } = await setup( startingState );
+
+			expect( apiClient.searchIssues ).not.toHaveBeenCalled();
+		} );
+
+		test( 'Searches only fire when history changes affect the search parameters', async () => {
+			const startingSearchState: DuplicateSearchState = {
+				searchTerm: 'foo',
+				sort: 'relevance',
+				statusFilter: 'all',
+				activeRepoFilters: [],
+			};
+			const startingState: Partial< RootState > = {
+				duplicateSearch: startingSearchState,
+			};
+
+			const { apiClient } = await setup( startingState );
+			apiClient.searchIssues.mockClear();
+
+			// Popping the history doesn't work in the jest-dom environment, but replacing it does.
+			// So we'll test by replacement! Not ideal, but runs the same code paths, so is a good proxy.
+
+			const newStateWithNoSearchChanges: Partial< RootState > = {
+				duplicateSearch: startingSearchState,
+				issueDetails: {
+					issueTitle: '',
+					featureId: null,
+					issueType: 'urgent',
+				},
+			};
+
+			act( () => {
+				history.replace( `?${ stateToQuery( newStateWithNoSearchChanges as RootState ) }` );
+			} );
+
+			expect( apiClient.searchIssues ).not.toHaveBeenCalled();
+
+			const newSearchState: DuplicateSearchState = {
+				...startingSearchState,
+				searchTerm: 'bar',
+			};
+			const newStateWithSearchChanges: Partial< RootState > = {
+				duplicateSearch: newSearchState,
+			};
+
+			act( () => {
+				history.replace( `?${ stateToQuery( newStateWithSearchChanges as RootState ) }` );
+			} );
+			// Prevent act warnings by waiting for the empty results to be re-rendered.
+			await screen.findByRole( 'heading', { name: 'No results found.' } );
+
+			expect( apiClient.searchIssues ).toHaveBeenCalledTimes( 1 );
+			expect( apiClient.searchIssues ).toHaveBeenCalledWith( newSearchState.searchTerm, {
+				sort: newSearchState.sort,
+				status: newSearchState.statusFilter,
+				repos: newSearchState.activeRepoFilters,
+			} );
 		} );
 	} );
 } );

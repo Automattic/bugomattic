@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useRef, useState } from 'react';
+import React, { ReactNode } from 'react';
 import { useAppSelector } from '../app/hooks';
 import {
 	selectDuplicateResults,
@@ -6,7 +6,13 @@ import {
 	selectDuplicateRequestsWereMade,
 	selectDuplicateResultsRequestError,
 } from './duplicate-results-slice';
-import { IssueList, PlaceholderMessage, ReportIssueBanner, useShowBanner } from './sub-components';
+import {
+	IssueList,
+	PlaceholderMessage,
+	ReportIssueBanner,
+	useSetHeightAfterRequest,
+	useShowBanner,
+} from './sub-components';
 import styles from './duplicate-results.module.css';
 import { ReactComponent as InitialIllustration } from './svgs/initial-illustration.svg';
 import { ReactComponent as NoResultsIllustration } from '../common/svgs/missing-info.svg';
@@ -22,29 +28,16 @@ export function DuplicateResults() {
 	const resultsRequestStatus = useAppSelector( selectDuplicateResultsRequestStatus );
 	const resultsRequestError = useAppSelector( selectDuplicateResultsRequestError );
 	const requestsWereMade = useAppSelector( selectDuplicateRequestsWereMade );
-	const searchTerm = useAppSelector( selectDuplicateSearchTerm );
 	const filtersAreActive = useAppSelector( selectDuplicateSearchFiltersAreActive );
-	const showBanner = useShowBanner();
+	const searchTerm = useAppSelector( selectDuplicateSearchTerm );
+
 	const monitoringClient = useMonitoring();
 	const logError = useLoggerWithCache( monitoringClient.logger.error, [] );
 
-	// This ref and corresponding useEffect hook are used to preserve the height of the
-	// results container between searches. This keeps the UI from jumping around while searching.
-	const resultsContainerContentRef = useRef< HTMLDivElement >( null );
-	const [ resultsContainerContentHeightPx, setResultsContainerContentHeightPx ] = useState<
-		number | undefined
-	>( undefined );
+	const showBanner = useShowBanner();
 
-	useEffect( () => {
-		if (
-			resultsRequestStatus === 'fulfilled' ||
-			resultsRequestStatus === 'error' ||
-			searchTerm === ''
-		) {
-			const newHeight = resultsContainerContentRef.current?.clientHeight;
-			setResultsContainerContentHeightPx( newHeight );
-		}
-	}, [ resultsRequestStatus, searchTerm ] );
+	const { resultsContainerContentRef, resultsContainerContentHeightPx } =
+		useSetHeightAfterRequest();
 
 	const resultsLimit = 20; // We can tweak this as needed!
 

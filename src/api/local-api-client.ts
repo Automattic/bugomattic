@@ -1,6 +1,7 @@
 import { ApiClient } from './types';
 import path from 'path-browserify';
 import { Issue } from '../duplicate-results/types';
+import { getSearchIssuesCache, setSearchIssuesCache } from './shared-helpers/search-issues-cache';
 
 /**
  * An implementation of the API client that returns faked values for local development.
@@ -28,6 +29,10 @@ export const localApiClient: ApiClient = {
 	},
 
 	searchIssues: async ( search, options ) => {
+		const cachedResponse = getSearchIssuesCache( { search, options } );
+		if ( cachedResponse ) {
+			return cachedResponse;
+		}
 		// Delay to simulate network latency.
 		await wait( 2000 );
 
@@ -71,6 +76,8 @@ export const localApiClient: ApiClient = {
 				url: url,
 			} );
 		}
+
+		setSearchIssuesCache( { search, options }, issues );
 
 		return issues;
 	},

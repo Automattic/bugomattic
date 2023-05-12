@@ -1,4 +1,5 @@
 import { LoggerApiClient, LogPayload } from '../monitoring/types';
+import { getSearchIssuesCache, setSearchIssuesCache } from './shared-helpers/search-issues-cache';
 import {
 	ApiClient,
 	AvailableRepoFiltersApiResponse,
@@ -111,6 +112,11 @@ class ProductionApiClient implements ApiClient, LoggerApiClient {
 		search: string,
 		options?: SearchIssueOptions
 	): Promise< SearchIssueApiResponse > {
+		const cachedData = getSearchIssuesCache( { search, options } );
+		if ( cachedData ) {
+			return cachedData;
+		}
+
 		const queryParams = new URLSearchParams();
 		queryParams.set( 'search', search );
 		if ( options?.sort ) {
@@ -135,7 +141,9 @@ class ProductionApiClient implements ApiClient, LoggerApiClient {
 		const response = await fetch( request );
 
 		if ( response.ok ) {
-			return response.json();
+			const issues = await response.json();
+			setSearchIssuesCache( { search, options }, issues );
+			return issues;
 		} else {
 			throw new Error(
 				`Search Issues web request failed with status code ${

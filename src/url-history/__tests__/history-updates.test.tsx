@@ -9,9 +9,19 @@ import React from 'react';
 import { createMockApiClient } from '../../test-utils/mock-api-client';
 import { renderWithProviders } from '../../test-utils/render-with-providers';
 import { UserEvent } from '@testing-library/user-event/dist/types/setup/setup';
-import { ReportingConfigApiResponse } from '../../api/types';
+import {
+	AvailableRepoFiltersApiResponse,
+	ReportingConfigApiResponse,
+	SearchIssueOptions,
+} from '../../api/types';
 import { App } from '../../app/app';
 import history from 'history/browser';
+import {
+	DuplicateSearchState,
+	IssueSortOption,
+	IssueStatusFilter,
+} from '../../duplicate-search/types';
+import { Issue } from '../../duplicate-results/types';
 
 globalThis.scrollTo = jest.fn();
 
@@ -48,10 +58,18 @@ describe( 'history updates', () => {
 			},
 		},
 	};
+	const fakeAvailableRepoFiltersResponse: AvailableRepoFiltersApiResponse = [ 'fakeOrg/fakeRepo' ];
+	const newSearchTerm = 'foo';
+	const newStatusFilter: IssueStatusFilter = 'open';
+	const newRepoFilters: string[] = [ ...fakeAvailableRepoFiltersResponse ];
+	const newSort: IssueSortOption = 'date-created';
 
-	// TODO: Expand with some more steps in duplicate searching
 	const pointsInTime = [
 		'onStart',
+		'onSearchTermChange',
+		'onStatusFilterChange',
+		'onRepoFilterChange',
+		'onSortChange',
 		'onReportingFlowStart',
 		'onFeatureSelectionComplete',
 		'onFirstTaskComplete',
@@ -63,13 +81,210 @@ describe( 'history updates', () => {
 
 	type PointInTime = typeof pointsInTime[ number ];
 
+	function createFakeIssueContentFromSearchState( searchState: DuplicateSearchState ) {
+		const { searchTerm, statusFilter, activeRepoFilters, sort } = searchState;
+
+		return `search:${ searchTerm } status:${ statusFilter } repos:${ activeRepoFilters.join(
+			','
+		) } sort:${ sort }`;
+	}
+
+	const mockSearchIssuesImplementation = async ( search: string, options?: SearchIssueOptions ) => {
+		const fakeIssue: Issue = {
+			title: 'fake title',
+			url: 'https://github.com/test/test/issues/1',
+			content: createFakeIssueContentFromSearchState( {
+				searchTerm: search,
+				statusFilter: options?.status || 'all',
+				activeRepoFilters: options?.repos || [],
+				sort: options?.sort || 'relevance',
+			} ),
+			status: 'open',
+			dateCreated: new Date().toISOString(),
+			dateUpdated: new Date().toISOString(),
+			author: 'fake author',
+			repo: 'fakeOrg/fakeRepo',
+		};
+
+		return [ fakeIssue ];
+	};
+
+	function toTitleCase( str: string ) {
+		return str.charAt( 0 ).toUpperCase() + str.slice( 1 );
+	}
+
+	function validateSearchControlsForExpectedState( searchState: DuplicateSearchState ) {
+		const { searchTerm, statusFilter, activeRepoFilters, sort } = searchState;
+
+		expect( screen.getByRole( 'textbox', { name: 'Search for duplicate issues' } ) ).toHaveValue(
+			searchTerm
+		);
+
+		expect(
+			screen.getByRole( 'option', { name: toTitleCase( statusFilter ), selected: true } )
+		).toBeInTheDocument();
+
+		expect( screen.getByRole( 'button', { name: 'Repository filter' } ) ).toHaveAttribute(
+			'data-active',
+			activeRepoFilters.length > 0 ? 'true' : 'false'
+		);
+
+		const expectedSortText = sort === 'relevance' ? 'Relevance' : 'Date added';
+		expect( screen.getByRole( 'combobox', { name: 'Sort results by…' } ) ).toHaveTextContent(
+			expectedSortText
+		);
+	}
+
+	function validateSearchResultsForExpectedState( searchState: DuplicateSearchState ) {
+		if ( searchState.searchTerm === '' ) {
+			expect(
+				screen.getByRole( 'heading', { name: 'Enter some keywords to search for duplicates.' } )
+			).toBeInTheDocument();
+		} else {
+			expect(
+				screen.getByText( createFakeIssueContentFromSearchState( searchState ) )
+			).toBeInTheDocument();
+		}
+	}
+
+	const actions: { [ key in PointInTime ]: () => Promise< void > } = {
+		onStart: async () => {
+			return;
+		},
+
+		onSearchTermChange: async () => {
+			await user.click( screen.getByRole( 'textbox', { name: 'Search for duplicate issues' } ) );
+			await user.keyboard( newSearchTerm );
+			await user.keyboard( '{enter}' );
+		},
+
+		onStatusFilterChange: async () => {
+			await user.click( screen.getByRole( 'option', { name: 'Open' } ) );
+		},
+
+		onRepoFilterChange: async () => {
+			await user.click( screen.getByRole( 'button', { name: 'Repository filter' } ) );
+			await user.click( screen.getByRole( 'option', { name: 'Manual' } ) );
+			await user.click(
+				screen.getByRole( 'checkbox', { name: newRepoFilters[ 0 ].split( '/' )[ 1 ] } )
+			);
+			await user.click( screen.getByRole( 'button', { name: 'Filter' } ) );
+		},
+
+		onSortChange: async () => {
+			await user.click( screen.getByRole( 'combobox', { name: 'Sort results by…' } ) );
+			await user.click( screen.getByRole( 'option', { name: 'Date added' } ) );
+		},
+
+		onReportingFlowStart: async () => {
+			await user.click( screen.getByRole( 'menuitem', { name: 'Report an Issue' } ) );
+			await user.click( screen.getByRole( 'menuitem', { name: 'Request a new feature' } ) );
+		},
+
+		onFeatureSelectionComplete: async () => {
+			await user.click( screen.getByRole( 'button', { name: productName } ) );
+			await user.click( screen.getByRole( 'option', { name: featureName } ) );
+			await user.click( screen.getByRole( 'button', { name: 'Continue' } ) );
+		},
+
+		onFirstTaskComplete: async () => {
+			await user.click( screen.getByRole( 'checkbox', { name: taskName, checked: false } ) );
+			await screen.findByRole( 'checkbox', { name: taskName, checked: true } );
+		},
+
+		onFirstTaskUnComplete: async () => {
+			await user.click( screen.getByRole( 'checkbox', { name: taskName, checked: true } ) );
+		},
+
+		onFeatureSelectionEdit: async () => {
+			await user.click(
+				screen.getByRole( 'button', {
+					name: 'Edit',
+					description: /Product and Feature/,
+				} )
+			);
+		},
+
+		onTypeEdit: async () => {
+			await user.click(
+				screen.getByRole( 'button', {
+					name: 'Edit',
+					description: /Type/,
+				} )
+			);
+		},
+
+		onStartOver: async () => {
+			// We have to complete all tasks to get the Start Over button to appear
+			await user.click( screen.getByRole( 'checkbox', { name: taskName, checked: false } ) );
+			await user.click( screen.getByRole( 'button', { name: 'Start Over' } ) );
+			await user.click( screen.getByRole( 'menuitem', { name: 'Report a new issue' } ) );
+		},
+	};
+
 	const validations: { [ key in PointInTime ]: () => Promise< void > } = {
 		onStart: async () => {
 			expect(
 				screen.getByRole( 'heading', { name: 'Search for duplicate issues' } )
 			).toBeInTheDocument();
 
-			expect( screen.queryByRole( 'form', { name: 'Set issue type' } ) ).not.toBeInTheDocument();
+			const expectedSearchState: DuplicateSearchState = {
+				searchTerm: '',
+				statusFilter: 'all',
+				activeRepoFilters: [],
+				sort: 'relevance',
+			};
+
+			validateSearchControlsForExpectedState( expectedSearchState );
+			validateSearchResultsForExpectedState( expectedSearchState );
+		},
+
+		onSearchTermChange: async () => {
+			const expectedSearchState: DuplicateSearchState = {
+				searchTerm: newSearchTerm,
+				statusFilter: 'all',
+				activeRepoFilters: [],
+				sort: 'relevance',
+			};
+
+			validateSearchControlsForExpectedState( expectedSearchState );
+			validateSearchResultsForExpectedState( expectedSearchState );
+		},
+
+		onStatusFilterChange: async () => {
+			const expectedSearchState: DuplicateSearchState = {
+				searchTerm: newSearchTerm,
+				statusFilter: newStatusFilter,
+				activeRepoFilters: [],
+				sort: 'relevance',
+			};
+
+			validateSearchControlsForExpectedState( expectedSearchState );
+			validateSearchResultsForExpectedState( expectedSearchState );
+		},
+
+		onRepoFilterChange: async () => {
+			const expectedSearchState: DuplicateSearchState = {
+				searchTerm: newSearchTerm,
+				statusFilter: newStatusFilter,
+				activeRepoFilters: newRepoFilters,
+				sort: 'relevance',
+			};
+
+			validateSearchControlsForExpectedState( expectedSearchState );
+			validateSearchResultsForExpectedState( expectedSearchState );
+		},
+
+		onSortChange: async () => {
+			const expectedSearchState: DuplicateSearchState = {
+				searchTerm: newSearchTerm,
+				statusFilter: newStatusFilter,
+				activeRepoFilters: newRepoFilters,
+				sort: newSort,
+			};
+
+			validateSearchControlsForExpectedState( expectedSearchState );
+			validateSearchResultsForExpectedState( expectedSearchState );
 		},
 
 		onReportingFlowStart: async () => {
@@ -157,6 +372,10 @@ describe( 'history updates', () => {
 
 	const referenceUrlQueries: { [ key in PointInTime ]: string } = {
 		onStart: 'WILL BE SET IN TEST',
+		onSearchTermChange: 'WILL BE SET IN TEST',
+		onStatusFilterChange: 'WILL BE SET IN TEST',
+		onRepoFilterChange: 'WILL BE SET IN TEST',
+		onSortChange: 'WILL BE SET IN TEST',
 		onReportingFlowStart: 'WILL BE SET IN TEST',
 		onFeatureSelectionComplete: 'WILL BE SET IN TEST',
 		onFirstTaskComplete: 'WILL BE SET IN TEST',
@@ -170,7 +389,9 @@ describe( 'history updates', () => {
 	beforeAll( async () => {
 		const apiClient = createMockApiClient();
 		user = userEvent.setup();
-		apiClient.loadReportingConfig = jest.fn().mockResolvedValue( fakeReportingConfigApiResponse );
+		apiClient.loadReportingConfig.mockResolvedValue( fakeReportingConfigApiResponse );
+		apiClient.loadAvailableRepoFilters.mockResolvedValue( fakeAvailableRepoFiltersResponse );
+		apiClient.searchIssues.mockImplementation( mockSearchIssuesImplementation );
 		// eslint-disable-next-line testing-library/no-render-in-setup
 		renderWithProviders( <App />, { apiClient } );
 		await waitForElementToBeRemoved(
@@ -179,99 +400,19 @@ describe( 'history updates', () => {
 	} );
 
 	describe( 'Set point in time reference url queries and ensure history change', () => {
-		test( 'onStart', async () => {
-			await validations.onStart();
-			referenceUrlQueries.onStart = history.location.search;
-		} );
+		pointsInTime.forEach( ( pointInTime, index ) => {
+			test( pointInTime, async () => {
+				await actions[ pointInTime ]();
+				await validations[ pointInTime ]();
 
-		test( 'onReportingFlowStart', async () => {
-			await user.click( screen.getByRole( 'menuitem', { name: 'Report an Issue' } ) );
-			await user.click( screen.getByRole( 'menuitem', { name: 'Request a new feature' } ) );
-
-			await validations.onReportingFlowStart();
-
-			referenceUrlQueries.onReportingFlowStart = history.location.search;
-			expect( referenceUrlQueries.onReportingFlowStart ).not.toBe( referenceUrlQueries.onStart );
-		} );
-
-		test( 'onFeatureSelectionComplete', async () => {
-			await user.click( screen.getByRole( 'button', { name: productName } ) );
-			await user.click( screen.getByRole( 'option', { name: featureName } ) );
-			await user.click( screen.getByRole( 'button', { name: 'Continue' } ) );
-
-			await validations.onFeatureSelectionComplete();
-
-			referenceUrlQueries.onFeatureSelectionComplete = history.location.search;
-			expect( referenceUrlQueries.onFeatureSelectionComplete ).not.toBe(
-				referenceUrlQueries.onReportingFlowStart
-			);
-		} );
-
-		test( 'onFirstTaskComplete', async () => {
-			await user.click( screen.getByRole( 'checkbox', { name: taskName, checked: false } ) );
-			await screen.findByRole( 'checkbox', { name: taskName, checked: true } );
-
-			await validations.onFirstTaskComplete();
-
-			referenceUrlQueries.onFirstTaskComplete = history.location.search;
-			expect( referenceUrlQueries.onFirstTaskComplete ).not.toBe(
-				referenceUrlQueries.onReportingFlowStart
-			);
-		} );
-
-		test( 'onFirstTaskUnComplete', async () => {
-			await user.click( screen.getByRole( 'checkbox', { name: taskName, checked: true } ) );
-
-			await validations.onFirstTaskUnComplete();
-
-			referenceUrlQueries.onFirstTaskUnComplete = history.location.search;
-			expect( referenceUrlQueries.onFirstTaskUnComplete ).not.toBe(
-				referenceUrlQueries.onFirstTaskComplete
-			);
-		} );
-
-		test( 'onFeatureSelectionEdit', async () => {
-			await user.click(
-				screen.getByRole( 'button', {
-					name: 'Edit',
-					description: /Product and Feature/,
-				} )
-			);
-
-			await validations.onFeatureSelectionEdit();
-
-			referenceUrlQueries.onFeatureSelectionEdit = history.location.search;
-			expect( referenceUrlQueries.onFeatureSelectionEdit ).not.toBe(
-				referenceUrlQueries.onFirstTaskUnComplete
-			);
-		} );
-
-		test( 'onTypeEdit', async () => {
-			await user.click(
-				screen.getByRole( 'button', {
-					name: 'Edit',
-					description: /Type/,
-				} )
-			);
-
-			await validations.onTypeEdit();
-
-			referenceUrlQueries.onTypeEdit = history.location.search;
-			expect( referenceUrlQueries.onTypeEdit ).not.toBe(
-				referenceUrlQueries.onFeatureSelectionEdit
-			);
-		} );
-
-		test( 'onStartOver', async () => {
-			// We have to complete all tasks to get the Start Over button to appear
-			await user.click( screen.getByRole( 'checkbox', { name: taskName, checked: false } ) );
-			await user.click( screen.getByRole( 'button', { name: 'Start Over' } ) );
-			await user.click( screen.getByRole( 'menuitem', { name: 'Report a new issue' } ) );
-
-			await validations.onStartOver();
-
-			referenceUrlQueries.onStartOver = history.location.search;
-			expect( referenceUrlQueries.onStartOver ).not.toBe( referenceUrlQueries.onTypeEdit );
+				referenceUrlQueries[ pointInTime ] = history.location.search;
+				if ( index > 0 ) {
+					// Nothing to compare for first point in time
+					expect( referenceUrlQueries[ pointInTime ] ).not.toBe(
+						referenceUrlQueries[ pointsInTime[ index - 1 ] ]
+					);
+				}
+			} );
 		} );
 	} );
 
@@ -285,19 +426,21 @@ describe( 'history updates', () => {
 			history.replace( urlQuery );
 			const apiClient = createMockApiClient();
 			apiClient.loadReportingConfig = jest.fn().mockResolvedValue( fakeReportingConfigApiResponse );
+			apiClient.loadAvailableRepoFilters.mockResolvedValue( fakeAvailableRepoFiltersResponse );
+			apiClient.searchIssues.mockImplementation( mockSearchIssuesImplementation );
 			renderWithProviders( <App />, { apiClient } );
 			await waitForElementToBeRemoved(
 				screen.queryByRole( 'alert', { name: 'Loading required app data' } )
 			);
 		}
 
-		for ( const pointInTime of pointsInTime ) {
+		pointsInTime.forEach( ( pointInTime ) => {
 			test( pointInTime, async () => {
 				const urlQuery = referenceUrlQueries[ pointInTime ];
 
 				await setup( urlQuery );
 				await validations[ pointInTime ]();
 			} );
-		}
+		} );
 	} );
 } );

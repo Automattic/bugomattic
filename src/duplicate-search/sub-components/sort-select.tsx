@@ -3,11 +3,12 @@ import { Dropdown, DropdownContent, DropdownItem, DropdownTrigger } from '../../
 import styles from '../duplicate-search-controls.module.css';
 import { IssueSortOption } from '../types';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { selectSort, setSearchParam, setSort } from '../duplicate-search-slice';
+import { selectSort, setSort } from '../duplicate-search-slice';
 import { ReactComponent as CheckIcon } from '../../common/svgs/check.svg';
 import { ReactComponent as DownIcon } from '../../common/svgs/chevron-down.svg';
 import { ReactComponent as SortIcon } from '../../common/svgs/sort.svg';
 import { Placement } from '@floating-ui/react';
+import { updateHistoryWithState } from '../../url-history/actions';
 
 interface SortOptions {
 	label: string;
@@ -33,7 +34,8 @@ export function SortSelect() {
 
 	const handleSortOptionClick = useCallback(
 		( sortOptionValue: IssueSortOption ) => {
-			dispatch( setSearchParam( setSort( sortOptionValue ) ) );
+			dispatch( setSort( sortOptionValue ) );
+			dispatch( updateHistoryWithState() );
 		},
 		[ dispatch ]
 	);
