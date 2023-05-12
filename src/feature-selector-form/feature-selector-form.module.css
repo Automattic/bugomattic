@@ -35,8 +35,10 @@ button.treeNode {
 	font-size: var( --font-body );
 	color: var( --color-text-primary );
 	width: 100%;
+	min-height: 2.75rem;
+	height: fit-content;
 	text-align: left;
-	padding: 0.75rem 0.5rem;
+	padding: 0.25rem 0.5rem;
 	display: flex;
 	align-items: center;
 }
@@ -53,12 +55,17 @@ button.treeNode:hover {
 	background-color: var( --color-neutral-light );
 }
 
-.feature {
-	display: block;
+.treeNodeContentWrapper {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	flex-wrap: wrap;
+	column-gap: 0.5rem;
+	row-gap: 0.5rem;
 }
 
-button.selectedFeature,
-button.selectedFeature:hover {
+button[aria-selected='true'],
+button[aria-selected='true']:hover {
 	background-color: var( --color-neutral );
 }
 
@@ -153,6 +160,8 @@ button.clearButton:active {
 .keywordsWrapper {
 	display: flex;
 	flex-wrap: wrap;
+	column-gap: 0.5rem;
+	row-gap: 0.5rem;
 }
 
 .noKeywords {
@@ -162,12 +171,11 @@ button.clearButton:active {
 
 .keywordPill {
 	background-color: var( --color-primary-light );
-	display: inline-block;
+	height: 1.5rem;
 }
 
 .matchedPill {
 	background-color: var( --color-neutral-light );
-	margin: 0.5rem;
 }
 
 .appIcon {

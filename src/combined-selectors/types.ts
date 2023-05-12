@@ -1,21 +1,21 @@
-export type MatchType = 'name' | 'keyword' | 'description' | 'child';
 export type MatchOption = NameMatch | KeywordMatch | DescriptionMatch | ChildMatch;
+export type MatchType = MatchOption[ 'matchType' ];
 
-interface ChildMatch {
+export interface ChildMatch {
 	matchType: 'child';
 }
-interface NameMatch {
+
+export interface NameMatch {
 	matchType: 'name';
 }
 
-interface KeywordMatch {
+export interface KeywordMatch {
 	matchType: 'keyword';
 	keyword: string;
 }
 
-interface DescriptionMatch {
+export interface DescriptionMatch {
 	matchType: 'description';
-	matchedTerms: Set< string >;
 }
 
 interface Matches {

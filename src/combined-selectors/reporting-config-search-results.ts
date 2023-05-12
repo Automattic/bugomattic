@@ -12,7 +12,13 @@ import {
 	Features,
 	Products,
 } from '../static-data/reporting-config/types';
-import { ReportingConfigSearchResults, MatchType, MatchOption } from './types';
+import {
+	ReportingConfigSearchResults,
+	MatchType,
+	MatchOption,
+	DescriptionMatch,
+	ChildMatch,
+} from './types';
 import { tokenizeAndNormalize } from '../common/lib';
 
 class ReportingConfigSearcher {
@@ -74,7 +80,7 @@ class ReportingConfigSearcher {
 	private addFeatureAndParents( entityId: string, match: MatchOption ): void {
 		this.updateMatchEntity( 'features', entityId, match );
 
-		const childMatch: () => MatchOption = () => ( {
+		const childMatch: () => ChildMatch = () => ( {
 			matchType: 'child',
 		} );
 
@@ -140,9 +146,8 @@ class ReportingConfigSearcher {
 		}
 
 		const scoreThreshold = 1;
-		const descriptionMatch: () => MatchOption = () => ( {
+		const descriptionMatch: () => DescriptionMatch = () => ( {
 			matchType: 'description',
-			matchedTerms: new Set( searchTermTokens ),
 		} );
 
 		for ( const entityId in scores.product ) {

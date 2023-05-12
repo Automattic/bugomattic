@@ -32,16 +32,8 @@ export function Feature( { id }: Props ) {
 
 	const selectedFeatureId = useAppSelector( selectSelectedFeatureId );
 	const isSelected = id === selectedFeatureId;
-	const classNames = [ styles.treeNode, styles.feature ];
-	if ( isSelected ) {
-		classNames.push( styles.selectedFeature );
-	}
 
-	const matchedDisplay = (
-		<>
-			<MatchedTypeDisplay entityId={ id } entityType={ 'features' } />
-		</>
-	);
+	const matchedDisplay = <MatchedTypeDisplay entityId={ id } entityType={ 'features' } />;
 
 	const safeId = replaceSpaces( id );
 	const featureNameId = `feature_name_${ safeId }`;
@@ -53,17 +45,14 @@ export function Feature( { id }: Props ) {
 				role="option"
 				type="button"
 				aria-selected={ isSelected }
-				className={ classNames.join( ' ' ) }
+				className={ styles.treeNode }
 				onClick={ handleFeatureSelect }
 				aria-describedby={ descriptionId }
 			>
-				<div>
-					<span id={ featureNameId }>
-						<SearchHighlighter>{ featureName }</SearchHighlighter>
-					</span>
-
+				<span id={ featureNameId } className={ styles.treeNodeContentWrapper }>
+					<SearchHighlighter>{ featureName }</SearchHighlighter>
 					{ matchedDisplay }
-				</div>
+				</span>
 			</button>
 
 			<Tooltip

@@ -5,6 +5,9 @@
 	color: var( --color-text-light );
 	font-weight: 400;
 	border-radius: 61px;
-	padding: 0.34375rem 0.625rem;
-	margin: 0.5rem 0.5rem 0 0;
+	padding: 0.125rem 0.625rem;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	max-width: fit-content;
 }
