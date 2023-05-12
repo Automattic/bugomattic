@@ -23,9 +23,9 @@ export function ExpandableTreeNode( {
 	// This kind of random string should be plenty.
 	// If needed in the future, we can crawl the label for text content and add that.
 	const randomString = Math.random().toString( 16 ).slice( 2 );
-	const contentId = `collapsible-tree-node-content_${ randomString }`;
-	const labelId = `collapsible-tree-node-label_${ randomString }`;
-	const descriptionId = `collapsible-tree-node-description_${ randomString }`;
+	const contentId = `expandable-tree-node-content_${ randomString }`;
+	const labelId = `expandable-tree-node-label_${ randomString }`;
+	const descriptionId = `expandable-tree-node-description_${ randomString }`;
 
 	let icon: React.ReactNode;
 	if ( isExpanded ) {
@@ -45,7 +45,9 @@ export function ExpandableTreeNode( {
 				aria-describedby={ descriptionId }
 			>
 				{ icon }
-				<span id={ labelId }> { label }</span>
+				<span id={ labelId } className={ styles.treeNodeContentWrapper }>
+					{ label }
+				</span>
 			</button>
 			<Tooltip
 				anchorSelect={ `#${ labelId }` }

@@ -35,8 +35,10 @@ button.treeNode {
 	font-size: var( --font-body );
 	color: var( --color-text-primary );
 	width: 100%;
+	min-height: 2.75rem;
+	height: fit-content;
 	text-align: left;
-	padding: 0.75rem 0.5rem;
+	padding: 0.25rem 0.5rem;
 	display: flex;
 	align-items: center;
 }
@@ -53,12 +55,17 @@ button.treeNode:hover {
 	background-color: var( --color-neutral-light );
 }
 
-.feature {
-	display: block;
+.treeNodeContentWrapper {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	flex-wrap: wrap;
+	column-gap: 0.5rem;
+	row-gap: 0.5rem;
 }
 
-button.selectedFeature,
-button.selectedFeature:hover {
+button[aria-selected='true'],
+button[aria-selected='true']:hover {
 	background-color: var( --color-neutral );
 }
 
@@ -156,11 +163,34 @@ button.clearButton:active {
 .keywordsWrapper {
 	display: flex;
 	flex-wrap: wrap;
+	column-gap: 0.5rem;
+	row-gap: 0.5rem;
 }
 
 .noResults {
 	color: var( --color-text-primary );
 	font-size: var( --font-body-small );
+}
+
+.keywordPill {
+	background-color: var( --color-primary-light );
+	height: 1.5rem;
+}
+
+.matchedPill {
+	background-color: var( --color-neutral-light );
+}
+
+.appIcon {
+	position: relative;
+	height: 1.5rem;
+	width: 1.5rem;
+	vertical-align: middle;
+}
+
+.linkText {
+	margin-right: 0.5rem;
+	vertical-align: middle;
 }
 
 @media only screen and ( max-width: 600px ) {
@@ -179,6 +209,19 @@ button.clearButton:active {
 
 	.tooltip {
 		max-width: 50vw;
+	}
+
+	.searchMatchedType {
+		display: none;
+	}
+
+	.appIcon {
+		height: 1.25rem;
+		width: 1.25rem;
+	}
+
+	.matchedTypeWrapper {
+		line-height: 1.5;
 	}
 }
 
