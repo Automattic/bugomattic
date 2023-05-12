@@ -3,13 +3,9 @@ import styles from './pill.module.css';
 
 interface Props {
 	children: string | React.ReactNode;
-	highlightClassName: string;
+	pillClassName: string;
 }
 
-export function Pill( { children: content, highlightClassName }: Props ) {
-	return (
-		<span role="listitem" className={ `${ styles.pill } ${ highlightClassName }` }>
-			{ content }
-		</span>
-	);
+export function Pill( { children: content, pillClassName: pillClassName }: Props ) {
+	return <span className={ `${ styles.pill } ${ pillClassName }` }>{ content }</span>;
 }

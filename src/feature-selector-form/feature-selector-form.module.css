@@ -171,15 +171,12 @@ button.clearButton:active {
 }
 
 .appIcon {
-	display: inline-block;
 	position: relative;
 	height: 1.5rem;
 	width: 1.5rem;
-}
-
-.appIcon {
 	vertical-align: middle;
 }
+
 .linkText {
 	margin-right: 0.5rem;
 	vertical-align: middle;
@@ -210,6 +207,10 @@ button.clearButton:active {
 	.appIcon {
 		height: 1.25rem;
 		width: 1.25rem;
+	}
+
+	.matchedTypeWrapper {
+		line-height: 1.5;
 	}
 }
 

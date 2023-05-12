@@ -19,7 +19,7 @@ export function SortedKeywordList( { keywords }: Props ) {
 			aria-label="Keyword list"
 		>
 			{ sortedKeywords.map( ( keyword ) => (
-				<Pill key={ keyword } highlightClassName={ styles.keywordPill }>
+				<Pill key={ keyword } pillClassName={ styles.keywordPill }>
 					{ keyword }
 				</Pill>
 			) ) }
