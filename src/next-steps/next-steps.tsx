@@ -9,6 +9,7 @@ import { selectIssueFeatureId } from '../issue-details/issue-details-slice';
 import { selectAllTasksAreComplete } from '../combined-selectors/all-tasks-are-complete';
 import { useMonitoring } from '../monitoring/monitoring-provider';
 import { selectNormalizedReportingConfig } from '../static-data/reporting-config/reporting-config-slice';
+import { StepSubheader } from '../common/components';
 
 export function NextSteps() {
 	const monitoringClient = useMonitoring();
@@ -95,9 +96,7 @@ export function NextSteps() {
 				/>
 			) }
 
-			<p data-testid={ 'subheader' } className={ styles.subheader }>
-				{ subheader }
-			</p>
+			<StepSubheader>{ subheader }</StepSubheader>
 			<ol aria-label="Steps to report issue" className={ styles.taskList }>
 				{ relevantTaskIds.map( ( taskId ) => (
 					<Task key={ taskId } taskId={ taskId } />

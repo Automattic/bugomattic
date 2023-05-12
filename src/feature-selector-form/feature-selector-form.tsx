@@ -1,6 +1,6 @@
 import React, { FormEventHandler, ReactNode, useCallback, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { DebouncedSearch, FormErrorMessage } from '../common/components';
+import { DebouncedSearch, FormErrorMessage, StepSubheader } from '../common/components';
 import { selectIssueFeatureId, setIssueFeatureId } from '../issue-details/issue-details-slice';
 import { useMonitoring } from '../monitoring/monitoring-provider';
 import {
@@ -93,9 +93,7 @@ export function FeatureSelectorForm( { onContinue }: Props ) {
 
 	return (
 		<section className={ styles.sectionWrapper }>
-			<p data-testid={ 'subheader' } className={ styles.subheader }>
-				{ subheader }
-			</p>
+			<StepSubheader>{ subheader }</StepSubheader>
 			<div className={ styles.searchWrapper }>
 				<DebouncedSearch
 					callback={ handleSearch }

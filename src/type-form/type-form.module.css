@@ -50,12 +50,6 @@
 	margin-left: 0.5rem;
 }
 
-.subheader {
-	font-size: var( --font-body );
-	color: var( --color-text-light );
-	margin: 0 0 1.5rem 0;
-}
-
 .titleLabelRow,
 .typeLabel {
 	display: flex;
