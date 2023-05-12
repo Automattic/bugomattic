@@ -64,8 +64,8 @@ button.treeNode:hover {
 	row-gap: 0.5rem;
 }
 
-button[aria-selected='true'],
-button[aria-selected='true']:hover {
+button.treeNode[aria-selected='true'],
+button.treeNode[aria-selected='true']:hover {
 	background-color: var( --color-neutral );
 }
 
