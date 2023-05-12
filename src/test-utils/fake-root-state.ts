@@ -2,7 +2,7 @@ import { RootState } from '../app/store';
 
 export function createFakeRootState( partialState: Partial< RootState > = {} ): RootState {
 	const fakeDefaultRootState: RootState = {
-		activePage: 'duplicateSearching',
+		activePage: 'duplicate-search',
 		availableRepoFilters: {
 			repos: [],
 			loadError: null,
@@ -18,7 +18,7 @@ export function createFakeRootState( partialState: Partial< RootState > = {} ): 
 			},
 		},
 
-		activeReportingStep: 'featureSelection',
+		activeReportingStep: 'feature',
 		completedTasks: [],
 		featureSelectorForm: {
 			searchTerm: '',

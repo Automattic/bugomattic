@@ -47,8 +47,8 @@ describe( '[StartOverBanner]', () => {
 	// This starting state should make the banner appear.
 	const startingState: RootState = {
 		...createFakeRootState(),
-		activePage: 'reportingFlow',
-		activeReportingStep: 'nextSteps',
+		activePage: 'report-issue',
+		activeReportingStep: 'next-steps',
 		issueDetails: {
 			issueType: 'bug',
 			featureId: expectedFeatureId,

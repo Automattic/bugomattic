@@ -1,6 +1,6 @@
 import React, { FormEventHandler, ReactNode, useCallback, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { DebouncedSearch, FormErrorMessage } from '../common/components';
+import { DebouncedSearch, FormErrorMessage, StepSubheader } from '../common/components';
 import { selectIssueFeatureId, setIssueFeatureId } from '../issue-details/issue-details-slice';
 import { useMonitoring } from '../monitoring/monitoring-provider';
 import {
@@ -89,8 +89,11 @@ export function FeatureSelectorForm( { onContinue }: Props ) {
 		bottomPanelDisplay = null;
 	}
 
+	const subheader = `Explore the tree or use the search function to select the feature associated with your issue. The search results will include exact word matches from descriptions, as well as matches based on related keywords.`;
+
 	return (
 		<section className={ styles.sectionWrapper }>
+			<StepSubheader>{ subheader }</StepSubheader>
 			<div className={ styles.searchWrapper }>
 				<DebouncedSearch
 					callback={ handleSearch }

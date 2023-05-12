@@ -5,15 +5,12 @@ import {
 	selectProductIdForFeature,
 } from '../../static-data/reporting-config/reporting-config-slice';
 import styles from './../feature-selector-form.module.css';
-import {
-	selectFeatureSearchTerm,
-	selectSelectedFeatureId,
-	setSelectedFeatureId,
-} from '../feature-selector-form-slice';
-import { includesIgnoringCase, replaceSpaces } from '../../common/lib';
-import { TextMatchHighlighter } from '../../common/components';
+import { selectSelectedFeatureId, setSelectedFeatureId } from '../feature-selector-form-slice';
+import { replaceSpaces } from '../../common/lib';
+import { SearchHighlighter } from './search-hightlighter';
 import { useMonitoring } from '../../monitoring/monitoring-provider';
 import { Tooltip } from 'react-tooltip';
+import { MatchedTypeDisplay } from './matched-terms-display';
 
 interface Props {
 	id: string;
@@ -25,8 +22,8 @@ export function Feature( { id }: Props ) {
 	const { features, products } = useAppSelector( selectNormalizedReportingConfig );
 	const productId = useAppSelector( selectProductIdForFeature( id ) );
 	const productName = productId ? products[ productId ].name : 'Unknown';
-	let { name: featureName } = features[ id ];
-	const { keywords, description } = features[ id ];
+	const { name: featureName } = features[ id ];
+	const { description } = features[ id ];
 
 	const handleFeatureSelect = () => {
 		dispatch( setSelectedFeatureId( id ) );
@@ -35,20 +32,8 @@ export function Feature( { id }: Props ) {
 
 	const selectedFeatureId = useAppSelector( selectSelectedFeatureId );
 	const isSelected = id === selectedFeatureId;
-	const classNames = [ styles.treeNode, styles.feature ];
-	if ( isSelected ) {
-		classNames.push( styles.selectedFeature );
-	}
 
-	const searchTerm = useAppSelector( selectFeatureSearchTerm );
-	if ( searchTerm !== '' && ! includesIgnoringCase( featureName, searchTerm ) ) {
-		const matchingKeyword = keywords?.find( ( keyword ) =>
-			includesIgnoringCase( keyword, searchTerm )
-		);
-		if ( matchingKeyword ) {
-			featureName = `${ featureName } (${ matchingKeyword })`;
-		}
-	}
+	const matchedDisplay = <MatchedTypeDisplay entityId={ id } entityType={ 'features' } />;
 
 	const safeId = replaceSpaces( id );
 	const featureNameId = `feature_name_${ safeId }`;
@@ -60,19 +45,16 @@ export function Feature( { id }: Props ) {
 				role="option"
 				type="button"
 				aria-selected={ isSelected }
-				className={ classNames.join( ' ' ) }
+				className={ styles.treeNode }
 				onClick={ handleFeatureSelect }
 				aria-describedby={ descriptionId }
 			>
-				<span id={ featureNameId }>
-					<TextMatchHighlighter
-						textMatch={ searchTerm }
-						highlightClassName={ styles.searchSubstringMatch }
-					>
-						{ featureName }
-					</TextMatchHighlighter>
+				<span id={ featureNameId } className={ styles.treeNodeContentWrapper }>
+					<SearchHighlighter>{ featureName }</SearchHighlighter>
+					{ matchedDisplay }
 				</span>
 			</button>
+
 			<Tooltip
 				// Can't use #ID because some characters in IDs may not be safe for that syntax.
 				anchorSelect={ `[id='${ featureNameId }']` }

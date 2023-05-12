@@ -39,7 +39,7 @@ describe( '[AppNavbar]', () => {
 	}
 
 	test( 'The currently active page is marked as aria-current="page"', async () => {
-		await setup( { activePage: 'reportingFlow' } );
+		await setup( { activePage: 'report-issue' } );
 
 		expect( screen.getByRole( 'menuitem', { name: 'Report an Issue' } ) ).toHaveAttribute(
 			'aria-current',
