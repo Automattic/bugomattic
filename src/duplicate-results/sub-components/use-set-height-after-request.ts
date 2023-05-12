@@ -14,14 +14,12 @@ export function useSetHeightAfterRequest() {
 	>( undefined );
 
 	useEffect( () => {
-		if (
-			resultsRequestStatus === 'fulfilled' ||
-			resultsRequestStatus === 'error' ||
-			searchTerm === ''
-		) {
+		if ( resultsRequestStatus === 'fulfilled' || resultsRequestStatus === 'error' ) {
 			const newHeight = resultsContainerContentRef.current?.clientHeight;
 			setResultsContainerContentHeightPx( newHeight );
 		}
+		// We dd searchTerm as a dependency to make sure the height is redrawn when the search term is empty,
+		// because we don't actually trigger new search requests when the search term is empty.
 	}, [ resultsRequestStatus, searchTerm ] );
 
 	return { resultsContainerContentRef, resultsContainerContentHeightPx };
