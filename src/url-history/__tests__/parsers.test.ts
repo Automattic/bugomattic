@@ -4,7 +4,7 @@ import { queryToState, stateToQuery } from '../parsers';
 describe( 'url-history-parsers', () => {
 	test( 'Parsing state to query params and back preserves tracked top level state keys', () => {
 		const startingState: RootState = {
-			activePage: 'reportingFlow',
+			activePage: 'report-issue',
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			reportingConfig: { foo: 'bar' } as any,
 			availableRepoFilters: {
@@ -15,7 +15,7 @@ describe( 'url-history-parsers', () => {
 			issueDetails: {
 				issueType: 'bug',
 				featureId: 'test_feature_id',
-				issueTitle: '',
+				issueTitle: 'fake title',
 			},
 			featureSelectorForm: {
 				searchTerm: 'should be ignored',
@@ -27,8 +27,8 @@ describe( 'url-history-parsers', () => {
 			duplicateSearch: {
 				searchTerm: 'Test search term',
 				activeRepoFilters: [ 'test_repo_1', 'test_repo_2' ],
-				sort: 'relevance',
-				statusFilter: 'all',
+				sort: 'date-created',
+				statusFilter: 'open',
 			},
 			startOverCounter: 0,
 		};

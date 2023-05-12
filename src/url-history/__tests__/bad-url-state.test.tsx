@@ -69,8 +69,8 @@ describe( '[Bad URL State]', () => {
 					issueType: 'unset',
 					issueTitle: '',
 				},
-				activePage: 'reportingFlow',
-				activeReportingStep: 'featureSelection',
+				activePage: 'report-issue',
+				activeReportingStep: 'feature',
 			} as RootState );
 
 			await setup( urlQuery );
@@ -88,7 +88,7 @@ describe( '[Bad URL State]', () => {
 					issueType: 'not-a-real-issue-type' as any,
 					issueTitle: '',
 				},
-				activePage: 'reportingFlow',
+				activePage: 'report-issue',
 				activeReportingStep: 'type',
 			} as RootState );
 
@@ -101,7 +101,7 @@ describe( '[Bad URL State]', () => {
 		test( 'Active reporting step that is not part of the predefined list', async () => {
 			const urlQuery = stateToQuery( {
 				activeReportingStep: 'not-a-real-step' as any,
-				activePage: 'reportingFlow',
+				activePage: 'report-issue',
 			} as RootState );
 
 			await setup( urlQuery );
@@ -117,8 +117,8 @@ describe( '[Bad URL State]', () => {
 					issueType: 'bug',
 					issueTitle: '',
 				},
-				activePage: 'reportingFlow',
-				activeReportingStep: 'nextSteps',
+				activePage: 'report-issue',
+				activeReportingStep: 'next-steps',
 				completedTasks: [ 'not-an-id' ],
 			} as RootState );
 
@@ -176,8 +176,8 @@ describe( '[Bad URL State]', () => {
 				issueType: 'bug',
 				issueTitle: '',
 			},
-			activeReportingStep: 'nextSteps',
-			activePage: 'reportingFlow',
+			activeReportingStep: 'next-steps',
+			activePage: 'report-issue',
 		} as RootState );
 
 		await setup( urlQuery );

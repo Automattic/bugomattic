@@ -7,9 +7,9 @@ import { ActiveReportingStep } from './types';
 const initialState: ActiveReportingStep = 'type' as ActiveReportingStep;
 
 const validActiveReportingSteps = new Set< ActiveReportingStep >( [
-	'featureSelection',
+	'feature',
 	'type',
-	'nextSteps',
+	'next-steps',
 ] );
 
 export const activeReportingStepSlice = createSlice( {

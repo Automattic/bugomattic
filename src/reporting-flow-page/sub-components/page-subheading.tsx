@@ -11,8 +11,8 @@ export function ReportingPageSubheading() {
 
 	const friendlyStepDescriptions: { [ key in ActiveReportingStep ]: string } = {
 		type: 'Select issue type',
-		featureSelection: 'Select issue feature',
-		nextSteps: 'Next steps to report issue',
+		feature: 'Select issue feature',
+		[ 'next-steps' ]: 'Next steps to report issue',
 	};
 
 	return (

@@ -49,7 +49,7 @@ function getTaskIdsForFeature(
 	featureId: FeatureId
 ): string[] {
 	const { tasks } = reportingConfig;
-	const allIssueTypes: IssueType[] = [ 'bug', 'featureRequest', 'urgent' ];
+	const allIssueTypes: IssueType[] = [ 'bug', 'feature-request', 'urgent' ];
 	const taskIds = allIssueTypes.flatMap( ( issueType ) =>
 		getTaskIdsForFeatureAndType( reportingConfig, featureId, issueType )
 	);
@@ -70,15 +70,16 @@ function getTaskIdsForFeatureAndType(
 
 	const relevantTasksIds: string[] = [];
 
+	const keyableIssueType = issueType === 'feature-request' ? 'featureRequest' : issueType;
 	const feature = features[ featureId ];
-	const featureTaskIds = feature?.taskMapping?.[ issueType ];
+	const featureTaskIds = feature?.taskMapping?.[ keyableIssueType ];
 	if ( featureTaskIds ) {
 		relevantTasksIds.push( ...featureTaskIds );
 	}
 
 	if ( feature.parentType === 'featureGroup' ) {
 		const featureGroup = featureGroups[ feature.parentId ];
-		const featureGroupTaskIds = featureGroup.taskMapping?.[ issueType ];
+		const featureGroupTaskIds = featureGroup.taskMapping?.[ keyableIssueType ];
 		if ( featureGroupTaskIds ) {
 			relevantTasksIds.push( ...featureGroupTaskIds );
 		}
@@ -93,7 +94,7 @@ function getTaskIdsForFeatureAndType(
 		product = products[ feature.parentId ];
 	}
 
-	const productTaskIds = product.taskMapping?.[ issueType ];
+	const productTaskIds = product.taskMapping?.[ keyableIssueType ];
 	if ( productTaskIds ) {
 		relevantTasksIds.push( ...productTaskIds );
 	}

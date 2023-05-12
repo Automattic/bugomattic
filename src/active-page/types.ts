@@ -1,1 +1,1 @@
-export type ActivePage = 'duplicateSearching' | 'reportingFlow';
+export type ActivePage = 'duplicate-search' | 'report-issue';
