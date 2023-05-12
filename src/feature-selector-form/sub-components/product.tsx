@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React from 'react';
 import { useAppSelector } from '../../app/hooks';
 import { selectNormalizedReportingConfig } from '../../static-data/reporting-config/reporting-config-slice';
 import { SortedFeatureGroupList } from './sorted-feature-group-list';
