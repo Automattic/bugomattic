@@ -60,35 +60,31 @@ class ReportingConfigSearcher {
 			name: 3,
 			keyword: 2,
 			description: 1,
+			child: 0,
 		};
 		return priority[ newMatchType ] >= priority[ existingMatchType ];
 	}
 
-	private addEntityAndParents(
-		entityType: keyof ReportingConfigSearchResults,
-		entityId: string,
-		match: MatchOption,
-		parentId?: string
-	): void {
-		if ( ! this.searchResults[ entityType ] ) {
-			this.searchResults[ entityType ] = {};
-		}
+	private addFeatureGroupAndParents( entityId: string, match: MatchOption ): void {
+		this.updateMatchEntity( 'featureGroups', entityId, match );
+		const id = this.featureGroups[ entityId ].productId;
+		this.updateMatchEntity( 'products', id, { matchType: 'child' } );
+	}
 
-		this.updateMatchEntity( entityType, entityId, match );
+	private addFeatureAndParents( entityId: string, match: MatchOption ): void {
+		this.updateMatchEntity( 'features', entityId, match );
 
-		if ( parentId ) {
-			if ( entityType === 'features' && this.features[ entityId ]?.parentType === 'product' ) {
-				this.updateMatchEntity( 'products', parentId, match );
-			} else if ( entityType === 'featureGroups' ) {
-				// Explicitly handle the addition of parent products for feature groups
-				this.updateMatchEntity( 'products', parentId, match );
-			} else {
-				this.updateMatchEntity( 'featureGroups', parentId, match );
-				const parentFeatureGroup = this.featureGroups[ parentId ];
-				if ( parentFeatureGroup ) {
-					this.updateMatchEntity( 'products', parentFeatureGroup.productId, match );
-				}
-			}
+		const childMatch: () => MatchOption = () => ( {
+			matchType: 'child',
+		} );
+
+		const feature = this.features[ entityId ];
+		if ( feature.parentType === 'product' ) {
+			this.updateMatchEntity( 'products', feature.parentId, childMatch() );
+		} else {
+			this.updateMatchEntity( 'featureGroups', feature.parentId, childMatch() );
+			const parentFeatureGroup = this.featureGroups[ feature.parentId ];
+			this.updateMatchEntity( 'products', parentFeatureGroup.productId, childMatch() );
 		}
 	}
 
@@ -96,41 +92,30 @@ class ReportingConfigSearcher {
 		for ( const productId in this.products ) {
 			const product = this.products[ productId ];
 			if ( includesIgnoringCase( product.name, this.searchTerm ) ) {
-				this.addEntityAndParents( 'products', productId, { matchType: 'name' } );
+				this.updateMatchEntity( 'products', productId, { matchType: 'name' } );
 			}
 		}
 
 		for ( const featureGroupId in this.featureGroups ) {
 			const featureGroup = this.featureGroups[ featureGroupId ];
 			if ( includesIgnoringCase( featureGroup.name, this.searchTerm ) ) {
-				this.addEntityAndParents(
-					'featureGroups',
-					featureGroupId,
-					{ matchType: 'name' },
-					featureGroup.productId
-				);
+				this.addFeatureGroupAndParents( featureGroupId, { matchType: 'name' } );
 			}
 		}
 
 		for ( const featureId in this.features ) {
 			const feature = this.features[ featureId ];
 
-			if ( includesIgnoringCase( feature.name, this.searchTerm ) ) {
-				this.addEntityAndParents( 'features', featureId, { matchType: 'name' }, feature.parentId );
-			}
-
 			feature.keywords?.some( ( keyword: string ) => {
 				const includesSearchTerm = includesIgnoringCase( keyword, this.searchTerm );
 				if ( includesSearchTerm ) {
-					this.addEntityAndParents(
-						'features',
-						featureId,
-						{ matchType: 'keyword', keyword: keyword },
-						feature.parentId
-					);
+					this.addFeatureAndParents( featureId, { matchType: 'keyword', keyword: keyword } );
 				}
-				return includesSearchTerm;
 			} );
+
+			if ( includesIgnoringCase( feature.name, this.searchTerm ) ) {
+				this.addFeatureAndParents( featureId, { matchType: 'name' } );
+			}
 		}
 		return this;
 	}
@@ -162,23 +147,19 @@ class ReportingConfigSearcher {
 
 		for ( const entityId in scores.product ) {
 			if ( scores.product[ entityId ] >= scoreThreshold ) {
-				this.addEntityAndParents( 'products', entityId, descriptionMatch() );
+				this.updateMatchEntity( 'products', entityId, descriptionMatch() );
 			}
 		}
 
 		for ( const entityId in scores.featureGroup ) {
 			if ( scores.featureGroup[ entityId ] >= scoreThreshold ) {
-				this.addEntityAndParents( 'featureGroups', entityId, descriptionMatch() );
-				const parentFeatureGroup = this.featureGroups[ entityId ];
-				this.addEntityAndParents( 'products', parentFeatureGroup.productId, descriptionMatch() );
+				this.addFeatureGroupAndParents( entityId, descriptionMatch() );
 			}
 		}
 
 		for ( const entityId in scores.feature ) {
 			if ( scores.feature[ entityId ] >= scoreThreshold ) {
-				this.addEntityAndParents( 'features', entityId, descriptionMatch() );
-				const feature = this.features[ entityId ];
-				this.addEntityAndParents( 'products', feature.parentId, descriptionMatch() );
+				this.addFeatureAndParents( entityId, descriptionMatch() );
 			}
 		}
 

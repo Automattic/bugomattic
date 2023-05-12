@@ -13,15 +13,13 @@ interface Props {
 export function MatchedTypeDisplay( { entityId, entityType }: Props ) {
 	const searchResults = useAppSelector( selectReportingConfigSearchResults );
 
-	// Get the MatchType object for this entity
 	const entityMatch = searchResults[ entityType ][ entityId ];
 
 	let matchedDisplay: ReactNode = null;
 
 	if (
 		entityMatch &&
-		( ( entityMatch.matchType === 'keyword' && entityType === 'features' ) ||
-			entityMatch.matchType === 'description' )
+		( entityMatch.matchType === 'keyword' || entityMatch.matchType === 'description' )
 	) {
 		matchedDisplay = (
 			<span className={ styles.matchedTypeWrapper }>

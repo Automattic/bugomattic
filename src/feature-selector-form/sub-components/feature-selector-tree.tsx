@@ -14,7 +14,6 @@ export function FeatureSelectorTree( { parentElementId }: Props ) {
 	const { products } = useAppSelector( selectNormalizedReportingConfig );
 	const searchTerm = useAppSelector( selectFeatureSearchTerm );
 	const searchResults = useAppSelector( selectReportingConfigSearchResults );
-
 	let searchMessageDisplay: ReactNode;
 	if ( ! searchTerm ) {
 		searchMessageDisplay = null;
