@@ -7,7 +7,6 @@ import { ExpandableTreeNode } from './expandable-tree-node';
 import { SearchHighlighter } from './search-hightlighter';
 import { useExpansionWithSearch } from './use-expansion-with-search';
 import { selectReportingConfigSearchResults } from '../../combined-selectors/reporting-config-search-results';
-import { selectFeatureSearchTerm } from '../feature-selector-form-slice';
 import { MatchedTypeDisplay } from './matched-terms-display';
 
 interface Props {
@@ -17,25 +16,16 @@ interface Props {
 export function Product( { id }: Props ) {
 	const { products } = useAppSelector( selectNormalizedReportingConfig );
 	const { name, featureGroupIds, featureIds, description } = products[ id ];
-
-	const searchTerm = useAppSelector( selectFeatureSearchTerm );
-
 	const { isExpanded, handleCollapseExpandToggle } = useExpansionWithSearch();
 
 	const searchResults = useAppSelector( selectReportingConfigSearchResults );
 
-	const label = <SearchHighlighter>{ name }</SearchHighlighter>;
-
-	let labelDisplay: ReactNode = label;
-
-	if ( searchTerm !== '' && description ) {
-		labelDisplay = (
-			<>
-				{ label }
-				<MatchedTypeDisplay entityId={ id } entityType={ 'products' } />
-			</>
-		);
-	}
+	const matchesDisplay = (
+		<>
+			<SearchHighlighter>{ name }</SearchHighlighter>
+			<MatchedTypeDisplay entityId={ id } entityType={ 'products' } />
+		</>
+	);
 
 	const featureGroupIdsToDisplay = isExpanded
 		? featureGroupIds
@@ -47,7 +37,7 @@ export function Product( { id }: Props ) {
 
 	return (
 		<ExpandableTreeNode
-			label={ labelDisplay }
+			label={ matchesDisplay }
 			isExpanded={ isExpanded }
 			handleToggle={ handleCollapseExpandToggle }
 			description={ description }

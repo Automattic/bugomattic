@@ -237,6 +237,10 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 				screen.getByRole( 'button', { expanded: false, name: /ABC Product/ } )
 			).toBeInTheDocument();
 
+			expect(
+				screen.getByRole( 'button', { expanded: false, name: /ABC Product/ } )
+			).not.toHaveTextContent( 'description match' );
+
 			// Test important exclusions
 			expect( screen.queryByRole( 'button', { name: 'PQR Product' } ) ).not.toBeInTheDocument();
 			expect( screen.queryByRole( 'option', { name: 'GHI Feature' } ) ).not.toBeInTheDocument();
@@ -252,28 +256,14 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 				screen.getByRole( 'button', { expanded: false, name: 'PQR Product' } )
 			).toBeInTheDocument();
 
+			expect(
+				screen.getByRole( 'button', { expanded: false, name: /PQR Product/ } )
+			).not.toHaveTextContent( 'description match' );
+
 			// Test important exclusions
 			expect( screen.queryByRole( 'button', { name: 'ABC Product' } ) ).not.toBeInTheDocument();
 			expect( screen.queryByRole( 'button', { name: /Group/ } ) ).not.toBeInTheDocument();
 			expect( screen.queryByRole( 'option', { name: 'VWX Feature' } ) ).not.toBeInTheDocument();
-		} );
-
-		test( 'Two matches on a feature description under product shows all matches', async () => {
-			const { user } = setup( <FeatureSelectorForm /> );
-			await search( user, 'blog posts' );
-
-			expect( screen.getByRole( 'option', { name: /STU Feature/ } ) ).toHaveTextContent(
-				'description match'
-			);
-		} );
-
-		test( '3 or more matches on a feature description under product shows the strongest match and number of remaining matches', async () => {
-			const { user } = setup( <FeatureSelectorForm /> );
-			await search( user, 'blog posts carousel' );
-
-			expect( screen.getByRole( 'option', { name: /STU Feature/ } ) ).toHaveTextContent(
-				'description match'
-			);
 		} );
 
 		test( 'Matching both feature keyword and description shows the keyword match', async () => {

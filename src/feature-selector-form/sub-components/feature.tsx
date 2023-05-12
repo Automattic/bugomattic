@@ -1,16 +1,12 @@
-import React, { ReactNode } from 'react';
+import React from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
 	selectNormalizedReportingConfig,
 	selectProductIdForFeature,
 } from '../../static-data/reporting-config/reporting-config-slice';
 import styles from './../feature-selector-form.module.css';
-import {
-	selectFeatureSearchTerm,
-	selectSelectedFeatureId,
-	setSelectedFeatureId,
-} from '../feature-selector-form-slice';
-import { includesIgnoringCase, replaceSpaces } from '../../common/lib';
+import { selectSelectedFeatureId, setSelectedFeatureId } from '../feature-selector-form-slice';
+import { replaceSpaces } from '../../common/lib';
 import { SearchHighlighter } from './search-hightlighter';
 import { useMonitoring } from '../../monitoring/monitoring-provider';
 import { Tooltip } from 'react-tooltip';
@@ -41,19 +37,11 @@ export function Feature( { id }: Props ) {
 		classNames.push( styles.selectedFeature );
 	}
 
-	const searchTerm = useAppSelector( selectFeatureSearchTerm );
-
-	let matchedDisplay: ReactNode;
-
-	if ( searchTerm !== '' ) {
-		if ( ! includesIgnoringCase( featureName, searchTerm ) ) {
-			matchedDisplay = (
-				<>
-					<MatchedTypeDisplay entityId={ id } entityType={ 'features' } />
-				</>
-			);
-		}
-	}
+	const matchedDisplay = (
+		<>
+			<MatchedTypeDisplay entityId={ id } entityType={ 'features' } />
+		</>
+	);
 
 	const safeId = replaceSpaces( id );
 	const featureNameId = `feature_name_${ safeId }`;

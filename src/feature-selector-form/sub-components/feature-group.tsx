@@ -24,7 +24,7 @@ export function FeatureGroup( { id }: Props ) {
 		? featureIds
 		: featureIds.filter( ( featureId ) => featureId in searchResults.features );
 
-	const labelDisplay = (
+	const matchesDisplay = (
 		<>
 			<SearchHighlighter>{ name }</SearchHighlighter>
 			<MatchedTypeDisplay entityId={ id } entityType={ 'featureGroups' } />
@@ -33,7 +33,7 @@ export function FeatureGroup( { id }: Props ) {
 
 	return (
 		<ExpandableTreeNode
-			label={ labelDisplay }
+			label={ matchesDisplay }
 			isExpanded={ isExpanded }
 			handleToggle={ handleCollapseExpandToggle }
 			description={ description }
