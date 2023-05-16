@@ -1,4 +1,6 @@
 import React from 'react';
+import styles from './text-match-highlighter.module.css';
+import { escapeStringForRegex } from '../lib';
 
 interface Props {
 	children: string;
@@ -37,7 +39,7 @@ export function TextMatchHighlighter( {
 		if ( endIndexOfLastMatch !== matchStartIndex ) {
 			// And if it's not, add the text before the match.
 			outputParts.push(
-				<span key={ endIndexOfLastMatch }>
+				<span key={ endIndexOfLastMatch } className={ styles.segment }>
 					{ content.slice( endIndexOfLastMatch, matchStartIndex ) }
 				</span>
 			);
@@ -50,7 +52,7 @@ export function TextMatchHighlighter( {
 			<span
 				key={ matchStartIndex }
 				data-testid="highlighted-text-match"
-				className={ highlightClassName }
+				className={ `${ styles.segment } ${ highlightClassName }` }
 			>
 				{ matchDisplayText }
 			</span>
@@ -61,12 +63,10 @@ export function TextMatchHighlighter( {
 	}
 
 	outputParts.push(
-		<span key={ endIndexOfLastMatch }>{ content.slice( endIndexOfLastMatch ) }</span>
+		<span key={ endIndexOfLastMatch } className={ styles.segment }>
+			{ content.slice( endIndexOfLastMatch ) }
+		</span>
 	);
 
 	return <>{ outputParts }</>;
-}
-
-function escapeStringForRegex( string: string ) {
-	return string.replace( /[\\^$.*+?()[\]{}|]/g, '\\$&' );
 }

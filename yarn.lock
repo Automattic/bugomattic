@@ -2856,6 +2856,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/lodash.words@npm:^4.2.7":
+  version: 4.2.7
+  resolution: "@types/lodash.words@npm:4.2.7"
+  dependencies:
+    "@types/lodash": "*"
+  checksum: ec6caf0c92b96bd5ff4935237f8d5ff945a00ee410cc5fcf164bec30298cb241e54e60d8d7535c1cc3bf08887572d8825135841640c459d60522a9608305fd97
+  languageName: node
+  linkType: hard
+
 "@types/lodash@npm:*":
   version: 4.14.191
   resolution: "@types/lodash@npm:4.14.191"
@@ -4238,6 +4247,7 @@ __metadata:
     "@types/deep-equal": ^1.0.1
     "@types/jest": ^29.1.2
     "@types/lodash.debounce": ^4.0.7
+    "@types/lodash.words": ^4.2.7
     "@types/node": ^16.7.13
     "@types/path-browserify": ^1.0.0
     "@types/react": ^18.0.0
@@ -4261,6 +4271,7 @@ __metadata:
     jest-environment-jsdom: ^27.4.3
     lint-staged: ^13.0.3
     lodash.debounce: ^4.0.8
+    lodash.words: ^4.2.0
     miragejs: ^0.1.47
     path-browserify: ^1.0.1
     prettier: "npm:wp-prettier@latest"
@@ -9449,6 +9460,13 @@ __metadata:
   version: 4.3.0
   resolution: "lodash.values@npm:4.3.0"
   checksum: 857e122ddf6edb50137887f0b834d471f96d66692ebb5de8b048ed277c8a3dd1bc8f85d82cf31b0f5c6dbc5b72c036a591205f76eec86bb11818a1a6f7e5a28c
+  languageName: node
+  linkType: hard
+
+"lodash.words@npm:^4.2.0":
+  version: 4.2.0
+  resolution: "lodash.words@npm:4.2.0"
+  checksum: 287d617ffa3fb453b6925620f04fa195c801590833fd9336c7e80c36ce105d06613ad0455ad368738fb40b36fd5f635b85f837fc7f584b73e03365482acd6e7a
   languageName: node
   linkType: hard
 
