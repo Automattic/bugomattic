@@ -9,13 +9,22 @@
 	margin-bottom: 1rem;
 }
 
+.treeFieldset {
+	border: none;
+	padding: 0;
+	margin: 0;
+}
+
 .treeWrapper {
-	height: 320px;
-	overflow-y: scroll;
 	/* This helps preserve the focus outline */
 	padding: 1px;
 	margin: 0;
 	border: none;
+	resize: vertical;
+	/* This helps cut rows in half to show overflow */
+	height: 330px;
+	min-height: 80px;
+	overflow-y: scroll;
 }
 
 .firstLevel {
@@ -130,7 +139,7 @@ button.clearButton:active {
 }
 
 .bottomPanel {
-	margin-top: 1rem;
+	margin-top: 0.25rem;
 	border-top: solid 1px var( --color-border );
 	padding-top: 1.5rem;
 	padding-bottom: 1.5rem;
