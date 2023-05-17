@@ -42,12 +42,14 @@ export function FeatureSelectorTree( { parentElementId }: Props ) {
 	}
 
 	return (
-		<fieldset className={ styles.treeWrapper } id={ parentElementId }>
-			{ searchMessageDisplay }
-			<legend className="screenReaderOnly">
-				Expandable and collapsible tree with products, feature groups, and features
-			</legend>
-			<SortedProductList productIds={ productsToDisplay } />
-		</fieldset>
+		<div className={ styles.treeWrapper }>
+			<fieldset className={ styles.treeFieldset } id={ parentElementId }>
+				{ searchMessageDisplay }
+				<legend className="screenReaderOnly">
+					Expandable and collapsible tree with products, feature groups, and features
+				</legend>
+				<SortedProductList productIds={ productsToDisplay } />
+			</fieldset>
+		</div>
 	);
 }
