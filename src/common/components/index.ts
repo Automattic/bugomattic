@@ -9,3 +9,4 @@ export * from './segmented-control';
 export * from './dropdown';
 export * from './banner';
 export * from './step-subheader';
+export * from './buttons';

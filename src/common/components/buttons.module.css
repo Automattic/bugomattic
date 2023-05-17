@@ -1,0 +1,68 @@
+@import '../../variables.css';
+
+button.button {
+	display: inline-flex;
+	flex-direction: row;
+	align-items: center;
+	border-radius: 2px;
+}
+
+button.primary {
+	color: var( --color-white );
+	background-color: var( --color-primary );
+}
+
+button.primary:hover {
+	background-color: var( --color-primary-dark );
+}
+
+button.primary:active {
+	background-color: var( --color-primary-extra-dark );
+}
+
+button.primary:focus-visible {
+	outline-offset: 2px;
+}
+
+button.text {
+	color: var( --color-primary );
+	background-color: transparent;
+	border: none;
+	padding: 0.25rem 0 0 0;
+}
+
+button.text:hover {
+	color: var( --color-primary-dark );
+}
+
+button.text:active {
+	color: var( --color-primary-extra-dark );
+}
+
+button.clear {
+	color: var( --color-primary );
+	background-color: var( --color-white );
+}
+
+button.outlinePrimary {
+	color: var( --color-primary );
+	background-color: var( --color-white );
+	border: 1px solid var( --color-primary );
+}
+
+button.outlineNeutral {
+	background-color: var( --color-white );
+	border: 1px solid var( --color-border-dark );
+}
+
+button.clear:hover,
+button.outlinePrimary:hover,
+button.outlineNeutral:hover {
+	background-color: var( --color-neutral-extra-light );
+}
+
+button.clear:active,
+button.outlinePrimary:active,
+button.outlineNeutral:active {
+	background-color: var( --color-neutral-light );
+}
