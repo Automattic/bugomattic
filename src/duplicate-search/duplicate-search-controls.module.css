@@ -33,11 +33,6 @@ button.dropdownButton {
 	padding: 0.375rem 0.5625rem 0.375rem 0.5625rem;
 }
 
-button.dropdownButton[data-active='true'] {
-	/* Primary buttons don't traditionally have any border, so for size consistency, adding one here */
-	border: 1px solid var( --color-primary );
-}
-
 .repoPopover {
 	z-index: 2;
 	background-color: var( --color-white );
