@@ -10,25 +10,33 @@ button.button {
 button.primary {
 	color: var( --color-white );
 	background-color: var( --color-primary );
+	border: 1px solid var( --color-primary );
 }
 
 button.primary:hover {
 	background-color: var( --color-primary-dark );
+	border-color: var( --color-primary-dark );
 }
 
 button.primary:active {
 	background-color: var( --color-primary-extra-dark );
+	border-color: var( --color-primary-extra-dark );
 }
 
 button.primary:focus-visible {
+	outline: 2px solid var( --color-primary );
 	outline-offset: 2px;
+}
+
+button.primary svg path {
+	fill: var( --color-white );
 }
 
 button.text {
 	color: var( --color-primary );
 	background-color: transparent;
 	border: none;
-	padding: 0.25rem 0 0 0;
+	padding: 0;
 }
 
 button.text:hover {
@@ -42,12 +50,18 @@ button.text:active {
 button.clear {
 	color: var( --color-primary );
 	background-color: var( --color-white );
+	border: 1px solid transparent;
 }
 
 button.outlinePrimary {
 	color: var( --color-primary );
 	background-color: var( --color-white );
 	border: 1px solid var( --color-primary );
+}
+
+button.clear svg path,
+button.outlinePrimary svg path {
+	fill: var( --color-primary );
 }
 
 button.outlineNeutral {
@@ -65,4 +79,11 @@ button.clear:active,
 button.outlinePrimary:active,
 button.outlineNeutral:active {
 	background-color: var( --color-neutral-light );
+}
+
+button.clear:focus-visible,
+button.outlinePrimary:focus-visible,
+button.outlineNeutral:focus-visible {
+	border-color: var( --color-primary );
+	outline: 1px solid var( --color-primary );
 }

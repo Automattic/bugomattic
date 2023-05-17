@@ -1,5 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Dropdown, DropdownContent, DropdownItem, DropdownTrigger } from '../../common/components';
+import {
+	Dropdown,
+	DropdownContent,
+	DropdownItem,
+	DropdownTrigger,
+	OutlineNeutralButton,
+} from '../../common/components';
 import styles from '../duplicate-search-controls.module.css';
 import { IssueSortOption } from '../types';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
@@ -57,11 +63,11 @@ export function SortSelect() {
 	return (
 		<Dropdown placement={ placement } role="listbox">
 			<DropdownTrigger aria-label="Sort results by…">
-				<button className={ styles.dropdownButton }>
+				<OutlineNeutralButton className={ styles.dropdownButton }>
 					<SortIcon aria-hidden={ true } className={ styles.inlineIcon } />
 					<span>{ sortDropdownTriggerLabel }</span>
 					<DownIcon aria-hidden={ true } className={ styles.inlineIcon } />
-				</button>
+				</OutlineNeutralButton>
 			</DropdownTrigger>
 			<DropdownContent aria-label="Sort options">
 				{ sortOptions.map( ( sortOption ) => (
