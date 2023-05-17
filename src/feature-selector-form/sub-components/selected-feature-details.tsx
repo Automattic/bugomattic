@@ -6,6 +6,7 @@ import { selectSelectedFeatureId, setSelectedFeatureId } from '../feature-select
 import { useMonitoring } from '../../monitoring/monitoring-provider';
 import { SortedKeywordList } from './sorted-keyword-list';
 import { selectReposForFeature } from '../../combined-selectors/relevant-task-ids';
+import { SearchHighlighter } from './search-hightlighter';
 
 export function SelectedFeatureDetails() {
 	const dispatch = useAppDispatch();
@@ -74,7 +75,7 @@ export function SelectedFeatureDetails() {
 					data-testid={ 'selected-feature-description' }
 					className={ styles.selectedFeatureDescription }
 				>
-					{ description }
+					<SearchHighlighter tokenize={ true }>{ description }</SearchHighlighter>
 				</p>
 			) }
 			<div className={ styles.selectedFeatureRepositories }>

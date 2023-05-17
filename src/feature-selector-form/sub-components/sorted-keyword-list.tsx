@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { Pill } from '../../common/components';
 import styles from '../feature-selector-form.module.css';
+import { SearchHighlighter } from './search-hightlighter';
 
 interface Props {
 	keywords: string[];
@@ -20,7 +21,7 @@ export function SortedKeywordList( { keywords }: Props ) {
 		>
 			{ sortedKeywords.map( ( keyword ) => (
 				<Pill key={ keyword } pillClassName={ styles.keywordPill }>
-					{ keyword }
+					<SearchHighlighter>{ keyword }</SearchHighlighter>
 				</Pill>
 			) ) }
 		</div>

@@ -316,6 +316,28 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 			expect( highlightedMatches[ 0 ]?.textContent ).toBe( 'GHI' );
 		} );
 
+		test( 'The selected feature details will highlight the search term in keywords', async () => {
+			const { user } = setup( <FeatureSelectorForm /> );
+			await search( user, 'yzz' );
+			await user.click( screen.getByRole( 'option', { name: /VWX Feature/ } ) );
+
+			const highlightedMatches = screen.getAllByTestId( 'highlighted-text-match' );
+			expect( highlightedMatches.length ).toBe( 1 );
+			expect( highlightedMatches[ 0 ]?.textContent ).toBe( 'YZZ' );
+		} );
+
+		test( 'The selected feature details will highlight matching tokens from the search in the description', async () => {
+			const { user } = setup( <FeatureSelectorForm /> );
+			// Let's test an out-of-order match with a non-matching word and some junk symbols, for extra honesty!
+			await search( user, 'carousel foo #@&^*?>- newspack' );
+			await user.click( screen.getByRole( 'option', { name: /STU Feature/ } ) );
+
+			const highlightedMatches = screen.getAllByTestId( 'highlighted-text-match' );
+			expect( highlightedMatches.length ).toBe( 2 );
+			expect( highlightedMatches[ 0 ]?.textContent ).toBe( 'Newspack' );
+			expect( highlightedMatches[ 1 ]?.textContent ).toBe( 'Carousel' );
+		} );
+
 		test( 'You can expand result parents to see other non-matches', async () => {
 			const { user } = setup( <FeatureSelectorForm /> );
 			await search( user, 'ghi' );
