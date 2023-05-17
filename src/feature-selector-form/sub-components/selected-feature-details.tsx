@@ -7,6 +7,7 @@ import { useMonitoring } from '../../monitoring/monitoring-provider';
 import { SortedKeywordList } from './sorted-keyword-list';
 import { selectReposForFeature } from '../../combined-selectors/relevant-task-ids';
 import { SearchHighlighter } from './search-hightlighter';
+import { TextButton } from '../../common/components';
 
 export function SelectedFeatureDetails() {
 	const dispatch = useAppDispatch();
@@ -61,14 +62,13 @@ export function SelectedFeatureDetails() {
 			<h3 className="screenReaderOnly">Currently selected feature:</h3>
 			<div>
 				<span className={ styles.selectedFeatureName }>{ featureName }</span>
-				<button
+				<TextButton
 					type="button"
-					className={ styles.clearButton }
 					aria-label="Clear currently selected feature"
 					onClick={ handleClearClick }
 				>
 					Clear
-				</button>
+				</TextButton>
 			</div>
 			{ description && (
 				<p

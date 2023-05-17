@@ -49,7 +49,7 @@ button.text:active {
 
 button.clear {
 	color: var( --color-primary );
-	background-color: var( --color-white );
+	background-color: transparent;
 	border: 1px solid transparent;
 }
 

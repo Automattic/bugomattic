@@ -1,6 +1,6 @@
 import React, { ChangeEventHandler, FormEventHandler, ReactNode, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { FormErrorMessage, StepSubheader } from '../common/components';
+import { FormErrorMessage, PrimaryButton, StepSubheader } from '../common/components';
 import { selectIssueDetails, setIssueType } from '../issue-details/issue-details-slice';
 import { IssueType } from '../issue-details/types';
 import { ReactComponent as InfoIcon } from '../common/svgs/info.svg';
@@ -139,7 +139,7 @@ export function TypeForm( { onContinue }: Props ) {
 			</fieldset>
 
 			<div className={ styles.continueWrapper }>
-				<button className="primaryButton">Continue</button>
+				<PrimaryButton>Continue</PrimaryButton>
 			</div>
 		</form>
 	);

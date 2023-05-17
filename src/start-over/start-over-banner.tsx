@@ -11,6 +11,7 @@ import {
 	DropdownContent,
 	DropdownItem,
 	DropdownTrigger,
+	OutlinePrimaryButton,
 } from '../common/components';
 import { ReactComponent as ChecklistIllustration } from './checklist-illustration.svg';
 import { ActivePage } from '../active-page/types';
@@ -82,10 +83,10 @@ function StartOverDropdownMenu() {
 	return (
 		<Dropdown role="menu" placement="bottom">
 			<DropdownTrigger>
-				<button className={ styles.triggerButton }>
+				<OutlinePrimaryButton className={ styles.triggerButton }>
 					<span>Start Over</span>
 					<DownChevronIcon aria-hidden="true" className={ styles.triggerButtonIcon } />
-				</button>
+				</OutlinePrimaryButton>
 			</DropdownTrigger>
 			<DropdownContent>
 				{ menuOptions.map( ( { targetActivePage, label, icon: Icon } ) => (
