@@ -15,8 +15,8 @@ import {
 } from './sub-components';
 import styles from './duplicate-results.module.css';
 import { ReactComponent as InitialIllustration } from './svgs/initial-illustration.svg';
-import { ReactComponent as NoResultsIllustration } from '../common/svgs/missing-info.svg';
-import { ReactComponent as ErrorIllustration } from '../common/svgs/warning-triangle.svg';
+import { ReactComponent as NoResultsIllustration } from '../common/svgs/missing-info-illustration.svg';
+import { ReactComponent as ErrorIllustration } from '../common/svgs/warning.svg';
 import { LoadingIndicator } from '../common/components';
 import { selectDuplicateSearchFiltersAreActive } from '../combined-selectors/duplicate-search-filters-are-active';
 import { selectDuplicateSearchTerm } from '../duplicate-search/duplicate-search-slice';

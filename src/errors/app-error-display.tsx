@@ -1,5 +1,5 @@
 import React from 'react';
-import { ReactComponent as ErrorIcon } from '../common/svgs/warning-triangle.svg';
+import { ReactComponent as ErrorIcon } from '../common/svgs/warning.svg';
 import styles from './app-error.module.css';
 
 export function AppErrorDisplay() {

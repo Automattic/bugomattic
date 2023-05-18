@@ -6,7 +6,7 @@ import { selectIssueFeatureId, selectIssueType } from '../../issue-details/issue
 import { NextSteps } from '../../next-steps/next-steps';
 import { selectActiveReportingStep } from '../active-reporting-step-slice';
 import { StepContainer } from './step-container';
-import { ReactComponent as MissingInfoIcon } from '../../common/svgs/missing-info.svg';
+import { ReactComponent as MissingInfoIllustration } from '../../common/svgs/missing-info-illustration.svg';
 import styles from '../reporting-flow-page.module.css';
 import { startOver } from '../../start-over/start-over-counter-slice';
 import { useMonitoring } from '../../monitoring/monitoring-provider';
@@ -81,7 +81,7 @@ function MissingRequiredInfoWarning() {
 	};
 	return (
 		<div role="alert" className={ styles.badStateWrapper }>
-			<MissingInfoIcon className={ styles.badStateImage } aria-hidden="true" />
+			<MissingInfoIllustration className={ styles.badStateImage } aria-hidden="true" />
 			<h4 className={ styles.badStateHeader }>Hmm, we seem to be missing some information.</h4>
 			<p className={ styles.badStateMessage }>
 				This almost always means we could not parse the info in the URL. Please start over by
@@ -98,7 +98,7 @@ function NoTasksConfiguredWarning() {
 	return (
 		<>
 			<div role="alert" className={ styles.badStateWrapper }>
-				<MissingInfoIcon className={ styles.badStateImage } aria-hidden="true" />
+				<MissingInfoIllustration className={ styles.badStateImage } aria-hidden="true" />
 				<h4 className={ styles.badStateHeader }>
 					Hmm, it appears this feature area has no issue reporting configuration.
 				</h4>

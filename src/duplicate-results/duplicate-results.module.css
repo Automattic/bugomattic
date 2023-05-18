@@ -106,6 +106,14 @@ p.issueContent {
 	width: 1.5rem;
 }
 
+.closedIcon path {
+	fill: var( --color-issue-closed );
+}
+
+.openIcon path {
+	fill: var( --color-issue-open );
+}
+
 .statusIconWrapper {
 	padding: 0 0.75rem;
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ReactComponent as ErrorIcon } from '../svgs/warning-triangle.svg';
+import { ReactComponent as ErrorIcon } from '../svgs/warning.svg';
 import styles from './form-error-message.module.css';
 
 interface Props {

@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { ReactComponent as MegaphoneIllustration } from '../svgs/megaphone.svg';
+import { ReactComponent as MegaphoneIllustration } from '../svgs/megaphone-illustration.svg';
 import { Banner, OutlinePrimaryButton } from '../../common/components';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { ReportIssueDropdownMenu } from '../../common/components/report-issue-dropdown-menu';

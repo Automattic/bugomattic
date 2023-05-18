@@ -16,6 +16,10 @@
 	height: 4rem;
 }
 
+.icon path {
+	fill: var( --color-error );
+}
+
 h2.header {
 	font-size: var( --font-header );
 	font-family: var( --font-san-serif );

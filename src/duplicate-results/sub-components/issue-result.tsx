@@ -4,8 +4,8 @@ import { formatDistance, format } from 'date-fns';
 import { Tooltip } from 'react-tooltip';
 import styles from '../duplicate-results.module.css';
 import { TextMatchHighlighter } from '../../common/components';
-import { ReactComponent as OpenIcon } from '../svgs/open-icon.svg';
-import { ReactComponent as ClosedIcon } from '../svgs/closed-icon.svg';
+import { ReactComponent as OpenIcon } from '../svgs/open-issue.svg';
+import { ReactComponent as ClosedIcon } from '../svgs/closed-issue.svg';
 import { replaceSpaces } from '../../common/lib';
 
 interface Props {
@@ -45,7 +45,7 @@ export function IssueResult( { issue }: Props ) {
 				data-testid="open-icon"
 				role="img"
 				tabIndex={ -1 }
-				className={ styles.statusIcon }
+				className={ `${ styles.statusIcon } ${ styles.openIcon }` }
 			/>
 		);
 	} else {
@@ -56,7 +56,7 @@ export function IssueResult( { issue }: Props ) {
 				data-testid="closed-icon"
 				role="img"
 				tabIndex={ -1 }
-				className={ styles.statusIcon }
+				className={ `${ styles.statusIcon } ${ styles.closedIcon }` }
 			/>
 		);
 	}
