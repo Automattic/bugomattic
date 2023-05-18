@@ -13,6 +13,7 @@ import { useMonitoring } from '../../monitoring/monitoring-provider';
 import { useLoggerWithCache } from '../../monitoring/use-logger-with-cache';
 import { MoreInfo } from '../../next-steps/more-info';
 import { updateHistoryWithState } from '../../url-history/actions';
+import { PrimaryButton } from '../../common/components';
 
 interface Props {
 	stepNumber: number;
@@ -75,6 +76,7 @@ function MissingRequiredInfoWarning() {
 	const dispatch = useAppDispatch();
 	const handleStartOverClick = () => {
 		dispatch( startOver() );
+		// We stay on the same page, just restarting the reporting flow!
 		dispatch( updateHistoryWithState() );
 	};
 	return (
@@ -85,12 +87,9 @@ function MissingRequiredInfoWarning() {
 				This almost always means we could not parse the info in the URL. Please start over by
 				clicking the button below.
 			</p>
-			<button
-				onClick={ handleStartOverClick }
-				className={ `${ styles.startOverButton } primaryButton` }
-			>
+			<PrimaryButton onClick={ handleStartOverClick } className={ styles.startOverButton }>
 				Start Over
-			</button>
+			</PrimaryButton>
 		</div>
 	);
 }

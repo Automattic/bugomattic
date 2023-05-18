@@ -65,17 +65,6 @@
 	position: relative;
 }
 
-button.editButton {
-	color: var( --color-primary );
-	background-color: transparent;
-	padding: 0;
-}
-
-button.editButton:hover,
-button.editButton:active {
-	color: var( --color-primary-dark );
-}
-
 .completedContentHeader {
 	font-size: var( --font-body );
 	font-weight: 400;

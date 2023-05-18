@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { ReactComponent as MegaphoneIllustration } from '../svgs/megaphone.svg';
-import { Banner } from '../../common/components';
+import { Banner, OutlinePrimaryButton } from '../../common/components';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { ReportIssueDropdownMenu } from '../../common/components/report-issue-dropdown-menu';
 import { selectIssueType } from '../../issue-details/issue-details-slice';
@@ -21,19 +21,19 @@ export function ReportIssueBanner() {
 	}, [ dispatch ] );
 
 	const simpleButton = (
-		<button className={ styles.bannerButton } onClick={ handleSimpleButtonClick }>
+		<OutlinePrimaryButton className={ styles.bannerButton } onClick={ handleSimpleButtonClick }>
 			<span className={ styles.bannerSimpleButtonText }>Report an Issue</span>
 			<RightArrowIcon aria-hidden="true" className={ styles.bannerButtonIcon } />
-		</button>
+		</OutlinePrimaryButton>
 	);
 
 	const buttonWithDropdown = (
 		<ReportIssueDropdownMenu>
-			<button className={ styles.bannerButton }>
+			<OutlinePrimaryButton className={ styles.bannerButton }>
 				<PlusIcon aria-hidden="true" className={ styles.bannerButtonIcon } />
 				<span>Report an Issue</span>
 				<DownChevronIcon aria-hidden="true" className={ styles.bannerButtonIcon } />
-			</button>
+			</OutlinePrimaryButton>
 		</ReportIssueDropdownMenu>
 	);
 

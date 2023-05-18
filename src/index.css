@@ -84,29 +84,6 @@ body {
 	outline: revert;
 }
 
-/*
-These are generic enough that it feels like overkill to make a new component just for these button styles.
-So, we'll enable a global class option. 
-*/
-
-.root button.primaryButton {
-	color: var( --color-white );
-	background-color: var( --color-primary );
-	border-radius: 2px;
-}
-
-.root button.primaryButton:hover {
-	background-color: var( --color-primary-dark );
-}
-
-.root button.primaryButton:active {
-	background-color: var( --color-primary-extra-dark );
-}
-
-.root button.primaryButton:focus-visible {
-	outline-offset: 2px;
-}
-
 .root input code {
 	font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }

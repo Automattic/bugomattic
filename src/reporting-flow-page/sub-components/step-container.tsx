@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react';
 import styles from '../reporting-flow-page.module.css';
+import { TextButton } from '../../common/components';
 
 interface Props {
 	onEdit: () => void;
@@ -43,9 +44,9 @@ export function StepContainer( {
 					<span className={ styles.stepHeaderTitle }>{ title }</span>
 				</h3>
 				{ showEditButton && (
-					<button className={ styles.editButton } onClick={ onEdit } aria-describedby={ headerId }>
+					<TextButton onClick={ onEdit } aria-describedby={ headerId }>
 						Edit
-					</button>
+					</TextButton>
 				) }
 			</div>
 			{ children && <div className={ styles.stepContent }>{ children }</div> }

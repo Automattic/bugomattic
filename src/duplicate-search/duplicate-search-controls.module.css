@@ -29,47 +29,8 @@
 	align-items: center;
 }
 
-/* TODO: Move to its own app-wide styles in CSS or through a shared component */
 button.dropdownButton {
 	padding: 0.375rem 0.5625rem 0.375rem 0.5625rem;
-	display: flex;
-	align-items: center;
-	background-color: var( --color-white );
-	border-radius: 2px;
-	border: 1px solid var( --color-border-dark );
-}
-
-button.dropdownButton:hover {
-	background-color: var( --color-neutral-extra-light );
-}
-
-button.dropdownButton:active {
-	background-color: var( --color-neutral-light );
-}
-
-button.dropdownButton:focus-visible {
-	border-color: var( --color-primary );
-	outline: 1px solid var( --color-primary );
-}
-
-button.dropdownButton[data-active='true'] {
-	background-color: var( --color-primary );
-	border-color: var( --color-primary );
-	color: var( --color-white );
-}
-
-button.dropdownButton[data-active='true'] .inlineIcon path {
-	fill: var( --color-white );
-}
-
-button.dropdownButton[data-active='true']:hover {
-	background-color: var( --color-primary-dark );
-	border-color: var( --color-primary-dark );
-}
-
-button.dropdownButton[data-active='true']:active {
-	background-color: var( --color-primary-extra-dark );
-	border-color: var( --color-primary-extra-dark );
 }
 
 .repoPopover {
@@ -137,20 +98,6 @@ button.dropdownButton[data-active='true']:active {
 	margin: 1rem auto 1rem auto;
 }
 
-/* TODO: Move to its own app-wide styles in CSS or through a shared component */
-.repoFilterCancelButton {
-	color: var( --color-primary );
-	background-color: var( --color-white );
-}
-
-.repoFilterCancelButton:hover {
-	background-color: var( --color-neutral-extra-light );
-}
-
-.repoFilterCancelButton:active {
-	background-color: var( --color-neutral-light );
-}
-
 .repoFilterOrgList {
 	list-style: none;
 	padding-left: 0;
@@ -181,20 +128,6 @@ button.dropdownButton[data-active='true']:active {
 	display: flex;
 	align-items: center;
 	width: max-content;
-}
-
-button.repoFilterMassActionButton {
-	color: var( --color-primary );
-	background-color: transparent;
-	padding: 0;
-}
-
-.repoFilterMassActionButton:hover {
-	color: var( --color-primary-dark );
-}
-
-.repoFilterMassActionButton:active {
-	color: var( --color-primary-extra-dark );
 }
 
 .sortOption {

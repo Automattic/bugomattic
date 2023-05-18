@@ -167,21 +167,7 @@ p.placeholderText {
 }
 
 button.bannerButton {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	color: var( --color-primary );
-	background-color: var( --color-white );
-	border: 1px solid var( --color-primary );
 	padding: 0.625rem;
-}
-
-button.bannerButton:hover {
-	background-color: var( --color-neutral-extra-light );
-}
-
-button.bannerButton:active {
-	background-color: var( --color-neutral-light );
 }
 
 .bannerSimpleButtonText {
@@ -191,10 +177,6 @@ button.bannerButton:active {
 .bannerButtonIcon {
 	height: 1.5rem;
 	width: 1.5rem;
-}
-
-.bannerButtonIcon path {
-	fill: var( --color-primary );
 }
 
 @media only screen and ( max-width: 600px ) {

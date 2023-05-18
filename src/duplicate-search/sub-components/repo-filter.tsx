@@ -12,7 +12,12 @@ import {
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import styles from '../duplicate-search-controls.module.css';
 import { selectActiveRepoFilters, setActiveRepoFilters } from '../duplicate-search-slice';
-import { SegmentedControl } from '../../common/components';
+import {
+	ClearButton,
+	OutlineNeutralButton,
+	PrimaryButton,
+	SegmentedControl,
+} from '../../common/components';
 import { DefaultRepoFilter } from './default-repo-filter';
 import { ManualRepoFilter } from './manual-repo-filter';
 import { ReactComponent as DownIcon } from '../../common/svgs/chevron-down.svg';
@@ -89,6 +94,9 @@ export function RepoFilter() {
 		setFilterMode( newFilterMode as FilterMode );
 	}, [] );
 
+	const repoFiltersAreActive = savedActiveRepos.length > 0;
+	const TriggerButtonComponent = repoFiltersAreActive ? PrimaryButton : OutlineNeutralButton;
+
 	const popoverBodyClasses = [ styles.repoPopoverBody ];
 	if ( filterMode === 'Manual' ) {
 		popoverBodyClasses.push( styles.repoPopoverManualModeBody );
@@ -102,7 +110,7 @@ export function RepoFilter() {
 
 	return (
 		<>
-			<button
+			<TriggerButtonComponent
 				className={ styles.dropdownButton }
 				ref={ refs.setReference }
 				{ ...getReferenceProps() }
@@ -113,7 +121,7 @@ export function RepoFilter() {
 				<FilterIcon aria-hidden={ true } className={ styles.inlineIcon } />
 				<span>Repositories</span>
 				<DownIcon aria-hidden={ true } className={ styles.inlineIcon } />
-			</button>
+			</TriggerButtonComponent>
 			<span hidden id={ currentFilterDescriptionId }>
 				{ currentFilterDescription }
 			</span>
@@ -143,16 +151,8 @@ export function RepoFilter() {
 						<div className={ popoverBodyClasses.join( ' ' ) }>{ filterModeDisplay }</div>
 						<div className={ styles.repoPopoverFooter }>
 							<div className={ styles.repoFilterButtonWrapper }>
-								<button
-									type="button"
-									className={ styles.repoFilterCancelButton }
-									onClick={ handleCancelClick }
-								>
-									Cancel
-								</button>
-								<button type="button" className="primaryButton" onClick={ handleFilterClick }>
-									Filter
-								</button>
+								<ClearButton onClick={ handleCancelClick }>Cancel</ClearButton>
+								<PrimaryButton onClick={ handleFilterClick }>Filter</PrimaryButton>
 							</div>
 						</div>
 					</div>

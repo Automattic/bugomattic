@@ -1,6 +1,11 @@
 import React, { FormEventHandler, ReactNode, useCallback, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { DebouncedSearch, FormErrorMessage, StepSubheader } from '../common/components';
+import {
+	DebouncedSearch,
+	FormErrorMessage,
+	PrimaryButton,
+	StepSubheader,
+} from '../common/components';
 import { selectIssueFeatureId, setIssueFeatureId } from '../issue-details/issue-details-slice';
 import { useMonitoring } from '../monitoring/monitoring-provider';
 import {
@@ -115,7 +120,7 @@ export function FeatureSelectorForm( { onContinue }: Props ) {
 						{ bottomPanelDisplay }
 					</section>
 					<div className={ styles.continueButtonWrapper }>
-						<button className="primaryButton">Continue</button>
+						<PrimaryButton>Continue</PrimaryButton>
 					</div>
 				</div>
 			</form>

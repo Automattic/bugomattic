@@ -101,18 +101,6 @@ button.treeNode[aria-selected='true']:hover {
 	margin-right: 0.5rem;
 }
 
-button.clearButton {
-	color: var( --color-primary );
-	background-color: transparent;
-	border: none;
-	padding: 0.25rem 0 0 0;
-}
-
-button.clearButton:hover,
-button.clearButton:active {
-	color: var( --color-primary-dark );
-}
-
 .selectedFeatureRepositories,
 .selectedFeatureKeywords {
 	margin-top: 1.25rem;

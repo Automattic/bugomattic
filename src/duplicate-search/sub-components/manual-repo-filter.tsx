@@ -8,6 +8,7 @@ import {
 import { useMonitoring } from '../../monitoring/monitoring-provider';
 import { useLoggerWithCache } from '../../monitoring/use-logger-with-cache';
 import { ActiveRepos } from './types';
+import { TextButton } from '../../common/components';
 
 interface Props {
 	activeRepos: ActiveRepos;
@@ -48,9 +49,7 @@ export function ManualRepoFilter( { activeRepos, setActiveRepos }: Props ) {
 		};
 
 	const selectAllButton = (
-		<button
-			type="button"
-			className={ styles.repoFilterMassActionButton }
+		<TextButton
 			onClick={ () =>
 				setActiveRepos(
 					availableRepos.reduce( ( newActiveRepos: ActiveRepos, repo: string ) => {
@@ -61,17 +60,13 @@ export function ManualRepoFilter( { activeRepos, setActiveRepos }: Props ) {
 			}
 		>
 			Select all
-		</button>
+		</TextButton>
 	);
 
 	const deselectAllButton = (
-		<button
-			type="button"
-			className={ styles.repoFilterMassActionButton }
-			onClick={ () => setActiveRepos( {} ) }
-		>
+		<TextButton type="button" onClick={ () => setActiveRepos( {} ) }>
 			Deselect all
-		</button>
+		</TextButton>
 	);
 
 	const massActionButton =
