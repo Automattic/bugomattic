@@ -27,7 +27,7 @@ li.issueResult {
 a.issueLinkWrapper {
 	display: flex;
 	flex-direction: row;
-	color: var( --color-text-primary );
+	color: var( --color-text );
 	text-decoration: none;
 	padding: 0.75rem 1.25rem 0.75rem 0;
 }
@@ -38,7 +38,7 @@ a.issueLinkWrapper {
 }
 
 .issueResult:nth-child( 2n ) {
-	background-color: #fafafa;
+	background-color: var( --color-shaded-background );
 }
 
 .issueResult:nth-child( 2n + 1 ) {
@@ -46,15 +46,15 @@ a.issueLinkWrapper {
 }
 
 .issueResult:hover {
-	background-color: var( --color-primary-extra-light );
+	background-color: var( --color-primary-lightest );
 }
 
 .openIssue {
-	border-left: 4px solid #4ab866;
+	border-left: 4px solid var( --color-issue-open );
 }
 
 .closedIssue {
-	border-left: 4px solid #7a00df;
+	border-left: 4px solid var( --color-issue-closed );
 }
 
 p.issueTitle {

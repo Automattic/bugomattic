@@ -31,21 +31,21 @@ button.option {
 	padding: 0.5rem 0.875rem;
 	border: 1px solid transparent;
 	text-align: center;
-	color: var( --color-text-primary );
+	color: var( --color-text );
 	background-color: var( --color-white );
 }
 
 button.option:focus-visible {
 	outline: none;
-	border: 1px solid var( --color-primary-extra-dark );
+	border: 1px solid var( --color-primary-darker );
 }
 
 button.option:hover {
-	background-color: var( --color-neutral-extra-light );
+	background-color: var( --color-neutral-light );
 }
 
 button.option:active {
-	background-color: var( --color-neutral-light );
+	background-color: var( --color-neutral );
 }
 
 button.option[aria-selected='true'] {
@@ -58,5 +58,5 @@ button.option[aria-selected='true']:hover {
 }
 
 button.option[aria-selected='true']:active {
-	background-color: var( --color-primary-extra-dark );
+	background-color: var( --color-primary-darker );
 }

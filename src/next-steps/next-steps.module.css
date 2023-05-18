@@ -13,8 +13,8 @@
 }
 
 .taskListItem {
-	border: 1px solid var( --color-border-light );
-	background-color: var( --color-item-background );
+	border: 1px solid var( --color-border );
+	background-color: var( --color-shaded-background-light );
 	border-radius: 6px;
 	padding: 0.625rem;
 	display: flex;
@@ -32,7 +32,7 @@
 .taskTitle {
 	font-size: var( --font-header );
 	font-weight: 500;
-	color: var( --color-text-primary );
+	color: var( --color-text );
 	overflow-wrap: break-word;
 }
 
