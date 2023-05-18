@@ -11,15 +11,16 @@ export const OutlinePrimaryButton = createButton( styles.outlinePrimary );
 
 export const OutlineNeutralButton = createButton( styles.outlineNeutral );
 
-function createButton( buttonStlyeClass: string ) {
+function createButton( buttonStyleClass: string ) {
 	return forwardRef< HTMLButtonElement, ButtonHTMLAttributes< HTMLButtonElement > >(
 		function Button( { className, children, ...props }, ref ) {
+			const classes = [ styles.button, buttonStyleClass ];
+			if ( className ) {
+				classes.push( className );
+			}
+
 			return (
-				<button
-					className={ `${ styles.button } ${ buttonStlyeClass } ${ className }` }
-					ref={ ref }
-					{ ...props }
-				>
+				<button className={ classes.join( ' ' ) } ref={ ref } { ...props }>
 					{ children }
 				</button>
 			);
