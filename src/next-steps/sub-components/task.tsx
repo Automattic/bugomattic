@@ -5,7 +5,7 @@ import { TaskLink } from '../../static-data/reporting-config/types';
 import { ReactComponent as SlackIcon } from '../../common/svgs/slack-colored.svg';
 import { ReactComponent as GithubIcon } from '../../common/svgs/github.svg';
 import { ReactComponent as P2Icon } from '../../common/svgs/p2.svg';
-import { ReactComponent as LinkIcon } from '../../common/svgs/external-link-blue.svg';
+import { ReactComponent as LinkIcon } from '../../common/svgs/external-link.svg';
 import { selectIssueDetails } from '../../issue-details/issue-details-slice';
 import styles from '../next-steps.module.css';
 import {

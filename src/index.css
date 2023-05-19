@@ -9,8 +9,9 @@ body {
 	font-family: var( --font-san-serif );
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
-	color: var( --color-text-primary );
+	color: var( --color-text );
 	font-size: var( --font-body );
+	background-color: var( --color-white );
 }
 
 .root li,
@@ -24,7 +25,7 @@ body {
 .root h4,
 .root h5,
 .root h6 {
-	color: var( --color-text-primary );
+	color: var( --color-text );
 	font-weight: 700;
 }
 

@@ -42,7 +42,7 @@ button.treeNode {
 	background-color: inherit;
 	border: none;
 	font-size: var( --font-body );
-	color: var( --color-text-primary );
+	color: var( --color-text );
 	width: 100%;
 	min-height: 2.75rem;
 	height: fit-content;
@@ -61,7 +61,7 @@ button.treeNode {
 }
 
 button.treeNode:hover {
-	background-color: var( --color-neutral-light );
+	background-color: var( --color-primary-lightest );
 }
 
 .treeNodeContentWrapper {
@@ -75,7 +75,7 @@ button.treeNode:hover {
 
 button.treeNode[aria-selected='true'],
 button.treeNode[aria-selected='true']:hover {
-	background-color: var( --color-neutral );
+	background-color: var( --color-primary-lighter );
 }
 
 .searchSubstringMatch {
@@ -85,7 +85,6 @@ button.treeNode[aria-selected='true']:hover {
 
 .repositoriesList,
 .noResultsMessage {
-	color: var( --color-text-light );
 	font-weight: 300;
 }
 
@@ -122,7 +121,7 @@ button.treeNode[aria-selected='true']:hover {
 
 .selectedFeatureDescription {
 	font-size: var( --font-body );
-	color: var( --color-text-light );
+	font-weight: 300;
 	margin: 0.5rem 0 0 0;
 }
 
@@ -165,7 +164,7 @@ button.treeNode[aria-selected='true']:hover {
 }
 
 .noResults {
-	color: var( --color-text-primary );
+	color: var( --color-text );
 	font-size: var( --font-body-small );
 }
 
@@ -175,7 +174,7 @@ button.treeNode[aria-selected='true']:hover {
 }
 
 .matchedPill {
-	background-color: var( --color-neutral-light );
+	background-color: var( --color-neutral );
 }
 
 .appIcon {

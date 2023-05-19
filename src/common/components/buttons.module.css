@@ -19,8 +19,8 @@ button.primary:hover {
 }
 
 button.primary:active {
-	background-color: var( --color-primary-extra-dark );
-	border-color: var( --color-primary-extra-dark );
+	background-color: var( --color-primary-darker );
+	border-color: var( --color-primary-darker );
 }
 
 button.primary:focus-visible {
@@ -44,7 +44,7 @@ button.text:hover {
 }
 
 button.text:active {
-	color: var( --color-primary-extra-dark );
+	color: var( --color-primary-darker );
 }
 
 button.clear {
@@ -72,13 +72,13 @@ button.outlineNeutral {
 button.clear:hover,
 button.outlinePrimary:hover,
 button.outlineNeutral:hover {
-	background-color: var( --color-neutral-extra-light );
+	background-color: var( --color-neutral-light );
 }
 
 button.clear:active,
 button.outlinePrimary:active,
 button.outlineNeutral:active {
-	background-color: var( --color-neutral-light );
+	background-color: var( --color-neutral );
 }
 
 button.clear:focus-visible,

@@ -1,9 +1,9 @@
 import React, { FunctionComponent, ReactElement, SVGProps, forwardRef, useCallback } from 'react';
 import { Dropdown, DropdownContent, DropdownItem, DropdownTrigger } from './dropdown';
 import { IssueType } from '../../issue-details/types';
-import { ReactComponent as BugIcon } from '../svgs/bug-icon.svg';
-import { ReactComponent as FeatureIcon } from '../svgs/megaphone-icon.svg';
-import { ReactComponent as UrgentIcon } from '../svgs/warning-circle.svg';
+import { ReactComponent as BugIcon } from '../svgs/bug.svg';
+import { ReactComponent as FeatureIcon } from '../svgs/megaphone.svg';
+import { ReactComponent as UrgentIcon } from '../svgs/warning.svg';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setIssueType } from '../../issue-details/issue-details-slice';
 import { setActiveReportingStep } from '../../reporting-flow-page/active-reporting-step-slice';

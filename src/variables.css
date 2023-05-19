@@ -1,28 +1,35 @@
+@import './colors.css';
+
 :root {
-	--color-primary: #3858e9; /* Automattic Blue 50 */
-	--color-primary-dark: #1d35b4; /* Automattic Blue 70 */
-	--color-primary-extra-dark: #061a80; /* Automattic Blue 90 */
-	--color-primary-light: #bbe0fa; /* Automattic Blue 20 */
-	--color-primary-extra-light: #f0f6fc; /* Automattic Light Blue 100 */
-	--color-accent: #c9356e; /* Automattic Pink 50 */
-	--color-neutral: #dcdcde; /* Automattic Gray 5 */
-	--color-neutral-light: #eeeeee;
-	--color-neutral-extra-light: #fafafa;
-	--color-neutral-dark: #646970; /* Automattic Gray 50 */
-	--color-error: #d63638; /* Automattic Red 50 */
-	--color-success: #008a20; /* Automattic Green 50 */
-	--color-white: #ffffff;
+	/* Colors */
+	--color-primary: var( --blue );
+	--color-primary-light: var( --light-blue-300 );
+	--color-primary-lighter: var( --light-blue-200 );
+	--color-primary-lightest: var( --light-blue-100 );
+	--color-primary-dark: var( --dark-blue-100 );
+	--color-primary-darker: var( --dark-blue-200 );
 
-	--color-border: #cccccc;
-	--color-border-dark: #757575;
-	--color-border-light: #d7dade;
-	--color-shaded-background: #fafafa;
-	--color-item-background: #fcfcfc;
-	--color-text-primary: #1e1e1e;
-	--color-text-light: #2c2c2c;
+	--color-neutral: var( --gray-100 );
+	--color-neutral-light: var( --light-gray-200 );
+	--color-neutral-dark: var( --gray-700 );
 
-	--mobile-breakpoint: 600px;
+	--color-error: var( --red );
+	--color-success: var( --green );
 
+	--color-issue-open: var( --green );
+	--color-issue-closed: var( --purple );
+
+	--color-white: var( --white );
+
+	--color-border: var( --gray-400 );
+	--color-border-dark: var( --gray-700 );
+
+	--color-shaded-background: var( --light-gray-200 );
+	--color-shaded-background-light: var( --light-gray-100 );
+
+	--color-text: var( --gray-900 );
+
+	/* Font */
 	--font-san-serif: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, sans-serif;
 	--font-serif: Georgia, 'Times New Roman', Times, serif;
 
