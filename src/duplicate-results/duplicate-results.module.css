@@ -29,7 +29,7 @@ a.issueLinkWrapper {
 	flex-direction: row;
 	color: var( --color-text );
 	text-decoration: none;
-	padding: 0.75rem 1.25rem 0.75rem 0;
+	padding: 1.25rem 1.25rem 1.25rem 0;
 }
 
 .issueDetailsWrapper {
