@@ -13,12 +13,9 @@ export function useListboxFocusManager< OptionElementType extends HTMLElement = 
 ) {
 	const [ focusedIndex, setFocusedIndex ] = useState( initiallyFocusedIndex );
 
-	const refs = useRef< RefObject< OptionElementType >[] >( [] );
-	for ( let i = 0; i < length; i++ ) {
-		if ( ! refs.current[ i ] ) {
-			refs.current[ i ] = createRef();
-		}
-	}
+	const refs = useRef< RefObject< OptionElementType >[] >(
+		Array.from( { length }, () => createRef() )
+	);
 
 	// An "imperative" (i.e. focusing directly in an event callback) focus approach is more resilient
 	// than using useEffect hooks for managing focus race conditions. Because we have some page-header
@@ -72,6 +69,8 @@ export function useListboxFocusManager< OptionElementType extends HTMLElement = 
 				case 'End':
 					event.preventDefault();
 					goToLast();
+					break;
+				default:
 					break;
 			}
 		},
