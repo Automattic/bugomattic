@@ -8,6 +8,7 @@ import { ReportIssueDropdownMenu } from '../common/components/report-issue-dropd
 import { ReactComponent as PlusIcon } from '../common/svgs/plus.svg';
 import { ReactComponent as DownChevronIcon } from '../common/svgs/chevron-down.svg';
 import { selectIssueType } from '../issue-details/issue-details-slice';
+import { useListboxKeyboardNavigation } from '../common/components';
 
 export function AppNavbar() {
 	const dispatch = useAppDispatch();
@@ -52,43 +53,29 @@ export function AppNavbar() {
 		}
 	};
 
-	const goToNextItem = () => {
+	const goToNext = () => {
 		focusMenuItem( 'report-issue' );
 	};
 
-	const goToPreviousItem = () => {
+	const goToPrevious = () => {
 		focusMenuItem( 'duplicate-search' );
 	};
 
-	const goToFirstItem = () => {
+	const goToFirst = () => {
 		focusMenuItem( 'duplicate-search' );
 	};
 
-	const goToLastItem = () => {
+	const goToLast = () => {
 		focusMenuItem( 'report-issue' );
 	};
 
-	const handleKeyDown = ( event: React.KeyboardEvent< HTMLUListElement > ) => {
-		event.stopPropagation();
-		switch ( event.key ) {
-			case 'ArrowRight':
-				event.preventDefault();
-				goToNextItem();
-				break;
-			case 'ArrowLeft':
-				event.preventDefault();
-				goToPreviousItem();
-				break;
-			case 'Home':
-				event.preventDefault();
-				goToFirstItem();
-				break;
-			case 'End':
-				event.preventDefault();
-				goToLastItem();
-				break;
-		}
-	};
+	// The keyboard navigation rules are effectively the same for menubars and listboxes.
+	const handleKeyDown = useListboxKeyboardNavigation( 'horizontal', {
+		goToNext,
+		goToPrevious,
+		goToFirst,
+		goToLast,
+	} );
 
 	const handleMenuItemClick = ( page: ActivePage ) => () => {
 		dispatch( setActivePage( page ) );
