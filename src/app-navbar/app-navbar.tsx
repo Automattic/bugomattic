@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ButtonHTMLAttributes, forwardRef } from 'react';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { selectActivePage, setActivePage } from '../active-page/active-page-slice';
 import { ActivePage } from '../active-page/types';
@@ -12,63 +12,8 @@ import { useListboxFocusManager } from '../common/components';
 import { ReactElement } from 'react';
 
 export function AppNavbar() {
-	const dispatch = useAppDispatch();
 	const issueType = useAppSelector( selectIssueType );
 	const currentActivePage = useAppSelector( selectActivePage );
-
-	const handleSimpleMenuItemClick = ( page: ActivePage ) => () => {
-		dispatch( setActivePage( page ) );
-		dispatch( updateHistoryWithState() );
-	};
-
-	/*
-	The key to this component is managing focus. How fun! :)
-	For reference, see these two WAI ARIA articles:
-	https://www.w3.org/WAI/ARIA/apg/patterns/menubar/ - rules for menubars.
-	https://www.w3.org/WAI/ARIA/apg/patterns/menubar/examples/menubar-navigation/ - example we're following.
-
-	In short, we need to make sure keyboard and tabbing focus is handled correctly within the menubar.
-	And, after we've navigated to a new page, we need to make sure the heading for that page is focused.
-	The page heading focus happens in a hook elsewhere.
-	*/
-
-	const duplicateSearchMenuItem = (
-		<button
-			role="menuitem"
-			aria-current={ currentActivePage === 'duplicate-search' ? 'page' : undefined }
-			onClick={ handleSimpleMenuItemClick( 'duplicate-search' ) }
-			className={ styles.menuItem }
-		>
-			<span className={ styles.menuItemLabel }>Duplicate Search</span>
-		</button>
-	);
-
-	const simpleReportIssueMenuItem = (
-		<button
-			role="menuitem"
-			aria-current={ currentActivePage === 'report-issue' ? 'page' : undefined }
-			onClick={ handleSimpleMenuItemClick( 'report-issue' ) }
-			className={ styles.menuItem }
-		>
-			<span className={ styles.menuItemLabel }>Report an Issue</span>
-		</button>
-	);
-
-	const dropdownReportIssueMenuItem = (
-		<ReportIssueDropdownMenu>
-			<button
-				role="menuitem"
-				aria-current={ currentActivePage === 'report-issue' ? 'page' : undefined }
-				className={ styles.menuItem }
-			>
-				<span className={ styles.menuItemLabel }>
-					<PlusIcon aria-hidden="true" className={ styles.plusIcon } />
-					<span>Report an Issue</span>
-					<DownChevronIcon aria-hidden="true" />
-				</span>
-			</button>
-		</ReportIssueDropdownMenu>
-	);
 
 	interface MenuItemDetails {
 		page: ActivePage;
@@ -78,17 +23,22 @@ export function AppNavbar() {
 	const menuItems: MenuItemDetails[] = [
 		{
 			page: 'duplicate-search',
-			component: duplicateSearchMenuItem,
+			component: <SimpleMenuItem page="duplicate-search" label="Duplicate Search" />,
 		},
 		{
 			page: 'report-issue',
-			component: issueType === 'unset' ? dropdownReportIssueMenuItem : simpleReportIssueMenuItem,
+			component:
+				issueType === 'unset' ? (
+					<DropdownReportIssueMenuItem />
+				) : (
+					<SimpleMenuItem page="report-issue" label="Report an Issue" />
+				),
 		},
 	];
 
 	const currentPageIndex = menuItems.findIndex( ( item ) => item.page === currentActivePage );
 
-	// Menubars have just about the same focus/key rules as listboxes.
+	// This menubar has the same focus/key rules as a listbox.
 	const { focusedIndex, refs, handleKeyDown } = useListboxFocusManager< HTMLButtonElement >(
 		'horizontal',
 		{
@@ -96,8 +46,6 @@ export function AppNavbar() {
 			initiallyFocusedIndex: currentPageIndex,
 		}
 	);
-
-	console.log( focusedIndex );
 
 	return (
 		<nav aria-label="Bugomattic site navigation" className={ styles.navWrapper }>
@@ -120,3 +68,65 @@ export function AppNavbar() {
 		</nav>
 	);
 }
+
+// Why all these subcomponents and "forwardingRefs"?
+//
+// We want to be able to statically define the menu item components in an array for stability
+// and predictability.
+//
+// However, we also need to provide refs and tabIndices to actually rendered menu items.
+// These child components help handle forwarding those refs and tabIndices to the right places.
+
+interface SimpleMenuItemProps extends ButtonHTMLAttributes< HTMLButtonElement > {
+	page: ActivePage;
+	label: string;
+}
+
+const SimpleMenuItem = forwardRef< HTMLButtonElement, SimpleMenuItemProps >(
+	function SimpleMenuItem( { page, label, tabIndex }, forwardedRef ) {
+		const dispatch = useAppDispatch();
+		const currentActivePage = useAppSelector( selectActivePage );
+
+		const handleClick = ( page: ActivePage ) => () => {
+			dispatch( setActivePage( page ) );
+			dispatch( updateHistoryWithState() );
+		};
+
+		return (
+			<button
+				ref={ forwardedRef }
+				role="menuitem"
+				aria-current={ currentActivePage === page ? 'page' : undefined }
+				onClick={ handleClick( page ) }
+				tabIndex={ tabIndex }
+				className={ styles.menuItem }
+			>
+				<span className={ styles.menuItemLabel }>{ label }</span>
+			</button>
+		);
+	}
+);
+
+const DropdownReportIssueMenuItem = forwardRef<
+	HTMLButtonElement,
+	ButtonHTMLAttributes< HTMLButtonElement >
+>( function DropdownReportIssueMenuItem( { tabIndex }, forwardedRef ) {
+	const currentActivePage = useAppSelector( selectActivePage );
+
+	return (
+		<ReportIssueDropdownMenu ref={ forwardedRef }>
+			<button
+				role="menuitem"
+				aria-current={ currentActivePage === 'report-issue' ? 'page' : undefined }
+				className={ styles.menuItem }
+				tabIndex={ tabIndex }
+			>
+				<span className={ styles.menuItemLabel }>
+					<PlusIcon aria-hidden="true" className={ styles.plusIcon } />
+					<span>Report an Issue</span>
+					<DownChevronIcon aria-hidden="true" />
+				</span>
+			</button>
+		</ReportIssueDropdownMenu>
+	);
+} );
