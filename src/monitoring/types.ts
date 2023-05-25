@@ -33,6 +33,7 @@ export type EventName =
 	| 'feature_clear'
 	| 'feature_search'
 	| 'feature_save'
+	| 'issue_link_click'
 	| 'issue_search'
 	| 'navbar_item_click'
 	| 'navbar_report_issue_start'
