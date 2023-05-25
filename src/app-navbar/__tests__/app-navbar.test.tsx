@@ -154,5 +154,27 @@ describe( '[AppNavbar]', () => {
 				}
 			);
 		} );
+
+		test( 'Selecting the "Report an Issue" in the navbar records event', async () => {
+			const { monitoringClient, user } = await setup( {
+				issueDetails: { issueType: 'bug', issueTitle: '', featureId: null },
+			} );
+
+			await user.click( screen.getByRole( 'menuitem', { name: 'Report an Issue' } ) );
+
+			expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'navbar_item_click', {
+				page: 'report-issue',
+			} );
+		} );
+
+		test( 'Selecting the "Report an Issue" in the navbar records event', async () => {
+			const { monitoringClient, user } = await setup();
+
+			await user.click( screen.getByRole( 'menuitem', { name: 'Duplicate Search' } ) );
+
+			expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'navbar_item_click', {
+				page: 'duplicate-search',
+			} );
+		} );
 	} );
 } );

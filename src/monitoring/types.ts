@@ -34,6 +34,7 @@ export type EventName =
 	| 'feature_search'
 	| 'feature_save'
 	| 'issue_search'
+	| 'navbar_item_click'
 	| 'navbar_report_issue_start'
 	| 'type_save'
 	| 'feature_step_edit'

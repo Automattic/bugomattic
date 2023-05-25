@@ -8,10 +8,14 @@ import { ReportIssueDropdownMenu } from '../common/components/report-issue-dropd
 import { ReactComponent as PlusIcon } from '../common/svgs/plus.svg';
 import { ReactComponent as DownChevronIcon } from '../common/svgs/chevron-down.svg';
 import { selectIssueType } from '../issue-details/issue-details-slice';
+import { useMonitoring } from '../monitoring/monitoring-provider';
 import { useListboxFocusManager } from '../common/components';
 import { ReactElement } from 'react';
 
 export function AppNavbar() {
+	const dispatch = useAppDispatch();
+	const monitoringClient = useMonitoring();
+	const issueType = useAppSelector( selectIssueType );
 	const currentActivePage = useAppSelector( selectActivePage );
 
 	interface MenuItemDetails {
@@ -81,10 +85,12 @@ const SimpleMenuItem = forwardRef< HTMLButtonElement, SimpleMenuItemProps >(
 		const dispatch = useAppDispatch();
 		const currentActivePage = useAppSelector( selectActivePage );
 
-		const handleClick = ( page: ActivePage ) => () => {
-			dispatch( setActivePage( page ) );
-			dispatch( updateHistoryWithState() );
-		};
+	const handleMenuItemClick = ( page: ActivePage ) => () => {
+		dispatch( setActivePage( page ) );
+		dispatch( updateHistoryWithState() );
+
+		monitoringClient.analytics.recordEvent( 'navbar_item_click', { page } );
+	};
 
 		return (
 			<button
