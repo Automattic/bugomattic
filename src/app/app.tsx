@@ -11,11 +11,12 @@ import { useAppDataHydration } from './use-app-data-hydration';
 import { LoadingIndicator } from '../common/components';
 import { AppNavbar } from '../app-navbar/app-navbar';
 import { PageNavigationProvider } from '../active-page/page-navigation-provider';
+import history from 'history/browser';
 
 export function App() {
 	const monitoringClient = useMonitoring();
 	useEffect( () => {
-		monitoringClient.analytics.recordEvent( 'page_view' );
+		monitoringClient.analytics.recordEvent( 'page_view', { query: history.location.search } );
 	}, [ monitoringClient.analytics ] );
 
 	return (
