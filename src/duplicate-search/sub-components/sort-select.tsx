@@ -15,6 +15,7 @@ import { ReactComponent as DownIcon } from '../../common/svgs/chevron-down.svg';
 import { ReactComponent as SortIcon } from '../../common/svgs/sort.svg';
 import { Placement } from '@floating-ui/react';
 import { updateHistoryWithState } from '../../url-history/actions';
+import { useMonitoring } from '../../monitoring/monitoring-provider';
 
 interface SortOptions {
 	label: string;
@@ -23,6 +24,7 @@ interface SortOptions {
 
 export function SortSelect() {
 	const dispatch = useAppDispatch();
+	const monitoringClient = useMonitoring();
 	const currentSortOption = useAppSelector( selectSort );
 	const sortOptions: SortOptions[] = [
 		{
@@ -42,8 +44,12 @@ export function SortSelect() {
 		( sortOptionValue: IssueSortOption ) => {
 			dispatch( setSort( sortOptionValue ) );
 			dispatch( updateHistoryWithState() );
+
+			monitoringClient.analytics.recordEvent( 'sort_select', {
+				sortOption: sortOptionValue,
+			} );
 		},
-		[ dispatch ]
+		[ dispatch, monitoringClient.analytics ]
 	);
 
 	const [ placement, setPlacement ] = useState< Placement >( getPlacementBasedOnViewport() );

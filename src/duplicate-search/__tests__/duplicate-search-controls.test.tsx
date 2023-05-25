@@ -570,5 +570,23 @@ describe( '[DuplicateSearchControls]', () => {
 				).toHaveFocus()
 			);
 		} );
+
+		test( 'Selecting a sort option records event', async () => {
+			const { monitoringClient, user } = setup( <DuplicateSearchControls /> );
+
+			await user.click( screen.getByRole( 'combobox', { name: 'Sort results by…' } ) );
+			await user.click( screen.getByRole( 'option', { name: 'Date added' } ) );
+
+			expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'sort_select', {
+				sortOption: 'date-created',
+			} );
+
+			await user.click( screen.getByRole( 'combobox', { name: 'Sort results by…' } ) );
+			await user.click( screen.getByRole( 'option', { name: 'Relevance' } ) );
+
+			expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'sort_select', {
+				sortOption: 'relevance',
+			} );
+		} );
 	} );
 } );

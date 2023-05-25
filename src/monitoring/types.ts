@@ -41,6 +41,7 @@ export type EventName =
 	| 'task_link_click'
 	| 'more_info_link_click'
 	| 'repo_filter_select'
+	| 'sort_select'
 	| 'start_over_click'
 	| 'status_filter_select';
 
