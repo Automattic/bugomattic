@@ -9,7 +9,6 @@ import { setIssueType } from '../../issue-details/issue-details-slice';
 import { setActiveReportingStep } from '../../reporting-flow-page/active-reporting-step-slice';
 import { setActivePage } from '../../active-page/active-page-slice';
 import { updateHistoryWithState } from '../../url-history/actions';
-import { useMonitoring } from '../../monitoring/monitoring-provider';
 
 import styles from './report-issue-dropdown-menu.module.css';
 import { selectNextReportingStep } from '../../combined-selectors/next-reporting-step';
@@ -29,7 +28,6 @@ interface IssueTypeDetails {
 export const ReportIssueDropdownMenu = forwardRef< HTMLElement, Props >(
 	function ReportingIssueDropdownMenu( { children, additionalOnIssueTypeSelect }: Props, ref ) {
 		const dispatch = useAppDispatch();
-		const monitoringClient = useMonitoring();
 		const nextReportingFlowStep = useAppSelector( selectNextReportingStep );
 		const issueTypeOptions: IssueTypeDetails[] = [
 			{
@@ -54,9 +52,6 @@ export const ReportIssueDropdownMenu = forwardRef< HTMLElement, Props >(
 				// In the future, if we re-use this dropdown apart from navigation from duplicate searching,
 				// we may have defer more of these actions to calling components.
 				dispatch( setIssueType( issueType ) );
-
-				monitoringClient.analytics.recordEvent( 'type_save', { issueType: issueType } );
-
 				dispatch( setActiveReportingStep( nextReportingFlowStep ) );
 				dispatch( setActivePage( 'report-issue' ) );
 				dispatch( updateHistoryWithState() );
@@ -65,7 +60,7 @@ export const ReportIssueDropdownMenu = forwardRef< HTMLElement, Props >(
 					additionalOnIssueTypeSelect( issueType );
 				}
 			},
-			[ dispatch, monitoringClient.analytics, nextReportingFlowStep, additionalOnIssueTypeSelect ]
+			[ dispatch, nextReportingFlowStep, additionalOnIssueTypeSelect ]
 		);
 
 		return (
