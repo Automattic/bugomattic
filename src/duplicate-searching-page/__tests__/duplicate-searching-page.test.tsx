@@ -167,6 +167,7 @@ describe( '[DuplicateSearchingPage]', () => {
 				history.replace( `?${ preloadedStateInUrl }` );
 			}
 
+			const monitoringClient = createMockMonitoringClient();
 			const apiClient = createMockApiClient();
 			apiClient.loadReportingConfig.mockResolvedValue( {} );
 			apiClient.loadAvailableRepoFilters.mockResolvedValue( availableRepoFilters );
@@ -174,6 +175,7 @@ describe( '[DuplicateSearchingPage]', () => {
 			const user = userEvent.setup();
 			const view = renderWithProviders( <App />, {
 				apiClient,
+				monitoringClient,
 			} );
 
 			await waitForElementToBeRemoved(
@@ -183,6 +185,7 @@ describe( '[DuplicateSearchingPage]', () => {
 			return {
 				user,
 				apiClient,
+				monitoringClient,
 				...view,
 			};
 		}
@@ -254,6 +257,23 @@ describe( '[DuplicateSearchingPage]', () => {
 			await user.click( screen.getByRole( 'button', { name: 'Report an Issue' } ) );
 
 			expect( screen.getByRole( 'heading', { name: 'Report a new issue' } ) ).toBeInTheDocument();
+		} );
+
+		test( 'Selecting an issue type records event', async () => {
+			const { apiClient, monitoringClient, user } = await setup();
+			apiClient.searchIssues.mockResolvedValue( [] );
+			await search( user, 'foo bar' );
+
+			// Wait for it to show up.
+			await screen.findByRole( 'region', { name: 'Report a new issue' } );
+
+			await user.click( screen.getByRole( 'button', { name: 'Report an Issue' } ) );
+			await user.click( screen.getByRole( 'menuitem', { name: 'Escalate something urgent' } ) );
+
+			expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith(
+				'banner_report_issue_start',
+				{ issueType: 'urgent' }
+			);
 		} );
 	} );
 

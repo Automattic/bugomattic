@@ -27,12 +27,14 @@ export interface AnalyticsClient {
 }
 
 export type EventName =
+	| 'banner_report_issue_start'
 	| 'page_view'
 	| 'feature_select'
 	| 'feature_clear'
 	| 'feature_search'
 	| 'feature_save'
 	| 'issue_search'
+	| 'navbar_report_issue_start'
 	| 'type_save'
 	| 'feature_step_edit'
 	| 'type_step_edit'

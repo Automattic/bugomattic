@@ -120,7 +120,7 @@ const ReportIssueMenuItem = forwardRef<
 	}
 
 	return (
-		<ReportIssueDropdownMenu ref={ forwardedRef }>
+		<ReportIssueDropdownMenu ref={ forwardedRef } location="navbar">
 			<button
 				role="menuitem"
 				aria-current={ currentActivePage === 'report-issue' ? 'page' : undefined }

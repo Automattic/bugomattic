@@ -9,12 +9,15 @@ import { setIssueType } from '../../issue-details/issue-details-slice';
 import { setActiveReportingStep } from '../../reporting-flow-page/active-reporting-step-slice';
 import { setActivePage } from '../../active-page/active-page-slice';
 import { updateHistoryWithState } from '../../url-history/actions';
+import { useMonitoring } from '../../monitoring/monitoring-provider';
+import { ReportIssueLocation } from '../../duplicate-search/types';
 
 import styles from './report-issue-dropdown-menu.module.css';
 import { selectNextReportingStep } from '../../combined-selectors/next-reporting-step';
 
 interface Props {
 	children: ReactElement;
+	location: ReportIssueLocation;
 	additionalOnIssueTypeSelect?: ( issueType: IssueType ) => void;
 }
 
@@ -26,8 +29,12 @@ interface IssueTypeDetails {
 
 // We are forwarding the ref here because in some parent components, we need to force focus on the trigger element.
 export const ReportIssueDropdownMenu = forwardRef< HTMLElement, Props >(
-	function ReportingIssueDropdownMenu( { children, additionalOnIssueTypeSelect }: Props, ref ) {
+	function ReportingIssueDropdownMenu(
+		{ children, location, additionalOnIssueTypeSelect }: Props,
+		ref
+	) {
 		const dispatch = useAppDispatch();
+		const monitoringClient = useMonitoring();
 		const nextReportingFlowStep = useAppSelector( selectNextReportingStep );
 		const issueTypeOptions: IssueTypeDetails[] = [
 			{
@@ -56,11 +63,21 @@ export const ReportIssueDropdownMenu = forwardRef< HTMLElement, Props >(
 				dispatch( setActivePage( 'report-issue' ) );
 				dispatch( updateHistoryWithState() );
 
+				const eventType =
+					location === 'banner' ? 'banner_report_issue_start' : 'navbar_report_issue_start';
+				monitoringClient.analytics.recordEvent( eventType, { issueType: issueType } );
+
 				if ( additionalOnIssueTypeSelect ) {
 					additionalOnIssueTypeSelect( issueType );
 				}
 			},
-			[ dispatch, nextReportingFlowStep, additionalOnIssueTypeSelect ]
+			[
+				dispatch,
+				monitoringClient.analytics,
+				nextReportingFlowStep,
+				location,
+				additionalOnIssueTypeSelect,
+			]
 		);
 
 		return (
