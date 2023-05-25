@@ -105,6 +105,17 @@ describe( '[DuplicateSearchControls]', () => {
 
 			expect( apiClient.searchIssues ).not.toHaveBeenCalled();
 		} );
+
+		test( 'Searching a term records event', async () => {
+			const { monitoringClient, user } = setup( <DuplicateSearchControls /> );
+
+			const searchTerm = 'foo';
+			await search( user, searchTerm );
+
+			expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'issue_search', {
+				searchTerm: searchTerm,
+			} );
+		} );
 	} );
 
 	describe( 'Status filter', () => {

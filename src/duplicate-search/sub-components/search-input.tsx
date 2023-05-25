@@ -3,9 +3,11 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { selectDuplicateSearchTerm, setSearchTerm } from '../duplicate-search-slice';
 import { DebouncedSearch } from '../../common/components';
 import { updateHistoryWithState } from '../../url-history/actions';
+import { useMonitoring } from '../../monitoring/monitoring-provider';
 
 export function DuplicateSearchInput() {
 	const dispatch = useAppDispatch();
+	const monitoringClient = useMonitoring();
 	const reduxSearchTerm = useAppSelector( selectDuplicateSearchTerm );
 	const [ inputSearchTerm, setInputSearchTerm ] = useState( reduxSearchTerm );
 
@@ -30,8 +32,10 @@ export function DuplicateSearchInput() {
 		( searchTerm: string ) => {
 			dispatch( setSearchTerm( searchTerm ) );
 			dispatch( updateHistoryWithState() );
+
+			monitoringClient.analytics.recordEvent( 'issue_search', { searchTerm } );
 		},
-		[ dispatch ]
+		[ dispatch, monitoringClient.analytics ]
 	);
 
 	return (
