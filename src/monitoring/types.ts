@@ -40,7 +40,8 @@ export type EventName =
 	| 'task_complete_all'
 	| 'task_link_click'
 	| 'more_info_link_click'
-	| 'start_over_click';
+	| 'start_over_click'
+	| 'status_filter_select';
 
 export interface LogPayload {
 	feature: 'bugomattic_client';

@@ -157,6 +157,19 @@ describe( '[DuplicateSearchControls]', () => {
 
 			expect( apiClient.searchIssues ).not.toHaveBeenCalled();
 		} );
+
+		test( 'Selecting a new filter records event', async () => {
+			const { monitoringClient, user } = setup( <DuplicateSearchControls /> );
+
+			await user.click( screen.getByRole( 'option', { name: 'Open' } ) );
+
+			expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith(
+				'status_filter_select',
+				{
+					statusFilter: 'open',
+				}
+			);
+		} );
 	} );
 
 	describe( 'Repo filter', () => {
