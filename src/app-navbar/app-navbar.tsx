@@ -12,7 +12,6 @@ import { useListboxFocusManager } from '../common/components';
 import { ReactElement } from 'react';
 
 export function AppNavbar() {
-	const issueType = useAppSelector( selectIssueType );
 	const currentActivePage = useAppSelector( selectActivePage );
 
 	interface MenuItemDetails {
@@ -27,12 +26,7 @@ export function AppNavbar() {
 		},
 		{
 			page: 'report-issue',
-			component:
-				issueType === 'unset' ? (
-					<DropdownReportIssueMenuItem />
-				) : (
-					<SimpleMenuItem page="report-issue" label="Report an Issue" />
-				),
+			component: <ReportIssueMenuItem />,
 		},
 	];
 
@@ -107,11 +101,23 @@ const SimpleMenuItem = forwardRef< HTMLButtonElement, SimpleMenuItemProps >(
 	}
 );
 
-const DropdownReportIssueMenuItem = forwardRef<
+const ReportIssueMenuItem = forwardRef<
 	HTMLButtonElement,
 	ButtonHTMLAttributes< HTMLButtonElement >
->( function DropdownReportIssueMenuItem( { tabIndex }, forwardedRef ) {
+>( function ReportIssueMenuItem( { tabIndex }, forwardedRef ) {
+	const issueType = useAppSelector( selectIssueType );
 	const currentActivePage = useAppSelector( selectActivePage );
+
+	if ( issueType !== 'unset' ) {
+		return (
+			<SimpleMenuItem
+				page="report-issue"
+				label="Report an Issue"
+				ref={ forwardedRef }
+				tabIndex={ tabIndex }
+			/>
+		);
+	}
 
 	return (
 		<ReportIssueDropdownMenu ref={ forwardedRef }>
