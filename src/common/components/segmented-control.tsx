@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './segmented-control.module.css';
+import { useListboxFocusManager } from './use-listbox-focus-manager';
 
 interface OptionWithDisplayText {
 	value: string;
@@ -35,6 +36,18 @@ export function SegmentedControl( {
 	className,
 	ariaLabel,
 }: Props ) {
+	const selectedIndex = options.findIndex(
+		( option ) => getOptionValue( option ) === selectedOption
+	);
+
+	const { focusedIndex, refs, handleKeyDown } = useListboxFocusManager< HTMLButtonElement >(
+		'horizontal',
+		{
+			length: options.length,
+			initiallyFocusedIndex: selectedIndex,
+		}
+	);
+
 	const createId = ( option: string | OptionWithDisplayText ) =>
 		`${ controlId }-${ getOptionValue( option ) }`;
 
@@ -59,15 +72,19 @@ export function SegmentedControl( {
 			<div
 				aria-label={ ariaLabel }
 				role="listbox"
+				aria-orientation="horizontal"
 				aria-activedescendant={ createId( selectedOption ) }
+				onKeyDown={ handleKeyDown }
 				className={ styles.control }
 			>
-				{ options.map( ( option ) => (
+				{ options.map( ( option, index ) => (
 					<button
 						id={ createId( option ) }
+						ref={ refs.current[ index ] }
 						key={ getOptionValue( option ) }
 						onClick={ createClickHandler( option ) }
 						aria-selected={ isSelected( option ) }
+						tabIndex={ index === focusedIndex ? 0 : -1 }
 						role="option"
 						className={ styles.option }
 					>
