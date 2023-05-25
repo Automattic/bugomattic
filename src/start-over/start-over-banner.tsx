@@ -75,7 +75,7 @@ function StartOverDropdownMenu() {
 			dispatch( startOver() );
 			dispatch( setActivePage( targetActivePage ) );
 			dispatch( updateHistoryWithState() );
-			monitoringClient.analytics.recordEvent( 'start_over_click' );
+			monitoringClient.analytics.recordEvent( 'start_over_click', { targetActivePage } );
 		},
 		[ dispatch, monitoringClient.analytics ]
 	);

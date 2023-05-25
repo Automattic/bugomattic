@@ -152,4 +152,28 @@ describe( '[StartOverBanner]', () => {
 			screen.getByRole( 'heading', { name: 'Enter some keywords to search for duplicates.' } )
 		).toBeInTheDocument();
 	} );
+
+	describe( '[Analytics]', () => {
+		test( 'Clicking the "Search for duplicates" option records event', async () => {
+			const { user, monitoringClient } = await setup();
+
+			await user.click( screen.getByRole( 'button', { name: 'Start Over' } ) );
+			await user.click( screen.getByRole( 'menuitem', { name: 'Search for duplicates' } ) );
+
+			expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'start_over_click', {
+				targetActivePage: 'duplicate-search',
+			} );
+		} );
+
+		test( 'Clicking the "Report a new issue" option records event', async () => {
+			const { user, monitoringClient } = await setup();
+
+			await user.click( screen.getByRole( 'button', { name: 'Start Over' } ) );
+			await user.click( screen.getByRole( 'menuitem', { name: 'Report a new issue' } ) );
+
+			expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'start_over_click', {
+				targetActivePage: 'report-issue',
+			} );
+		} );
+	} );
 } );
