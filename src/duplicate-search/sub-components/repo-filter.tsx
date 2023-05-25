@@ -24,11 +24,13 @@ import { ReactComponent as DownIcon } from '../../common/svgs/chevron-down.svg';
 import { ReactComponent as FilterIcon } from '../../common/svgs/filter.svg';
 import { ActiveRepos } from './types';
 import { updateHistoryWithState } from '../../url-history/actions';
+import { useMonitoring } from '../../monitoring/monitoring-provider';
 
 type FilterMode = 'Default' | 'Manual';
 
 export function RepoFilter() {
 	const dispatch = useAppDispatch();
+	const monitoringClient = useMonitoring();
 
 	const savedActiveRepos = useAppSelector( selectActiveRepoFilters );
 
@@ -74,8 +76,12 @@ export function RepoFilter() {
 		dispatch( setActiveRepoFilters( newRepoFilters ) );
 		dispatch( updateHistoryWithState() );
 
+		monitoringClient.analytics.recordEvent( 'repo_filter_select', {
+			repoFilter: newRepoFilters.join( ',' ),
+		} );
+
 		setIsPopoverOpen( false );
-	}, [ dispatch, filterMode, workingActiveRepos ] );
+	}, [ dispatch, filterMode, monitoringClient.analytics, workingActiveRepos ] );
 
 	let filterModeDisplay: ReactNode;
 	if ( filterMode === 'Default' ) {

@@ -446,6 +446,39 @@ describe( '[DuplicateSearchControls]', () => {
 				{ error: 'Repo filter load error.' }
 			);
 		} );
+
+		test( 'Filtering on default mode records event', async () => {
+			const { monitoringClient } = setup( <DuplicateSearchControls /> );
+
+			await userEvent.click( screen.getByRole( 'button', { name: 'Repository filter' } ) );
+			await userEvent.click( screen.getByRole( 'button', { name: 'Filter' } ) );
+
+			expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'repo_filter_select', {
+				repoFilter: '',
+			} );
+		} );
+
+		test( 'Filtering on manual mode records event', async () => {
+			const { monitoringClient } = setup( <DuplicateSearchControls /> );
+
+			await userEvent.click( screen.getByRole( 'button', { name: 'Repository filter' } ) );
+			await userEvent.click( screen.getByRole( 'option', { name: 'Manual' } ) );
+			await userEvent.click(
+				screen.getByRole( 'checkbox', {
+					name: getRepoNameFromFullName( availableRepoFilters[ 0 ] ),
+				} )
+			);
+			await userEvent.click(
+				screen.getByRole( 'checkbox', {
+					name: getRepoNameFromFullName( availableRepoFilters[ 1 ] ),
+				} )
+			);
+			await userEvent.click( screen.getByRole( 'button', { name: 'Filter' } ) );
+
+			expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'repo_filter_select', {
+				repoFilter: `${ availableRepoFilters[ 0 ] },${ availableRepoFilters[ 1 ] }`,
+			} );
+		} );
 	} );
 
 	describe( 'Sort selection', () => {

@@ -40,6 +40,7 @@ export type EventName =
 	| 'task_complete_all'
 	| 'task_link_click'
 	| 'more_info_link_click'
+	| 'repo_filter_select'
 	| 'start_over_click'
 	| 'status_filter_select';
 
