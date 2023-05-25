@@ -1,10 +1,11 @@
 import React, { ReactElement } from 'react';
-import { screen, waitForElementToBeRemoved } from '@testing-library/react';
+import { act, screen, waitForElementToBeRemoved } from '@testing-library/react';
 import { App } from '../app';
 import { ApiClient, ReportingConfigApiResponse } from '../../api/types';
 import { createMockApiClient } from '../../test-utils/mock-api-client';
 import { renderWithProviders } from '../../test-utils/render-with-providers';
 import { createMockMonitoringClient } from '../../test-utils/mock-monitoring-client';
+import history from 'history/browser';
 
 describe( '[app]', () => {
 	function setup( component: ReactElement, apiClient: ApiClient ) {
@@ -86,7 +87,7 @@ describe( '[app]', () => {
 		).toBeInTheDocument();
 	} );
 
-	test( 'On loading, records the "page_view" event', async () => {
+	test( 'On loading, records the "page_view" with empty query string', async () => {
 		const apiClient = createMockApiClient();
 
 		const { monitoringClient } = setup( <App />, apiClient );
@@ -94,7 +95,27 @@ describe( '[app]', () => {
 		await waitForElementToBeRemoved( () =>
 			screen.queryByRole( 'alert', { name: 'Loading required app data' } )
 		);
-		expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'page_view' );
+		expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'page_view', {
+			query: '',
+		} );
+	} );
+
+	test( 'On loading from URL history, records the "page_view" with query string', async () => {
+		const apiClient = createMockApiClient();
+		const query = '?activePage=report-issue';
+
+		act( () => {
+			history.replace( query );
+		} );
+
+		const { monitoringClient } = setup( <App />, apiClient );
+
+		await waitForElementToBeRemoved( () =>
+			screen.queryByRole( 'alert', { name: 'Loading required app data' } )
+		);
+		expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'page_view', {
+			query: query,
+		} );
 	} );
 
 	// This main seem silly, but this is an important test!
