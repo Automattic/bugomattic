@@ -440,7 +440,7 @@ describe( '[DuplicateSearchControls]', () => {
 
 			expect( screen.getByRole( 'listbox', { name: 'Sort options' } ) ).toBeInTheDocument();
 
-			const expectedSortOptions = [ 'Relevance', 'Date added' ];
+			const expectedSortOptions = [ 'Relevance', 'Date created' ];
 			for ( const expectedSortOption of expectedSortOptions ) {
 				expect( screen.getByRole( 'option', { name: expectedSortOption } ) ).toBeInTheDocument();
 			}
@@ -452,7 +452,7 @@ describe( '[DuplicateSearchControls]', () => {
 			} );
 
 			await user.click( screen.getByRole( 'combobox', { name: 'Sort results by…' } ) );
-			await user.click( screen.getByRole( 'option', { name: 'Date added' } ) );
+			await user.click( screen.getByRole( 'option', { name: 'Date created' } ) );
 
 			expect( screen.queryByRole( 'listbox', { name: 'Sort options' } ) ).not.toBeInTheDocument();
 			expect( apiClient.searchIssues ).toHaveBeenCalledWith(
@@ -462,7 +462,7 @@ describe( '[DuplicateSearchControls]', () => {
 				} )
 			);
 			expect( screen.getByRole( 'combobox', { name: 'Sort results by…' } ) ).toHaveTextContent(
-				'Date added'
+				'Date created'
 			);
 		} );
 
@@ -474,7 +474,7 @@ describe( '[DuplicateSearchControls]', () => {
 			await user.click( screen.getByRole( 'combobox', { name: 'Sort results by…' } ) );
 
 			expect(
-				screen.getByRole( 'option', { name: 'Date added', selected: true } )
+				screen.getByRole( 'option', { name: 'Date created', selected: true } )
 			).toBeInTheDocument();
 		} );
 
@@ -493,7 +493,7 @@ describe( '[DuplicateSearchControls]', () => {
 			await user.keyboard( '{arrowdown}' );
 			await waitFor( () =>
 				expect(
-					screen.getByRole( 'option', { name: 'Date added', selected: false } )
+					screen.getByRole( 'option', { name: 'Date created', selected: false } )
 				).toHaveFocus()
 			);
 		} );
@@ -509,7 +509,7 @@ describe( '[DuplicateSearchControls]', () => {
 			await user.keyboard( 'd' );
 			await waitFor( () =>
 				expect(
-					screen.getByRole( 'option', { name: 'Date added', selected: false } )
+					screen.getByRole( 'option', { name: 'Date created', selected: false } )
 				).toHaveFocus()
 			);
 		} );
