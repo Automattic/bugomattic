@@ -30,7 +30,7 @@ export function SortSelect() {
 			value: 'relevance',
 		},
 		{
-			label: 'Date added',
+			label: 'Date created',
 			value: 'date-created',
 		},
 	];

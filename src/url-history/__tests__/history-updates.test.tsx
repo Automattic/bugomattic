@@ -129,7 +129,7 @@ describe( 'history updates', () => {
 			activeRepoFilters.length > 0 ? 'true' : 'false'
 		);
 
-		const expectedSortText = sort === 'relevance' ? 'Relevance' : 'Date added';
+		const expectedSortText = sort === 'relevance' ? 'Relevance' : 'Date created';
 		expect( screen.getByRole( 'combobox', { name: 'Sort results by…' } ) ).toHaveTextContent(
 			expectedSortText
 		);
@@ -173,7 +173,7 @@ describe( 'history updates', () => {
 
 		onSortChange: async () => {
 			await user.click( screen.getByRole( 'combobox', { name: 'Sort results by…' } ) );
-			await user.click( screen.getByRole( 'option', { name: 'Date added' } ) );
+			await user.click( screen.getByRole( 'option', { name: 'Date created' } ) );
 		},
 
 		onReportingFlowStart: async () => {
