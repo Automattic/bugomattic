@@ -4281,6 +4281,7 @@ __metadata:
     lodash.debounce: ^4.0.8
     lodash.words: ^4.2.0
     miragejs: ^0.1.47
+    papaparse: ^5.4.1
     path-browserify: ^1.0.1
     prettier: "npm:wp-prettier@latest"
     qs: ^6.11.0
@@ -10428,6 +10429,13 @@ __metadata:
   version: 2.2.0
   resolution: "p-try@npm:2.2.0"
   checksum: f8a8e9a7693659383f06aec604ad5ead237c7a261c18048a6e1b5b85a5f8a067e469aa24f5bc009b991ea3b058a87f5065ef4176793a200d4917349881216cae
+  languageName: node
+  linkType: hard
+
+"papaparse@npm:^5.4.1":
+  version: 5.4.1
+  resolution: "papaparse@npm:5.4.1"
+  checksum: fc9e52f7158dca3517c229e3309065b1ab5da6c7194572fba4f31ff138bc43e3c91182cc40365cc828f97fe10d0aca416068fd731661058bea0f69ddb84a411a
   languageName: node
   linkType: hard
 
