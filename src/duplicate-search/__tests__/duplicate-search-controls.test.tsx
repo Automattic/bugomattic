@@ -575,7 +575,7 @@ describe( '[DuplicateSearchControls]', () => {
 			const { monitoringClient, user } = setup( <DuplicateSearchControls /> );
 
 			await user.click( screen.getByRole( 'combobox', { name: 'Sort results by…' } ) );
-			await user.click( screen.getByRole( 'option', { name: 'Date added' } ) );
+			await user.click( screen.getByRole( 'option', { name: 'Date created' } ) );
 
 			expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'sort_select', {
 				sortOption: 'date-created',
