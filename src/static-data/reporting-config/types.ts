@@ -114,7 +114,23 @@ export interface NewGitHubIssueLink {
 	labels?: string[]; // "[Pri] High" e.g.
 }
 
-export type TaskLink = SlackLink | P2Link | GeneralLink | NewGitHubIssueLink;
+export interface NewJiraIssueLink {
+	type: 'jira';
+	project: JiraProject;
+	issueType: JiraIssueType;
+}
+
+interface JiraIssueType {
+	name: string;
+	id: number;
+}
+
+interface JiraProject {
+	name: string;
+	id: number;
+}
+
+export type TaskLink = SlackLink | P2Link | GeneralLink | NewGitHubIssueLink | NewJiraIssueLink;
 
 export interface TaskDetails {
 	title?: string;

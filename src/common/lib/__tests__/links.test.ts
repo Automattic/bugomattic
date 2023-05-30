@@ -1,6 +1,7 @@
 import {
 	createGeneralHref,
 	createNewGithubIssueHref,
+	createNewJiraIssueHref,
 	createP2Href,
 	createSlackHref,
 } from '../links';
@@ -122,6 +123,26 @@ describe( '[Links]', () => {
 					},
 					'foo&bar'
 				)
+			).toBe( expectedHref );
+		} );
+	} );
+
+	describe( '[createNewJiraIssueHref]', () => {
+		test( 'Correctly creates href and encodes all the provided Jira params', () => {
+			const expectedHref =
+				'https://jira.tumblr.net/secure/CreateIssueDetails!init.jspa?pid=12345&issuetype=1';
+			expect(
+				createNewJiraIssueHref( {
+					type: 'jira',
+					project: {
+						name: 'Test Project',
+						id: 12345,
+					},
+					issueType: {
+						name: 'bug',
+						id: 1,
+					},
+				} )
 			).toBe( expectedHref );
 		} );
 	} );

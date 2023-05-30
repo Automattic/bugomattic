@@ -1,6 +1,7 @@
 import {
 	GeneralLink,
 	NewGitHubIssueLink,
+	NewJiraIssueLink,
 	P2Link,
 	SlackLink,
 } from '../../static-data/reporting-config/types';
@@ -65,5 +66,13 @@ export function createNewGithubIssueHref( link: NewGitHubIssueLink, issueTitle?:
 		url.searchParams.append( 'labels', link.labels.join( ',' ) );
 	}
 
+	return url.href;
+}
+
+export function createNewJiraIssueHref( link: NewJiraIssueLink ) {
+	const url = new URL( 'https://jira.tumblr.net/secure/CreateIssueDetails!init.jspa' );
+	// If the project ID or issue type is invalid, the link will just show an error saying as much.
+	url.searchParams.append( 'pid', link.project.id.toString() );
+	url.searchParams.append( 'issuetype', link.issueType.id.toString() );
 	return url.href;
 }
