@@ -70,9 +70,11 @@ export function createNewGithubIssueHref( link: NewGitHubIssueLink, issueTitle?:
 }
 
 export function createNewJiraIssueHref( link: NewJiraIssueLink ) {
-	const url = new URL( 'https://jira.tumblr.net/secure/CreateIssueDetails!init.jspa' );
+	// In case people accidentally prefix with 'https://', strip it
+	const trimmedHostName = link.hostName.replace( /^https?:\/\//, '' );
+	const url = new URL( `https://${ trimmedHostName }/secure/CreateIssueDetails!init.jspa` );
 	// If the project ID or issue type is invalid, the link will just show an error saying as much.
-	url.searchParams.append( 'pid', link.project.id.toString() );
-	url.searchParams.append( 'issuetype', link.issueType.id.toString() );
+	url.searchParams.append( 'pid', link.projectId.toString() );
+	url.searchParams.append( 'issuetype', link.issueTypeId.toString() );
 	return url.href;
 }

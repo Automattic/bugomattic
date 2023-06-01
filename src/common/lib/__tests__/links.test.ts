@@ -134,14 +134,22 @@ describe( '[Links]', () => {
 			expect(
 				createNewJiraIssueHref( {
 					type: 'jira',
-					project: {
-						name: 'Test Project',
-						id: 12345,
-					},
-					issueType: {
-						name: 'bug',
-						id: 1,
-					},
+					hostName: 'jira.tumblr.net',
+					projectId: 12345,
+					issueTypeId: 1,
+				} )
+			).toBe( expectedHref );
+		} );
+
+		test( 'Strips https:// if provided', () => {
+			const expectedHref =
+				'https://jira.tumblr.net/secure/CreateIssueDetails!init.jspa?pid=12345&issuetype=1';
+			expect(
+				createNewJiraIssueHref( {
+					type: 'jira',
+					hostName: 'https://jira.tumblr.net',
+					projectId: 12345,
+					issueTypeId: 1,
 				} )
 			).toBe( expectedHref );
 		} );

@@ -116,18 +116,9 @@ export interface NewGitHubIssueLink {
 
 export interface NewJiraIssueLink {
 	type: 'jira';
-	project: JiraProject;
-	issueType: JiraIssueType;
-}
-
-interface JiraIssueType {
-	name: string;
-	id: number;
-}
-
-interface JiraProject {
-	name: string;
-	id: number;
+	hostName: string;
+	projectId: number;
+	issueTypeId: number; // standard JIRA issue type values from 1 to 4
 }
 
 export type TaskLink = SlackLink | P2Link | GeneralLink | NewGitHubIssueLink | NewJiraIssueLink;

@@ -160,7 +160,7 @@ function getDefaultTitleForLink( link: TaskLink ): string {
 		case 'github':
 			return `Open an issue in the ${ link.repository } repo`;
 		case `jira`:
-			return `Open an issue in the ${ link.project.name } project`;
+			return 'Open a new issue';
 		case 'slack':
 			return `Notify the #${ link.channel } channel in Slack`;
 		case 'p2':
