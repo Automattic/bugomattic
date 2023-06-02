@@ -1,6 +1,7 @@
 import {
 	GeneralLink,
 	NewGitHubIssueLink,
+	NewJiraIssueLink,
 	P2Link,
 	SlackLink,
 } from '../../static-data/reporting-config/types';
@@ -65,5 +66,15 @@ export function createNewGithubIssueHref( link: NewGitHubIssueLink, issueTitle?:
 		url.searchParams.append( 'labels', link.labels.join( ',' ) );
 	}
 
+	return url.href;
+}
+
+export function createNewJiraIssueHref( link: NewJiraIssueLink ) {
+	// In case people accidentally prefix with 'https://', strip it
+	const trimmedHostName = link.hostName.replace( /^https?:\/\//, '' );
+	const url = new URL( `https://${ trimmedHostName }/secure/CreateIssueDetails!init.jspa` );
+	// If the project ID or issue type is invalid, the link will just show an error saying as much.
+	url.searchParams.append( 'pid', link.projectId.toString() );
+	url.searchParams.append( 'issuetype', link.issueTypeId.toString() );
 	return url.href;
 }

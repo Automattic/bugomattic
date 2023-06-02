@@ -6,6 +6,7 @@ import { ReactComponent as SlackIcon } from '../../common/svgs/slack-colored.svg
 import { ReactComponent as GithubIcon } from '../../common/svgs/github.svg';
 import { ReactComponent as P2Icon } from '../../common/svgs/p2.svg';
 import { ReactComponent as LinkIcon } from '../../common/svgs/external-link.svg';
+import { ReactComponent as JiraIcon } from '../../common/svgs/jira.svg';
 import { selectIssueDetails } from '../../issue-details/issue-details-slice';
 import styles from '../next-steps.module.css';
 import {
@@ -16,6 +17,7 @@ import {
 import {
 	createGeneralHref,
 	createNewGithubIssueHref,
+	createNewJiraIssueHref,
 	createP2Href,
 	createSlackHref,
 	replaceSpaces,
@@ -157,6 +159,8 @@ function getDefaultTitleForLink( link: TaskLink ): string {
 			return link.href;
 		case 'github':
 			return `Open an issue in the ${ link.repository } repo`;
+		case `jira`:
+			return 'Open a new issue';
 		case 'slack':
 			return `Notify the #${ link.channel } channel in Slack`;
 		case 'p2':
@@ -172,6 +176,8 @@ function getAppIconForLink( link: TaskLink ): ReactNode {
 			return (
 				<GithubIcon data-testid="github-icon" aria-hidden={ true } className={ styles.appIcon } />
 			);
+		case 'jira':
+			return <JiraIcon data-testid="jira-icon" aria-hidden={ true } className={ styles.appIcon } />;
 		case 'slack':
 			return (
 				<SlackIcon data-testid="slack-icon" aria-hidden={ true } className={ styles.appIcon } />
@@ -187,6 +193,8 @@ function getLinkName( link: TaskLink ): string {
 			return 'General';
 		case 'github':
 			return 'GitHub';
+		case 'jira':
+			return 'Jira';
 		case 'slack':
 			return 'Slack';
 		case 'p2':
@@ -200,6 +208,8 @@ function createLinkHref( link: TaskLink, issueTitle?: string ): string {
 			return createGeneralHref( link );
 		case 'github':
 			return createNewGithubIssueHref( link, issueTitle );
+		case 'jira':
+			return createNewJiraIssueHref( link );
 		case 'slack':
 			return createSlackHref( link );
 		case 'p2':
