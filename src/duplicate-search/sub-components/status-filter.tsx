@@ -4,9 +4,11 @@ import { selectStatusFilter, setStatusFilter } from '../duplicate-search-slice';
 import { IssueStatusFilter } from '../types';
 import { SegmentedControl } from '../../common/components';
 import { updateHistoryWithState } from '../../url-history/actions';
+import { useMonitoring } from '../../monitoring/monitoring-provider';
 
 export function StatusFilter() {
 	const dispatch = useAppDispatch();
+	const monitoringClient = useMonitoring();
 	const currentStatusFilter = useAppSelector( selectStatusFilter );
 
 	const statusFilterOptions: { value: IssueStatusFilter; displayText: string }[] = [
@@ -19,8 +21,12 @@ export function StatusFilter() {
 		( newStatusFilter: IssueStatusFilter ) => {
 			dispatch( setStatusFilter( newStatusFilter ) );
 			dispatch( updateHistoryWithState() );
+
+			monitoringClient.analytics.recordEvent( 'status_filter_select', {
+				statusFilter: newStatusFilter,
+			} );
 		},
-		[ dispatch ]
+		[ dispatch, monitoringClient.analytics ]
 	);
 
 	return (

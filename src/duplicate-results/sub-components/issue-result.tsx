@@ -7,12 +7,14 @@ import { TextMatchHighlighter } from '../../common/components';
 import { ReactComponent as OpenIcon } from '../svgs/open-issue.svg';
 import { ReactComponent as ClosedIcon } from '../svgs/closed-issue.svg';
 import { replaceSpaces } from '../../common/lib';
+import { useMonitoring } from '../../monitoring/monitoring-provider';
 
 interface Props {
 	issue: Issue;
 }
 
 export function IssueResult( { issue }: Props ) {
+	const monitoringClient = useMonitoring();
 	const { title, url, content, status, dateCreated, dateUpdated, author, repo } = issue;
 
 	const issueId = url.split( '/' ).pop(); // Last piece of the URL
@@ -73,6 +75,10 @@ export function IssueResult( { issue }: Props ) {
 	// changes in the future to not be HTML tags.
 	const searchMatchRegex = /<em data-search-match>(.*?)<\/em>/g;
 
+	const handleLinkClick = () => {
+		monitoringClient.analytics.recordEvent( 'issue_link_click' );
+	};
+
 	return (
 		<li className={ issueResultClasses.join( ' ' ) }>
 			<a
@@ -81,6 +87,7 @@ export function IssueResult( { issue }: Props ) {
 				target="_blank"
 				href={ url }
 				rel="noreferrer"
+				onClick={ handleLinkClick }
 			>
 				<div className={ styles.statusIconWrapper }>{ statusIcon }</div>
 				<div className={ styles.issueDetailsWrapper }>

@@ -7,6 +7,7 @@ import userEvent from '@testing-library/user-event';
 import { renderWithProviders } from '../../test-utils/render-with-providers';
 import { waitForElementToBeRemoved, screen, waitFor } from '@testing-library/react';
 import { App } from '../../app/app';
+import { createMockMonitoringClient } from '../../test-utils/mock-monitoring-client';
 
 describe( '[AppNavbar]', () => {
 	async function setup( preloadedState?: Partial< RootState > ) {
@@ -18,6 +19,7 @@ describe( '[AppNavbar]', () => {
 			history.replace( `?${ preloadedStateInUrl }` );
 		}
 
+		const monitoringClient = createMockMonitoringClient();
 		const apiClient = createMockApiClient();
 		apiClient.loadReportingConfig.mockResolvedValue( {} );
 		apiClient.loadAvailableRepoFilters.mockResolvedValue( [ 'foo/bar' ] );
@@ -25,6 +27,7 @@ describe( '[AppNavbar]', () => {
 		const user = userEvent.setup();
 		const view = renderWithProviders( <App />, {
 			apiClient,
+			monitoringClient,
 		} );
 
 		await waitForElementToBeRemoved(
@@ -34,6 +37,7 @@ describe( '[AppNavbar]', () => {
 		return {
 			user,
 			apiClient,
+			monitoringClient,
 			...view,
 		};
 	}
@@ -134,5 +138,43 @@ describe( '[AppNavbar]', () => {
 		await waitFor( () =>
 			expect( screen.getByRole( 'menuitem', { name: 'Report a bug' } ) ).toHaveFocus()
 		);
+	} );
+
+	describe( '[Analytics]', () => {
+		test( 'Selecting an issue type in the navbar records event', async () => {
+			const { user, monitoringClient } = await setup();
+
+			await user.click( screen.getByRole( 'menuitem', { name: 'Report an Issue' } ) );
+			await user.click( screen.getByRole( 'menuitem', { name: 'Report a bug' } ) );
+
+			expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith(
+				'navbar_report_issue_start',
+				{
+					issueType: 'bug',
+				}
+			);
+		} );
+
+		test( 'Selecting the "Report an Issue" in the navbar records event', async () => {
+			const { monitoringClient, user } = await setup( {
+				issueDetails: { issueType: 'bug', issueTitle: '', featureId: null },
+			} );
+
+			await user.click( screen.getByRole( 'menuitem', { name: 'Report an Issue' } ) );
+
+			expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'navbar_item_click', {
+				page: 'report-issue',
+			} );
+		} );
+
+		test( 'Selecting the "Report an Issue" in the navbar records event', async () => {
+			const { monitoringClient, user } = await setup();
+
+			await user.click( screen.getByRole( 'menuitem', { name: 'Duplicate Search' } ) );
+
+			expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'navbar_item_click', {
+				page: 'duplicate-search',
+			} );
+		} );
 	} );
 } );

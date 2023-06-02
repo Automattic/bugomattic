@@ -10,6 +10,7 @@ import { ReactComponent as DownChevronIcon } from '../common/svgs/chevron-down.s
 import { selectIssueType } from '../issue-details/issue-details-slice';
 import { useListboxFocusManager } from '../common/components';
 import { ReactElement } from 'react';
+import { useMonitoring } from '../monitoring/monitoring-provider';
 
 export function AppNavbar() {
 	const currentActivePage = useAppSelector( selectActivePage );
@@ -80,10 +81,13 @@ const SimpleMenuItem = forwardRef< HTMLButtonElement, SimpleMenuItemProps >(
 	function SimpleMenuItem( { page, label, tabIndex }, forwardedRef ) {
 		const dispatch = useAppDispatch();
 		const currentActivePage = useAppSelector( selectActivePage );
+		const monitoringClient = useMonitoring();
 
 		const handleClick = ( page: ActivePage ) => () => {
 			dispatch( setActivePage( page ) );
 			dispatch( updateHistoryWithState() );
+
+			monitoringClient.analytics.recordEvent( 'navbar_item_click', { page } );
 		};
 
 		return (
@@ -120,7 +124,7 @@ const ReportIssueMenuItem = forwardRef<
 	}
 
 	return (
-		<ReportIssueDropdownMenu ref={ forwardedRef }>
+		<ReportIssueDropdownMenu ref={ forwardedRef } location="navbar">
 			<button
 				role="menuitem"
 				aria-current={ currentActivePage === 'report-issue' ? 'page' : undefined }

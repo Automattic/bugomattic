@@ -28,7 +28,7 @@ export function ReportIssueBanner() {
 	);
 
 	const buttonWithDropdown = (
-		<ReportIssueDropdownMenu>
+		<ReportIssueDropdownMenu location="banner">
 			<OutlinePrimaryButton className={ styles.bannerButton }>
 				<PlusIcon aria-hidden="true" className={ styles.bannerButtonIcon } />
 				<span>Report an Issue</span>

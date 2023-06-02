@@ -2,6 +2,7 @@ import { IssueStatus } from '../duplicate-results/types';
 
 export type IssueStatusFilter = 'all' | IssueStatus;
 export type IssueSortOption = 'date-created' | 'relevance';
+export type ReportIssueLocation = 'banner' | 'navbar';
 
 export interface DuplicateSearchState {
 	searchTerm: string;

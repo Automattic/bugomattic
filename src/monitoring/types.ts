@@ -27,11 +27,16 @@ export interface AnalyticsClient {
 }
 
 export type EventName =
+	| 'banner_report_issue_start'
 	| 'page_view'
 	| 'feature_select'
 	| 'feature_clear'
 	| 'feature_search'
 	| 'feature_save'
+	| 'issue_link_click'
+	| 'issue_search'
+	| 'navbar_item_click'
+	| 'navbar_report_issue_start'
 	| 'type_save'
 	| 'feature_step_edit'
 	| 'type_step_edit'
@@ -39,7 +44,10 @@ export type EventName =
 	| 'task_complete_all'
 	| 'task_link_click'
 	| 'more_info_link_click'
-	| 'start_over_click';
+	| 'repo_filter_select'
+	| 'sort_select'
+	| 'start_over_click'
+	| 'status_filter_select';
 
 export interface LogPayload {
 	feature: 'bugomattic_client';

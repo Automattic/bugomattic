@@ -105,6 +105,17 @@ describe( '[DuplicateSearchControls]', () => {
 
 			expect( apiClient.searchIssues ).not.toHaveBeenCalled();
 		} );
+
+		test( 'Searching a term records event', async () => {
+			const { monitoringClient, user } = setup( <DuplicateSearchControls /> );
+
+			const searchTerm = 'foo';
+			await search( user, searchTerm );
+
+			expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'issue_search', {
+				searchTerm: searchTerm,
+			} );
+		} );
 	} );
 
 	describe( 'Status filter', () => {
@@ -145,6 +156,19 @@ describe( '[DuplicateSearchControls]', () => {
 			await user.click( screen.getByRole( 'option', { name: 'All' } ) );
 
 			expect( apiClient.searchIssues ).not.toHaveBeenCalled();
+		} );
+
+		test( 'Selecting a new filter records event', async () => {
+			const { monitoringClient, user } = setup( <DuplicateSearchControls /> );
+
+			await user.click( screen.getByRole( 'option', { name: 'Open' } ) );
+
+			expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith(
+				'status_filter_select',
+				{
+					statusFilter: 'open',
+				}
+			);
 		} );
 	} );
 
@@ -422,6 +446,39 @@ describe( '[DuplicateSearchControls]', () => {
 				{ error: 'Repo filter load error.' }
 			);
 		} );
+
+		test( 'Filtering on default mode records event', async () => {
+			const { monitoringClient } = setup( <DuplicateSearchControls /> );
+
+			await userEvent.click( screen.getByRole( 'button', { name: 'Repository filter' } ) );
+			await userEvent.click( screen.getByRole( 'button', { name: 'Filter' } ) );
+
+			expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'repo_filter_select', {
+				repoFilter: '',
+			} );
+		} );
+
+		test( 'Filtering on manual mode records event', async () => {
+			const { monitoringClient } = setup( <DuplicateSearchControls /> );
+
+			await userEvent.click( screen.getByRole( 'button', { name: 'Repository filter' } ) );
+			await userEvent.click( screen.getByRole( 'option', { name: 'Manual' } ) );
+			await userEvent.click(
+				screen.getByRole( 'checkbox', {
+					name: getRepoNameFromFullName( availableRepoFilters[ 0 ] ),
+				} )
+			);
+			await userEvent.click(
+				screen.getByRole( 'checkbox', {
+					name: getRepoNameFromFullName( availableRepoFilters[ 1 ] ),
+				} )
+			);
+			await userEvent.click( screen.getByRole( 'button', { name: 'Filter' } ) );
+
+			expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'repo_filter_select', {
+				repoFilter: `${ availableRepoFilters[ 0 ] },${ availableRepoFilters[ 1 ] }`,
+			} );
+		} );
 	} );
 
 	describe( 'Sort selection', () => {
@@ -512,6 +569,24 @@ describe( '[DuplicateSearchControls]', () => {
 					screen.getByRole( 'option', { name: 'Date created', selected: false } )
 				).toHaveFocus()
 			);
+		} );
+
+		test( 'Selecting a sort option records event', async () => {
+			const { monitoringClient, user } = setup( <DuplicateSearchControls /> );
+
+			await user.click( screen.getByRole( 'combobox', { name: 'Sort results by…' } ) );
+			await user.click( screen.getByRole( 'option', { name: 'Date created' } ) );
+
+			expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'sort_select', {
+				sortOption: 'date-created',
+			} );
+
+			await user.click( screen.getByRole( 'combobox', { name: 'Sort results by…' } ) );
+			await user.click( screen.getByRole( 'option', { name: 'Relevance' } ) );
+
+			expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'sort_select', {
+				sortOption: 'relevance',
+			} );
 		} );
 	} );
 } );
