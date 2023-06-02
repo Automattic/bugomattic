@@ -26,7 +26,7 @@ export function IssueResult( { issue }: Props ) {
 
 	const now = new Date();
 
-	const dateCreatedDisplay = `Opened ${ formatDistance( new Date( dateCreated ), now, {
+	const dateCreatedDisplay = `Created ${ formatDistance( new Date( dateCreated ), now, {
 		addSuffix: true,
 	} ) }`;
 	const dateCreatedTooltip = format( new Date( dateCreated ), 'PPpppp' );

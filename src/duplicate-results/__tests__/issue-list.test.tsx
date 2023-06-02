@@ -46,7 +46,7 @@ describe( '[IssueList]', () => {
 		render( <IssueList issues={ [ mockIssue ] } /> );
 		expect( screen.getByText( mockIssue.author ) ).toBeInTheDocument();
 		expect( screen.getByText( 'Testrepo' ) ).toBeInTheDocument();
-		expect( screen.getByText( 'Opened 3 months ago' ) ).toBeInTheDocument();
+		expect( screen.getByText( 'Created 3 months ago' ) ).toBeInTheDocument();
 		expect( screen.getByText( 'Updated 2 days ago' ) ).toBeInTheDocument();
 	} );
 
