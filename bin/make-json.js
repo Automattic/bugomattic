@@ -15,7 +15,7 @@ const outputJson = JSON.parse( jsonString );
 let lastFeatureGroup;
 
 for ( const row of parsedCsv.data ) {
-	const { name, isGroup, description, keywords, labels, projectSlugs, productName } = row;
+	const { name, isGroup, description, keywords, taskType, repository, productName } = row;
 
 	if ( ! outputJson[ productName ] ) {
 		outputJson[ productName ] = {};
@@ -42,76 +42,86 @@ for ( const row of parsedCsv.data ) {
 		}
 
 		product.featureGroups[ name ] = featureGroup;
-		lastFeatureGroup = name; // This should be name, not featureGroup
+		lastFeatureGroup = name;
 	} else {
-		const feature = {
-			description,
-		};
-		let additionalLabels = [];
-		let projectSlugsList = [];
-
-		if ( hasLearnMoreData( row ) ) {
-			feature.learnMoreLinks = makeLearnMoreLinks( row );
-		}
-
-		if ( keywords ) {
-			feature.keywords = keywords.split( ',' ).map( ( keyword ) => keyword.trim() );
-		}
-
-		if ( labels ) {
-			additionalLabels = labels.split( ',' ).map( ( label ) => label.trim() );
-		}
-
-		if ( projectSlugs ) {
-			projectSlugsList = projectSlugs.split( ',' ).map( ( slug ) => slug.trim() );
-		}
-
 		const labelName = `[Feature] ${ name.trim() }`;
-		const { repository, bugTemplate, featureRequestTemplate } = getRepositoryAndTemplateData( row );
+		const task = createTask( row, labelName );
 
-		feature.tasks = {
-			bug: [
-				{
-					link: {
-						type: 'github',
-						repository: repository,
-						template: bugTemplate,
-						labels: [ labelName, ...additionalLabels ],
-						projectSlugs: [ 'Automattic/343', ...projectSlugsList ],
-					},
-				},
-			],
-			featureRequest: [
-				{
-					link: {
-						type: 'github',
-						repository: repository,
-						template: featureRequestTemplate,
-						labels: [ labelName, ...additionalLabels ],
-						projectSlugs: [ 'Automattic/343', ...projectSlugsList ],
-					},
-				},
-			],
-			urgent: [
-				{
-					link: {
-						type: 'github',
-						repository: repository,
-						template: bugTemplate,
-						labels: [ '[Pri] BLOCKER', labelName, ...additionalLabels ],
-						projectSlugs: [ 'Automattic/343', ...projectSlugsList ],
-					},
-				},
-			],
-		};
-
-		// Check if there's an active Feature Group to add the Feature to
-		if ( lastFeatureGroup && product.featureGroups[ lastFeatureGroup ] ) {
-			// If there's an active Feature Group, add the Feature to it
-			product.featureGroups[ lastFeatureGroup ].features[ name ] = feature;
+		// Check if the feature exists in featureGroups
+		if ( lastFeatureGroup && product.featureGroups[ lastFeatureGroup ]?.features[ name ] ) {
+			// If it exists in featureGroups, add the task to that feature
+			product.featureGroups[ lastFeatureGroup ].features[ name ].tasks[ taskType ].push( task );
 		} else {
-			// If there's no active Feature Group, add the Feature to the Product
-			product.features[ name ] = feature;
+			const labelName = `[Feature] ${ name.trim() }`;
+			let feature;
+
+			if (
+				lastFeatureGroup &&
+				product.featureGroups[ lastFeatureGroup ] &&
+				product.featureGroups[ lastFeatureGroup ].features[ name ]
+			) {
+				// If the feature already exists in the active featureGroup, use that feature
+				feature = product.featureGroups[ lastFeatureGroup ].features[ name ];
+			} else {
+				// Otherwise, check if the feature already exists in product.features
+				feature = product.features[ name ];
+			}
+
+			if ( ! feature ) {
+				feature = {
+					description,
+					tasks: {
+						bug: [],
+						featureRequest: [
+							{
+								link: {
+									type: 'github',
+									repository: repository,
+									template: 'feature_request.yml',
+									labels: [ labelName ],
+									projectSlugs: [ 'Automattic/343' ],
+								},
+							},
+						],
+						urgent: [
+							{
+								link: {
+									type: 'github',
+									repository: repository,
+									template: 'bug_report.yml',
+									labels: [ '[Pri] BLOCKER', labelName ],
+									projectSlugs: [ 'Automattic/343' ],
+								},
+							},
+						],
+					},
+				};
+			}
+
+			const task = createTask( row, labelName );
+
+			// Push the task into the appropriate task array
+			feature.tasks[ taskType ].push( task );
+
+			if ( hasLearnMoreData( row ) ) {
+				feature.learnMoreLinks = makeLearnMoreLinks( row );
+			}
+
+			if ( keywords ) {
+				feature.keywords = keywords.split( ',' ).map( ( keyword ) => keyword.trim() );
+			}
+
+			if (
+				lastFeatureGroup &&
+				product.featureGroups[ lastFeatureGroup ] &&
+				! product.featureGroups[ lastFeatureGroup ].features[ name ]
+			) {
+				// If the feature is not already added to the active featureGroup, add it
+				product.featureGroups[ lastFeatureGroup ].features[ name ] = feature;
+			} else {
+				// Add the feature to product.features
+				product.features[ name ] = feature;
+			}
 		}
 	}
 }
@@ -160,37 +170,56 @@ function makeLearnMoreLinks( dataRow ) {
 	return links;
 }
 
-function setRepositoryDefaults( productName, defaultValue ) {
-	const defaultValues = {
-		'WordPress.com': 'Automattic/wp-calypso',
-		Jetpack: 'Automattic/jetpack',
-	};
-	return defaultValues[ productName ] || defaultValue;
-}
+function createTask( dataRow, labelName ) {
+	const {
+		labels,
+		projectSlugs,
+		taskType,
+		taskTitle,
+		taskDetails,
+		linkType,
+		linkHref,
+		repository,
+		template,
+	} = dataRow;
 
-function setTemplateDefaults( productName, defaultValue ) {
-	const defaultValues = {
-		'WordPress.com': 'bug_report.yml',
-		Jetpack: 'bug-report.yml',
-	};
-	return defaultValues[ productName ] || defaultValue;
-}
+	let additionalLabels = [];
+	let projectSlugsList = [];
 
-function getRepositoryAndTemplateData( dataRow ) {
-	const { repository, productName, template } = dataRow;
-	let featureRequestTemplateName = 'feature_request.yml';
+	if ( labels ) {
+		additionalLabels = labels.split( ',' ).map( ( label ) => label.trim() );
+	}
 
-	let repositoryLink =
-		repository && repository.trim() !== '' ? repository : setRepositoryDefaults( productName, '' );
+	if ( projectSlugs ) {
+		projectSlugsList = projectSlugs.split( ',' ).map( ( slug ) => slug.trim() );
+	}
 
-	let bugTemplateName =
-		template && template.trim() !== ''
-			? template
-			: setTemplateDefaults( repositoryLink, 'bug_report.yml' );
+	if ( taskType && linkType ) {
+		const task = {
+			link: {
+				type: linkType,
+			},
+		};
 
-	return {
-		repository: repositoryLink,
-		bugTemplate: bugTemplateName,
-		featureRequestTemplate: featureRequestTemplateName,
-	};
+		if ( taskTitle ) {
+			task.title = taskTitle;
+		}
+
+		if ( taskDetails ) {
+			task.details = taskDetails;
+		}
+
+		if ( linkType === 'github' ) {
+			if ( repository ) task.link.repository = repository;
+			if ( template ) task.link.template = template;
+			task.link.labels = [ labelName, ...additionalLabels ];
+			task.link.projectSlugs = [ 'Automattic/343', ...projectSlugsList ];
+		}
+		// Fields specific to the 'general' link type
+		else if ( linkType === 'general' && linkHref ) {
+			task.link.href = linkHref;
+		}
+
+		return task;
+	}
 }
