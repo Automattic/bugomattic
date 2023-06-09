@@ -225,29 +225,53 @@ function createTask( dataRow ) {
 }
 
 function makeDefaultWordPressFeatureTask( dataRow ) {
-	const { name, repository } = dataRow;
+	const { name, repository, labels, projectSlugs } = dataRow;
 	const labelName = `[Feature] ${ name.trim() }`;
+
+	let additionalLabels = [];
+	let projectSlugsList = [];
+
+	if ( labels ) {
+		additionalLabels = labels.split( ',' ).map( ( label ) => label.trim() );
+	}
+
+	if ( projectSlugs ) {
+		projectSlugsList = projectSlugs.split( ',' ).map( ( slug ) => slug.trim() );
+	}
+
 	return {
 		link: {
 			type: 'github',
 			repository: repository,
 			template: 'feature_request.yml',
-			labels: [ labelName ],
-			projectSlugs: [ 'Automattic/343' ],
+			labels: [ labelName, ...additionalLabels ],
+			projectSlugs: [ 'Automattic/343', ...projectSlugsList ],
 		},
 	};
 }
 
 function makeDefaultWordPressUrgentTask( dataRow ) {
-	const { name, repository } = dataRow;
+	const { name, repository, labels, projectSlugs } = dataRow;
 	const labelName = `[Feature] ${ name.trim() }`;
+
+	let additionalLabels = [];
+	let projectSlugsList = [];
+
+	if ( labels ) {
+		additionalLabels = labels.split( ',' ).map( ( label ) => label.trim() );
+	}
+
+	if ( projectSlugs ) {
+		projectSlugsList = projectSlugs.split( ',' ).map( ( slug ) => slug.trim() );
+	}
+
 	return {
 		link: {
 			type: 'github',
 			repository: repository,
 			template: 'bug_report.yml',
-			labels: [ '[Pri] BLOCKER', labelName ],
-			projectSlugs: [ 'Automattic/343' ],
+			labels: [ '[Pri] BLOCKER', labelName, ...additionalLabels ],
+			projectSlugs: [ 'Automattic/343', ...projectSlugsList ],
 		},
 	};
 }
