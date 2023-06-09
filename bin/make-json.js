@@ -83,6 +83,9 @@ for ( const row of parsedCsv.data ) {
 
 			const task = createTask( row );
 
+			if ( ! ( taskType === 'bug' || taskType === 'urgent' || taskType === 'featureRequest' ) ) {
+				throw new Error( `Invalid taskType: ${ taskType }` );
+			}
 			// Push the task into the appropriate task array
 			feature.tasks[ taskType ].push( task );
 
