@@ -102,6 +102,7 @@ export function DebouncedSearch( {
 				onBlur={ handleBlur }
 				aria-label={ inputAriaLabel }
 				aria-controls={ inputAriaControls }
+				maxLength={ 255 }
 			/>
 			<button
 				onClick={ searchImmediately }
