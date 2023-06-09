@@ -65,7 +65,7 @@ export function DuplicateResults() {
 			<PlaceholderMessage
 				illustration={ <ErrorIllustration className={ styles.errorIllustration } /> }
 				header="Uh oh! Something went wrong."
-				message="We've logged this error and will look into it. In the meantime, you can retry the search or report a new issue below."
+				message="We've logged this error and will look into it. In the meantime, try refreshing the page to ensure all your tokens are fresh. You can also still report a new issue below."
 				ariaLive="assertive"
 			/>
 		);
