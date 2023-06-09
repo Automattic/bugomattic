@@ -183,11 +183,7 @@ function createTask( dataRow ) {
 	}
 
 	if ( taskType && linkType ) {
-		const task = {
-			link: {
-				type: linkType,
-			},
-		};
+		const task = {};
 
 		if ( taskTitle ) {
 			task.title = taskTitle;
@@ -195,6 +191,12 @@ function createTask( dataRow ) {
 
 		if ( taskDetails ) {
 			task.details = taskDetails;
+		}
+
+		if ( linkType ) {
+			task.link = {
+				type: linkType,
+			};
 		}
 
 		if ( linkType === 'github' ) {
@@ -211,6 +213,10 @@ function createTask( dataRow ) {
 		// Fields specific to the 'general' link type
 		else if ( linkType === 'general' && linkHref ) {
 			task.link.href = linkHref;
+		} else if ( linkType === 'p2' && linkHref ) {
+			task.link.subdomain = linkHref.replace( /^\+/, '' );
+		} else if ( linkType === 'slack' && linkHref ) {
+			task.link.channel = linkHref.replace( /^#/, '' );
 		}
 
 		return task;
