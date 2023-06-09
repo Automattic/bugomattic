@@ -9,8 +9,8 @@
 	background-color: var( --color-shaded-background );
 	position: relative;
 	/* The min heights of this container is set directly in the React component based on the height of its content.
-	However, because the loading indicator is absolutely positioned, we need to set a fallback min height here.
-	This handles the edge case where you change pages and come back mid-request. */
+    However, because the loading indicator is absolutely positioned, we need to set a fallback min height here.
+    This handles the edge case where you change pages and come back mid-request. */
 	min-height: 160px;
 }
 
@@ -30,6 +30,14 @@ a.issueLinkWrapper {
 	color: var( --color-text );
 	text-decoration: none;
 	padding: 1.25rem 1.25rem 1.25rem 0;
+	position: relative;
+	border: 2px solid transparent;
+	border-radius: 2px;
+}
+
+a.issueLinkWrapper:focus-visible {
+	outline: none;
+	border-color: var( --color-primary );
 }
 
 .issueDetailsWrapper {
@@ -141,6 +149,10 @@ p.issueContent {
 	width: 80px;
 }
 
+.errorIllustration path {
+	fill: var( --color-error );
+}
+
 h3.placeholderHeader {
 	font-size: var( --font-header );
 	margin-top: 0;
@@ -153,6 +165,7 @@ p.placeholderText {
 	margin-top: 0;
 	margin-bottom: 0;
 	font-weight: 300;
+	max-width: 600px;
 }
 
 .loadingWrapper {
