@@ -15,7 +15,7 @@ const outputJson = JSON.parse( jsonString );
 let lastFeatureGroup;
 
 for ( const row of parsedCsv.data ) {
-	const { name, isGroup, description, keywords, taskType, repository, productName } = row;
+	const { name, isGroup, description, keywords, taskType, productName } = row;
 
 	if ( ! outputJson[ productName ] ) {
 		outputJson[ productName ] = {};
@@ -44,15 +44,13 @@ for ( const row of parsedCsv.data ) {
 		product.featureGroups[ name ] = featureGroup;
 		lastFeatureGroup = name;
 	} else {
-		const labelName = `[Feature] ${ name.trim() }`;
-		const task = createTask( row, labelName );
+		const task = createTask( row );
 
 		// Check if the feature exists in featureGroups
 		if ( lastFeatureGroup && product.featureGroups[ lastFeatureGroup ]?.features[ name ] ) {
 			// If it exists in featureGroups, add the task to that feature
 			product.featureGroups[ lastFeatureGroup ].features[ name ].tasks[ taskType ].push( task );
 		} else {
-			const labelName = `[Feature] ${ name.trim() }`;
 			let feature;
 
 			if (
@@ -72,33 +70,18 @@ for ( const row of parsedCsv.data ) {
 					description,
 					tasks: {
 						bug: [],
-						featureRequest: [
-							{
-								link: {
-									type: 'github',
-									repository: repository,
-									template: 'feature_request.yml',
-									labels: [ labelName ],
-									projectSlugs: [ 'Automattic/343' ],
-								},
-							},
-						],
-						urgent: [
-							{
-								link: {
-									type: 'github',
-									repository: repository,
-									template: 'bug_report.yml',
-									labels: [ '[Pri] BLOCKER', labelName ],
-									projectSlugs: [ 'Automattic/343' ],
-								},
-							},
-						],
+						featureRequest: [],
+						urgent: [],
 					},
 				};
+
+				if ( productName === 'WordPress.com' ) {
+					feature.tasks.featureRequest.push( makeDefaultWordPressFeatureTask( row ) );
+					feature.tasks.urgent.push( makeDefaultWordPressUrgentTask( row ) );
+				}
 			}
 
-			const task = createTask( row, labelName );
+			const task = createTask( row );
 
 			// Push the task into the appropriate task array
 			feature.tasks[ taskType ].push( task );
@@ -170,7 +153,7 @@ function makeLearnMoreLinks( dataRow ) {
 	return links;
 }
 
-function createTask( dataRow, labelName ) {
+function createTask( dataRow ) {
 	const {
 		labels,
 		projectSlugs,
@@ -181,6 +164,7 @@ function createTask( dataRow, labelName ) {
 		linkHref,
 		repository,
 		template,
+		productName,
 	} = dataRow;
 
 	let additionalLabels = [];
@@ -212,8 +196,13 @@ function createTask( dataRow, labelName ) {
 		if ( linkType === 'github' ) {
 			if ( repository ) task.link.repository = repository;
 			if ( template ) task.link.template = template;
-			task.link.labels = [ labelName, ...additionalLabels ];
-			task.link.projectSlugs = [ 'Automattic/343', ...projectSlugsList ];
+			task.link.labels = [ ...additionalLabels ];
+			task.link.projectSlugs = [ ...projectSlugsList ];
+
+			if ( productName === 'WordPress.com' ) {
+				task.link.projectSlugs.push( 'Automattic/343' );
+				task.link.labels.push( `[Feature] ${ name.trim() }` );
+			}
 		}
 		// Fields specific to the 'general' link type
 		else if ( linkType === 'general' && linkHref ) {
@@ -222,4 +211,32 @@ function createTask( dataRow, labelName ) {
 
 		return task;
 	}
+}
+
+function makeDefaultWordPressFeatureTask( dataRow ) {
+	const { name, repository } = dataRow;
+	const labelName = `[Feature] ${ name.trim() }`;
+	return {
+		link: {
+			type: 'github',
+			repository: repository,
+			template: 'feature_request.yml',
+			labels: [ labelName ],
+			projectSlugs: [ 'Automattic/343' ],
+		},
+	};
+}
+
+function makeDefaultWordPressUrgentTask( dataRow ) {
+	const { name, repository } = dataRow;
+	const labelName = `[Feature] ${ name.trim() }`;
+	return {
+		link: {
+			type: 'github',
+			repository: repository,
+			template: 'bug_report.yml',
+			labels: [ '[Pri] BLOCKER', labelName ],
+			projectSlugs: [ 'Automattic/343' ],
+		},
+	};
 }
