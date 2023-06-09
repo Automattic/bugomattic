@@ -160,8 +160,6 @@ function makeLearnMoreLinks( dataRow ) {
 function createTask( dataRow ) {
 	const {
 		name,
-		labels,
-		projectSlugs,
 		taskType,
 		taskTitle,
 		taskDetails,
@@ -171,17 +169,6 @@ function createTask( dataRow ) {
 		template,
 		productName,
 	} = dataRow;
-
-	let additionalLabels = [];
-	let projectSlugsList = [];
-
-	if ( labels ) {
-		additionalLabels = labels.split( ',' ).map( ( label ) => label.trim() );
-	}
-
-	if ( projectSlugs ) {
-		projectSlugsList = projectSlugs.split( ',' ).map( ( slug ) => slug.trim() );
-	}
 
 	if ( taskType && linkType ) {
 		const task = {};
@@ -203,8 +190,8 @@ function createTask( dataRow ) {
 		if ( linkType === 'github' ) {
 			if ( repository ) task.link.repository = repository;
 			if ( template ) task.link.template = template;
-			task.link.labels = [ ...additionalLabels ];
-			task.link.projectSlugs = [ ...projectSlugsList ];
+			task.link.labels = [ ...getGitHubLabels( dataRow ) ];
+			task.link.projectSlugs = [ ...getGitHubProjectSlugs( dataRow ) ];
 
 			if ( productName === 'WordPress.com' ) {
 				task.link.projectSlugs.push( 'Automattic/343' );
@@ -224,54 +211,51 @@ function createTask( dataRow ) {
 	}
 }
 
-function makeDefaultWordPressFeatureTask( dataRow ) {
-	const { name, repository, labels, projectSlugs } = dataRow;
-	const labelName = `[Feature] ${ name.trim() }`;
-
-	let additionalLabels = [];
-	let projectSlugsList = [];
-
+function getGitHubLabels( dataRow ) {
+	const { labels } = dataRow;
+	let outputLabels = [];
 	if ( labels ) {
-		additionalLabels = labels.split( ',' ).map( ( label ) => label.trim() );
+		outputLabels = labels.split( ',' ).map( ( label ) => label.trim() );
 	}
 
+	return outputLabels;
+}
+
+function getGitHubProjectSlugs( dataRow ) {
+	const { projectSlugs } = dataRow;
+	let outputProjectSlugs = [];
 	if ( projectSlugs ) {
-		projectSlugsList = projectSlugs.split( ',' ).map( ( slug ) => slug.trim() );
+		outputProjectSlugs = projectSlugs.split( ',' ).map( ( slug ) => slug.trim() );
 	}
 
+	return outputProjectSlugs;
+}
+
+function makeDefaultWordPressFeatureTask( dataRow ) {
+	const { name, repository } = dataRow;
+	const labelName = `[Feature] ${ name.trim() }`;
 	return {
 		link: {
 			type: 'github',
 			repository: repository,
 			template: 'feature_request.yml',
-			labels: [ labelName, ...additionalLabels ],
-			projectSlugs: [ 'Automattic/343', ...projectSlugsList ],
+			labels: [ labelName, ...getGitHubLabels( dataRow ) ],
+			projectSlugs: [ 'Automattic/343', ...getGitHubProjectSlugs( dataRow ) ],
 		},
 	};
 }
 
 function makeDefaultWordPressUrgentTask( dataRow ) {
-	const { name, repository, labels, projectSlugs } = dataRow;
+	const { name, repository } = dataRow;
 	const labelName = `[Feature] ${ name.trim() }`;
-
-	let additionalLabels = [];
-	let projectSlugsList = [];
-
-	if ( labels ) {
-		additionalLabels = labels.split( ',' ).map( ( label ) => label.trim() );
-	}
-
-	if ( projectSlugs ) {
-		projectSlugsList = projectSlugs.split( ',' ).map( ( slug ) => slug.trim() );
-	}
 
 	return {
 		link: {
 			type: 'github',
 			repository: repository,
 			template: 'bug_report.yml',
-			labels: [ '[Pri] BLOCKER', labelName, ...additionalLabels ],
-			projectSlugs: [ 'Automattic/343', ...projectSlugsList ],
+			labels: [ '[Pri] BLOCKER', labelName, ...getGitHubLabels( dataRow ) ],
+			projectSlugs: [ 'Automattic/343', ...getGitHubProjectSlugs( dataRow ) ],
 		},
 	};
 }
