@@ -14,6 +14,8 @@ const outputJson = JSON.parse( jsonString );
 
 let lastFeatureGroup;
 
+let currentProduct;
+
 for ( const row of parsedCsv.data ) {
 	const { name, isGroup, description, keywords, taskType, productName } = row;
 
@@ -23,12 +25,11 @@ for ( const row of parsedCsv.data ) {
 
 	const product = outputJson[ productName ];
 
-	if ( ! product.featureGroups ) {
+	if ( productName !== currentProduct ) {
 		product.featureGroups = {};
-	}
-
-	if ( ! product.features ) {
 		product.features = {};
+
+		currentProduct = productName;
 	}
 
 	if ( isGroup.toLowerCase() === 'yes' ) {
