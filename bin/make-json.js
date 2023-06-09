@@ -155,6 +155,7 @@ function makeLearnMoreLinks( dataRow ) {
 
 function createTask( dataRow ) {
 	const {
+		name,
 		labels,
 		projectSlugs,
 		taskType,
