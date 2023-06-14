@@ -91,6 +91,7 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 		backup: [ { type: 'featureGroup', id: 'DEF', weight: 1 } ],
 		blog: [ { type: 'feature', id: 'STU', weight: 1 } ],
 		carousel: [ { type: 'feature', id: 'STU', weight: 1 } ],
+		newspack: [ { type: 'feature', id: 'STU', weight: 1 } ],
 		posts: [ { type: 'feature', id: 'STU', weight: 1 } ],
 		site: [ { type: 'featureGroup', id: 'DEF', weight: 1 } ],
 		traffic: [ { type: 'product', id: 'ABC', weight: 1 } ],
@@ -358,6 +359,18 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 
 			expect( screen.getByRole( 'option', { name: 'GHI Feature' } ) ).toBeInTheDocument();
 			expect( screen.queryByRole( 'option', { name: 'JKL Feature' } ) ).not.toBeInTheDocument();
+		} );
+
+		test( 'Description search matches must match at least 60% of the search term tokens', async () => {
+			const { user } = setup( <FeatureSelectorForm /> );
+
+			await search( user, 'blog carousel newspack foo bar' );
+			expect( screen.getByRole( 'option', { name: /STU Feature/ } ) ).toBeInTheDocument();
+
+			await search( user, 'blog carousel newspack foo bar baz' );
+			expect(
+				screen.getByText( 'No results found. Try a different search or explore manually below.' )
+			).toBeInTheDocument();
 		} );
 	} );
 } );

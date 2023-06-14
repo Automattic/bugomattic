@@ -145,25 +145,28 @@ class ReportingConfigSearcher {
 			}
 		}
 
-		const scoreThreshold = 1;
 		const descriptionMatch: () => DescriptionMatch = () => ( {
 			matchType: 'description',
 		} );
 
+		const scoreRatioThreshold = 0.6;
+		const isAboveThreshold = ( score: number ) =>
+			score / searchTermTokens.length >= scoreRatioThreshold;
+
 		for ( const entityId in scores.product ) {
-			if ( scores.product[ entityId ] >= scoreThreshold ) {
+			if ( isAboveThreshold( scores.product[ entityId ] ) ) {
 				this.updateMatchEntity( 'products', entityId, descriptionMatch() );
 			}
 		}
 
 		for ( const entityId in scores.featureGroup ) {
-			if ( scores.featureGroup[ entityId ] >= scoreThreshold ) {
+			if ( isAboveThreshold( scores.featureGroup[ entityId ] ) ) {
 				this.addFeatureGroupAndParents( entityId, descriptionMatch() );
 			}
 		}
 
 		for ( const entityId in scores.feature ) {
-			if ( scores.feature[ entityId ] >= scoreThreshold ) {
+			if ( isAboveThreshold( scores.feature[ entityId ] ) ) {
 				this.addFeatureAndParents( entityId, descriptionMatch() );
 			}
 		}
