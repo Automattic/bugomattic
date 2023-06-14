@@ -3027,6 +3027,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/stopword@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@types/stopword@npm:2.0.0"
+  checksum: 20fdb908d2f18648a85d6280666b663d50bcd5724db3f10a354263c5ec163dc166fee27fa33e4cf55a3c89a606b52218c54c997c2fa4b5eb85e3e571ca304015
+  languageName: node
+  linkType: hard
+
 "@types/testing-library__jest-dom@npm:^5.9.1":
   version: 5.14.5
   resolution: "@types/testing-library__jest-dom@npm:5.14.5"
@@ -4252,6 +4259,7 @@ __metadata:
     "@types/path-browserify": ^1.0.0
     "@types/react": ^18.0.0
     "@types/react-dom": ^18.0.0
+    "@types/stopword": ^2.0.0
     "@typescript-eslint/eslint-plugin": ^5.0.0
     "@typescript-eslint/parser": ^5.40.0
     date-fns: ^2.29.3
@@ -4283,6 +4291,7 @@ __metadata:
     react-redux: ^8.0.4
     react-scripts: 5.0.1
     react-tooltip: ^5.8.3
+    stopword: ^2.0.8
     typescript: ^4.8.4
     url-join: ^5.0.0
     web-vitals: ^2.1.0
@@ -13711,6 +13720,13 @@ __metadata:
   dependencies:
     internal-slot: ^1.0.4
   checksum: d04173690b2efa40e24ab70e5e51a3ff31d56d699550cfad084104ab3381390daccb36652b25755e420245f3b0737de66c1879eaa2a8d4fc0a78f9bf892fcb42
+  languageName: node
+  linkType: hard
+
+"stopword@npm:^2.0.8":
+  version: 2.0.8
+  resolution: "stopword@npm:2.0.8"
+  checksum: 1b92d9b317a9b74b6fd92681a9767478c8f8fd856b869f8705afdcf1fd7e28f88062c97a4432c8d9b7a1e9d5491f24405c4815da6fdca887b58b20f8629472ef
   languageName: node
   linkType: hard
 

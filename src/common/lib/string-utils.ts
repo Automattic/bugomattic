@@ -1,4 +1,5 @@
 import words from 'lodash.words';
+import { removeStopwords } from 'stopword';
 
 export function includesIgnoringCase( string: string, substring: string ): boolean {
 	return string.toUpperCase().includes( substring.toUpperCase() );
@@ -9,12 +10,9 @@ export function replaceSpaces( string: string, replacementCharacter = '_' ): str
 }
 
 export function tokenizeAndNormalize( string: string ) {
-	// Add more stop words as needed
-	const stopWords = new Set( [ 'a', 'an', 'and', 'the', 'in', 'on', 'at', 'of', 'this', 'to' ] );
-
-	// The lodash 'words' function does a really nice job just as is!
+	// The lodash 'words' function does a really nice job just as is for word splitting!
 	const allWords = words( string.toLowerCase() );
-	return allWords.filter( ( word ) => ! stopWords.has( word ) );
+	return removeStopwords( allWords );
 }
 
 export function escapeStringForRegex( string: string ) {
