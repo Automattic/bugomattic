@@ -167,6 +167,9 @@ function createTask( dataRow ) {
 		linkHref,
 		repository,
 		template,
+		jiraHostName,
+		jiraProjectId,
+		jiraIssueTypeId,
 		productName,
 	} = dataRow;
 
@@ -198,6 +201,13 @@ function createTask( dataRow ) {
 				task.link.labels.push( `[Feature] ${ name.trim() }` );
 			}
 		}
+
+		if ( linkType === 'jira' ) {
+			if ( jiraHostName ) task.link.hostName = jiraHostName;
+			if ( jiraProjectId ) task.link.projectId = jiraProjectId;
+			if ( jiraIssueTypeId ) task.link.issueTypeId = jiraIssueTypeId;
+		}
+
 		// Fields specific to the 'general' link type
 		else if ( linkType === 'general' && linkHref ) {
 			task.link.href = linkHref;
