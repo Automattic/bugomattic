@@ -30,6 +30,7 @@ for ( const row of parsedCsv.data ) {
 		product.features = {};
 
 		currentProduct = productName;
+		lastFeatureGroup = null;
 	}
 
 	if ( isGroup.toLowerCase() === 'yes' ) {
@@ -76,9 +77,9 @@ for ( const row of parsedCsv.data ) {
 					},
 				};
 
-				if ( productName === 'WordPress.com' ) {
-					feature.tasks.featureRequest.push( makeDefaultWordPressFeatureTask( row ) );
-					feature.tasks.urgent.push( makeDefaultWordPressUrgentTask( row ) );
+				if ( productName === 'WordPress.com' || productName === 'Jetpack' ) {
+					feature.tasks.featureRequest.push( makeDefaultWordPressJetpackFeatureTask( row ) );
+					feature.tasks.urgent.push( makeDefaultWordPressJetpackUrgentTask( row ) );
 				}
 			}
 
@@ -196,20 +197,15 @@ function createTask( dataRow ) {
 			task.link.labels = [ ...getGitHubLabels( dataRow ) ];
 			task.link.projectSlugs = [ ...getGitHubProjectSlugs( dataRow ) ];
 
-			if ( productName === 'WordPress.com' ) {
+			if ( productName === 'WordPress.com' || productName === 'Jetpack' ) {
 				task.link.projectSlugs.push( 'Automattic/343' );
 				task.link.labels.push( `[Feature] ${ name.trim() }` );
 			}
-		}
-
-		if ( linkType === 'jira' ) {
+		} else if ( linkType === 'jira' ) {
 			if ( jiraHostName ) task.link.hostName = jiraHostName;
 			if ( jiraProjectId ) task.link.projectId = jiraProjectId;
 			if ( jiraIssueTypeId ) task.link.issueTypeId = jiraIssueTypeId;
-		}
-
-		// Fields specific to the 'general' link type
-		else if ( linkType === 'general' && linkHref ) {
+		} else if ( linkType === 'general' && linkHref ) {
 			task.link.href = linkHref;
 		} else if ( linkType === 'p2' && linkHref ) {
 			task.link.subdomain = linkHref.replace( /^\+/, '' );
@@ -241,29 +237,33 @@ function getGitHubProjectSlugs( dataRow ) {
 	return outputProjectSlugs;
 }
 
-function makeDefaultWordPressFeatureTask( dataRow ) {
+function makeDefaultWordPressJetpackFeatureTask( dataRow ) {
 	const { name, repository } = dataRow;
 	const labelName = `[Feature] ${ name.trim() }`;
+
+	const template =
+		repository === 'Automattic/jetpack' ? 'feature-request.yml' : 'feature_request.yml';
 	return {
 		link: {
 			type: 'github',
 			repository: repository,
-			template: 'feature_request.yml',
+			template: template,
 			labels: [ labelName, ...getGitHubLabels( dataRow ) ],
 			projectSlugs: [ 'Automattic/343', ...getGitHubProjectSlugs( dataRow ) ],
 		},
 	};
 }
 
-function makeDefaultWordPressUrgentTask( dataRow ) {
+function makeDefaultWordPressJetpackUrgentTask( dataRow ) {
 	const { name, repository } = dataRow;
 	const labelName = `[Feature] ${ name.trim() }`;
 
+	const template = repository === 'Automattic/jetpack' ? 'bug-report.yml' : 'bug_report.yml';
 	return {
 		link: {
 			type: 'github',
 			repository: repository,
-			template: 'bug_report.yml',
+			template: template,
 			labels: [ '[Pri] BLOCKER', labelName, ...getGitHubLabels( dataRow ) ],
 			projectSlugs: [ 'Automattic/343', ...getGitHubProjectSlugs( dataRow ) ],
 		},
