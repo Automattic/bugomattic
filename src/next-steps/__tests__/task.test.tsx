@@ -399,5 +399,28 @@ describe( '[Task]', () => {
 				linkType: 'general',
 			} );
 		} );
+
+		test( 'Clicking on a link when the checkbox is checked does not change anything', async () => {
+			const title = 'Foo task';
+			const task: Task = {
+				id: 'general link',
+				parentId: 'foo',
+				parentType: 'product',
+				title: title,
+				link: {
+					type: 'general',
+					href: 'https://automattic.com/',
+				},
+			};
+			const linkName = 'General';
+
+			const { user } = setup( <TaskComponent taskId={ task.id } />, task );
+
+			await user.click( screen.getByRole( 'checkbox', { name: title, checked: false } ) );
+			fireEvent.click( screen.getByRole( 'link', { name: linkName } ) );
+
+			// Still checked
+			expect( screen.getByRole( 'checkbox', { name: title, checked: true } ) ).toBeInTheDocument();
+		} );
 	} );
 } );
