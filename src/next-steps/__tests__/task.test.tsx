@@ -198,7 +198,7 @@ describe( '[Task]', () => {
 						href: href,
 					},
 				};
-				const linkName = 'General';
+				const linkName = 'Link';
 
 				setup( <TaskComponent taskId={ task.id } />, task );
 
@@ -279,7 +279,7 @@ describe( '[Task]', () => {
 				};
 
 				setup( <TaskComponent taskId={ task.id } />, task );
-				const link = screen.getByRole( 'link', { name: 'General' } );
+				const link = screen.getByRole( 'link', { name: 'Link' } );
 				expect( link ).toHaveAttribute( 'href', href );
 				expect( link ).toBeInTheDocument();
 			} );
@@ -363,7 +363,7 @@ describe( '[Task]', () => {
 					href: 'https://automattic.com/',
 				},
 			};
-			const linkName = 'General';
+			const linkName = 'Link';
 
 			setup( <TaskComponent taskId={ task.id } />, task );
 
@@ -387,7 +387,7 @@ describe( '[Task]', () => {
 					href: 'https://automattic.com/',
 				},
 			};
-			const linkName = 'General';
+			const linkName = 'Link';
 
 			const { monitoringClient } = setup( <TaskComponent taskId={ task.id } />, task );
 
@@ -412,7 +412,7 @@ describe( '[Task]', () => {
 					href: 'https://automattic.com/',
 				},
 			};
-			const linkName = 'General';
+			const linkName = 'Link';
 
 			const { user } = setup( <TaskComponent taskId={ task.id } />, task );
 
