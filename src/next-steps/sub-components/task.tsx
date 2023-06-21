@@ -56,16 +56,20 @@ export function Task( { taskId }: Props ) {
 		selectorToPredictCompletingAllTasks( state, taskId )
 	);
 
-	const handleCheckboxChange = () => {
+	const completeTask = () => {
+		dispatch( addCompletedTask( taskId ) );
+		monitoringClient.analytics.recordEvent( 'task_complete' );
+
+		if ( taskCompletionWillCompleteAll ) {
+			monitoringClient.analytics.recordEvent( 'task_complete_all' );
+		}
+	};
+
+	const handleCheckboxToggle = () => {
 		if ( isChecked ) {
 			dispatch( removeCompletedTask( taskId ) );
 		} else {
-			dispatch( addCompletedTask( taskId ) );
-			monitoringClient.analytics.recordEvent( 'task_complete' );
-
-			if ( taskCompletionWillCompleteAll ) {
-				monitoringClient.analytics.recordEvent( 'task_complete_all' );
-			}
+			completeTask();
 		}
 		dispatch( updateHistoryWithState() );
 	};
@@ -83,7 +87,10 @@ export function Task( { taskId }: Props ) {
 	if ( link ) {
 		const handleLinkClick = () => {
 			monitoringClient.analytics.recordEvent( 'task_link_click', { linkType: link.type } );
-			handleCheckboxChange();
+			if ( ! isChecked ) {
+				completeTask();
+				dispatch( updateHistoryWithState() );
+			}
 		};
 
 		try {
@@ -139,7 +146,7 @@ export function Task( { taskId }: Props ) {
 			<label className={ styles.task }>
 				<input
 					className={ styles.taskCheckbox }
-					onChange={ handleCheckboxChange }
+					onChange={ handleCheckboxToggle }
 					checked={ isChecked }
 					type="checkbox"
 				/>
