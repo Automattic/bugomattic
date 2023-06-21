@@ -60,7 +60,7 @@ function StartOverDropdownMenu() {
 	const menuOptions: MenuOption[] = [
 		{
 			label: 'Search for duplicates',
-			targetActivePage: 'duplicate-search',
+			targetActivePage: 'search-for-issues',
 			icon: SearchIcon,
 		},
 		{

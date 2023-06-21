@@ -44,7 +44,7 @@ function MainDisplay() {
 	}
 
 	let mainDisplay: ReactNode;
-	if ( activePage === 'duplicate-search' ) {
+	if ( activePage === 'search-for-issues' ) {
 		mainDisplay = <DuplicateSearchingPage />;
 	} else {
 		mainDisplay = <ReportingFlowPage />;

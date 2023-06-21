@@ -50,7 +50,7 @@ describe( '[AppNavbar]', () => {
 			'page'
 		);
 
-		expect( screen.getByRole( 'menuitem', { name: 'Duplicate Search' } ) ).not.toHaveAttribute(
+		expect( screen.getByRole( 'menuitem', { name: 'Search for Issues' } ) ).not.toHaveAttribute(
 			'aria-current',
 			'page'
 		);
@@ -93,7 +93,7 @@ describe( '[AppNavbar]', () => {
 		expect( reportingFlowPageHeading ).toBeInTheDocument();
 		expect( reportingFlowPageHeading ).toHaveFocus();
 
-		await user.click( screen.getByRole( 'menuitem', { name: 'Duplicate Search' } ) );
+		await user.click( screen.getByRole( 'menuitem', { name: 'Search for Issues' } ) );
 		const duplicateSearchingPageHeading = screen.getByRole( 'heading', {
 			name: 'Search for duplicate issues',
 		} );
@@ -105,7 +105,7 @@ describe( '[AppNavbar]', () => {
 		const { user } = await setup();
 
 		const reportAnIssueButton = screen.getByRole( 'menuitem', { name: 'Report an Issue' } );
-		const duplicateSearchButton = screen.getByRole( 'menuitem', { name: 'Duplicate Search' } );
+		const duplicateSearchButton = screen.getByRole( 'menuitem', { name: 'Search for Issues' } );
 
 		// Focus site header link
 		screen.getByRole( 'link', { name: 'Bugomattic' } ).focus();
@@ -113,7 +113,7 @@ describe( '[AppNavbar]', () => {
 		// Tab into navbar
 		await user.keyboard( '{tab}' );
 
-		// Default page starts with focus -- duplicate search
+		// Default page starts with focus -- search for issues
 		expect( duplicateSearchButton ).toHaveFocus();
 
 		// Basic menubar nav
@@ -170,10 +170,10 @@ describe( '[AppNavbar]', () => {
 		test( 'Selecting the "Report an Issue" in the navbar records event', async () => {
 			const { monitoringClient, user } = await setup();
 
-			await user.click( screen.getByRole( 'menuitem', { name: 'Duplicate Search' } ) );
+			await user.click( screen.getByRole( 'menuitem', { name: 'Search for Issues' } ) );
 
 			expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'navbar_item_click', {
-				page: 'duplicate-search',
+				page: 'search-for-issues',
 			} );
 		} );
 	} );

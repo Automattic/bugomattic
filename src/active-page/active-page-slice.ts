@@ -3,9 +3,9 @@ import { RootState } from '../app/store';
 import { updateStateFromHistory } from '../url-history/actions';
 import { ActivePage } from './types';
 
-const initialState: ActivePage = 'duplicate-search' as ActivePage;
+const initialState: ActivePage = 'search-for-issues' as ActivePage;
 
-const validActivePages = new Set< ActivePage >( [ 'duplicate-search', 'report-issue' ] );
+const validActivePages = new Set< ActivePage >( [ 'search-for-issues', 'report-issue' ] );
 
 export const activePageSlice = createSlice( {
 	name: 'activePage',

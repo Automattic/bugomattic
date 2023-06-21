@@ -127,7 +127,7 @@ describe( '[StartOverBanner]', () => {
 		await user.click( screen.getByRole( 'button', { name: 'Start Over' } ) );
 		await user.click( screen.getByRole( 'menuitem', { name: 'Search for duplicates' } ) );
 
-		// We're on the duplicate search page
+		// We're on the search for issues page
 		expect(
 			screen.getByRole( 'heading', { name: 'Search for duplicate issues' } )
 		).toBeInTheDocument();
@@ -161,7 +161,7 @@ describe( '[StartOverBanner]', () => {
 			await user.click( screen.getByRole( 'menuitem', { name: 'Search for duplicates' } ) );
 
 			expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'start_over_click', {
-				targetActivePage: 'duplicate-search',
+				targetActivePage: 'search-for-issues',
 			} );
 		} );
 
