@@ -44,7 +44,7 @@ function MainDisplay() {
 	}
 
 	let mainDisplay: ReactNode;
-	if ( activePage === 'search-for-issues' ) {
+	if ( activePage === 'search-issues' ) {
 		mainDisplay = <IssueSearchingPage />;
 	} else {
 		mainDisplay = <ReportingFlowPage />;

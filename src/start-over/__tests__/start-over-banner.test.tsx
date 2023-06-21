@@ -161,7 +161,7 @@ describe( '[StartOverBanner]', () => {
 			await user.click( screen.getByRole( 'menuitem', { name: 'Search for issues' } ) );
 
 			expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'start_over_click', {
-				targetActivePage: 'search-for-issues',
+				targetActivePage: 'search-issues',
 			} );
 		} );
 

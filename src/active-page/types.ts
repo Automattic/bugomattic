@@ -1,1 +1,1 @@
-export type ActivePage = 'search-for-issues' | 'report-issue';
+export type ActivePage = 'search-issues' | 'report-issue';

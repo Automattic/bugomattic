@@ -2,7 +2,7 @@ import { RootState } from '../app/store';
 
 export function createFakeRootState( partialState: Partial< RootState > = {} ): RootState {
 	const fakeDefaultRootState: RootState = {
-		activePage: 'search-for-issues',
+		activePage: 'search-issues',
 		availableRepoFilters: {
 			repos: [],
 			loadError: null,

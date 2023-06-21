@@ -173,7 +173,7 @@ describe( '[AppNavbar]', () => {
 			await user.click( screen.getByRole( 'menuitem', { name: 'Search for Issues' } ) );
 
 			expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'navbar_item_click', {
-				page: 'search-for-issues',
+				page: 'search-issues',
 			} );
 		} );
 	} );

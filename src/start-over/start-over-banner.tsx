@@ -60,7 +60,7 @@ function StartOverDropdownMenu() {
 	const menuOptions: MenuOption[] = [
 		{
 			label: 'Search for issues',
-			targetActivePage: 'search-for-issues',
+			targetActivePage: 'search-issues',
 			icon: SearchIcon,
 		},
 		{
