@@ -205,11 +205,24 @@ function createTask( dataRow ) {
 		if ( linkType === 'github' ) {
 			if ( repository ) task.link.repository = repository;
 			if ( template ) task.link.template = template;
-			task.link.labels = [ ...getGitHubLabels( dataRow ) ];
-			task.link.projectSlugs = [ ...getGitHubProjectSlugs( dataRow ) ];
+			const labels = getGitHubLabels( dataRow );
+			if ( labels.length > 0 ) {
+				task.link.labels = [ ...labels ];
+			}
+			const projectSlugs = getGitHubProjectSlugs( dataRow );
+			if ( projectSlugs.length > 0 ) {
+				task.link.projectSlugs = [ ...projectSlugs ];
+			}
 
 			if ( productName === 'WordPress.com' || productName === 'Jetpack' ) {
+				if ( ! task.link.projectSlugs ) {
+					task.link.projectSlugs = [];
+				}
 				task.link.projectSlugs.push( 'Automattic/343' );
+
+				if ( ! task.link.labels ) {
+					task.link.labels = [];
+				}
 				task.link.labels.push( ...defaultLabels );
 			}
 		} else if ( linkType === 'jira' ) {
