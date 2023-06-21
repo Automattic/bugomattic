@@ -2,7 +2,7 @@ import { RootState } from '../app/store';
 
 export function createFakeRootState( partialState: Partial< RootState > = {} ): RootState {
 	const fakeDefaultRootState: RootState = {
-		activePage: 'duplicate-search',
+		activePage: 'search-issues',
 		availableRepoFilters: {
 			repos: [],
 			loadError: null,
@@ -31,13 +31,13 @@ export function createFakeRootState( partialState: Partial< RootState > = {} ): 
 		},
 		startOverCounter: 0,
 
-		duplicateSearch: {
+		issueSearch: {
 			searchTerm: '',
 			activeRepoFilters: [],
 			sort: 'relevance',
 			statusFilter: 'all',
 		},
-		duplicateResults: {
+		issueSearchResults: {
 			results: [],
 			requestStatus: 'fulfilled',
 			requestError: null,

@@ -56,7 +56,7 @@ describe( '[StartOverBanner]', () => {
 		},
 		completedTasks: [ expectedTaskId ],
 		// We add these details so that we can make sure they are cleared on starting over!
-		duplicateSearch: {
+		issueSearch: {
 			searchTerm: 'foo bar',
 			statusFilter: 'closed',
 			activeRepoFilters: [ fakeAvailableRepos[ 0 ] ],
@@ -121,20 +121,20 @@ describe( '[StartOverBanner]', () => {
 		expect( screen.queryByText( featureName ) ).not.toBeInTheDocument();
 	} );
 
-	test( 'Clicking the "Search for duplicates" option resets everything and goes to the search page', async () => {
+	test( 'Clicking the "Search for issues" option resets everything and goes to the search page', async () => {
 		const { user } = await setup();
 
 		await user.click( screen.getByRole( 'button', { name: 'Start Over' } ) );
-		await user.click( screen.getByRole( 'menuitem', { name: 'Search for duplicates' } ) );
+		await user.click( screen.getByRole( 'menuitem', { name: 'Search for issues' } ) );
 
-		// We're on the duplicate search page
+		// We're on the search for issues page
 		expect(
-			screen.getByRole( 'heading', { name: 'Search for duplicate issues' } )
+			screen.getByRole( 'heading', { name: 'Search for existing issues' } )
 		).toBeInTheDocument();
 
 		// No search term
 		expect(
-			screen.queryByRole( 'textbox', { name: 'Search for duplicate issues' } )
+			screen.queryByRole( 'textbox', { name: 'Search for existing issues' } )
 		).not.toHaveValue();
 
 		// All filters and sorts are back to defaults
@@ -149,19 +149,19 @@ describe( '[StartOverBanner]', () => {
 
 		// There are no results, just the placeholder
 		expect(
-			screen.getByRole( 'heading', { name: 'Enter some keywords to search for duplicates.' } )
+			screen.getByRole( 'heading', { name: 'Enter some keywords to search for existing issues.' } )
 		).toBeInTheDocument();
 	} );
 
 	describe( '[Analytics]', () => {
-		test( 'Clicking the "Search for duplicates" option records event', async () => {
+		test( 'Clicking the "Search for issues" option records event', async () => {
 			const { user, monitoringClient } = await setup();
 
 			await user.click( screen.getByRole( 'button', { name: 'Start Over' } ) );
-			await user.click( screen.getByRole( 'menuitem', { name: 'Search for duplicates' } ) );
+			await user.click( screen.getByRole( 'menuitem', { name: 'Search for issues' } ) );
 
 			expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'start_over_click', {
-				targetActivePage: 'duplicate-search',
+				targetActivePage: 'search-issues',
 			} );
 		} );
 

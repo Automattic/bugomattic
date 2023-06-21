@@ -1,5 +1,5 @@
 import React, { ReactElement, cloneElement } from 'react';
-import styles from '../duplicate-results.module.css';
+import styles from '../issue-search-results.module.css';
 
 interface Props {
 	illustration: ReactElement;

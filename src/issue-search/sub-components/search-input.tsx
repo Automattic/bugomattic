@@ -1,14 +1,14 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { selectDuplicateSearchTerm, setSearchTerm } from '../duplicate-search-slice';
+import { selectIssueSearchTerm, setSearchTerm } from '../issue-search-slice';
 import { DebouncedSearch } from '../../common/components';
 import { updateHistoryWithState } from '../../url-history/actions';
 import { useMonitoring } from '../../monitoring/monitoring-provider';
 
-export function DuplicateSearchInput() {
+export function IssueSearchInput() {
 	const dispatch = useAppDispatch();
 	const monitoringClient = useMonitoring();
-	const reduxSearchTerm = useAppSelector( selectDuplicateSearchTerm );
+	const reduxSearchTerm = useAppSelector( selectIssueSearchTerm );
 	const [ inputSearchTerm, setInputSearchTerm ] = useState( reduxSearchTerm );
 
 	// This is the main reason why we are controlling the local input state here, rather than
@@ -40,8 +40,8 @@ export function DuplicateSearchInput() {
 
 	return (
 		<DebouncedSearch
-			placeholder="Search for duplicate issues"
-			inputAriaLabel="Search for duplicate issues"
+			placeholder="Search for existing issues"
+			inputAriaLabel="Search for existing issues"
 			callback={ handleSearchTermEmitted }
 			controlledInputState={ controlledInputState }
 			debounceMs={ 500 }

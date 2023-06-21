@@ -50,7 +50,7 @@ describe( '[AppNavbar]', () => {
 			'page'
 		);
 
-		expect( screen.getByRole( 'menuitem', { name: 'Duplicate Search' } ) ).not.toHaveAttribute(
+		expect( screen.getByRole( 'menuitem', { name: 'Search for Issues' } ) ).not.toHaveAttribute(
 			'aria-current',
 			'page'
 		);
@@ -93,19 +93,19 @@ describe( '[AppNavbar]', () => {
 		expect( reportingFlowPageHeading ).toBeInTheDocument();
 		expect( reportingFlowPageHeading ).toHaveFocus();
 
-		await user.click( screen.getByRole( 'menuitem', { name: 'Duplicate Search' } ) );
-		const duplicateSearchingPageHeading = screen.getByRole( 'heading', {
-			name: 'Search for duplicate issues',
+		await user.click( screen.getByRole( 'menuitem', { name: 'Search for Issues' } ) );
+		const issueSearchingPageHeading = screen.getByRole( 'heading', {
+			name: 'Search for existing issues',
 		} );
-		expect( duplicateSearchingPageHeading ).toBeInTheDocument();
-		expect( duplicateSearchingPageHeading ).toHaveFocus();
+		expect( issueSearchingPageHeading ).toBeInTheDocument();
+		expect( issueSearchingPageHeading ).toHaveFocus();
 	} );
 
 	test( 'The menubar supports keyboard navigation', async () => {
 		const { user } = await setup();
 
 		const reportAnIssueButton = screen.getByRole( 'menuitem', { name: 'Report an Issue' } );
-		const duplicateSearchButton = screen.getByRole( 'menuitem', { name: 'Duplicate Search' } );
+		const issueSearchButton = screen.getByRole( 'menuitem', { name: 'Search for Issues' } );
 
 		// Focus site header link
 		screen.getByRole( 'link', { name: 'Bugomattic' } ).focus();
@@ -113,21 +113,21 @@ describe( '[AppNavbar]', () => {
 		// Tab into navbar
 		await user.keyboard( '{tab}' );
 
-		// Default page starts with focus -- duplicate search
-		expect( duplicateSearchButton ).toHaveFocus();
+		// Default page starts with focus -- search for issues
+		expect( issueSearchButton ).toHaveFocus();
 
 		// Basic menubar nav
 		await user.keyboard( '{arrowright}' );
 		expect( reportAnIssueButton ).toHaveFocus();
 
 		await user.keyboard( '{arrowleft}' );
-		expect( duplicateSearchButton ).toHaveFocus();
+		expect( issueSearchButton ).toHaveFocus();
 
 		await user.keyboard( '{end}' );
 		expect( reportAnIssueButton ).toHaveFocus();
 
 		await user.keyboard( '{home}' );
-		expect( duplicateSearchButton ).toHaveFocus();
+		expect( issueSearchButton ).toHaveFocus();
 
 		// Opening the dropdown
 		await user.keyboard( '{arrowright}' );
@@ -170,10 +170,10 @@ describe( '[AppNavbar]', () => {
 		test( 'Selecting the "Report an Issue" in the navbar records event', async () => {
 			const { monitoringClient, user } = await setup();
 
-			await user.click( screen.getByRole( 'menuitem', { name: 'Duplicate Search' } ) );
+			await user.click( screen.getByRole( 'menuitem', { name: 'Search for Issues' } ) );
 
 			expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'navbar_item_click', {
-				page: 'duplicate-search',
+				page: 'search-issues',
 			} );
 		} );
 	} );

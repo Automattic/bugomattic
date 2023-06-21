@@ -18,7 +18,7 @@ describe( '[app]', () => {
 		return { monitoringClient };
 	}
 
-	test( 'App shows loading indicator until all configuration is loaded, then the current landing page (duplicate searching)', async () => {
+	test( 'App shows loading indicator until all configuration is loaded, then the current landing page (issue searching)', async () => {
 		const apiClient = createMockApiClient();
 		// This function will get set to the resolve() function in the API client call.
 		let resolveReportingConfigRequestPromise: (
@@ -49,7 +49,7 @@ describe( '[app]', () => {
 		).toBeInTheDocument();
 		// ...Landing page is not.
 		expect(
-			screen.queryByRole( 'heading', { name: 'Search for duplicate issues' } )
+			screen.queryByRole( 'heading', { name: 'Search for existing issues' } )
 		).not.toBeInTheDocument();
 
 		resolveReportingConfigRequestPromise( {} );
@@ -65,7 +65,7 @@ describe( '[app]', () => {
 		);
 
 		expect(
-			await screen.findByRole( 'heading', { name: 'Search for duplicate issues' } )
+			await screen.findByRole( 'heading', { name: 'Search for existing issues' } )
 		).toBeInTheDocument();
 	} );
 
@@ -83,7 +83,7 @@ describe( '[app]', () => {
 		);
 
 		expect(
-			await screen.findByRole( 'heading', { name: 'Search for duplicate issues' } )
+			await screen.findByRole( 'heading', { name: 'Search for existing issues' } )
 		).toBeInTheDocument();
 	} );
 

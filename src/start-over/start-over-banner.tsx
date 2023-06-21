@@ -42,7 +42,7 @@ export function StartOverBanner() {
 			aria-label="Start Over"
 			illustration={ <ChecklistIllustration /> }
 			header={ header }
-			message={ 'Start over to report a new issue or go back to duplicate search' }
+			message={ 'Start over to report a new issue or go back to issue search' }
 			actionButton={ <StartOverDropdownMenu /> }
 		/>
 	);
@@ -59,8 +59,8 @@ function StartOverDropdownMenu() {
 	const monitoringClient = useMonitoring();
 	const menuOptions: MenuOption[] = [
 		{
-			label: 'Search for duplicates',
-			targetActivePage: 'duplicate-search',
+			label: 'Search for issues',
+			targetActivePage: 'search-issues',
 			icon: SearchIcon,
 		},
 		{

@@ -7,7 +7,7 @@ import { selectIssueType } from '../../issue-details/issue-details-slice';
 import { ReactComponent as RightArrowIcon } from '../../common/svgs/arrow-right.svg';
 import { ReactComponent as PlusIcon } from '../../common/svgs/plus.svg';
 import { ReactComponent as DownChevronIcon } from '../../common/svgs/chevron-down.svg';
-import styles from '../duplicate-results.module.css';
+import styles from '../issue-search-results.module.css';
 import { setActivePage } from '../../active-page/active-page-slice';
 import { updateHistoryWithState } from '../../url-history/actions';
 

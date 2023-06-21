@@ -10,8 +10,8 @@ import {
 	FloatingFocusManager,
 } from '@floating-ui/react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import styles from '../duplicate-search-controls.module.css';
-import { selectActiveRepoFilters, setActiveRepoFilters } from '../duplicate-search-slice';
+import styles from '../issue-search-controls.module.css';
+import { selectActiveRepoFilters, setActiveRepoFilters } from '../issue-search-slice';
 import {
 	ClearButton,
 	OutlineNeutralButton,

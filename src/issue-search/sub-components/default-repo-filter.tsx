@@ -1,6 +1,6 @@
 import React from 'react';
 import { ReactComponent as DefaultFilterIllustration } from '../svgs/default-filter-illustration.svg';
-import styles from '../duplicate-search-controls.module.css';
+import styles from '../issue-search-controls.module.css';
 
 export function DefaultRepoFilter() {
 	return (

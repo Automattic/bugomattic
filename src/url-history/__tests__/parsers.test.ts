@@ -23,8 +23,8 @@ describe( 'url-history-parsers', () => {
 			},
 			completedTasks: [ 'completed_task_id_1', 'completed_task_id_2' ],
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			duplicateResults: [ 'should be ignored' ] as any,
-			duplicateSearch: {
+			issueSearchResults: [ 'should be ignored' ] as any,
+			issueSearch: {
 				searchTerm: 'Test search term',
 				activeRepoFilters: [ 'test_repo_1', 'test_repo_2' ],
 				sort: 'date-created',
@@ -39,7 +39,7 @@ describe( 'url-history-parsers', () => {
 			activeReportingStep: startingState.activeReportingStep,
 			issueDetails: startingState.issueDetails,
 			completedTasks: startingState.completedTasks,
-			duplicateSearch: startingState.duplicateSearch,
+			issueSearch: startingState.issueSearch,
 		};
 		expect( serializedAndReparsedState ).toEqual( expectedOutput );
 	} );

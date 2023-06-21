@@ -22,8 +22,8 @@ export function AppNavbar() {
 
 	const menuItems: MenuItemDetails[] = [
 		{
-			page: 'duplicate-search',
-			component: <SimpleMenuItem page="duplicate-search" label="Duplicate Search" />,
+			page: 'search-issues',
+			component: <SimpleMenuItem page="search-issues" label="Search for Issues" />,
 		},
 		{
 			page: 'report-issue',

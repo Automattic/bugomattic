@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { selectStatusFilter, setStatusFilter } from '../duplicate-search-slice';
+import { selectStatusFilter, setStatusFilter } from '../issue-search-slice';
 import { IssueStatusFilter } from '../types';
 import { SegmentedControl } from '../../common/components';
 import { updateHistoryWithState } from '../../url-history/actions';

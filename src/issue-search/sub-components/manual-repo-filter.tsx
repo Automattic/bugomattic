@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
-import styles from '../duplicate-search-controls.module.css';
+import styles from '../issue-search-controls.module.css';
 import { useAppSelector } from '../../app/hooks';
 import {
 	selectAvailableRepoFilters,
