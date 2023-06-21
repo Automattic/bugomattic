@@ -197,7 +197,7 @@ function getAppIconForLink( link: TaskLink ): ReactNode {
 function getLinkName( link: TaskLink ): string {
 	switch ( link.type ) {
 		case 'general':
-			return 'General';
+			return 'Link';
 		case 'github':
 			return 'GitHub';
 		case 'jira':
