@@ -43,11 +43,16 @@ export function createNewGithubIssueHref( link: NewGitHubIssueLink, issueTitle?:
 	// Any broken pieces will just result in a Github 404 or the param being tossed out by Github.
 	const url = new URL( 'https://github.com' );
 	let pathEnd = 'new';
-	if ( ! link.labels && ! link.projectSlugs && ! link.template ) {
+	if (
+		( ! link.labels || link.labels.length === 0 ) &&
+		( ! link.projectSlugs || link.projectSlugs.length === 0 ) &&
+		! link.template
+	) {
 		// If there's no other customization, lets default to the /choose route
 		// which lets users pick a template.
 		pathEnd = 'new/choose';
 	}
+
 	url.pathname = urlJoin( link.repository, 'issues', pathEnd );
 
 	if ( issueTitle ) {
