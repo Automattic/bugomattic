@@ -6,10 +6,10 @@ import {
 	DropdownTrigger,
 	OutlineNeutralButton,
 } from '../../common/components';
-import styles from '../duplicate-search-controls.module.css';
+import styles from '../issue-search-controls.module.css';
 import { IssueSortOption } from '../types';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { selectSort, setSort } from '../duplicate-search-slice';
+import { selectSort, setSort } from '../issue-search-slice';
 import { ReactComponent as CheckIcon } from '../../common/svgs/check.svg';
 import { ReactComponent as DownIcon } from '../../common/svgs/chevron-down.svg';
 import { ReactComponent as SortIcon } from '../../common/svgs/sort.svg';

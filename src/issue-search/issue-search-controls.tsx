@@ -1,6 +1,6 @@
 import React from 'react';
 import { DuplicateSearchInput, RepoFilter, SortSelect, StatusFilter } from './sub-components';
-import styles from './duplicate-search-controls.module.css';
+import styles from './issue-search-controls.module.css';
 
 export function DuplicateSearchControls() {
 	return (

@@ -1,6 +1,6 @@
 import { ApiClient } from './types';
 import path from 'path-browserify';
-import { Issue } from '../duplicate-results/types';
+import { Issue } from '../issue-search-results/types';
 import { getSearchIssuesCache, setSearchIssuesCache } from './shared-helpers/search-issues-cache';
 
 /**

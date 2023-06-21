@@ -13,11 +13,8 @@ import { completedTasksReducer } from '../next-steps/completed-tasks-slice';
 import { activeReportingStepReducer } from '../reporting-flow-page/active-reporting-step-slice';
 import { urlHistoryMiddleware, registerHistoryListener } from '../url-history/redux-handlers';
 import { startOverCounterReducer } from '../start-over/start-over-counter-slice';
-import {
-	duplicateSearchReducer,
-	searchIssuesMiddleware,
-} from '../duplicate-search/duplicate-search-slice';
-import { duplicateResultsReducer } from '../duplicate-results/duplicate-results-slice';
+import { duplicateSearchReducer, searchIssuesMiddleware } from '../issue-search/issue-search-slice';
+import { duplicateResultsReducer } from '../issue-search-results/issue-search-results-slice';
 import { activePageReducer } from '../active-page/active-page-slice';
 import { availableRepoFiltersReducer } from '../static-data/available-repo-filters/available-repo-filters-slice';
 import { surfaceStaticDataMiddleware } from '../static-data/static-data-middleware';

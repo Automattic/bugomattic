@@ -1,8 +1,5 @@
 import { createSelector } from '@reduxjs/toolkit';
-import {
-	selectActiveRepoFilters,
-	selectStatusFilter,
-} from '../duplicate-search/duplicate-search-slice';
+import { selectActiveRepoFilters, selectStatusFilter } from '../issue-search/issue-search-slice';
 
 export const selectDuplicateSearchFiltersAreActive = createSelector(
 	[ selectStatusFilter, selectActiveRepoFilters ],

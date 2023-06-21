@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useAppSelector } from '../../app/hooks';
-import { selectDuplicateSearchTerm } from '../../duplicate-search/duplicate-search-slice';
-import { selectDuplicateResultsRequestStatus } from '../duplicate-results-slice';
+import { selectDuplicateSearchTerm } from '../../issue-search/issue-search-slice';
+import { selectDuplicateResultsRequestStatus } from '../issue-search-results-slice';
 
 export function useSetHeightAfterRequest() {
 	const searchTerm = useAppSelector( selectDuplicateSearchTerm );

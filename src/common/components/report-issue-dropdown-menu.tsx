@@ -10,7 +10,7 @@ import { setActiveReportingStep } from '../../reporting-flow-page/active-reporti
 import { setActivePage } from '../../active-page/active-page-slice';
 import { updateHistoryWithState } from '../../url-history/actions';
 import { useMonitoring } from '../../monitoring/monitoring-provider';
-import { ReportIssueLocation } from '../../duplicate-search/types';
+import { ReportIssueLocation } from '../../issue-search/types';
 
 import styles from './report-issue-dropdown-menu.module.css';
 import { selectNextReportingStep } from '../../combined-selectors/next-reporting-step';
@@ -56,7 +56,7 @@ export const ReportIssueDropdownMenu = forwardRef< HTMLElement, Props >(
 
 		const handleIssueTypeClick = useCallback(
 			( issueType: IssueType ) => {
-				// In the future, if we re-use this dropdown apart from navigation from duplicate searching,
+				// In the future, if we re-use this dropdown apart from navigation from issue searching,
 				// we may have defer more of these actions to calling components.
 				dispatch( setIssueType( issueType ) );
 				dispatch( setActiveReportingStep( nextReportingFlowStep ) );

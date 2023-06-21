@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../app/store';
-import { searchIssues } from '../duplicate-search/duplicate-search-slice';
+import { searchIssues } from '../issue-search/issue-search-slice';
 import { DuplicateResultsState } from './types';
 import { startOver } from '../start-over/start-over-counter-slice';
 

@@ -1,4 +1,4 @@
-import { IssueStatus } from '../duplicate-results/types';
+import { IssueStatus } from '../issue-search-results/types';
 
 export type IssueStatusFilter = 'all' | IssueStatus;
 export type IssueSortOption = 'date-created' | 'relevance';

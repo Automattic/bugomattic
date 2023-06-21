@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { selectDuplicateSearchTerm, setSearchTerm } from '../duplicate-search-slice';
+import { selectDuplicateSearchTerm, setSearchTerm } from '../issue-search-slice';
 import { DebouncedSearch } from '../../common/components';
 import { updateHistoryWithState } from '../../url-history/actions';
 import { useMonitoring } from '../../monitoring/monitoring-provider';

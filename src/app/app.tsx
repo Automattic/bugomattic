@@ -5,7 +5,7 @@ import styles from './app.module.css';
 import { AppErrorBoundary } from '../errors/app-error-boundary';
 import { selectActivePage } from '../active-page/active-page-slice';
 import { useAppSelector } from './hooks';
-import { DuplicateSearchingPage } from '../duplicate-searching-page/duplicate-searching-page';
+import { DuplicateSearchingPage } from '../issue-searching-page/issue-searching-page';
 import { ReportingFlowPage } from '../reporting-flow-page/reporting-flow-page';
 import { useAppDataHydration } from './use-app-data-hydration';
 import { LoadingIndicator } from '../common/components';

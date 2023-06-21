@@ -88,7 +88,7 @@ describe( '[Bad URL State]', () => {
 	}
 
 	describe( 'Falls back to initial state when recieves bad URL state with...', () => {
-		// TODO: Expand coverage for duplicate searching related state
+		// TODO: Expand coverage for issue searching related state
 
 		test( "Feature ID that isn't in the reporting config", async () => {
 			const urlQuery = stateToQuery( {
@@ -156,7 +156,7 @@ describe( '[Bad URL State]', () => {
 			expect( screen.queryByRole( 'checkbox', { checked: true } ) ).not.toBeInTheDocument();
 		} );
 
-		test( 'Duplicate search options that are invalid options', async () => {
+		test( 'Issue search options that are invalid options', async () => {
 			const urlQuery = stateToQuery( {
 				duplicateSearch: {
 					searchTerm: [],

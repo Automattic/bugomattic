@@ -5,7 +5,7 @@ import {
 	selectDuplicateResultsRequestStatus,
 	selectDuplicateRequestsWereMade,
 	selectDuplicateResultsRequestError,
-} from './duplicate-results-slice';
+} from './issue-search-results-slice';
 import {
 	IssueList,
 	PlaceholderMessage,
@@ -13,13 +13,13 @@ import {
 	useSetHeightAfterRequest,
 	useShowBanner,
 } from './sub-components';
-import styles from './duplicate-results.module.css';
+import styles from './issue-search-results.module.css';
 import { ReactComponent as InitialIllustration } from './svgs/initial-illustration.svg';
 import { ReactComponent as NoResultsIllustration } from '../common/svgs/missing-info-illustration.svg';
 import { ReactComponent as ErrorIllustration } from '../common/svgs/warning.svg';
 import { LoadingIndicator } from '../common/components';
-import { selectDuplicateSearchFiltersAreActive } from '../combined-selectors/duplicate-search-filters-are-active';
-import { selectDuplicateSearchTerm } from '../duplicate-search/duplicate-search-slice';
+import { selectDuplicateSearchFiltersAreActive } from '../combined-selectors/issue-search-filters-are-active';
+import { selectDuplicateSearchTerm } from '../issue-search/issue-search-slice';
 import { useMonitoring } from '../monitoring/monitoring-provider';
 import { useLoggerWithCache } from '../monitoring/use-logger-with-cache';
 

@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react';
 import { createMockApiClient } from '../../test-utils/mock-api-client';
 import userEvent from '@testing-library/user-event';
 import { renderWithProviders } from '../../test-utils/render-with-providers';
-import { DuplicateSearchControls } from '../duplicate-search-controls';
+import { DuplicateSearchControls } from '../issue-search-controls';
 import { screen, waitFor } from '@testing-library/react';
 import { DuplicateSearchState } from '../types';
 import { RootState } from '../../app/store';

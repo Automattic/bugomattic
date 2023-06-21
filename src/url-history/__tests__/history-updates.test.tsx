@@ -16,12 +16,8 @@ import {
 } from '../../api/types';
 import { App } from '../../app/app';
 import history from 'history/browser';
-import {
-	DuplicateSearchState,
-	IssueSortOption,
-	IssueStatusFilter,
-} from '../../duplicate-search/types';
-import { Issue } from '../../duplicate-results/types';
+import { DuplicateSearchState, IssueSortOption, IssueStatusFilter } from '../../issue-search/types';
+import { Issue } from '../../issue-search-results/types';
 
 globalThis.scrollTo = jest.fn();
 
@@ -293,7 +289,7 @@ describe( 'history updates', () => {
 				screen.queryByRole( 'heading', { name: 'Search for duplicate issues' } )
 			).not.toBeInTheDocument();
 
-			// Coming from duplicate searching, we start with the type already filled in, and on feature selection
+			// Coming from issue searching, we start with the type already filled in, and on feature selection
 			expect( screen.getByRole( 'heading', { name: 'Completed step: Type' } ) ).toBeInTheDocument();
 			expect( screen.getByRole( 'form', { name: 'Select a feature' } ) ).toBeInTheDocument();
 		},

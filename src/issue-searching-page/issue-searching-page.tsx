@@ -1,8 +1,8 @@
 import React from 'react';
-import { DuplicateResults } from '../duplicate-results/duplicate-results';
-import { DuplicateSearchControls } from '../duplicate-search/duplicate-search-controls';
+import { DuplicateResults } from '../issue-search-results/issue-search-results';
+import { DuplicateSearchControls } from '../issue-search/issue-search-controls';
 import { usePageNavigation } from '../active-page/page-navigation-provider';
-import styles from './duplicate-searching-page.module.css';
+import styles from './issue-searching-page.module.css';
 
 export function DuplicateSearchingPage() {
 	const { pageHeadingRef } = usePageNavigation();

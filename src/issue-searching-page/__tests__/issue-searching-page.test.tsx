@@ -4,16 +4,16 @@ import userEvent from '@testing-library/user-event';
 import { renderWithProviders } from '../../test-utils/render-with-providers';
 import { AvailableRepoFiltersState } from '../../static-data/available-repo-filters/types';
 import { act, screen, waitForElementToBeRemoved } from '@testing-library/react';
-import { DuplicateSearchingPage } from '../duplicate-searching-page';
+import { DuplicateSearchingPage } from '../issue-searching-page';
 import { SearchIssueApiResponse } from '../../api/types';
-import { Issue } from '../../duplicate-results/types';
+import { Issue } from '../../issue-search-results/types';
 import { PageNavigationProvider } from '../../active-page/page-navigation-provider';
 import { App } from '../../app/app';
 import { RootState } from '../../app/store';
 import history from 'history/browser';
 import { stateToQuery } from '../../url-history/parsers';
 import { createMockMonitoringClient } from '../../test-utils/mock-monitoring-client';
-import { DuplicateSearchState } from '../../duplicate-search/types';
+import { DuplicateSearchState } from '../../issue-search/types';
 
 describe( '[DuplicateSearchingPage]', () => {
 	const fakeIssue: Issue = {

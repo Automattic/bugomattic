@@ -18,7 +18,7 @@ describe( '[app]', () => {
 		return { monitoringClient };
 	}
 
-	test( 'App shows loading indicator until all configuration is loaded, then the current landing page (duplicate searching)', async () => {
+	test( 'App shows loading indicator until all configuration is loaded, then the current landing page (issue searching)', async () => {
 		const apiClient = createMockApiClient();
 		// This function will get set to the resolve() function in the API client call.
 		let resolveReportingConfigRequestPromise: (

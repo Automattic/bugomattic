@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react';
 import { Issue } from '../types';
 import { formatDistance, format } from 'date-fns';
 import { Tooltip } from 'react-tooltip';
-import styles from '../duplicate-results.module.css';
+import styles from '../issue-search-results.module.css';
 import { TextMatchHighlighter } from '../../common/components';
 import { ReactComponent as OpenIcon } from '../svgs/open-issue.svg';
 import { ReactComponent as ClosedIcon } from '../svgs/closed-issue.svg';

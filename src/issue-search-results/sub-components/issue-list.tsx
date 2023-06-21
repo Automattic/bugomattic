@@ -1,7 +1,7 @@
 import React from 'react';
 import { Issue } from '../types';
 import { IssueResult } from './issue-result';
-import styles from '../duplicate-results.module.css';
+import styles from '../issue-search-results.module.css';
 
 interface Props {
 	issues: Issue[];

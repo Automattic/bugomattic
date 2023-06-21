@@ -1,4 +1,4 @@
-// Redux slice for duplicate search
+// Redux slice for issue search
 
 import { createAsyncThunk, createSlice, Middleware, PayloadAction } from '@reduxjs/toolkit';
 import { ApiClient, SearchIssueApiResponse } from '../api/types';
