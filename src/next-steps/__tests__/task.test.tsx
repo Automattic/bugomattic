@@ -224,7 +224,7 @@ describe( '[Task]', () => {
 				setup( <TaskComponent taskId={ task.id } />, task );
 
 				expect(
-					screen.getByRole( 'checkbox', { name: `Open an issue in the ${ repo } repo` } )
+					screen.getByRole( 'checkbox', { name: `Finish your report in the ${ repo } repo` } )
 				).toBeInTheDocument();
 			} );
 
