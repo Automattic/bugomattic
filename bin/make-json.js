@@ -174,6 +174,10 @@ function createTask( dataRow ) {
 		productName,
 	} = dataRow;
 
+	if ( ! linkType ) {
+		throw new Error( `Invalid linkType for: ${ name }` );
+	}
+
 	if ( taskType && linkType ) {
 		const task = {};
 
@@ -191,6 +195,13 @@ function createTask( dataRow ) {
 			};
 		}
 
+		const defaultLabels = [
+			`[Feature] ${ name.trim() }`,
+			'[Type] Bug',
+			'Needs triage',
+			'User Report',
+		];
+
 		if ( linkType === 'github' ) {
 			if ( repository ) task.link.repository = repository;
 			if ( template ) task.link.template = template;
@@ -199,7 +210,7 @@ function createTask( dataRow ) {
 
 			if ( productName === 'WordPress.com' || productName === 'Jetpack' ) {
 				task.link.projectSlugs.push( 'Automattic/343' );
-				task.link.labels.push( `[Feature] ${ name.trim() }` );
+				task.link.labels.push( ...defaultLabels );
 			}
 		} else if ( linkType === 'jira' ) {
 			if ( jiraHostName ) task.link.hostName = jiraHostName;
@@ -239,7 +250,7 @@ function getGitHubProjectSlugs( dataRow ) {
 
 function makeDefaultWordPressJetpackFeatureTask( dataRow ) {
 	const { name, repository } = dataRow;
-	const labelName = `[Feature] ${ name.trim() }`;
+	const defaultLabels = [ `[Feature] ${ name.trim() }`, '[Type] Feature Request' ];
 
 	const template =
 		repository === 'Automattic/jetpack' ? 'feature-request.yml' : 'feature_request.yml';
@@ -248,7 +259,7 @@ function makeDefaultWordPressJetpackFeatureTask( dataRow ) {
 			type: 'github',
 			repository: repository,
 			template: template,
-			labels: [ labelName, ...getGitHubLabels( dataRow ) ],
+			labels: [ ...defaultLabels, ...getGitHubLabels( dataRow ) ],
 			projectSlugs: [ 'Automattic/343', ...getGitHubProjectSlugs( dataRow ) ],
 		},
 	};
@@ -256,15 +267,20 @@ function makeDefaultWordPressJetpackFeatureTask( dataRow ) {
 
 function makeDefaultWordPressJetpackUrgentTask( dataRow ) {
 	const { name, repository } = dataRow;
-	const labelName = `[Feature] ${ name.trim() }`;
-
+	const defaultLabels = [
+		'[Pri] BLOCKER',
+		`[Feature] ${ name.trim() }`,
+		'[Type] Bug',
+		'Needs triage',
+		'User Report',
+	];
 	const template = repository === 'Automattic/jetpack' ? 'bug-report.yml' : 'bug_report.yml';
 	return {
 		link: {
 			type: 'github',
 			repository: repository,
 			template: template,
-			labels: [ '[Pri] BLOCKER', labelName, ...getGitHubLabels( dataRow ) ],
+			labels: [ ...defaultLabels, ...getGitHubLabels( dataRow ) ],
 			projectSlugs: [ 'Automattic/343', ...getGitHubProjectSlugs( dataRow ) ],
 		},
 	};
