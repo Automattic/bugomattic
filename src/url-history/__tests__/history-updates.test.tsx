@@ -16,7 +16,7 @@ import {
 } from '../../api/types';
 import { App } from '../../app/app';
 import history from 'history/browser';
-import { DuplicateSearchState, IssueSortOption, IssueStatusFilter } from '../../issue-search/types';
+import { IssueSearchState, IssueSortOption, IssueStatusFilter } from '../../issue-search/types';
 import { Issue } from '../../issue-search-results/types';
 
 globalThis.scrollTo = jest.fn();
@@ -77,7 +77,7 @@ describe( 'history updates', () => {
 
 	type PointInTime = typeof pointsInTime[ number ];
 
-	function createFakeIssueContentFromSearchState( searchState: DuplicateSearchState ) {
+	function createFakeIssueContentFromSearchState( searchState: IssueSearchState ) {
 		const { searchTerm, statusFilter, activeRepoFilters, sort } = searchState;
 
 		return `search:${ searchTerm } status:${ statusFilter } repos:${ activeRepoFilters.join(
@@ -109,10 +109,10 @@ describe( 'history updates', () => {
 		return str.charAt( 0 ).toUpperCase() + str.slice( 1 );
 	}
 
-	function validateSearchControlsForExpectedState( searchState: DuplicateSearchState ) {
+	function validateSearchControlsForExpectedState( searchState: IssueSearchState ) {
 		const { searchTerm, statusFilter, activeRepoFilters, sort } = searchState;
 
-		expect( screen.getByRole( 'textbox', { name: 'Search for duplicate issues' } ) ).toHaveValue(
+		expect( screen.getByRole( 'textbox', { name: 'Search for existing issues' } ) ).toHaveValue(
 			searchTerm
 		);
 
@@ -131,10 +131,12 @@ describe( 'history updates', () => {
 		);
 	}
 
-	function validateSearchResultsForExpectedState( searchState: DuplicateSearchState ) {
+	function validateSearchResultsForExpectedState( searchState: IssueSearchState ) {
 		if ( searchState.searchTerm === '' ) {
 			expect(
-				screen.getByRole( 'heading', { name: 'Enter some keywords to search for duplicates.' } )
+				screen.getByRole( 'heading', {
+					name: 'Enter some keywords to search for existing issues.',
+				} )
 			).toBeInTheDocument();
 		} else {
 			expect(
@@ -149,7 +151,7 @@ describe( 'history updates', () => {
 		},
 
 		onSearchTermChange: async () => {
-			await user.click( screen.getByRole( 'textbox', { name: 'Search for duplicate issues' } ) );
+			await user.click( screen.getByRole( 'textbox', { name: 'Search for existing issues' } ) );
 			await user.keyboard( newSearchTerm );
 			await user.keyboard( '{enter}' );
 		},
@@ -221,10 +223,10 @@ describe( 'history updates', () => {
 	const validations: { [ key in PointInTime ]: () => Promise< void > } = {
 		onStart: async () => {
 			expect(
-				screen.getByRole( 'heading', { name: 'Search for duplicate issues' } )
+				screen.getByRole( 'heading', { name: 'Search for existing issues' } )
 			).toBeInTheDocument();
 
-			const expectedSearchState: DuplicateSearchState = {
+			const expectedSearchState: IssueSearchState = {
 				searchTerm: '',
 				statusFilter: 'all',
 				activeRepoFilters: [],
@@ -236,7 +238,7 @@ describe( 'history updates', () => {
 		},
 
 		onSearchTermChange: async () => {
-			const expectedSearchState: DuplicateSearchState = {
+			const expectedSearchState: IssueSearchState = {
 				searchTerm: newSearchTerm,
 				statusFilter: 'all',
 				activeRepoFilters: [],
@@ -248,7 +250,7 @@ describe( 'history updates', () => {
 		},
 
 		onStatusFilterChange: async () => {
-			const expectedSearchState: DuplicateSearchState = {
+			const expectedSearchState: IssueSearchState = {
 				searchTerm: newSearchTerm,
 				statusFilter: newStatusFilter,
 				activeRepoFilters: [],
@@ -260,7 +262,7 @@ describe( 'history updates', () => {
 		},
 
 		onRepoFilterChange: async () => {
-			const expectedSearchState: DuplicateSearchState = {
+			const expectedSearchState: IssueSearchState = {
 				searchTerm: newSearchTerm,
 				statusFilter: newStatusFilter,
 				activeRepoFilters: newRepoFilters,
@@ -272,7 +274,7 @@ describe( 'history updates', () => {
 		},
 
 		onSortChange: async () => {
-			const expectedSearchState: DuplicateSearchState = {
+			const expectedSearchState: IssueSearchState = {
 				searchTerm: newSearchTerm,
 				statusFilter: newStatusFilter,
 				activeRepoFilters: newRepoFilters,
@@ -286,7 +288,7 @@ describe( 'history updates', () => {
 		onReportingFlowStart: async () => {
 			expect( screen.getByRole( 'heading', { name: 'Report a new issue' } ) ).toBeInTheDocument();
 			expect(
-				screen.queryByRole( 'heading', { name: 'Search for duplicate issues' } )
+				screen.queryByRole( 'heading', { name: 'Search for existing issues' } )
 			).not.toBeInTheDocument();
 
 			// Coming from issue searching, we start with the type already filled in, and on feature selection

@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useAppSelector } from '../../app/hooks';
 import {
-	selectDuplicateRequestsWereMade,
-	selectDuplicateResultsRequestStatus,
+	selectIssueSearchRequestsWereMade,
+	selectIssueSearchResultsRequestStatus,
 } from '../issue-search-results-slice';
 
 export function useShowBanner() {
-	const resultsRequestStatus = useAppSelector( selectDuplicateResultsRequestStatus );
-	const requestsWereMade = useAppSelector( selectDuplicateRequestsWereMade );
+	const resultsRequestStatus = useAppSelector( selectIssueSearchResultsRequestStatus );
+	const requestsWereMade = useAppSelector( selectIssueSearchRequestsWereMade );
 
 	// We want to handle the case when we come back to the issue searching page.
 	// Since this is local state, we want to tie it back to the redux state.

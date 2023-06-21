@@ -62,14 +62,14 @@ describe( '[Bad URL State]', () => {
 		).not.toBeInTheDocument();
 	}
 
-	function validateDefaultDuplicateSearchState() {
+	function validateDefaultIssueSearchState() {
 		// Page
 		expect(
-			screen.getByRole( 'heading', { name: 'Search for duplicate issues' } )
+			screen.getByRole( 'heading', { name: 'Search for existing issues' } )
 		).toBeInTheDocument();
 
 		// Controls
-		expect( screen.getByRole( 'textbox', { name: 'Search for duplicate issues' } ) ).toHaveValue(
+		expect( screen.getByRole( 'textbox', { name: 'Search for existing issues' } ) ).toHaveValue(
 			''
 		);
 		expect( screen.getByRole( 'option', { name: 'All', selected: true } ) ).toBeInTheDocument();
@@ -83,7 +83,7 @@ describe( '[Bad URL State]', () => {
 
 		// Results
 		expect(
-			screen.getByRole( 'heading', { name: 'Enter some keywords to search for duplicates.' } )
+			screen.getByRole( 'heading', { name: 'Enter some keywords to search for existing issues.' } )
 		).toBeInTheDocument();
 	}
 
@@ -158,7 +158,7 @@ describe( '[Bad URL State]', () => {
 
 		test( 'Issue search options that are invalid options', async () => {
 			const urlQuery = stateToQuery( {
-				duplicateSearch: {
+				issueSearch: {
 					searchTerm: [],
 					activeRepoFilters: [ 'not-available-repo' ],
 					sort: 'not-a-valid-sort-option',
@@ -170,7 +170,7 @@ describe( '[Bad URL State]', () => {
 
 			expectNoErrorThrown();
 
-			validateDefaultDuplicateSearchState();
+			validateDefaultIssueSearchState();
 		} );
 
 		test( 'Invalid types for all the top-level tracked state fields', async () => {
@@ -179,14 +179,14 @@ describe( '[Bad URL State]', () => {
 				activeReportingStep: { foo: 'bar' } as any,
 				completedTasks: { foo: 'bar' } as any,
 				activePage: { foo: 'bar' } as any,
-				duplicateSearch: { foo: 'bar' } as any,
+				issueSearch: { foo: 'bar' } as any,
 			} as RootState );
 
 			await setup( urlQuery );
 
 			expectNoErrorThrown();
 
-			validateDefaultDuplicateSearchState();
+			validateDefaultIssueSearchState();
 		} );
 
 		test( 'Undefined for all the top-level tracked state fields', async () => {
@@ -195,14 +195,14 @@ describe( '[Bad URL State]', () => {
 				activeReportingStep: undefined as any,
 				completedTasks: undefined as any,
 				activePage: undefined as any,
-				duplicateSearch: undefined as any,
+				issueSearch: undefined as any,
 			} as RootState );
 
 			await setup( urlQuery );
 
 			expectNoErrorThrown();
 
-			validateDefaultDuplicateSearchState();
+			validateDefaultIssueSearchState();
 		} );
 	} );
 

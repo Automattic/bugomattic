@@ -94,18 +94,18 @@ describe( '[AppNavbar]', () => {
 		expect( reportingFlowPageHeading ).toHaveFocus();
 
 		await user.click( screen.getByRole( 'menuitem', { name: 'Search for Issues' } ) );
-		const duplicateSearchingPageHeading = screen.getByRole( 'heading', {
-			name: 'Search for duplicate issues',
+		const issueSearchingPageHeading = screen.getByRole( 'heading', {
+			name: 'Search for existing issues',
 		} );
-		expect( duplicateSearchingPageHeading ).toBeInTheDocument();
-		expect( duplicateSearchingPageHeading ).toHaveFocus();
+		expect( issueSearchingPageHeading ).toBeInTheDocument();
+		expect( issueSearchingPageHeading ).toHaveFocus();
 	} );
 
 	test( 'The menubar supports keyboard navigation', async () => {
 		const { user } = await setup();
 
 		const reportAnIssueButton = screen.getByRole( 'menuitem', { name: 'Report an Issue' } );
-		const duplicateSearchButton = screen.getByRole( 'menuitem', { name: 'Search for Issues' } );
+		const issueSearchButton = screen.getByRole( 'menuitem', { name: 'Search for Issues' } );
 
 		// Focus site header link
 		screen.getByRole( 'link', { name: 'Bugomattic' } ).focus();
@@ -114,20 +114,20 @@ describe( '[AppNavbar]', () => {
 		await user.keyboard( '{tab}' );
 
 		// Default page starts with focus -- search for issues
-		expect( duplicateSearchButton ).toHaveFocus();
+		expect( issueSearchButton ).toHaveFocus();
 
 		// Basic menubar nav
 		await user.keyboard( '{arrowright}' );
 		expect( reportAnIssueButton ).toHaveFocus();
 
 		await user.keyboard( '{arrowleft}' );
-		expect( duplicateSearchButton ).toHaveFocus();
+		expect( issueSearchButton ).toHaveFocus();
 
 		await user.keyboard( '{end}' );
 		expect( reportAnIssueButton ).toHaveFocus();
 
 		await user.keyboard( '{home}' );
-		expect( duplicateSearchButton ).toHaveFocus();
+		expect( issueSearchButton ).toHaveFocus();
 
 		// Opening the dropdown
 		await user.keyboard( '{arrowright}' );

@@ -1,18 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../app/store';
 import { searchIssues } from '../issue-search/issue-search-slice';
-import { DuplicateResultsState } from './types';
+import { IssueSearchResultsState } from './types';
 import { startOver } from '../start-over/start-over-counter-slice';
 
-const initialState: DuplicateResultsState = {
+const initialState: IssueSearchResultsState = {
 	results: [],
 	requestStatus: 'fulfilled',
 	requestError: null,
 	currentRequestId: '',
 };
 
-export const duplicateResultsSlice = createSlice( {
-	name: 'duplicateResults',
+export const issueSearchResultsSlice = createSlice( {
+	name: 'issueSearchResults',
 	initialState,
 	reducers: {},
 	extraReducers: ( builder ) => {
@@ -58,22 +58,22 @@ export const duplicateResultsSlice = createSlice( {
 	},
 } );
 
-export const duplicateResultsReducer = duplicateResultsSlice.reducer;
+export const issueSearchResultsReducer = issueSearchResultsSlice.reducer;
 
 /* Selectors */
 
-export function selectDuplicateResults( state: RootState ) {
-	return state.duplicateResults.results;
+export function selectIssueSearchResults( state: RootState ) {
+	return state.issueSearchResults.results;
 }
 
-export function selectDuplicateResultsRequestStatus( state: RootState ) {
-	return state.duplicateResults.requestStatus;
+export function selectIssueSearchResultsRequestStatus( state: RootState ) {
+	return state.issueSearchResults.requestStatus;
 }
 
-export function selectDuplicateResultsRequestError( state: RootState ) {
-	return state.duplicateResults.requestError;
+export function selectIssueSearchResultsRequestError( state: RootState ) {
+	return state.issueSearchResults.requestError;
 }
 
-export function selectDuplicateRequestsWereMade( state: RootState ) {
-	return state.duplicateResults.currentRequestId !== '';
+export function selectIssueSearchRequestsWereMade( state: RootState ) {
+	return state.issueSearchResults.currentRequestId !== '';
 }

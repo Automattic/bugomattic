@@ -49,7 +49,7 @@ describe( '[app]', () => {
 		).toBeInTheDocument();
 		// ...Landing page is not.
 		expect(
-			screen.queryByRole( 'heading', { name: 'Search for duplicate issues' } )
+			screen.queryByRole( 'heading', { name: 'Search for existing issues' } )
 		).not.toBeInTheDocument();
 
 		resolveReportingConfigRequestPromise( {} );
@@ -65,7 +65,7 @@ describe( '[app]', () => {
 		);
 
 		expect(
-			await screen.findByRole( 'heading', { name: 'Search for duplicate issues' } )
+			await screen.findByRole( 'heading', { name: 'Search for existing issues' } )
 		).toBeInTheDocument();
 	} );
 
@@ -83,7 +83,7 @@ describe( '[app]', () => {
 		);
 
 		expect(
-			await screen.findByRole( 'heading', { name: 'Search for duplicate issues' } )
+			await screen.findByRole( 'heading', { name: 'Search for existing issues' } )
 		).toBeInTheDocument();
 	} );
 

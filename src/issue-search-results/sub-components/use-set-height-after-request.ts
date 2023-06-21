@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { useAppSelector } from '../../app/hooks';
-import { selectDuplicateSearchTerm } from '../../issue-search/issue-search-slice';
-import { selectDuplicateResultsRequestStatus } from '../issue-search-results-slice';
+import { selectIssueSearchTerm } from '../../issue-search/issue-search-slice';
+import { selectIssueSearchResultsRequestStatus } from '../issue-search-results-slice';
 
 export function useSetHeightAfterRequest() {
-	const searchTerm = useAppSelector( selectDuplicateSearchTerm );
-	const resultsRequestStatus = useAppSelector( selectDuplicateResultsRequestStatus );
+	const searchTerm = useAppSelector( selectIssueSearchTerm );
+	const resultsRequestStatus = useAppSelector( selectIssueSearchResultsRequestStatus );
 	// This ref and corresponding useEffect hook are used to preserve the height of the
 	// results container between searches. This keeps the UI from jumping around while searching.
 	const resultsContainerContentRef = useRef< HTMLDivElement >( null );

@@ -11,7 +11,7 @@ export interface Issue {
 	content: string;
 }
 
-export interface DuplicateResultsState {
+export interface IssueSearchResultsState {
 	results: Issue[];
 	requestStatus: 'pending' | 'fulfilled' | 'error';
 	requestError: string | null;

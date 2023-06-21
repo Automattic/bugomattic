@@ -1,18 +1,18 @@
 import React from 'react';
-import { DuplicateResults } from '../issue-search-results/issue-search-results';
-import { DuplicateSearchControls } from '../issue-search/issue-search-controls';
+import { IssueSearchResults } from '../issue-search-results/issue-search-results';
+import { IssueSearchControls } from '../issue-search/issue-search-controls';
 import { usePageNavigation } from '../active-page/page-navigation-provider';
 import styles from './issue-searching-page.module.css';
 
-export function DuplicateSearchingPage() {
+export function IssueSearchingPage() {
 	const { pageHeadingRef } = usePageNavigation();
 	return (
 		<section className={ styles.wrapper }>
 			<h2 ref={ pageHeadingRef } className="screenReaderOnly" tabIndex={ -1 }>
-				Search for duplicate issues
+				Search for existing issues
 			</h2>
-			<DuplicateSearchControls />
-			<DuplicateResults />
+			<IssueSearchControls />
+			<IssueSearchResults />
 		</section>
 	);
 }

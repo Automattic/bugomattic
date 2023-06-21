@@ -11,7 +11,7 @@ type KeyableRootState = Omit< RootState, keyof EmptyObject >;
 const trackedStateKeys: ( keyof KeyableRootState )[] = [
 	'activePage',
 	'activeReportingStep',
-	'duplicateSearch',
+	'issueSearch',
 	'issueDetails',
 	'completedTasks',
 ];
@@ -51,8 +51,8 @@ function isFalsyOrEmpty( value: unknown ) {
 }
 
 const defaultStateValues: { [ key: string ]: string } = {
-	'duplicateSearch.statusFilter': 'all',
-	'duplicateSearch.sort': 'relevance',
+	'issueSearch.statusFilter': 'all',
+	'issueSearch.sort': 'relevance',
 	'issueDetails.issueType': 'unset',
 };
 

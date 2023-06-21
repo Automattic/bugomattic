@@ -5,11 +5,11 @@ import { ApiClient, SearchIssueApiResponse } from '../api/types';
 import { AppDispatch, RootState } from '../app/store';
 import { ActionWithStaticData } from '../static-data/types';
 import { updateStateFromHistory } from '../url-history/actions';
-import { DuplicateSearchState, IssueSortOption, IssueStatusFilter } from './types';
+import { IssueSearchState, IssueSortOption, IssueStatusFilter } from './types';
 import { startOver } from '../start-over/start-over-counter-slice';
 import deepEqual from 'deep-equal';
 
-const initialState: DuplicateSearchState = {
+const initialState: IssueSearchState = {
 	searchTerm: '',
 	activeRepoFilters: [],
 	statusFilter: 'all',
@@ -23,9 +23,9 @@ export const searchIssues = createAsyncThunk<
 	SearchIssueApiResponse,
 	void,
 	{ extra: { apiClient: ApiClient }; requestId: string }
->( 'duplicateSearch/searchIssues', async ( _, { extra, getState } ) => {
+>( 'issueSearch/searchIssues', async ( _, { extra, getState } ) => {
 	const rootState = getState() as RootState;
-	const searchTerm = selectDuplicateSearchTerm( rootState );
+	const searchTerm = selectIssueSearchTerm( rootState );
 	const activeRepoFilters = selectActiveRepoFilters( rootState );
 	const statusFilter = selectStatusFilter( rootState );
 	const sort = selectSort( rootState );
@@ -38,8 +38,8 @@ export const searchIssues = createAsyncThunk<
 	} );
 } );
 
-export const duplicateSearchSlice = createSlice( {
-	name: 'duplicateSearch',
+export const issueSearchSlice = createSlice( {
+	name: 'issueSearch',
 	initialState,
 	reducers: {
 		setSearchTerm: ( state, { payload }: PayloadAction< string > ) => {
@@ -70,8 +70,8 @@ export const duplicateSearchSlice = createSlice( {
 	extraReducers: ( builder ) => {
 		builder
 			.addCase( updateStateFromHistory, ( _state, action ) => {
-				const duplicateSearchParamsFromUrl = action.payload.duplicateSearch;
-				if ( ! duplicateSearchParamsFromUrl || typeof duplicateSearchParamsFromUrl !== 'object' ) {
+				const issueSearchParamsFromUrl = action.payload.issueSearch;
+				if ( ! issueSearchParamsFromUrl || typeof issueSearchParamsFromUrl !== 'object' ) {
 					return { ...initialState };
 				}
 
@@ -79,46 +79,46 @@ export const duplicateSearchSlice = createSlice( {
 
 				let searchTerm: string;
 				if (
-					! duplicateSearchParamsFromUrl.searchTerm ||
-					typeof duplicateSearchParamsFromUrl.searchTerm !== 'string'
+					! issueSearchParamsFromUrl.searchTerm ||
+					typeof issueSearchParamsFromUrl.searchTerm !== 'string'
 				) {
 					searchTerm = initialState.searchTerm;
 				} else {
-					searchTerm = duplicateSearchParamsFromUrl.searchTerm;
+					searchTerm = issueSearchParamsFromUrl.searchTerm;
 				}
 
 				const actionWithStaticData = action as ActionWithStaticData;
 				const avaliableRepoFiltersSet = new Set( actionWithStaticData.meta.availableRepoFilters );
 				let activeRepoFilters: string[];
 				if (
-					! duplicateSearchParamsFromUrl.activeRepoFilters ||
-					! Array.isArray( duplicateSearchParamsFromUrl.activeRepoFilters )
+					! issueSearchParamsFromUrl.activeRepoFilters ||
+					! Array.isArray( issueSearchParamsFromUrl.activeRepoFilters )
 				) {
 					activeRepoFilters = [ ...initialState.activeRepoFilters ];
 				} else {
-					activeRepoFilters = duplicateSearchParamsFromUrl.activeRepoFilters.filter( ( repo ) =>
+					activeRepoFilters = issueSearchParamsFromUrl.activeRepoFilters.filter( ( repo ) =>
 						avaliableRepoFiltersSet.has( repo )
 					);
 				}
 
 				let statusFilter: IssueStatusFilter;
 				if (
-					! duplicateSearchParamsFromUrl.statusFilter ||
-					! validIssueStatusFilters.has( duplicateSearchParamsFromUrl.statusFilter )
+					! issueSearchParamsFromUrl.statusFilter ||
+					! validIssueStatusFilters.has( issueSearchParamsFromUrl.statusFilter )
 				) {
 					statusFilter = initialState.statusFilter;
 				} else {
-					statusFilter = duplicateSearchParamsFromUrl.statusFilter;
+					statusFilter = issueSearchParamsFromUrl.statusFilter;
 				}
 
 				let sort: IssueSortOption;
 				if (
-					! duplicateSearchParamsFromUrl.sort ||
-					! validIssueSortOptions.has( duplicateSearchParamsFromUrl.sort )
+					! issueSearchParamsFromUrl.sort ||
+					! validIssueSortOptions.has( issueSearchParamsFromUrl.sort )
 				) {
 					sort = initialState.sort;
 				} else {
-					sort = duplicateSearchParamsFromUrl.sort;
+					sort = issueSearchParamsFromUrl.sort;
 				}
 
 				return {
@@ -135,30 +135,30 @@ export const duplicateSearchSlice = createSlice( {
 } );
 
 export const { setSearchTerm, setActiveRepoFilters, setStatusFilter, setSort } =
-	duplicateSearchSlice.actions;
+	issueSearchSlice.actions;
 
-export const duplicateSearchReducer = duplicateSearchSlice.reducer;
+export const issueSearchReducer = issueSearchSlice.reducer;
 
 /* Selectors */
 
-export function selectDuplicateSearchTerm( state: RootState ) {
-	return state.duplicateSearch.searchTerm;
+export function selectIssueSearchTerm( state: RootState ) {
+	return state.issueSearch.searchTerm;
 }
 
 export function selectActiveRepoFilters( state: RootState ) {
-	return state.duplicateSearch.activeRepoFilters;
+	return state.issueSearch.activeRepoFilters;
 }
 
 export function selectStatusFilter( state: RootState ) {
-	return state.duplicateSearch.statusFilter;
+	return state.issueSearch.statusFilter;
 }
 
 export function selectSort( state: RootState ) {
-	return state.duplicateSearch.sort;
+	return state.issueSearch.sort;
 }
 
-export function selectDuplicateSearchParams( state: RootState ) {
-	return state.duplicateSearch;
+export function selectIssueSearchParams( state: RootState ) {
+	return state.issueSearch;
 }
 
 const searchTriggeringActions: Set< string > = new Set( [
@@ -175,9 +175,9 @@ export const searchIssuesMiddleware: Middleware< {}, RootState > =
 			return next( action );
 		}
 
-		const startingSearchParams = selectDuplicateSearchParams( store.getState() );
+		const startingSearchParams = selectIssueSearchParams( store.getState() );
 		next( action );
-		const newSearchParams = selectDuplicateSearchParams( store.getState() );
+		const newSearchParams = selectIssueSearchParams( store.getState() );
 
 		const searchParamsDidNotChangeFromHistoryUpdate =
 			action.type === updateStateFromHistory.type &&

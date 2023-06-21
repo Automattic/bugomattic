@@ -13,8 +13,8 @@ import { completedTasksReducer } from '../next-steps/completed-tasks-slice';
 import { activeReportingStepReducer } from '../reporting-flow-page/active-reporting-step-slice';
 import { urlHistoryMiddleware, registerHistoryListener } from '../url-history/redux-handlers';
 import { startOverCounterReducer } from '../start-over/start-over-counter-slice';
-import { duplicateSearchReducer, searchIssuesMiddleware } from '../issue-search/issue-search-slice';
-import { duplicateResultsReducer } from '../issue-search-results/issue-search-results-slice';
+import { issueSearchReducer, searchIssuesMiddleware } from '../issue-search/issue-search-slice';
+import { issueSearchResultsReducer } from '../issue-search-results/issue-search-results-slice';
 import { activePageReducer } from '../active-page/active-page-slice';
 import { availableRepoFiltersReducer } from '../static-data/available-repo-filters/available-repo-filters-slice';
 import { surfaceStaticDataMiddleware } from '../static-data/static-data-middleware';
@@ -28,8 +28,8 @@ function createRootReducer() {
 		featureSelectorForm: featureSelectorFormReducer,
 		activeReportingStep: activeReportingStepReducer,
 		startOverCounter: startOverCounterReducer,
-		duplicateSearch: duplicateSearchReducer,
-		duplicateResults: duplicateResultsReducer,
+		issueSearch: issueSearchReducer,
+		issueSearchResults: issueSearchResultsReducer,
 		activePage: activePageReducer,
 	} );
 }

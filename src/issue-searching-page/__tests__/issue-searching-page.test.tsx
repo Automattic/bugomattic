@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { renderWithProviders } from '../../test-utils/render-with-providers';
 import { AvailableRepoFiltersState } from '../../static-data/available-repo-filters/types';
 import { act, screen, waitForElementToBeRemoved } from '@testing-library/react';
-import { DuplicateSearchingPage } from '../issue-searching-page';
+import { IssueSearchingPage } from '../issue-searching-page';
 import { SearchIssueApiResponse } from '../../api/types';
 import { Issue } from '../../issue-search-results/types';
 import { PageNavigationProvider } from '../../active-page/page-navigation-provider';
@@ -13,9 +13,9 @@ import { RootState } from '../../app/store';
 import history from 'history/browser';
 import { stateToQuery } from '../../url-history/parsers';
 import { createMockMonitoringClient } from '../../test-utils/mock-monitoring-client';
-import { DuplicateSearchState } from '../../issue-search/types';
+import { IssueSearchState } from '../../issue-search/types';
 
-describe( '[DuplicateSearchingPage]', () => {
+describe( '[IssueSearchingPage]', () => {
 	const fakeIssue: Issue = {
 		title: 'Test Issue Title',
 		url: 'https://github.com/test/test/issues/1',
@@ -34,7 +34,7 @@ describe( '[DuplicateSearchingPage]', () => {
 	};
 
 	async function search( user: ReturnType< typeof userEvent.setup >, searchTerm: string ) {
-		await user.click( screen.getByRole( 'textbox', { name: 'Search for duplicate issues' } ) );
+		await user.click( screen.getByRole( 'textbox', { name: 'Search for existing issues' } ) );
 		await user.keyboard( searchTerm );
 		// Bypass debouncing by hitting enter
 		await user.keyboard( '{Enter}' );
@@ -47,7 +47,7 @@ describe( '[DuplicateSearchingPage]', () => {
 			const user = userEvent.setup();
 			const view = renderWithProviders(
 				<PageNavigationProvider>
-					<DuplicateSearchingPage />
+					<IssueSearchingPage />
 				</PageNavigationProvider>,
 				{
 					apiClient,
@@ -70,7 +70,9 @@ describe( '[DuplicateSearchingPage]', () => {
 			setup();
 
 			expect(
-				screen.getByRole( 'heading', { name: 'Enter some keywords to search for duplicates.' } )
+				screen.getByRole( 'heading', {
+					name: 'Enter some keywords to search for existing issues.',
+				} )
 			).toBeInTheDocument();
 		} );
 
@@ -86,19 +88,17 @@ describe( '[DuplicateSearchingPage]', () => {
 			await search( user, 'foo' );
 
 			expect(
-				screen.getByRole( 'alert', { name: 'Duplicate search in progress' } )
+				screen.getByRole( 'alert', { name: 'Issue search in progress' } )
 			).toBeInTheDocument();
 
 			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 			resolveSearchIssuesPromise!( [ fakeIssue ] );
 
 			await waitForElementToBeRemoved( () =>
-				screen.queryByRole( 'alert', { name: 'Duplicate search in progress' } )
+				screen.queryByRole( 'alert', { name: 'Issue search in progress' } )
 			);
 
-			expect(
-				screen.getByRole( 'list', { name: 'Duplicate issue search results' } )
-			).toBeInTheDocument();
+			expect( screen.getByRole( 'list', { name: 'Issue search results' } ) ).toBeInTheDocument();
 		} );
 
 		test( 'If no search results are found, shows message about no results', async () => {
@@ -119,11 +119,13 @@ describe( '[DuplicateSearchingPage]', () => {
 
 			await search( user, 'foo' );
 
-			await user.clear( screen.getByRole( 'textbox', { name: 'Search for duplicate issues' } ) );
+			await user.clear( screen.getByRole( 'textbox', { name: 'Search for existing issues' } ) );
 			await user.keyboard( '{Enter}' );
 
 			expect(
-				screen.getByRole( 'heading', { name: 'Enter some keywords to search for duplicates.' } )
+				screen.getByRole( 'heading', {
+					name: 'Enter some keywords to search for existing issues.',
+				} )
 			).toBeInTheDocument();
 
 			expect( apiClient.searchIssues ).toHaveBeenCalledTimes( 1 );
@@ -141,7 +143,7 @@ describe( '[DuplicateSearchingPage]', () => {
 			).toBeInTheDocument();
 
 			expect( monitoringClient.logger.error ).toHaveBeenCalledWith(
-				'Error in duplicate search request',
+				'Error in issue search request',
 				{
 					errorMessage: `Error: ${ errorMessage }`,
 				}
@@ -311,7 +313,7 @@ describe( '[DuplicateSearchingPage]', () => {
 
 		test( 'When the app loads, if there is a non-empty search term, we fire a search', async () => {
 			const startingState: Partial< RootState > = {
-				duplicateSearch: {
+				issueSearch: {
 					searchTerm: 'foo',
 					sort: 'relevance',
 					statusFilter: 'all',
@@ -323,18 +325,18 @@ describe( '[DuplicateSearchingPage]', () => {
 
 			expect( apiClient.searchIssues ).toHaveBeenCalledTimes( 1 );
 			expect( apiClient.searchIssues ).toHaveBeenCalledWith(
-				startingState.duplicateSearch?.searchTerm,
+				startingState.issueSearch?.searchTerm,
 				{
-					sort: startingState.duplicateSearch?.sort,
-					status: startingState.duplicateSearch?.statusFilter,
-					repos: startingState.duplicateSearch?.activeRepoFilters,
+					sort: startingState.issueSearch?.sort,
+					status: startingState.issueSearch?.statusFilter,
+					repos: startingState.issueSearch?.activeRepoFilters,
 				}
 			);
 		} );
 
 		test( 'When the app loads, if the search term is empty, we do not search', async () => {
 			const startingState: Partial< RootState > = {
-				duplicateSearch: {
+				issueSearch: {
 					searchTerm: '',
 					sort: 'date-created',
 					statusFilter: 'open',
@@ -348,14 +350,14 @@ describe( '[DuplicateSearchingPage]', () => {
 		} );
 
 		test( 'Searches only fire when history changes affect the search parameters', async () => {
-			const startingSearchState: DuplicateSearchState = {
+			const startingSearchState: IssueSearchState = {
 				searchTerm: 'foo',
 				sort: 'relevance',
 				statusFilter: 'all',
 				activeRepoFilters: [],
 			};
 			const startingState: Partial< RootState > = {
-				duplicateSearch: startingSearchState,
+				issueSearch: startingSearchState,
 			};
 
 			const { apiClient } = await setup( startingState );
@@ -365,7 +367,7 @@ describe( '[DuplicateSearchingPage]', () => {
 			// So we'll test by replacement! Not ideal, but runs the same code paths, so is a good proxy.
 
 			const newStateWithNoSearchChanges: Partial< RootState > = {
-				duplicateSearch: startingSearchState,
+				issueSearch: startingSearchState,
 				issueDetails: {
 					issueTitle: '',
 					featureId: null,
@@ -379,12 +381,12 @@ describe( '[DuplicateSearchingPage]', () => {
 
 			expect( apiClient.searchIssues ).not.toHaveBeenCalled();
 
-			const newSearchState: DuplicateSearchState = {
+			const newSearchState: IssueSearchState = {
 				...startingSearchState,
 				searchTerm: 'bar',
 			};
 			const newStateWithSearchChanges: Partial< RootState > = {
-				duplicateSearch: newSearchState,
+				issueSearch: newSearchState,
 			};
 
 			act( () => {

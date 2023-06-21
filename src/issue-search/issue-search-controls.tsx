@@ -1,12 +1,12 @@
 import React from 'react';
-import { DuplicateSearchInput, RepoFilter, SortSelect, StatusFilter } from './sub-components';
+import { IssueSearchInput, RepoFilter, SortSelect, StatusFilter } from './sub-components';
 import styles from './issue-search-controls.module.css';
 
-export function DuplicateSearchControls() {
+export function IssueSearchControls() {
 	return (
 		<section>
 			<div className={ styles.searchWrapper }>
-				<DuplicateSearchInput />
+				<IssueSearchInput />
 			</div>
 			<div className={ styles.filterSortBar }>
 				<div className={ styles.filtersWrapper }>
