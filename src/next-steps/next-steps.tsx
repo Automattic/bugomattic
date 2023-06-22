@@ -80,7 +80,7 @@ export function NextSteps() {
 		setShowConfetti( false );
 	}, [] );
 
-	const subheader = `Complete the tasks listed below. Your selections above will help organize your issue properly.`;
+	const subheader = `Complete the next steps below to report your issue. Your selections above will help organize your issue properly.`;
 
 	return (
 		<section ref={ sectionRef }>

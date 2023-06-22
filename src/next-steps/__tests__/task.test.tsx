@@ -208,7 +208,7 @@ describe( '[Task]', () => {
 			} );
 		} );
 
-		describe( 'Creates correct default titles for task types:', () => {
+		describe( 'Creates correct default titles and details for task types:', () => {
 			test( 'GitHub link task', () => {
 				const repo = 'Automattic/bugomattic';
 				const task: Task = {
@@ -224,7 +224,12 @@ describe( '[Task]', () => {
 				setup( <TaskComponent taskId={ task.id } />, task );
 
 				expect(
-					screen.getByRole( 'checkbox', { name: `Finish your report in the ${ repo } repo` } )
+					screen.getByText( `Click the link to open your report in the ${ repo } repo` )
+				).toBeInTheDocument();
+				expect(
+					screen.getByText(
+						'Don\'t forget to click "Submit new issue" on the GitHub form when you\'re done!'
+					)
 				).toBeInTheDocument();
 			} );
 

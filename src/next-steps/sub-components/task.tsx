@@ -81,8 +81,8 @@ export function Task( { taskId }: Props ) {
 		return null;
 	}
 
-	let taskIsBroken = false;
 	let titleDisplay: ReactNode;
+	let detailsDisplay: ReactNode = null;
 	let buttonDisplay: ReactNode = null;
 	if ( link ) {
 		const handleLinkClick = () => {
@@ -96,12 +96,16 @@ export function Task( { taskId }: Props ) {
 		try {
 			const titleId = replaceSpaces( `title-${ taskId }` );
 			const titleText = title || getDefaultTitleForLink( link );
+			const detailsText = details || getDefaultDetailsForLink( link );
 			const href = createLinkHref( link, issueTitle );
 			titleDisplay = (
 				<span id={ titleId } className={ styles.taskTitle }>
 					{ titleText }
 				</span>
 			);
+			if ( detailsText ) {
+				detailsDisplay = <p className={ styles.taskDetails }>{ detailsText }</p>;
+			}
 			buttonDisplay = (
 				<a
 					className={ styles.taskLink }
@@ -124,7 +128,6 @@ export function Task( { taskId }: Props ) {
 				error: error.message,
 			} );
 
-			taskIsBroken = true;
 			titleDisplay = (
 				<span className={ styles.badTask }>
 					This task has broken configuration. Please notify the Bugomattic administrators.
@@ -134,11 +137,9 @@ export function Task( { taskId }: Props ) {
 	} else {
 		const titleText = title ? title : 'Complete the details below';
 		titleDisplay = <span className={ styles.taskTitle }>{ titleText }</span>;
-	}
-
-	let detailsDisplay: ReactNode = null;
-	if ( ! taskIsBroken && details ) {
-		detailsDisplay = <p className={ styles.taskDetails }>{ details }</p>;
+		if ( details ) {
+			detailsDisplay = <p className={ styles.taskDetails }>{ details }</p>;
+		}
 	}
 
 	return (
@@ -165,13 +166,28 @@ function getDefaultTitleForLink( link: TaskLink ): string {
 		case 'general':
 			return link.href;
 		case 'github':
-			return `Finish your report in the ${ link.repository } repo`;
+			return `Click the link to open your report in the ${ link.repository } repo`;
 		case `jira`:
 			return 'Open a new issue';
 		case 'slack':
 			return `Notify the #${ link.channel } channel in Slack`;
 		case 'p2':
 			return `Post on the +${ link.subdomain } P2`;
+	}
+}
+
+function getDefaultDetailsForLink( link: TaskLink ): string | null {
+	switch ( link.type ) {
+		case 'general':
+			return null;
+		case 'github':
+			return `Don't forget to click "Submit new issue" on the GitHub form when you're done!`;
+		case `jira`:
+			return null;
+		case 'slack':
+			return null;
+		case 'p2':
+			return null;
 	}
 }
 
