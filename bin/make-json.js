@@ -35,9 +35,12 @@ for ( const row of parsedCsv.data ) {
 
 	if ( isGroup.toLowerCase() === 'yes' ) {
 		const featureGroup = {
-			description,
 			features: {},
 		};
+
+		if ( description ) {
+			featureGroup.description = description;
+		}
 
 		if ( hasLearnMoreData( row ) ) {
 			featureGroup.learnMoreLinks = makeLearnMoreLinks( row );
@@ -69,7 +72,6 @@ for ( const row of parsedCsv.data ) {
 
 			if ( ! feature ) {
 				feature = {
-					description,
 					tasks: {
 						bug: [],
 						featureRequest: [],
@@ -77,9 +79,13 @@ for ( const row of parsedCsv.data ) {
 					},
 				};
 
-				if ( productName === 'WordPress.com' || productName === 'Jetpack' ) {
-					feature.tasks.featureRequest.push( makeDefaultWordPressJetpackFeatureTask( row ) );
-					feature.tasks.urgent.push( makeDefaultWordPressJetpackUrgentTask( row ) );
+				if ( description ) {
+					feature.description = description;
+				}
+
+				if ( productName === 'WordPress.com' ) {
+					feature.tasks.featureRequest.push( makeDefaultWordPressFeatureTask( row ) );
+					feature.tasks.urgent.push( makeDefaultWordPressUrgentTask( row ) );
 				}
 			}
 
@@ -261,7 +267,7 @@ function getGitHubProjectSlugs( dataRow ) {
 	return outputProjectSlugs;
 }
 
-function makeDefaultWordPressJetpackFeatureTask( dataRow ) {
+function makeDefaultWordPressFeatureTask( dataRow ) {
 	const { name, repository } = dataRow;
 	const defaultLabels = [ `[Feature] ${ name.trim() }`, '[Type] Feature Request' ];
 
@@ -278,7 +284,7 @@ function makeDefaultWordPressJetpackFeatureTask( dataRow ) {
 	};
 }
 
-function makeDefaultWordPressJetpackUrgentTask( dataRow ) {
+function makeDefaultWordPressUrgentTask( dataRow ) {
 	const { name, repository } = dataRow;
 	const defaultLabels = [
 		'[Pri] BLOCKER',
