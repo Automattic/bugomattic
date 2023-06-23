@@ -180,8 +180,10 @@ function createTask( dataRow ) {
 		productName,
 	} = dataRow;
 
-	if ( ! linkType ) {
-		throw new Error( `Invalid linkType for: ${ name }` );
+	const validLinkTypes = new Set( [ 'github', 'jira', 'general', 'slack', 'p2', '' ] );
+
+	if ( ! validLinkTypes.has( linkType ) ) {
+		throw new Error( `Invalid linkType (${ linkType }) for: ${ name }` );
 	}
 
 	if ( taskType && linkType ) {
