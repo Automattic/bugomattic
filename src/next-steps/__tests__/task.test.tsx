@@ -287,6 +287,28 @@ describe( '[Task]', () => {
 				const link = screen.getByRole( 'link', { name: 'Link' } );
 				expect( link ).toHaveAttribute( 'href', href );
 				expect( link ).toBeInTheDocument();
+				expect(
+					screen.getByRole( 'checkbox', { name: 'Click the link to report your issue' } )
+				).toBeInTheDocument();
+			} );
+
+			test( 'Jira link task', () => {
+				const task: Task = {
+					id: 'jira',
+					parentId: 'foo',
+					parentType: 'product',
+					link: {
+						type: 'jira',
+						hostName: 'fake.atlasssian.net',
+						projectId: 12345,
+						issueTypeId: 54321,
+					},
+				};
+
+				setup( <TaskComponent taskId={ task.id } />, task );
+				expect(
+					screen.getByRole( 'checkbox', { name: 'Click the link to open a new Jira issue' } )
+				).toBeInTheDocument();
 			} );
 
 			test( 'Task with no link and no title', () => {
