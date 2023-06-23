@@ -164,11 +164,11 @@ export function Task( { taskId }: Props ) {
 function getDefaultTitleForLink( link: TaskLink ): string {
 	switch ( link.type ) {
 		case 'general':
-			return link.href;
+			return 'Click the link to report your issue';
 		case 'github':
 			return `Click the link to open your report in the ${ link.repository } repo`;
 		case `jira`:
-			return 'Open a new issue';
+			return 'Click the link to open a new Jira issue';
 		case 'slack':
 			return `Notify the #${ link.channel } channel in Slack`;
 		case 'p2':

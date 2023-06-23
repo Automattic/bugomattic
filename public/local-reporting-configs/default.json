@@ -66,6 +66,12 @@
 					"bug": [
 						{
 							"details": "Feature Group | Bug | details only"
+						},
+						{
+							"link": {
+								"type": "general",
+								"href": "https://google.com/search?q=feature-group"
+							}
 						}
 					],
 					"featureRequest": [
