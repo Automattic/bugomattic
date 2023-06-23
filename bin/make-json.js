@@ -186,7 +186,7 @@ function createTask( dataRow ) {
 		throw new Error( `Invalid linkType (${ linkType }) for: ${ name }` );
 	}
 
-	if ( taskType && linkType ) {
+	if ( taskType ) {
 		const task = {};
 
 		if ( taskTitle ) {
