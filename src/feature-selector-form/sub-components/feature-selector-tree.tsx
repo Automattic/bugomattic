@@ -41,6 +41,12 @@ export function FeatureSelectorTree( { parentElementId }: Props ) {
 		);
 	}
 
+	// Keying the whole list actually provides us a pretty big performance benefit when rendering the tree.
+	// Reconciling the DOM after a search when you have a big tree expanded is really slow.
+	// It's actually almost always faster to just throw away the whole tree and rebuild it based on the new search results.
+	// We already reset the UI for the user, so just rebuilding the whole tree doesn't change the user experience at all!
+	const listKey = `search-${ searchTerm }`;
+
 	return (
 		<div className={ styles.treeWrapper }>
 			<fieldset className={ styles.treeFieldset } id={ parentElementId }>
@@ -48,7 +54,7 @@ export function FeatureSelectorTree( { parentElementId }: Props ) {
 				<legend className="screenReaderOnly">
 					Expandable and collapsible tree with products, feature groups, and features
 				</legend>
-				<SortedProductList productIds={ productsToDisplay } />
+				<SortedProductList key={ listKey } productIds={ productsToDisplay } />
 			</fieldset>
 		</div>
 	);
