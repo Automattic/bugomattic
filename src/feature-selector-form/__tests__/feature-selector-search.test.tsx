@@ -372,5 +372,35 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 				screen.getByText( 'No results found. Try a different search or explore manually below.' )
 			).toBeInTheDocument();
 		} );
+
+		test( "If you search for only white space, it doesn't search", async () => {
+			const { user } = setup( <FeatureSelectorForm /> );
+			await search( user, ' ' );
+			expect(
+				screen.getByRole( 'button', { expanded: false, name: 'ABC Product' } )
+			).toBeInTheDocument();
+			expect(
+				screen.getByRole( 'button', { expanded: false, name: 'PQR Product' } )
+			).toBeInTheDocument();
+		} );
+
+		test( 'Clearing the field only resets the results after pressing enter', async () => {
+			const { user } = setup( <FeatureSelectorForm /> );
+
+			await search( user, 'abc' );
+
+			await user.clear( screen.getByRole( 'textbox', { name: 'Search for a feature' } ) );
+
+			expect( screen.getByText( 'Results found. Search results are below.' ) ).toBeInTheDocument();
+
+			await user.keyboard( '{Enter}' );
+
+			expect(
+				screen.getByRole( 'button', { expanded: false, name: 'ABC Product' } )
+			).toBeInTheDocument();
+			expect(
+				screen.getByRole( 'button', { expanded: false, name: 'PQR Product' } )
+			).toBeInTheDocument();
+		} );
 	} );
 } );
