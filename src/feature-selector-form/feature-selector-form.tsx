@@ -105,7 +105,7 @@ export function FeatureSelectorForm( { onContinue }: Props ) {
 					placeholder='Search for a feature (e.g. "site editor") '
 					inputAriaLabel="Search for a feature"
 					inputAriaControls={ searchControlsId }
-					debounceMs={ 500 }
+					debounceMs={ 300 }
 					debounceCharacterMinimum={ 3 }
 				/>
 			</div>
