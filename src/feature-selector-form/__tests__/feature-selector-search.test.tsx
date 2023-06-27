@@ -384,12 +384,15 @@ describe( '[FeatureSelector -- Tree interaction]', () => {
 			).toBeInTheDocument();
 		} );
 
-		test( "If you clear the field, it doesn't search again", async () => {
+		test( 'Clearing the field only resets the results after pressing enter', async () => {
 			const { user } = setup( <FeatureSelectorForm /> );
 
 			await search( user, 'abc' );
 
 			await user.clear( screen.getByRole( 'textbox', { name: 'Search for a feature' } ) );
+
+			expect( screen.getByText( 'Results found. Search results are below.' ) ).toBeInTheDocument();
+
 			await user.keyboard( '{Enter}' );
 
 			expect(
