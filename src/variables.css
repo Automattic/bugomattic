@@ -15,6 +15,7 @@
 
 	--color-error: var( --red );
 	--color-success: var( --green );
+	--color-success-light: var( --light-green );
 
 	--color-issue-open: var( --green );
 	--color-issue-closed: var( --purple );
