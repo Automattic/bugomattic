@@ -5,6 +5,7 @@ import { selectNormalizedReportingConfig } from '../../static-data/reporting-con
 import { selectFeatureSearchTerm } from '../feature-selector-form-slice';
 import styles from '../feature-selector-form.module.css';
 import { SortedProductList } from './sorted-product-list';
+import { Tooltip } from 'react-tooltip';
 
 interface Props {
 	parentElementId: string;
@@ -54,6 +55,12 @@ export function FeatureSelectorTree( { parentElementId }: Props ) {
 				<legend className="screenReaderOnly">
 					Expandable and collapsible tree with products, feature groups, and features
 				</legend>
+				<Tooltip
+					delayShow={ 1000 }
+					className={ styles.tooltip }
+					place="right"
+					id="feature-tree-tooltip"
+				/>
 				<SortedProductList key={ listKey } productIds={ productsToDisplay } />
 			</fieldset>
 		</div>

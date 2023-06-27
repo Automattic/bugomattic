@@ -2,7 +2,6 @@ import React, { ReactNode } from 'react';
 import styles from './../feature-selector-form.module.css';
 import { ReactComponent as CollapsedIcon } from '../../common/svgs/chevron-right.svg';
 import { ReactComponent as ExpandedIcon } from '../../common/svgs/chevron-down.svg';
-import { Tooltip } from 'react-tooltip';
 
 interface Props {
 	children: ReactNode;
@@ -24,7 +23,6 @@ export function ExpandableTreeNode( {
 	// If needed in the future, we can crawl the label for text content and add that.
 	const randomString = Math.random().toString( 16 ).slice( 2 );
 	const contentId = `expandable-tree-node-content_${ randomString }`;
-	const labelId = `expandable-tree-node-label_${ randomString }`;
 	const descriptionId = `expandable-tree-node-description_${ randomString }`;
 
 	let icon: React.ReactNode;
@@ -45,17 +43,14 @@ export function ExpandableTreeNode( {
 				aria-describedby={ descriptionId }
 			>
 				{ icon }
-				<span id={ labelId } className={ styles.treeNodeContentWrapper }>
+				<span
+					className={ styles.treeNodeContentWrapper }
+					data-tooltip-id="feature-tree-tooltip"
+					data-tooltip-content={ description }
+				>
 					{ label }
 				</span>
 			</button>
-			<Tooltip
-				anchorSelect={ `#${ labelId }` }
-				delayShow={ 1000 }
-				className={ styles.tooltip }
-				content={ description }
-				place="right"
-			/>
 			<span hidden={ true } id={ descriptionId }>
 				{ description }
 			</span>
