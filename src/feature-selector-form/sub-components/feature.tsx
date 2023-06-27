@@ -9,7 +9,6 @@ import { selectSelectedFeatureId, setSelectedFeatureId } from '../feature-select
 import { replaceSpaces } from '../../common/lib';
 import { SearchHighlighter } from './search-hightlighter';
 import { useMonitoring } from '../../monitoring/monitoring-provider';
-import { Tooltip } from 'react-tooltip';
 import { MatchedTypeDisplay } from './matched-terms-display';
 
 interface Props {
@@ -36,7 +35,6 @@ export function Feature( { id }: Props ) {
 	const matchedDisplay = <MatchedTypeDisplay entityId={ id } entityType={ 'features' } />;
 
 	const safeId = replaceSpaces( id );
-	const featureNameId = `feature_name_${ safeId }`;
 	const descriptionId = `description_${ safeId }`;
 
 	return (
@@ -49,7 +47,11 @@ export function Feature( { id }: Props ) {
 				onClick={ handleFeatureSelect }
 				aria-describedby={ descriptionId }
 			>
-				<span id={ featureNameId } className={ styles.treeNodeContentWrapper }>
+				<span
+					className={ styles.treeNodeContentWrapper }
+					data-tooltip-id="feature-tree-tooltip"
+					data-tooltip-content={ description }
+				>
 					<span>
 						<SearchHighlighter>{ featureName }</SearchHighlighter>
 					</span>
@@ -57,14 +59,6 @@ export function Feature( { id }: Props ) {
 				</span>
 			</button>
 
-			<Tooltip
-				// Can't use #ID because some characters in IDs may not be safe for that syntax.
-				anchorSelect={ `[id='${ featureNameId }']` }
-				delayShow={ 1000 }
-				className={ styles.tooltip }
-				content={ description }
-				place="right"
-			/>
 			<span hidden={ true } id={ descriptionId }>
 				{ description }
 			</span>
