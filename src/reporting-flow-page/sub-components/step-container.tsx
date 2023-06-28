@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react';
 import styles from '../reporting-flow-page.module.css';
 import { TextButton } from '../../common/components';
+import { ReactComponent as CheckIcon } from '../../common/svgs/check.svg';
 
 interface Props {
 	onEdit: () => void;
@@ -25,7 +26,7 @@ export function StepContainer( {
 	if ( isComplete ) {
 		stepIconDisplay = (
 			<div className={ styles.checkmarkWrapper } aria-label="Completed step:">
-				<span className={ styles.checkmark }>&#10003;</span>
+				<CheckIcon className={ styles.checkmark } />
 			</div>
 		);
 	} else {

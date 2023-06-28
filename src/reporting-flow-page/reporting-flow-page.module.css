@@ -32,24 +32,35 @@
 	margin-right: 0.5rem;
 	width: 2rem;
 	height: 2rem;
-	text-align: center;
 }
 
 .stepNumberWrapper {
 	background-color: var( --color-neutral-dark );
+	text-align: center;
 }
 
 .checkmarkWrapper {
 	background-color: var( --color-success );
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
-.stepNumber,
-.checkmark {
+.stepNumber {
 	display: block;
 	color: var( --color-white );
 	font-size: var( --font-header );
 	transform: translateY( 0.25rem );
 	font-weight: 400;
+}
+
+.checkmark {
+	width: 1.5rem;
+	height: 1.5rem;
+}
+
+.checkmark path {
+	fill: var( --color-white );
 }
 
 .stepHeaderTitle {
@@ -63,6 +74,18 @@
 	background-color: var( --color-shaded-background );
 	border-radius: 0 0 4px 4px;
 	position: relative;
+}
+
+@media only screen and ( max-width: 450px ) {
+	.stepContent {
+		padding-left: 0.75rem;
+		padding-right: 0.75rem;
+	}
+
+	.stepHeaderRow {
+		padding-left: 0.75rem;
+		padding-right: 0.75rem;
+	}
 }
 
 .completedContentHeader {

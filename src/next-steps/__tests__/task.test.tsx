@@ -52,9 +52,8 @@ describe( '[Task]', () => {
 
 			setup( <TaskComponent taskId={ task.id } />, task );
 
-			expect(
-				screen.getByRole( 'checkbox', { name: `${ title } ${ details }` } )
-			).toBeInTheDocument();
+			expect( screen.getByText( title ) ).toBeInTheDocument();
+			expect( screen.getByText( details ) ).toBeInTheDocument();
 		} );
 
 		test( 'Includes the task title and details for link tasks', () => {
@@ -75,7 +74,7 @@ describe( '[Task]', () => {
 			setup( <TaskComponent taskId={ task.id } />, task );
 
 			expect(
-				screen.getByRole( 'checkbox', { name: `${ title } ${ details }` } )
+				screen.getByRole( 'link', { name: title, description: details } )
 			).toBeInTheDocument();
 		} );
 
@@ -91,7 +90,7 @@ describe( '[Task]', () => {
 			expect( screen.queryByRole( 'checkbox' ) ).not.toBeInTheDocument();
 		} );
 
-		test( 'A task with a broken configuration shows error title and no details or link', () => {
+		test( 'A task with a broken configuration shows error message and no link', () => {
 			// easiest way is an invalid p2 subdomain
 			const task: Task = {
 				id: 'p2',
@@ -105,10 +104,11 @@ describe( '[Task]', () => {
 
 			setup( <TaskComponent taskId={ task.id } />, task );
 
+			expect( screen.getByText( 'Bad link configuration' ) ).toBeInTheDocument();
 			expect(
-				screen.getByRole( 'checkbox', {
-					name: 'This task has broken configuration. Please notify the Bugomattic administrators.',
-				} )
+				screen.getByText(
+					"Uh oh! We've logged an error and will follow up. In the meantime, you can try contacting the product team directly."
+				)
 			).toBeInTheDocument();
 			expect( screen.queryByRole( 'link' ) ).not.toBeInTheDocument();
 		} );
@@ -126,11 +126,10 @@ describe( '[Task]', () => {
 						repository: 'Automattic/bugomattic',
 					},
 				};
-				const linkName = 'GitHub';
 
 				setup( <TaskComponent taskId={ task.id } />, task );
 
-				const link = screen.getByRole( 'link', { name: linkName } );
+				const link = screen.getByRole( 'link', { name: title } );
 				expect( link ).toBeInTheDocument();
 				const expectedHref = 'https://github.com/Automattic/bugomattic/issues/new/choose';
 				expect( link ).toHaveAttribute( 'href', expectedHref );
@@ -150,11 +149,9 @@ describe( '[Task]', () => {
 						channel: channel,
 					},
 				};
-				const linkName = 'Slack';
-
 				setup( <TaskComponent taskId={ task.id } />, task );
 
-				const link = screen.getByRole( 'link', { name: linkName } );
+				const link = screen.getByRole( 'link', { name: title } );
 				expect( link ).toBeInTheDocument();
 				const expectedHref = `https://slack.com/app_redirect?channel=${ channel }`;
 				expect( link ).toHaveAttribute( 'href', expectedHref );
@@ -174,11 +171,9 @@ describe( '[Task]', () => {
 						subdomain: subdomain,
 					},
 				};
-				const linkName = 'P2';
-
 				setup( <TaskComponent taskId={ task.id } />, task );
 
-				const link = screen.getByRole( 'link', { name: linkName } );
+				const link = screen.getByRole( 'link', { name: title } );
 				expect( link ).toBeInTheDocument();
 				const expectedHref = `https://${ subdomain }.wordpress.com/`;
 				expect( link ).toHaveAttribute( 'href', expectedHref );
@@ -198,11 +193,9 @@ describe( '[Task]', () => {
 						href: href,
 					},
 				};
-				const linkName = 'Link';
-
 				setup( <TaskComponent taskId={ task.id } />, task );
 
-				const link = screen.getByRole( 'link', { name: linkName } );
+				const link = screen.getByRole( 'link', { name: title } );
 				expect( link ).toBeInTheDocument();
 				expect( link ).toHaveAttribute( 'href', href );
 			} );
@@ -220,16 +213,14 @@ describe( '[Task]', () => {
 						repository: repo,
 					},
 				};
-
 				setup( <TaskComponent taskId={ task.id } />, task );
 
 				expect(
-					screen.getByText( `Click the link to open your report in the ${ repo } repo` )
-				).toBeInTheDocument();
-				expect(
-					screen.getByText(
-						'Don\'t forget to click "Submit new issue" on the GitHub form when you\'re done!'
-					)
+					screen.getByRole( 'link', {
+						name: `Click to open your report in the ${ repo } repo`,
+						description:
+							'Don\'t forget to click "Submit new issue" on the GitHub form when you\'re done!',
+					} )
 				).toBeInTheDocument();
 			} );
 
@@ -248,7 +239,7 @@ describe( '[Task]', () => {
 				setup( <TaskComponent taskId={ task.id } />, task );
 
 				expect(
-					screen.getByRole( 'checkbox', { name: `Notify the #${ channel } channel in Slack` } )
+					screen.getByRole( 'link', { name: `Notify the #${ channel } channel in Slack` } )
 				).toBeInTheDocument();
 			} );
 
@@ -267,7 +258,7 @@ describe( '[Task]', () => {
 				setup( <TaskComponent taskId={ task.id } />, task );
 
 				expect(
-					screen.getByRole( 'checkbox', { name: `Post on the +${ subdomain } P2` } )
+					screen.getByRole( 'link', { name: `Post on the +${ subdomain } P2` } )
 				).toBeInTheDocument();
 			} );
 
@@ -284,11 +275,8 @@ describe( '[Task]', () => {
 				};
 
 				setup( <TaskComponent taskId={ task.id } />, task );
-				const link = screen.getByRole( 'link', { name: 'Link' } );
-				expect( link ).toHaveAttribute( 'href', href );
-				expect( link ).toBeInTheDocument();
 				expect(
-					screen.getByRole( 'checkbox', { name: 'Click the link to report your issue' } )
+					screen.getByRole( 'link', { name: 'Click to report your issue' } )
 				).toBeInTheDocument();
 			} );
 
@@ -307,7 +295,7 @@ describe( '[Task]', () => {
 
 				setup( <TaskComponent taskId={ task.id } />, task );
 				expect(
-					screen.getByRole( 'checkbox', { name: 'Click the link to open a new Jira issue' } )
+					screen.getByRole( 'link', { name: 'Click to open a new Jira issue' } )
 				).toBeInTheDocument();
 			} );
 
@@ -321,31 +309,53 @@ describe( '[Task]', () => {
 
 				setup( <TaskComponent taskId={ task.id } />, task );
 
-				expect(
-					screen.getByRole( 'checkbox', { name: /Complete the details below/ } )
-				).toBeInTheDocument();
+				expect( screen.getByText( 'Complete the details below' ) ).toBeInTheDocument();
 			} );
 		} );
 	} );
 
 	describe( 'Task interaction', () => {
-		test( 'Clicking on a unchecked task checks the checkbox', async () => {
+		test( 'Clicking "Mark as complete" marks the step as complete, changing the UI', async () => {
 			const title = 'Foo task';
 			const task: Task = {
 				id: 'basic',
 				parentId: 'foo',
 				parentType: 'product',
 				title: title,
+				link: {
+					type: 'general',
+					href: 'https://automattic.com',
+				},
 			};
 
 			const { user } = setup( <TaskComponent taskId={ task.id } />, task );
 
-			await user.click( screen.getByRole( 'checkbox', { name: title, checked: false } ) );
+			await user.click(
+				screen.getByRole( 'button', { name: 'Mark as complete', description: title } )
+			);
 
-			expect( screen.getByRole( 'checkbox', { name: title, checked: true } ) ).toBeInTheDocument();
+			// Button changes
+			expect(
+				screen.getByRole( 'button', {
+					name: 'Unmark as complete',
+					description: `Completed step: ${ title }`,
+				} )
+			).toBeInTheDocument();
+
+			// We append "Completed step" to the title for screen readers
+			expect(
+				screen.getByRole( 'link', { name: `Completed step: ${ title }` } )
+			).toBeInTheDocument();
+
+			// We append this data attribute to drive styling -- closest proxy for testing the style changes.
+			expect( screen.getByRole( 'listitem' ) ).toHaveAttribute( 'data-completed-task', 'true' );
+
+			// Icon changes
+			expect( screen.getByTestId( 'check-icon' ) ).toBeInTheDocument();
+			expect( screen.queryByTestId( 'general-icon' ) ).not.toBeInTheDocument();
 		} );
 
-		test( 'Checking a task records the "task_complete" event', async () => {
+		test( 'Completing a task records the "task_complete" event', async () => {
 			const title = 'Foo task';
 			const task: Task = {
 				id: 'basic',
@@ -356,29 +366,49 @@ describe( '[Task]', () => {
 
 			const { user, monitoringClient } = setup( <TaskComponent taskId={ task.id } />, task );
 
-			await user.click( screen.getByRole( 'checkbox', { name: title, checked: false } ) );
+			await user.click( screen.getByRole( 'button', { name: 'Mark as complete' } ) );
 
 			expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'task_complete' );
 		} );
 
-		test( 'Clicking on a checked task unchecks the checkbox', async () => {
+		test( 'Clicking "unmark as complete" unmarks the task as complete, resetting the UI', async () => {
 			const title = 'Foo task';
 			const task: Task = {
 				id: 'basic',
 				parentId: 'foo',
 				parentType: 'product',
 				title: title,
+				link: {
+					type: 'general',
+					href: 'https://automattic.com',
+				},
 			};
 
 			const { user } = setup( <TaskComponent taskId={ task.id } />, task );
 
-			await user.click( screen.getByRole( 'checkbox', { name: title, checked: false } ) );
-			await user.click( screen.getByRole( 'checkbox', { name: title, checked: true } ) );
+			await user.click( screen.getByRole( 'button', { name: 'Mark as complete' } ) );
+			await user.click( screen.getByRole( 'button', { name: 'Unmark as complete' } ) );
 
-			expect( screen.getByRole( 'checkbox', { name: title, checked: false } ) ).toBeInTheDocument();
+			// Button is back to starting UI
+			expect(
+				screen.getByRole( 'button', {
+					name: 'Mark as complete',
+					description: `${ title }`,
+				} )
+			).toBeInTheDocument();
+
+			// "Completed step" is removed from the title for screen readers
+			expect( screen.getByRole( 'link', { name: title } ) ).toBeInTheDocument();
+
+			// The data attribute is set back to "false", resetting the styles
+			expect( screen.getByRole( 'listitem' ) ).toHaveAttribute( 'data-completed-task', 'false' );
+
+			// Icon changes back to task icon
+			expect( screen.getByTestId( 'general-icon' ) ).toBeInTheDocument();
+			expect( screen.queryByTestId( 'check-icon' ) ).not.toBeInTheDocument();
 		} );
 
-		test( 'Clicking on a link in a task checks the checkbox too', async () => {
+		test( 'Clicking on a link in a task completes the task', async () => {
 			const title = 'Foo task';
 			const task: Task = {
 				id: 'general link',
@@ -390,16 +420,34 @@ describe( '[Task]', () => {
 					href: 'https://automattic.com/',
 				},
 			};
-			const linkName = 'Link';
-
 			setup( <TaskComponent taskId={ task.id } />, task );
 
 			// The userEvent action doesn't play well with links, so using fireEvent.
-			fireEvent.click( screen.getByRole( 'link', { name: linkName } ) );
+			fireEvent.click( screen.getByRole( 'link', { name: title } ) );
 
-			expect(
-				await screen.findByRole( 'checkbox', { name: title, checked: true } )
-			).toBeInTheDocument();
+			// Use button as proxy for checking completion
+			expect( screen.getByRole( 'button', { name: 'Unmark as complete' } ) ).toBeInTheDocument();
+		} );
+
+		test( 'Clicking on a link when the task is complete leaves it as complete', async () => {
+			const title = 'Foo task';
+			const task: Task = {
+				id: 'general link',
+				parentId: 'foo',
+				parentType: 'product',
+				title: title,
+				link: {
+					type: 'general',
+					href: 'https://automattic.com/',
+				},
+			};
+			const { user } = setup( <TaskComponent taskId={ task.id } />, task );
+
+			await user.click( screen.getByRole( 'button', { name: 'Mark as complete' } ) );
+			fireEvent.click( screen.getByRole( 'link', { name: `Completed step: ${ title }` } ) );
+
+			// Still complete
+			expect( screen.getByRole( 'button', { name: 'Unmark as complete' } ) ).toBeInTheDocument();
 		} );
 
 		test( 'Click on a link in a task records both the "task_complete" and "task_link_click" events', async () => {
@@ -414,40 +462,15 @@ describe( '[Task]', () => {
 					href: 'https://automattic.com/',
 				},
 			};
-			const linkName = 'Link';
-
 			const { monitoringClient } = setup( <TaskComponent taskId={ task.id } />, task );
 
 			// The userEvent action doesn't play well with links, so using fireEvent.
-			fireEvent.click( screen.getByRole( 'link', { name: linkName } ) );
+			fireEvent.click( screen.getByRole( 'link', { name: title } ) );
 
 			expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'task_complete' );
 			expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'task_link_click', {
 				linkType: 'general',
 			} );
-		} );
-
-		test( 'Clicking on a link when the checkbox is checked does not change anything', async () => {
-			const title = 'Foo task';
-			const task: Task = {
-				id: 'general link',
-				parentId: 'foo',
-				parentType: 'product',
-				title: title,
-				link: {
-					type: 'general',
-					href: 'https://automattic.com/',
-				},
-			};
-			const linkName = 'Link';
-
-			const { user } = setup( <TaskComponent taskId={ task.id } />, task );
-
-			await user.click( screen.getByRole( 'checkbox', { name: title, checked: false } ) );
-			fireEvent.click( screen.getByRole( 'link', { name: linkName } ) );
-
-			// Still checked
-			expect( screen.getByRole( 'checkbox', { name: title, checked: true } ) ).toBeInTheDocument();
 		} );
 	} );
 } );
