@@ -159,7 +159,6 @@ export function Task( { taskId }: Props ) {
 		monitoringClient.analytics.recordEvent( 'task_link_click', { linkType: link!.type } );
 		if ( ! isComplete ) {
 			markTaskAsComplete();
-			dispatch( updateHistoryWithState() );
 		}
 	};
 
