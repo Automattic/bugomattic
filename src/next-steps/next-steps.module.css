@@ -10,24 +10,61 @@
 	margin-top: 1rem;
 }
 
+.taskCard {
+	border: 1px solid var( --color-border );
+	border-radius: 6px;
+	overflow: hidden;
+}
+
+[data-completed-task='true'].taskCard {
+	border-color: var( --color-success );
+}
+
 a.taskLink {
 	text-decoration: none;
 }
 
-.taskCard {
-	border: 1px solid var( --color-border );
-	background-color: var( --color-shaded-background-light );
-	border-radius: 6px;
-	padding: 0.625rem;
+a.taskLink:hover .taskTitle,
+a.taskLink:hover .taskDetails {
+	color: var( --color-primary );
+}
+
+a.taskLink:hover .linkIcon path {
+	fill: var( --color-primary );
+}
+
+.taskCard:has( a.taskLink:hover ) {
+	border-color: var( --color-primary );
+	outline: 1px solid var( --color-primary );
+}
+
+@supports not selector( :has( a, b ) ) {
+	/* For browsers that don't support :has, we'll fallback just darkening the background a little bit if the task isn't complete */
+	[data-completed-task='false'] a.taskLink:hover .taskTopPanel {
+		background-color: var( --color-neutral-light );
+	}
+}
+
+.taskTopPanel {
+	background-color: var( --color-white );
 	display: flex;
 	flex-direction: row;
 	align-items: flex-start;
 	gap: 0.625rem;
+	padding: 0.625rem;
 }
 
-[data-completed-task='true'].taskCard {
+[data-completed-task='true'] .taskTopPanel {
 	background-color: var( --color-success-light );
-	border-color: var( --color-success );
+}
+
+.taskBottomPanel {
+	background-color: var( --color-neutral );
+	padding: 0.625rem 0.625rem 0.625rem 3rem;
+}
+
+[data-completed-task='true'] .taskBottomPanel {
+	background-color: #b8e6bf;
 }
 
 .taskIcon,
@@ -39,6 +76,11 @@ a.taskLink {
 
 .checkIcon path {
 	fill: var( --color-white );
+}
+
+.linkIcon {
+	/* This helps align with the task icon more nicely */
+	padding-top: 0.125rem;
 }
 
 .taskIconWrapper {
@@ -57,6 +99,8 @@ a.taskLink {
 
 .taskContent {
 	flex: 1 0 0;
+	/* This helps align with the task icon more nicely */
+	padding-top: 0.125rem;
 }
 
 .taskTitle {
@@ -66,13 +110,18 @@ a.taskLink {
 	overflow-wrap: break-word;
 }
 
+.brokenTask .taskTitle,
+.brokenTask .taskDetails {
+	color: var( --color-error );
+	font-style: italic;
+}
+
 .taskDetails {
 	margin: 0.5rem 0 0.5rem 0;
 	color: var( --color-text );
 }
 
 button.taskButton {
-	margin-top: 0.625rem;
 	padding: 0.375rem 0.75rem;
 }
 

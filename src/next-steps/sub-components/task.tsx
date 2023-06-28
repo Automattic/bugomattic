@@ -59,7 +59,7 @@ export function Task( { taskId }: Props ) {
 		selectorToPredictCompletingAllTasks( state, taskId )
 	);
 
-	const completeTask = () => {
+	const markTaskAsComplete = () => {
 		dispatch( addCompletedTask( taskId ) );
 		dispatch( updateHistoryWithState() );
 		monitoringClient.analytics.recordEvent( 'task_complete' );
@@ -69,7 +69,7 @@ export function Task( { taskId }: Props ) {
 		}
 	};
 
-	const uncompleteTask = () => {
+	const unmarkTaskAsComplete = () => {
 		dispatch( removeCompletedTask( taskId ) );
 		dispatch( updateHistoryWithState() );
 	};
@@ -81,29 +81,62 @@ export function Task( { taskId }: Props ) {
 		return null;
 	}
 
-	const titleText = title || getDefaultTitleForLink( link );
 	const titleId = replaceSpaces( `title-${ taskId }` );
-	const detailsText = details || getDefaultDetailsForLink( link );
 	const detailsId = replaceSpaces( `details-${ taskId }` );
 
 	const markAsCompleteButton = (
-		<OutlineNeutralButton className={ styles.taskButton } onClick={ completeTask }>
+		<OutlineNeutralButton
+			className={ styles.taskButton }
+			aria-describedby={ titleId }
+			onClick={ markTaskAsComplete }
+		>
 			Mark as complete
 		</OutlineNeutralButton>
 	);
 	const unmarkAsCompleteButton = (
-		<OutlineNeutralButton className={ styles.taskButton } onClick={ uncompleteTask }>
+		<OutlineNeutralButton
+			className={ styles.taskButton }
+			aria-describedby={ titleId }
+			onClick={ unmarkTaskAsComplete }
+		>
 			Unmark as complete
 		</OutlineNeutralButton>
 	);
 
-	const cardDisplay = (
-		<div className={ styles.taskCard } data-completed-task={ isComplete ? 'true' : 'false' }>
+	let linkHref: string | undefined;
+	let linkHasError = false;
+	try {
+		if ( link ) {
+			linkHref = createLinkHref( link, issueTitle );
+		}
+	} catch ( err ) {
+		linkHasError = true;
+		const error = err as Error;
+		logError( 'Task link has broken configuration', {
+			taskId,
+			error: error.message,
+		} );
+	}
+
+	const titleText = linkHasError
+		? 'Bad link configuration'
+		: title || getDefaultTitleBasedOnLink( link );
+	const detailsText = linkHasError
+		? "Uh oh! We've logged an error and will follow up. In the meantime, you can try contacting the product team directly."
+		: details || getDefaultDetailsBasedOnLink( link );
+
+	const topPanelClasses = [ styles.taskTopPanel ];
+	if ( linkHasError ) {
+		topPanelClasses.push( styles.brokenTask );
+	}
+
+	const topPanelDisplay = (
+		<div className={ topPanelClasses.join( ' ' ) }>
 			<div className={ styles.taskIconWrapper }>
 				{ isComplete ? (
 					<CheckIcon data-testid="check-icon" aria-hidden={ true } className={ styles.checkIcon } />
 				) : (
-					getTaskIconForLink( link )
+					getTaskIconBasedOnLink( link )
 				) }
 			</div>
 			<div className={ styles.taskContent }>
@@ -116,8 +149,7 @@ export function Task( { taskId }: Props ) {
 					</p>
 				) }
 			</div>
-			{ link && <LinkIcon className={ styles.linkIcon } /> }
-			{ isComplete ? unmarkAsCompleteButton : markAsCompleteButton }
+			{ link && ! linkHasError && <LinkIcon className={ styles.linkIcon } /> }
 		</div>
 	);
 
@@ -125,43 +157,50 @@ export function Task( { taskId }: Props ) {
 		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 		monitoringClient.analytics.recordEvent( 'task_link_click', { linkType: link!.type } );
 		if ( ! isComplete ) {
-			completeTask();
+			markTaskAsComplete();
 			dispatch( updateHistoryWithState() );
 		}
 	};
 
-	const wrappedCardDisplay = link ? (
-		<a
-			className={ styles.taskLink }
-			target="_blank"
-			href={ createLinkHref( link, issueTitle ) }
-			rel="noreferrer"
-			aria-labelledby={ titleId }
-			aria-describedby={ detailsId }
-			// When they open a link, let's trigger the checkbox change too
-			onClick={ handleLinkClick }
-		>
-			{ cardDisplay }
-		</a>
-	) : (
-		cardDisplay
+	return (
+		<li className={ styles.taskListItem }>
+			<div className={ styles.taskCard } data-completed-task={ isComplete ? 'true' : 'false' }>
+				{ link && ! linkHasError ? (
+					<a
+						className={ styles.taskLink }
+						target="_blank"
+						href={ linkHref }
+						rel="noreferrer"
+						aria-labelledby={ titleId }
+						aria-describedby={ detailsId }
+						// When they open a link, let's trigger the checkbox change too
+						onClick={ handleLinkClick }
+					>
+						{ topPanelDisplay }
+					</a>
+				) : (
+					topPanelDisplay
+				) }
+				<div className={ styles.taskBottomPanel }>
+					{ isComplete ? unmarkAsCompleteButton : markAsCompleteButton }
+				</div>
+			</div>
+		</li>
 	);
-
-	return <li className={ styles.taskListItem }>{ wrappedCardDisplay }</li>;
 }
 
-function getDefaultTitleForLink( link: TaskLink | undefined ): string {
+function getDefaultTitleBasedOnLink( link: TaskLink | undefined ): string {
 	if ( ! link ) {
 		return 'Complete the details below';
 	}
 
 	switch ( link.type ) {
 		case 'general':
-			return 'Click the link to report your issue';
+			return 'Click to report your issue';
 		case 'github':
-			return `Click the link to open your report in the ${ link.repository } repo`;
+			return `Click to open your report in the ${ link.repository } repo`;
 		case `jira`:
-			return 'Click the link to open a new Jira issue';
+			return 'Click to open a new Jira issue';
 		case 'slack':
 			return `Notify the #${ link.channel } channel in Slack`;
 		case 'p2':
@@ -169,7 +208,7 @@ function getDefaultTitleForLink( link: TaskLink | undefined ): string {
 	}
 }
 
-function getDefaultDetailsForLink( link: TaskLink | undefined ): string | null {
+function getDefaultDetailsBasedOnLink( link: TaskLink | undefined ): string | null {
 	if ( ! link ) {
 		return null;
 	}
@@ -188,7 +227,7 @@ function getDefaultDetailsForLink( link: TaskLink | undefined ): string | null {
 	}
 }
 
-function getTaskIconForLink( link: TaskLink | undefined ): ReactNode {
+function getTaskIconBasedOnLink( link: TaskLink | undefined ): ReactNode {
 	if ( ! link ) {
 		return (
 			<GeneralIcon data-testid="general-icon" aria-hidden={ true } className={ styles.taskIcon } />
