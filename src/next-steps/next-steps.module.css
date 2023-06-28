@@ -22,18 +22,23 @@
 
 a.taskLink {
 	text-decoration: none;
+	outline: none;
 }
 
 a.taskLink:hover .taskTitle,
-a.taskLink:hover .taskDetails {
+a.taskLink:focus-visible .taskTitle,
+a.taskLink:hover .taskDetails,
+a.taskLink:focus-visible .taskDetails {
 	color: var( --color-primary );
 }
 
-a.taskLink:hover .linkIcon path {
+a.taskLink:hover .linkIcon path,
+a.taskLink:focus-visible .linkIcon path {
 	fill: var( --color-primary );
 }
 
-.taskCard:has( a.taskLink:hover ) {
+.taskCard:has( a.taskLink:hover ),
+.taskCard:has( a.taskLink:focus-visible ) {
 	border-color: var( --color-primary );
 	outline: 1px solid var( --color-primary );
 }
@@ -42,6 +47,17 @@ a.taskLink:hover .linkIcon path {
 	/* For browsers that don't support :has, we'll fallback just darkening the background a little bit if the task isn't complete */
 	[data-completed-task='false'] a.taskLink:hover .taskTopPanel {
 		background-color: var( --color-neutral-light );
+	}
+
+	a.taskLink:focus-visible .taskTopPanel::after {
+		content: '';
+		position: absolute;
+		top: 4px;
+		left: 4px;
+		bottom: 4px;
+		right: 4px;
+		border: 2px solid var( --color-primary );
+		border-radius: 6px;
 	}
 }
 
@@ -52,10 +68,11 @@ a.taskLink:hover .linkIcon path {
 	align-items: flex-start;
 	gap: 0.625rem;
 	padding: 0.625rem;
+	position: relative;
 }
 
 [data-completed-task='true'] .taskTopPanel {
-	background-color: var( --color-success-light );
+	background-color: var( --color-success-lighter );
 }
 
 .taskBottomPanel {
@@ -64,7 +81,7 @@ a.taskLink:hover .linkIcon path {
 }
 
 [data-completed-task='true'] .taskBottomPanel {
-	background-color: #b8e6bf;
+	background-color: var( --color-success-light );
 }
 
 .taskIcon,

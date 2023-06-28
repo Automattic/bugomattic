@@ -65,6 +65,18 @@
 	position: relative;
 }
 
+@media only screen and ( max-width: 450px ) {
+	.stepContent {
+		padding-left: 0.75rem;
+		padding-right: 0.75rem;
+	}
+
+	.stepHeaderRow {
+		padding-left: 0.75rem;
+		padding-right: 0.75rem;
+	}
+}
+
 .completedContentHeader {
 	font-size: var( --font-body );
 	font-weight: 400;
