@@ -209,13 +209,19 @@ describe( '[Reporting Flow]', () => {
 
 	test( 'The right list of next step tasks appear for issue details', async () => {
 		expect(
-			screen.getByRole( 'checkbox', { name: taskFor_A_featureRequest.title, checked: false } )
+			screen.getByRole( 'button', {
+				name: 'Mark as complete',
+				description: taskFor_A_featureRequest.title,
+			} )
 		).toBeInTheDocument();
 	} );
 
-	test( 'Check off the next step task (completing all tasks)', async () => {
+	test( 'Complete the next step task (completing all tasks)', async () => {
 		await user.click(
-			screen.getByRole( 'checkbox', { name: taskFor_A_featureRequest.title, checked: false } )
+			screen.getByRole( 'button', {
+				name: 'Mark as complete',
+				description: taskFor_A_featureRequest.title,
+			} )
 		);
 	} );
 
@@ -266,9 +272,7 @@ describe( '[Reporting Flow]', () => {
 	} );
 
 	test( 'The next steps step does not update yet for the new type', async () => {
-		expect(
-			screen.getByRole( 'checkbox', { name: taskFor_A_featureRequest.title } )
-		).toBeInTheDocument();
+		expect( screen.getByText( taskFor_A_featureRequest.title as string ) ).toBeInTheDocument();
 	} );
 
 	test( 'Click "Continue" on the edited type step', async () => {
@@ -329,7 +333,7 @@ describe( '[Reporting Flow]', () => {
 		).not.toBeInTheDocument();
 
 		expect(
-			screen.getByRole( 'checkbox', { name: taskFor_A_bug.title, checked: false } )
+			screen.getByRole( 'button', { name: 'Mark as complete', description: taskFor_A_bug.title } )
 		).toBeInTheDocument();
 	} );
 
@@ -373,11 +377,9 @@ describe( '[Reporting Flow]', () => {
 	} );
 
 	test( 'The next step tasks do not update yet for the new feature', async () => {
-		expect( screen.getByRole( 'checkbox', { name: taskFor_A_bug.title } ) ).toBeInTheDocument();
+		expect( screen.getByText( taskFor_A_bug.title as string ) ).toBeInTheDocument();
 
-		expect(
-			screen.queryByRole( 'checkbox', { name: taskFor_B_bug.title } )
-		).not.toBeInTheDocument();
+		expect( screen.queryByRole( taskFor_B_bug.title as string ) ).not.toBeInTheDocument();
 	} );
 
 	test( 'Click "Continue" on the edited feature selection step', async () => {
@@ -408,13 +410,9 @@ describe( '[Reporting Flow]', () => {
 	} );
 
 	test( 'The next step tasks update to reflect the new feature', async () => {
-		expect(
-			screen.queryByRole( 'checkbox', { name: taskFor_A_bug.title } )
-		).not.toBeInTheDocument();
+		expect( screen.queryByRole( taskFor_A_bug.title as string ) ).not.toBeInTheDocument();
 
-		expect(
-			screen.getByRole( 'checkbox', { name: taskFor_B_bug.title, checked: false } )
-		).toBeInTheDocument();
+		expect( screen.getByText( taskFor_B_bug.title as string ) ).toBeInTheDocument();
 	} );
 
 	test( 'Does not make the type step active because it is already complete', async () => {
@@ -428,7 +426,7 @@ describe( '[Reporting Flow]', () => {
 
 	test( 'Complete the new tasks', async () => {
 		await user.click(
-			screen.getByRole( 'checkbox', { name: taskFor_B_bug.title, checked: false } )
+			screen.getByRole( 'button', { name: 'Mark as complete', description: taskFor_B_bug.title } )
 		);
 	} );
 

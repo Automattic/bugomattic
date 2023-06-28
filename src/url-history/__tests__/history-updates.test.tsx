@@ -36,7 +36,7 @@ Then, we reload those URLs later, and ensure we can pass the same set of validat
 describe( 'history updates', () => {
 	const productName = 'Product';
 	const featureName = 'Unique feature name';
-	const taskName = 'Task Title';
+	const taskName = 'Task Title With Unique Name Foo';
 	const fakeReportingConfigApiResponse: ReportingConfigApiResponse = {
 		[ productName ]: {
 			features: {
@@ -186,12 +186,12 @@ describe( 'history updates', () => {
 		},
 
 		onFirstTaskComplete: async () => {
-			await user.click( screen.getByRole( 'checkbox', { name: taskName, checked: false } ) );
-			await screen.findByRole( 'checkbox', { name: taskName, checked: true } );
+			await user.click( screen.getByRole( 'button', { name: 'Mark as complete' } ) );
+			await screen.findByRole( 'button', { name: 'Unmark as complete' } );
 		},
 
 		onFirstTaskUnComplete: async () => {
-			await user.click( screen.getByRole( 'checkbox', { name: taskName, checked: true } ) );
+			await user.click( screen.getByRole( 'button', { name: 'Unmark as complete' } ) );
 		},
 
 		onFeatureSelectionEdit: async () => {
@@ -214,7 +214,7 @@ describe( 'history updates', () => {
 
 		onStartOver: async () => {
 			// We have to complete all tasks to get the Start Over button to appear
-			await user.click( screen.getByRole( 'checkbox', { name: taskName, checked: false } ) );
+			await user.click( screen.getByRole( 'button', { name: 'Mark as complete' } ) );
 			await user.click( screen.getByRole( 'button', { name: 'Start Over' } ) );
 			await user.click( screen.getByRole( 'menuitem', { name: 'Report a new issue' } ) );
 		},
@@ -313,9 +313,7 @@ describe( 'history updates', () => {
 				screen.getByRole( 'heading', { name: 'Completed step: Product and Feature' } )
 			).toBeInTheDocument();
 
-			expect(
-				screen.getByRole( 'checkbox', { name: taskName, checked: true } )
-			).toBeInTheDocument();
+			expect( screen.getByRole( 'button', { name: 'Unmark as complete' } ) ).toBeInTheDocument();
 		},
 
 		onFirstTaskUnComplete: async () => {
@@ -324,9 +322,7 @@ describe( 'history updates', () => {
 			).toBeInTheDocument();
 			expect( screen.getByRole( 'heading', { name: 'Completed step: Type' } ) ).toBeInTheDocument();
 
-			expect(
-				screen.getByRole( 'checkbox', { name: taskName, checked: false } )
-			).toBeInTheDocument();
+			expect( screen.getByRole( 'button', { name: 'Mark as complete' } ) ).toBeInTheDocument();
 		},
 
 		onFeatureSelectionEdit: async () => {

@@ -141,6 +141,7 @@ export function Task( { taskId }: Props ) {
 			</div>
 			<div className={ styles.taskContent }>
 				<span id={ titleId } className={ styles.taskTitle }>
+					{ isComplete && <span className="screenReaderOnly">Completed step: </span> }
 					{ titleText }
 				</span>
 				{ detailsText && (
@@ -163,8 +164,8 @@ export function Task( { taskId }: Props ) {
 	};
 
 	return (
-		<li className={ styles.taskListItem }>
-			<div className={ styles.taskCard } data-completed-task={ isComplete ? 'true' : 'false' }>
+		<li className={ styles.taskListItem } data-completed-task={ isComplete ? 'true' : 'false' }>
+			<div className={ styles.taskCard }>
 				{ link && ! linkHasError ? (
 					<a
 						className={ styles.taskLink }

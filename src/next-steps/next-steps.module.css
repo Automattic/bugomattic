@@ -16,7 +16,7 @@
 	overflow: hidden;
 }
 
-[data-completed-task='true'].taskCard {
+[data-completed-task='true'] .taskCard {
 	border-color: var( --color-success );
 }
 
