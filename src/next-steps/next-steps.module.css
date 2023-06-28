@@ -17,48 +17,12 @@
 }
 
 [data-completed-task='true'] .taskCard {
-	border-color: var( --color-success );
+	border-color: var( --color-border-success );
 }
 
 a.taskLink {
 	text-decoration: none;
 	outline: none;
-}
-
-a.taskLink:hover .taskTitle,
-a.taskLink:focus-visible .taskTitle,
-a.taskLink:hover .taskDetails,
-a.taskLink:focus-visible .taskDetails {
-	color: var( --color-primary );
-}
-
-a.taskLink:hover .linkIcon path,
-a.taskLink:focus-visible .linkIcon path {
-	fill: var( --color-primary );
-}
-
-.taskCard:has( a.taskLink:hover ),
-.taskCard:has( a.taskLink:focus-visible ) {
-	border-color: var( --color-primary );
-	outline: 1px solid var( --color-primary );
-}
-
-@supports not selector( :has( a, b ) ) {
-	/* For browsers that don't support :has, we'll fallback just darkening the background a little bit if the task isn't complete */
-	[data-completed-task='false'] a.taskLink:hover .taskTopPanel {
-		background-color: var( --color-neutral-light );
-	}
-
-	a.taskLink:focus-visible .taskTopPanel::after {
-		content: '';
-		position: absolute;
-		top: 4px;
-		left: 4px;
-		bottom: 4px;
-		right: 4px;
-		border: 2px solid var( --color-primary );
-		border-radius: 6px;
-	}
 }
 
 .taskTopPanel {
@@ -71,17 +35,33 @@ a.taskLink:focus-visible .linkIcon path {
 	position: relative;
 }
 
+a.taskLink:hover .taskTopPanel {
+	background-color: var( --color-shaded-background-light );
+}
+
+a.taskLink:active .taskTopPanel {
+	background-color: var( --color-neutral );
+}
+
 [data-completed-task='true'] .taskTopPanel {
+	background-color: var( --color-success-lightest );
+}
+
+[data-completed-task='true'] a.taskLink:hover .taskTopPanel {
 	background-color: var( --color-success-lighter );
 }
 
+[data-completed-task='true'] a.taskLink:active .taskTopPanel {
+	background-color: var( --color-success-light );
+}
+
 .taskBottomPanel {
-	background-color: var( --color-neutral );
+	background-color: var( --color-shaded-background-light );
 	padding: 0.625rem 0.625rem 0.625rem 3rem;
 }
 
 [data-completed-task='true'] .taskBottomPanel {
-	background-color: var( --color-success-light );
+	background-color: var( --color-success-lighter );
 }
 
 .taskIcon,
@@ -93,6 +73,11 @@ a.taskLink:focus-visible .linkIcon path {
 
 .checkIcon path {
 	fill: var( --color-white );
+}
+
+a.taskLink:hover .linkIcon path,
+a.taskLink:focus-visible .linkIcon path {
+	fill: var( --color-primary );
 }
 
 .linkIcon {
@@ -127,6 +112,11 @@ a.taskLink:focus-visible .linkIcon path {
 	overflow-wrap: break-word;
 }
 
+a.taskLink:hover .taskTitle,
+a.taskLink:focus-visible .taskTitle {
+	color: var( --color-primary );
+}
+
 .brokenTask .taskTitle,
 .brokenTask .taskDetails {
 	color: var( --color-error );
@@ -146,6 +136,17 @@ button.taskButton {
 	font-style: italic;
 	color: var( --color-error );
 	font-size: var( --font-header );
+}
+
+a.taskLink:focus-visible .taskTopPanel::after {
+	content: '';
+	position: absolute;
+	top: 4px;
+	left: 4px;
+	bottom: 4px;
+	right: 4px;
+	border: 2px solid var( --color-primary );
+	border-radius: 6px;
 }
 
 .moreInfoSection {

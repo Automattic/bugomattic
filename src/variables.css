@@ -14,17 +14,19 @@
 	--color-neutral-dark: var( --gray-700 );
 
 	--color-error: var( --red );
-	--color-success: var( --green );
-	--color-success-light: var( --light-green-200 );
-	--color-success-lighter: var( --light-green-100 );
+	--color-success: var( --green-200 );
+	--color-success-light: var( --light-green-300 );
+	--color-success-lighter: var( --light-green-200 );
+	--color-success-lightest: var( --light-green-100 );
 
-	--color-issue-open: var( --green );
+	--color-issue-open: var( --green-200 );
 	--color-issue-closed: var( --purple );
 
 	--color-white: var( --white );
 
 	--color-border: var( --gray-400 );
 	--color-border-dark: var( --gray-700 );
+	--color-border-success: var( --green-100 );
 
 	--color-shaded-background: var( --light-gray-200 );
 	--color-shaded-background-light: var( --light-gray-100 );
