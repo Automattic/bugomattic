@@ -174,7 +174,7 @@ function safelySetLocalstorageCache( key: string, value: string ) {
 		// So let's just leave a gentle console message about the user being able to add a perfomrance boost.
 		console.info(
 			`Unable to set cache value for ${ key }. ` +
-				`This likely means there is too much in localstorage for this domain. ` +
+				`This likely means there is too much in localstorage for this website. ` +
 				`Consider deleting unused data from localstorage -- it will speed up performance on this site! `
 		);
 	}
