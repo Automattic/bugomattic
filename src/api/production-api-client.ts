@@ -37,8 +37,8 @@ class ProductionApiClient implements ApiClient, LoggerApiClient {
 			const data = await response.json();
 
 			const cacheExpiryTime = Date.now() + 3 * 24 * 60 * 60 * 1000; // 3 days in milliseconds
-			localStorage.setItem( 'cachedReportingConfigData', JSON.stringify( data ) );
-			localStorage.setItem( 'cacheExpiry', cacheExpiryTime.toString() );
+			safelySetLocalstorageCache( 'cachedReportingConfigData', JSON.stringify( data ) );
+			safelySetLocalstorageCache( 'cacheExpiry', cacheExpiryTime.toString() );
 
 			return data;
 		} else {
@@ -95,8 +95,8 @@ class ProductionApiClient implements ApiClient, LoggerApiClient {
 
 			const newCacheExpiry = Date.now() + 14 * 24 * 60 * 60 * 1000; // 14 days -- these really won't change often
 
-			localStorage.setItem( repoFiltersCacheKey, JSON.stringify( repoFilters ) );
-			localStorage.setItem( repoFiltersCacheExpiryKey, newCacheExpiry.toString() );
+			safelySetLocalstorageCache( repoFiltersCacheKey, JSON.stringify( repoFilters ) );
+			safelySetLocalstorageCache( repoFiltersCacheExpiryKey, newCacheExpiry.toString() );
 
 			return repoFilters;
 		} else {
@@ -163,4 +163,19 @@ export function createProductionApiClient(): ApiClient & LoggerApiClient {
 			productionApiClient.loadAvailableRepoFilters.bind( productionApiClient ),
 		searchIssues: productionApiClient.searchIssues.bind( productionApiClient ),
 	};
+}
+
+function safelySetLocalstorageCache( key: string, value: string ) {
+	try {
+		localStorage.setItem( key, value );
+	} catch ( err ) {
+		// Caching should never bubble up errors -- it's just a performance optimization!
+		// The most likely thing we'd hit when caching is a QuotaExceededError.
+		// So let's just leave a gentle console message about the user being able to add a perfomrance boost.
+		console.info(
+			`Unable to set cache value for ${ key }. ` +
+				`This likely means there is too much in localstorage for this website. ` +
+				`Consider deleting unused data from localstorage -- it will speed up performance on this site! `
+		);
+	}
 }
