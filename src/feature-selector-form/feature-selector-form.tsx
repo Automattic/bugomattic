@@ -54,7 +54,7 @@ export function FeatureSelectorForm( { onContinue }: Props ) {
 	const handleSearch = useCallback(
 		( searchTerm: string ) => {
 			dispatch( setFeatureSearchTerm( searchTerm ) );
-			monitoringClient.analytics.recordEvent( 'feature_search', { searchTerm } );
+			monitoringClient.analytics.recordEvent( 'feature_search', { search_term: searchTerm } );
 		},
 		[ dispatch, monitoringClient.analytics ]
 	);
@@ -66,8 +66,8 @@ export function FeatureSelectorForm( { onContinue }: Props ) {
 			dispatch( setIssueFeatureId( selectedFeatureId ) );
 
 			monitoringClient.analytics.recordEvent( 'feature_save', {
-				productName: selectedFeatureProductName,
-				featureName: selectedFeatureName,
+				product_name: selectedFeatureProductName,
+				feature_name: selectedFeatureName,
 			} );
 
 			if ( onContinue ) {

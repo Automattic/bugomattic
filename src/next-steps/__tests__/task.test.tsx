@@ -469,7 +469,7 @@ describe( '[Task]', () => {
 
 			expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'task_complete' );
 			expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'task_link_click', {
-				linkType: 'general',
+				link_type: 'general',
 			} );
 		} );
 	} );

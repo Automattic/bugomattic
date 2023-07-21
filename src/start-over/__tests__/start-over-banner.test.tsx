@@ -161,7 +161,7 @@ describe( '[StartOverBanner]', () => {
 			await user.click( screen.getByRole( 'menuitem', { name: 'Search for issues' } ) );
 
 			expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'start_over_click', {
-				targetActivePage: 'search-issues',
+				target_page: 'search-issues',
 			} );
 		} );
 
@@ -172,7 +172,7 @@ describe( '[StartOverBanner]', () => {
 			await user.click( screen.getByRole( 'menuitem', { name: 'Report a new issue' } ) );
 
 			expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'start_over_click', {
-				targetActivePage: 'report-issue',
+				target_page: 'report-issue',
 			} );
 		} );
 	} );

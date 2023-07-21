@@ -84,7 +84,7 @@ describe( '[TitleTypeForm]', () => {
 			await user.click( screen.getByRole( 'button', { name: 'Continue' } ) );
 
 			expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'type_save', {
-				issueType: 'bug',
+				issue_type: 'bug',
 			} );
 		} );
 	} );

@@ -274,7 +274,7 @@ describe( '[IssueSearchingPage]', () => {
 
 			expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith(
 				'banner_report_issue_start',
-				{ issueType: 'urgent' }
+				{ issue_type: 'urgent' }
 			);
 		} );
 	} );

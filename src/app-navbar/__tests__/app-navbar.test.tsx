@@ -150,7 +150,7 @@ describe( '[AppNavbar]', () => {
 			expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith(
 				'navbar_report_issue_start',
 				{
-					issueType: 'bug',
+					issue_type: 'bug',
 				}
 			);
 		} );

@@ -39,7 +39,7 @@ export function TypeForm( { onContinue }: Props ) {
 		if ( readyToContinue ) {
 			dispatch( setIssueType( type ) );
 
-			monitoringClient.analytics.recordEvent( 'type_save', { issueType: type } );
+			monitoringClient.analytics.recordEvent( 'type_save', { issue_type: type } );
 
 			if ( onContinue ) {
 				onContinue();

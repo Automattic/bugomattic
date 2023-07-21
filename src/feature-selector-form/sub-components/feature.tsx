@@ -26,7 +26,10 @@ export function Feature( { id }: Props ) {
 
 	const handleFeatureSelect = () => {
 		dispatch( setSelectedFeatureId( id ) );
-		monitoringClient.analytics.recordEvent( 'feature_select', { productName, featureName } );
+		monitoringClient.analytics.recordEvent( 'feature_select', {
+			product_name: productName,
+			feature_name: featureName,
+		} );
 	};
 
 	const selectedFeatureId = useAppSelector( selectSelectedFeatureId );

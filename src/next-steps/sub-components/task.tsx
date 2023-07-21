@@ -156,7 +156,7 @@ export function Task( { taskId }: Props ) {
 
 	const handleLinkClick = () => {
 		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-		monitoringClient.analytics.recordEvent( 'task_link_click', { linkType: link!.type } );
+		monitoringClient.analytics.recordEvent( 'task_link_click', { link_type: link!.type } );
 		if ( ! isComplete ) {
 			markTaskAsComplete();
 		}

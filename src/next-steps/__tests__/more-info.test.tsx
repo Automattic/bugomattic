@@ -291,7 +291,7 @@ describe( '[MoreInfo]', () => {
 
 			expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith(
 				'more_info_link_click',
-				{ linkType: 'general' }
+				{ link_type: 'general' }
 			);
 		} );
 	} );
