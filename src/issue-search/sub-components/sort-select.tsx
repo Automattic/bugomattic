@@ -46,7 +46,7 @@ export function SortSelect() {
 			dispatch( updateHistoryWithState() );
 
 			monitoringClient.analytics.recordEvent( 'sort_select', {
-				sortOption: sortOptionValue,
+				sort_option: sortOptionValue,
 			} );
 		},
 		[ dispatch, monitoringClient.analytics ]

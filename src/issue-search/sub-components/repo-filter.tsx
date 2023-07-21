@@ -77,7 +77,7 @@ export function RepoFilter() {
 		dispatch( updateHistoryWithState() );
 
 		monitoringClient.analytics.recordEvent( 'repo_filter_select', {
-			repoFilter: newRepoFilters.join( ',' ),
+			repo_filter: newRepoFilters.join( ',' ),
 		} );
 
 		setIsPopoverOpen( false );

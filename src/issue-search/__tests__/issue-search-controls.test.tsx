@@ -113,7 +113,7 @@ describe( '[IssueSearchControls]', () => {
 			await search( user, searchTerm );
 
 			expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'issue_search', {
-				searchTerm: searchTerm,
+				search_term: searchTerm,
 			} );
 		} );
 	} );
@@ -166,7 +166,7 @@ describe( '[IssueSearchControls]', () => {
 			expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith(
 				'status_filter_select',
 				{
-					statusFilter: 'open',
+					status_filter: 'open',
 				}
 			);
 		} );
@@ -454,7 +454,7 @@ describe( '[IssueSearchControls]', () => {
 			await userEvent.click( screen.getByRole( 'button', { name: 'Filter' } ) );
 
 			expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'repo_filter_select', {
-				repoFilter: '',
+				repo_filter: '',
 			} );
 		} );
 
@@ -476,7 +476,7 @@ describe( '[IssueSearchControls]', () => {
 			await userEvent.click( screen.getByRole( 'button', { name: 'Filter' } ) );
 
 			expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'repo_filter_select', {
-				repoFilter: `${ availableRepoFilters[ 0 ] },${ availableRepoFilters[ 1 ] }`,
+				repo_filter: `${ availableRepoFilters[ 0 ] },${ availableRepoFilters[ 1 ] }`,
 			} );
 		} );
 	} );
@@ -578,14 +578,14 @@ describe( '[IssueSearchControls]', () => {
 			await user.click( screen.getByRole( 'option', { name: 'Date created' } ) );
 
 			expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'sort_select', {
-				sortOption: 'date-created',
+				sort_option: 'date-created',
 			} );
 
 			await user.click( screen.getByRole( 'combobox', { name: 'Sort results by…' } ) );
 			await user.click( screen.getByRole( 'option', { name: 'Relevance' } ) );
 
 			expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'sort_select', {
-				sortOption: 'relevance',
+				sort_option: 'relevance',
 			} );
 		} );
 	} );

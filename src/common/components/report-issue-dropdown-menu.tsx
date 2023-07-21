@@ -65,7 +65,7 @@ export const ReportIssueDropdownMenu = forwardRef< HTMLElement, Props >(
 
 				const eventType =
 					location === 'banner' ? 'banner_report_issue_start' : 'navbar_report_issue_start';
-				monitoringClient.analytics.recordEvent( eventType, { issueType: issueType } );
+				monitoringClient.analytics.recordEvent( eventType, { issue_type: issueType } );
 
 				if ( additionalOnIssueTypeSelect ) {
 					additionalOnIssueTypeSelect( issueType );

@@ -23,7 +23,7 @@ export function StatusFilter() {
 			dispatch( updateHistoryWithState() );
 
 			monitoringClient.analytics.recordEvent( 'status_filter_select', {
-				statusFilter: newStatusFilter,
+				status_filter: newStatusFilter,
 			} );
 		},
 		[ dispatch, monitoringClient.analytics ]

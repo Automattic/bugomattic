@@ -247,8 +247,8 @@ describe( '[FeatureSelector -- Feature Selection]', () => {
 		);
 
 		expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'feature_select', {
-			productName: product.name,
-			featureName: featureUnderGroup.name,
+			product_name: product.name,
+			feature_name: featureUnderGroup.name,
 		} );
 	} );
 
@@ -325,8 +325,8 @@ describe( '[FeatureSelector -- Feature Selection]', () => {
 		await user.click( screen.getByRole( 'button', { name: 'Continue' } ) );
 
 		expect( monitoringClient.analytics.recordEvent ).toHaveBeenCalledWith( 'feature_save', {
-			productName: product.name,
-			featureName: featureUnderGroup.name,
+			product_name: product.name,
+			feature_name: featureUnderGroup.name,
 		} );
 	} );
 } );

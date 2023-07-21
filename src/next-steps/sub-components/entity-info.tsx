@@ -27,7 +27,7 @@ export function EntityInfo( { entity }: Props ) {
 				{ links.map( ( link, index ) => {
 					const handleClick = () => {
 						monitoringClient.analytics.recordEvent( 'more_info_link_click', {
-							linkType: link.type,
+							link_type: link.type,
 						} );
 					};
 					return (

@@ -33,7 +33,7 @@ export function IssueSearchInput() {
 			dispatch( setSearchTerm( searchTerm ) );
 			dispatch( updateHistoryWithState() );
 
-			monitoringClient.analytics.recordEvent( 'issue_search', { searchTerm } );
+			monitoringClient.analytics.recordEvent( 'issue_search', { search_term: searchTerm } );
 		},
 		[ dispatch, monitoringClient.analytics ]
 	);
