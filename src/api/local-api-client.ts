@@ -91,6 +91,7 @@ export const localApiClient: ApiClient = {
 			'Automattic/themes',
 			'Automattic/simplenote-ios',
 			'Automattic/simplenote-android',
+			'Automattic/studio',
 			'Automattic/pocket-casts-ios',
 			'Automattic/sensei',
 			'Automattic/woocommerce.com',
