@@ -62,6 +62,11 @@ button.treeNode {
 
 button.treeNode:hover {
 	background-color: var( --color-primary-lightest );
+	color: var( --color-text );
+}
+
+button.treeNode:focus {
+	outline: none;
 }
 
 .treeNodeContentWrapper {
