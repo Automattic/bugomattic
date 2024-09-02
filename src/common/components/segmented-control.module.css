@@ -42,15 +42,21 @@ button.option:focus-visible {
 
 button.option:hover {
 	background-color: var( --color-neutral-light );
+	color: var( --color-text );
+	border: 1px solid transparent;
+	outline: none;
 }
 
 button.option:active {
 	background-color: var( --color-neutral );
+	border: 1px solid transparent;
+	outline: none;
 }
 
 button.option[aria-selected='true'] {
 	color: var( --color-white );
 	background-color: var( --color-primary );
+	outline: none;
 }
 
 button.option[aria-selected='true']:hover {

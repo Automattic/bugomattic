@@ -52,6 +52,7 @@
 	font-size: var( --font-header );
 	transform: translateY( 0.25rem );
 	font-weight: 400;
+	line-height: normal;
 }
 
 .checkmark {
