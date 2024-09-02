@@ -53,6 +53,9 @@ If we need to in the future, we can implement that. */
 
 button.menuItem:hover {
 	color: var( --color-primary );
+	background-color: var( --color-neutral-light );
+	border: none;
+	border-bottom: 4px solid #f0f0f0;
 }
 
 button.menuItem:hover path {
@@ -71,6 +74,7 @@ button.menuItem[aria-current='page'] {
 	border-bottom: 4px solid var( --color-primary );
 }
 
+button.menuItem:focus,
 button.menuItem:focus-visible {
 	outline: none;
 }
