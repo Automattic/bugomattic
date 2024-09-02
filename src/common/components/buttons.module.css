@@ -41,6 +41,8 @@ button.text {
 
 button.text:hover {
 	color: var( --color-primary-dark );
+	background-color: transparent;
+	border: none;
 }
 
 button.text:active {
@@ -65,6 +67,7 @@ button.outlinePrimary svg path {
 }
 
 button.outlineNeutral {
+	color: var( --color-text );
 	background-color: var( --color-white );
 	border: 1px solid var( --color-border-dark );
 }
@@ -73,12 +76,14 @@ button.clear:hover,
 button.outlinePrimary:hover,
 button.outlineNeutral:hover {
 	background-color: var( --color-neutral-light );
+	color: var( --color-primary );
 }
 
 button.clear:active,
 button.outlinePrimary:active,
 button.outlineNeutral:active {
 	background-color: var( --color-neutral );
+	color: var( --color-primary );
 }
 
 button.clear:focus-visible,

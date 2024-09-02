@@ -63,6 +63,7 @@ button.treeNode {
 button.treeNode:hover {
 	background-color: var( --color-primary-lightest );
 	color: var( --color-text );
+	border: none;
 }
 
 button.treeNode:focus {

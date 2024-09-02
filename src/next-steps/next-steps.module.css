@@ -130,6 +130,7 @@ a.taskLink:focus-visible .taskTitle {
 
 button.taskButton {
 	padding: 0.375rem 0.75rem;
+	color: var( --color-text );
 }
 
 .badTask {

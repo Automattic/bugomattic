@@ -23,6 +23,7 @@ button.button {
 
 button.button:hover {
 	background-color: var( --color-neutral-light );
+	border: none;
 }
 
 button.button:active {
