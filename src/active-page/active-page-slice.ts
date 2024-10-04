@@ -3,7 +3,7 @@ import { RootState } from '../app/store';
 import { updateStateFromHistory } from '../url-history/actions';
 import { ActivePage } from './types';
 
-const initialState: ActivePage = 'search-issues' as ActivePage;
+const initialState: ActivePage = 'report-issue' as ActivePage;
 
 const validActivePages = new Set< ActivePage >( [ 'search-issues', 'report-issue' ] );
 
