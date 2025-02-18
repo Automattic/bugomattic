@@ -112,6 +112,7 @@ export interface NewGitHubIssueLink {
 	template?: string; // "bug_report.yml" e.g.
 	projectSlugs?: string[]; // "Automattic/xyz" e.g.
 	labels?: string[]; // "[Pri] High" e.g.
+	org?: string; // "a8c" e.g.
 }
 
 export interface NewJiraIssueLink {

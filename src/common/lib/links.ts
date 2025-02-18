@@ -41,7 +41,13 @@ export function createNewGithubIssueHref( link: NewGitHubIssueLink, issueTitle?:
 	// For safety, we don't really need to validate all the individual pieces here.
 	// As long as we use the URL API and guarantee the root GitHub domain, we are safe.
 	// Any broken pieces will just result in a Github 404 or the param being tossed out by Github.
-	const url = new URL( 'https://github.com' );
+	let url = new URL( 'https://github.com' );
+
+	// If one specifies an org, let's customize the URL accordingly.
+	if ( link.org ) {
+		url = new URL( `https://github.${ link.org }.com` );
+	}
+
 	let pathEnd = 'new';
 	if (
 		( ! link.labels || link.labels.length === 0 ) &&
