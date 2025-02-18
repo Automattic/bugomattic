@@ -102,6 +102,27 @@ describe( '[Links]', () => {
 			).toBe( expectedHref );
 		} );
 
+		test( 'If an org is provided, uses it to customize the URL', () => {
+			const expectedHref = 'https://github.a8c.com/Automattic/wpcom/issues/new/choose';
+			expect(
+				createNewGithubIssueHref( {
+					type: 'github',
+					repository: 'Automattic/wpcom',
+					org: 'a8c',
+				} )
+			).toBe( expectedHref );
+		} );
+
+		test( 'If no org is provided, uses the default GitHub URL', () => {
+			const expectedHref = 'https://github.com/Automattic/bugomattic/issues/new/choose';
+			expect(
+				createNewGithubIssueHref( {
+					type: 'github',
+					repository: 'Automattic/bugomattic',
+				} )
+			).toBe( expectedHref );
+		} );
+
 		test( 'If no GitHub params are provided, ends route at /new/choose', () => {
 			const expectedHref = 'https://github.com/Automattic/bugomattic/issues/new/choose';
 			expect(

@@ -97,7 +97,7 @@
 				"features": {
 					"Feature (Under Feature Group)": {
 						"description": "Feature (Under Feature Group) description",
-						"keywords": [ "foo", "bar" ],
+						"keywords": ["foo", "bar"],
 						"learnMoreLinks": [
 							{
 								"type": "p2",
@@ -120,8 +120,8 @@
 									"link": {
 										"type": "github",
 										"repository": "Automattic/fake-repo",
-										"labels": [ "[Type] Bug" ],
-										"projectSlugs": [ "[Automattic/12345]" ]
+										"labels": ["[Type] Bug"],
+										"projectSlugs": ["[Automattic/12345]"]
 									}
 								}
 							],
@@ -131,8 +131,8 @@
 									"link": {
 										"type": "github",
 										"repository": "Automattic/fake-repo",
-										"labels": [ "[Type] Feature Request" ],
-										"projectSlugs": [ "[Automattic/12345]" ]
+										"labels": ["[Type] Feature Request"],
+										"projectSlugs": ["[Automattic/12345]"]
 									}
 								}
 							],
@@ -142,8 +142,72 @@
 									"link": {
 										"type": "github",
 										"repository": "Automattic/fake-repo",
-										"labels": [ "[Type] Bug", "[Pri] BLOCKER" ],
-										"projectSlugs": [ "[Automattic/12345]" ]
+										"labels": ["[Type] Bug", "[Pri] BLOCKER"],
+										"projectSlugs": ["[Automattic/12345]"]
+									}
+								},
+								{
+									"details": "Duplicate Task | P2 link",
+									"link": {
+										"type": "p2",
+										"subdomain": "duplicate"
+									}
+								}
+							]
+						}
+					},
+					"Feature in GitHub enterprise (Under Feature Group)": {
+						"description": "Feature in GitHub enterprise (Under Feature Group) description",
+						"keywords": ["github", "enterprise"],
+						"learnMoreLinks": [
+							{
+								"type": "p2",
+								"subdomain": "feature-under-feature-group"
+							},
+							{
+								"type": "slack",
+								"channel": "feature-under-feature-group"
+							},
+							{
+								"type": "general",
+								"href": "https://google.com/search?q=feature-under-feature-group"
+							}
+						],
+						"tasks": {
+							"bug": [
+								{
+									"title": "Testing a really really really really super super super super duper very much look how long it is it just keeps going dear god long link",
+									"details": "Feature (Under Feature Group) | Bug | GitHub link",
+									"link": {
+										"type": "github",
+										"org": "fake",
+										"repository": "Automattic/fake-repo",
+										"labels": ["[Type] Bug"],
+										"projectSlugs": ["[Automattic/12345]"]
+									}
+								}
+							],
+							"featureRequest": [
+								{
+									"details": "Feature (Under Feature Group) | Feature Request | GitHub link",
+									"link": {
+										"type": "github",
+										"org": "fake",
+										"repository": "Automattic/fake-repo",
+										"labels": ["[Type] Feature Request"],
+										"projectSlugs": ["[Automattic/12345]"]
+									}
+								}
+							],
+							"urgent": [
+								{
+									"details": "Feature (Under Feature Group) | Urgent | GitHub link",
+									"link": {
+										"type": "github",
+										"org": "fake",
+										"repository": "Automattic/fake-repo",
+										"labels": ["[Type] Bug", "[Pri] BLOCKER"],
+										"projectSlugs": ["[Automattic/12345]"]
 									}
 								},
 								{
