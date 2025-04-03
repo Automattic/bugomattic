@@ -214,6 +214,13 @@ describe( '[Links]', () => {
 			).toBe( expectedHref );
 		} );
 
+		test( 'Correctly creates href when a workspace and team are provided', () => {
+			const expectedHref = 'https://linear.app/workspace/team/calypso/new';
+			expect(
+				createNewLinearIssueHref( { type: 'linear', workspace: 'workspace', team: 'calypso' } )
+			).toBe( expectedHref );
+		} );
+
 		test( 'If an issue title is provided, adds and encodes query param for it', () => {
 			const expectedHref = 'https://linear.app/new?title=foo%26bar';
 			expect( createNewLinearIssueHref( { type: 'linear' }, 'foo&bar' ) ).toBe( expectedHref );
