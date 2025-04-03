@@ -6,6 +6,7 @@ import { ReactComponent as SlackIcon } from '../../common/svgs/slack-colored.svg
 import { ReactComponent as GithubIcon } from '../../common/svgs/github.svg';
 import { ReactComponent as P2Icon } from '../../common/svgs/p2.svg';
 import { ReactComponent as LinkIcon } from '../../common/svgs/external-link.svg';
+import { ReactComponent as LinearIcon } from '../../common/svgs/linear.svg';
 import { ReactComponent as JiraIcon } from '../../common/svgs/jira.svg';
 import { ReactComponent as GeneralIcon } from '../../common/svgs/info.svg';
 import { ReactComponent as CheckIcon } from '../../common/svgs/check.svg';
@@ -20,6 +21,7 @@ import {
 	createGeneralHref,
 	createNewGithubIssueHref,
 	createNewJiraIssueHref,
+	createNewLinearIssueHref,
 	createP2Href,
 	createSlackHref,
 	replaceSpaces,
@@ -205,6 +207,8 @@ function getDefaultTitleBasedOnLink( link: TaskLink | undefined ): string {
 			return `Notify the #${ link.channel } channel in Slack`;
 		case 'p2':
 			return `Post on the +${ link.subdomain } P2`;
+		case 'linear':
+			return 'Click to open a new Linear issue';
 	}
 }
 
@@ -223,6 +227,8 @@ function getDefaultDetailsBasedOnLink( link: TaskLink | undefined ): string | nu
 		case 'slack':
 			return null;
 		case 'p2':
+			return null;
+		case 'linear':
 			return null;
 	}
 }
@@ -257,6 +263,10 @@ function getTaskIconBasedOnLink( link: TaskLink | undefined ): ReactNode {
 			);
 		case 'p2':
 			return <P2Icon data-testid="p2-icon" aria-hidden={ true } className={ styles.taskIcon } />;
+		case 'linear':
+			return (
+				<LinearIcon data-testid="linear-icon" aria-hidden={ true } className={ styles.taskIcon } />
+			);
 	}
 }
 
@@ -272,5 +282,7 @@ function createLinkHref( link: TaskLink, issueTitle?: string ): string {
 			return createSlackHref( link );
 		case 'p2':
 			return createP2Href( link );
+		case 'linear':
+			return createNewLinearIssueHref( link, issueTitle );
 	}
 }

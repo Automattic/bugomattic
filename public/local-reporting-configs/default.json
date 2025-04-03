@@ -244,6 +244,137 @@
 			}
 		}
 	},
+	"Product tracked in Linear": {
+		"description": "Product tracked in Linear",
+		"keywords": [ "linear" ],
+		"learnMoreLinks": [
+			{
+				"type": "general",
+				"href": "https://linear.app/"
+			}
+		],
+		"featureGroups": {
+			"Feature Group for a product tracked in Linear": {
+				"features": {
+					"A feature not maintained by any specific team in Linear": {
+						"tasks": {
+							"bug": [
+								{
+									"details": "Product | Bug | Linear link",
+									"link": {
+										"type": "linear",
+										"workspace": "a8c",
+										"labels": [ "[Type] Bug" ]
+									}
+								}
+							],
+							"featureRequest": [
+								{
+									"details": "Product | Feature Request | Linear link",
+									"link": {
+										"type": "linear",
+										"workspace": "a8c",
+										"labels": [ "[Type] Enhancement" ]
+									}
+								}
+							],
+							"urgent": [
+								{
+									"details": "Product | Urgent bug | Linear link",
+									"link": {
+										"type": "linear",
+										"workspace": "a8c",
+										"labels": [ "[Type] Bug" ],
+										"priority": "urgent"
+									}
+								}
+							]
+						},
+						"keywords": [ "linear", "lumon" ]
+					},
+					"A random feature": {
+						"tasks": {
+							"bug": [
+								{
+									"details": "Product | Bug | Linear link",
+									"link": {
+										"type": "linear",
+										"workspace": "a8c",
+										"team": "DOTCOM",
+										"labels": [ "[Type] Bug" ]
+									}
+								}
+							],
+							"featureRequest": [
+								{
+									"details": "Product | Feature Request | Linear link",
+									"link": {
+										"type": "linear",
+										"workspace": "a8c",
+										"template": "1234567890",
+										"team": "DOTCOM"
+									}
+								}
+							],
+							"urgent": [
+								{
+									"details": "Product | Urgent bug | Linear link",
+									"link": {
+										"type": "linear",
+										"workspace": "a8c",
+										"template": "1234567890",
+										"team": "DOTCOM",
+										"priority": "urgent",
+										"labels": [ "[Type] Bug" ]
+									}
+								}
+							]
+						}
+					},
+					"A feature maintained by team MDR in Linear": {
+						"tasks": {
+							"bug": [
+								{
+									"details": "Product | Bug | Linear link",
+									"link": {
+										"type": "linear",
+										"workspace": "a8c",
+										"team": "MDR",
+										"labels": [ "[Type] Bug" ]
+									}
+								}
+							],
+							"featureRequest": [
+								{
+									"details": "Product | Feature Request | Linear link",
+									"link": {
+										"type": "linear",
+										"workspace": "a8c",
+										"template": "1234567890",
+										"team": "MDR"
+									}
+								}
+							],
+							"urgent": [
+								{
+									"details": "Product | Urgent bug | Linear link",
+									"link": {
+										"type": "linear",
+										"workspace": "a8c",
+										"template": "1234567890",
+										"team": "MDR",
+										"priority": "urgent",
+										"labels": [ "[Type] Bug" ]
+									}
+								}
+							]
+						},
+						"keywords": [ "mdr", "lumon" ]
+					}
+				}
+			}
+		}
+	},
 	"Alternative Product": {
 		"description": "Alternative Product (providers more bare-bones entities to search on)",
 		"featureGroups": {

@@ -44,6 +44,31 @@ function getReposForFeature(
 	return Array.from( repositories );
 }
 
+export const selectLinearTeamsForFeature = createSelector(
+	[ selectNormalizedReportingConfig, selectSelectedFeatureId ],
+	( reportingConfig, featureId ) => {
+		return getLinearTeamsForFeature( reportingConfig, featureId );
+	}
+);
+
+function getLinearTeamsForFeature(
+	reportingConfig: NormalizedReportingConfig,
+	featureId: FeatureId
+): string[] {
+	const { tasks } = reportingConfig;
+	const taskIds = getTaskIdsForFeature( reportingConfig, featureId );
+
+	const linearTeams = new Set< string >();
+	for ( const taskId of taskIds ) {
+		const task = tasks[ taskId ];
+		if ( task?.link?.type === 'linear' && task.link.team ) {
+			linearTeams.add( task.link.team );
+		}
+	}
+
+	return Array.from( linearTeams );
+}
+
 function getTaskIdsForFeature(
 	reportingConfig: NormalizedReportingConfig,
 	featureId: FeatureId

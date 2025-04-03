@@ -5,7 +5,10 @@ import styles from '../feature-selector-form.module.css';
 import { selectSelectedFeatureId, setSelectedFeatureId } from '../feature-selector-form-slice';
 import { useMonitoring } from '../../monitoring/monitoring-provider';
 import { SortedKeywordList } from './sorted-keyword-list';
-import { selectReposForFeature } from '../../combined-selectors/relevant-task-ids';
+import {
+	selectReposForFeature,
+	selectLinearTeamsForFeature,
+} from '../../combined-selectors/relevant-task-ids';
 import { SearchHighlighter } from './search-hightlighter';
 import { TextButton } from '../../common/components';
 
@@ -14,6 +17,7 @@ export function SelectedFeatureDetails() {
 	const monitoringClient = useMonitoring();
 	const featureId = useAppSelector( selectSelectedFeatureId );
 	const repositories = useAppSelector( selectReposForFeature );
+	const linearTeams = useAppSelector( selectLinearTeamsForFeature );
 	const { features } = useAppSelector( selectNormalizedReportingConfig );
 
 	// This should be handled in parent components, but adding for safety, and to keep typing happy.
@@ -49,10 +53,14 @@ export function SelectedFeatureDetails() {
 				{ repositoriesList }
 			</span>
 		);
-	} else {
-		repositoriesDisplay = (
-			<span data-testid={ dataTestId } className={ styles.noResults }>
-				None
+	}
+
+	let linearTeamDisplay: ReactNode;
+	if ( linearTeams.length > 0 ) {
+		const linearTeamsList = linearTeams.join( ', ' );
+		linearTeamDisplay = (
+			<span data-testid={ dataTestId } className={ styles.linearTeamsList }>
+				{ linearTeamsList }
 			</span>
 		);
 	}
@@ -78,12 +86,20 @@ export function SelectedFeatureDetails() {
 					<SearchHighlighter tokenize={ true }>{ description }</SearchHighlighter>
 				</p>
 			) }
-			<div className={ styles.selectedFeatureRepositories }>
-				<h4 className="screenReaderOnly">Repositories for currently selected feature:</h4>
-				<p className={ styles.selectedFeatureRepositoriesTitle }>Repositories</p>
-				{ repositoriesDisplay }
-			</div>
-
+			{ repositoriesDisplay && (
+				<div className={ styles.selectedFeatureRepositories }>
+					<h4 className="screenReaderOnly">Repositories for currently selected feature:</h4>
+					<p className={ styles.selectedFeatureRepositoriesTitle }>Repositories</p>
+					{ repositoriesDisplay }
+				</div>
+			) }
+			{ linearTeamDisplay && (
+				<div className={ styles.selectedFeatureLinearTeams }>
+					<h4 className="screenReaderOnly">Linear teams for currently selected feature:</h4>
+					<p className={ styles.selectedFeatureLinearTeamsTitle }>Linear teams</p>
+					{ linearTeamDisplay }
+				</div>
+			) }
 			<div className={ styles.selectedFeatureKeywords }>
 				<h4 className="screenReaderOnly">Keywords for currently selected feature:</h4>
 				<p className={ styles.selectedFeatureKeywordTitle }>Keywords</p>
