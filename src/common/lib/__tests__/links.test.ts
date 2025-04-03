@@ -2,6 +2,7 @@ import {
 	createGeneralHref,
 	createNewGithubIssueHref,
 	createNewJiraIssueHref,
+	createNewLinearIssueHref,
 	createP2Href,
 	createSlackHref,
 } from '../links';
@@ -172,6 +173,67 @@ describe( '[Links]', () => {
 					projectId: 12345,
 					issueTypeId: 1,
 				} )
+			).toBe( expectedHref );
+		} );
+	} );
+
+	describe( '[createNewLinearIssueHref]', () => {
+		test( 'Correctly creates href when no workspace is provided', () => {
+			const expectedHref = 'https://linear.app/new';
+			expect(
+				createNewLinearIssueHref( {
+					type: 'linear',
+				} )
+			).toBe( expectedHref );
+		} );
+		test( 'Correctly creates href when a workspace is provided', () => {
+			const expectedHref = 'https://linear.app/workspace/new';
+			expect(
+				createNewLinearIssueHref( {
+					type: 'linear',
+					workspace: 'workspace',
+				} )
+			).toBe( expectedHref );
+		} );
+		test( 'Correctly creates href when no team is provided', () => {
+			const expectedHref = 'https://linear.app/new';
+			expect(
+				createNewLinearIssueHref( {
+					type: 'linear',
+				} )
+			).toBe( expectedHref );
+		} );
+
+		test( 'Correctly creates href when a team is provided', () => {
+			const expectedHref = 'https://linear.app/team/calypso/new';
+			expect(
+				createNewLinearIssueHref( {
+					type: 'linear',
+					team: 'calypso',
+				} )
+			).toBe( expectedHref );
+		} );
+
+		test( 'If an issue title is provided, adds and encodes query param for it', () => {
+			const expectedHref = 'https://linear.app/new?title=foo%26bar';
+			expect( createNewLinearIssueHref( { type: 'linear' }, 'foo&bar' ) ).toBe( expectedHref );
+		} );
+
+		test( 'Correctly creates href and encodes all the provided GitHub params', () => {
+			const expectedHref =
+				'https://linear.app/team/calypso/new?title=foo%26bar&status=bar&priority=high&template=baz&labels=foo%2Cbar';
+			expect(
+				createNewLinearIssueHref(
+					{
+						type: 'linear',
+						team: 'calypso',
+						status: 'bar',
+						priority: 'high',
+						labels: [ 'foo', 'bar' ],
+						template: 'baz',
+					},
+					'foo&bar'
+				)
 			).toBe( expectedHref );
 		} );
 	} );

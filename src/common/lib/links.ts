@@ -1,5 +1,6 @@
 import {
 	GeneralLink,
+	NewLinearIssueLink,
 	NewGitHubIssueLink,
 	NewJiraIssueLink,
 	P2Link,
@@ -87,5 +88,35 @@ export function createNewJiraIssueHref( link: NewJiraIssueLink ) {
 	// If the project ID or issue type is invalid, the link will just show an error saying as much.
 	url.searchParams.append( 'pid', link.projectId.toString() );
 	url.searchParams.append( 'issuetype', link.issueTypeId.toString() );
+	return url.href;
+}
+
+export function createNewLinearIssueHref( link: NewLinearIssueLink, issueTitle?: string ) {
+	const url = new URL(
+		`https://linear.app/${ link.workspace ? `${ link.workspace }/` : '' }${
+			link.team ? `team/${ link.team }/` : ''
+		}new`
+	);
+
+	if ( issueTitle ) {
+		url.searchParams.append( 'title', issueTitle );
+	}
+
+	if ( link.status ) {
+		url.searchParams.append( 'status', link.status );
+	}
+
+	if ( link.priority && [ 'high', 'urgent', 'medium', 'low' ].includes( link.priority ) ) {
+		url.searchParams.append( 'priority', link.priority );
+	}
+
+	if ( link.template ) {
+		url.searchParams.append( 'template', link.template );
+	}
+
+	if ( link.labels && link.labels.length > 0 ) {
+		url.searchParams.append( 'labels', link.labels.join( ',' ) );
+	}
+
 	return url.href;
 }

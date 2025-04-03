@@ -115,6 +115,16 @@ export interface NewGitHubIssueLink {
 	org?: string; // "a8c" e.g.
 }
 
+export interface NewLinearIssueLink {
+	type: 'linear';
+	workspace?: string; // Workspace ID.
+	team?: string; // Team ID. Can be set to direct your issue to a specific team.
+	status?: string; // UUID or name of the workflow status. When using UUID you also need to indicate a corresponding team key.
+	priority?: string; // Possible values are high, urgent, medium and low.
+	labels?: string[]; // Label names. Must match existing labels in Linear, or will be ignored.
+	template?: string; // UUID of the issue template.
+}
+
 export interface NewJiraIssueLink {
 	type: 'jira';
 	hostName: string;
@@ -122,7 +132,13 @@ export interface NewJiraIssueLink {
 	issueTypeId: number; // standard JIRA issue type values from 1 to 4
 }
 
-export type TaskLink = SlackLink | P2Link | GeneralLink | NewGitHubIssueLink | NewJiraIssueLink;
+export type TaskLink =
+	| SlackLink
+	| P2Link
+	| GeneralLink
+	| NewGitHubIssueLink
+	| NewJiraIssueLink
+	| NewLinearIssueLink;
 
 export interface TaskDetails {
 	title?: string;
