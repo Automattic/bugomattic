@@ -123,6 +123,7 @@ export interface NewLinearIssueLink {
 	priority?: string; // Possible values are high, urgent, medium and low.
 	labels?: string[]; // Label names. Must match existing labels in Linear, or will be ignored.
 	template?: string; // UUID of the issue template.
+	project?: string; // UUID of the project.
 }
 
 export interface NewJiraIssueLink {

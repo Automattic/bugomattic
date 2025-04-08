@@ -221,6 +221,25 @@ describe( '[Links]', () => {
 			).toBe( expectedHref );
 		} );
 
+		test( 'When both a team and a project are provided, the URL points to the project', () => {
+			const expectedHref = 'https://linear.app/workspace/project/123/new';
+			expect(
+				createNewLinearIssueHref( {
+					type: 'linear',
+					workspace: 'workspace',
+					team: 'calypso',
+					project: '123',
+				} )
+			).toBe( expectedHref );
+		} );
+
+		test( 'When only a project is provided, without a team, it is not added to the URL', () => {
+			const expectedHref = 'https://linear.app/workspace/new';
+			expect(
+				createNewLinearIssueHref( { type: 'linear', workspace: 'workspace', project: '123' } )
+			).toBe( expectedHref );
+		} );
+
 		test( 'If an issue title is provided, adds and encodes query param for it', () => {
 			const expectedHref = 'https://linear.app/new?title=foo%26bar';
 			expect( createNewLinearIssueHref( { type: 'linear' }, 'foo&bar' ) ).toBe( expectedHref );

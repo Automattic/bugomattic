@@ -92,11 +92,21 @@ export function createNewJiraIssueHref( link: NewJiraIssueLink ) {
 }
 
 export function createNewLinearIssueHref( link: NewLinearIssueLink, issueTitle?: string ) {
-	const url = new URL(
+	let url = new URL(
 		`https://linear.app/${ link.workspace ? `${ link.workspace }/` : '' }${
 			link.team ? `team/${ link.team }/` : ''
 		}new`
 	);
+
+	// Project links will only work if a team is also provided.
+	// If both a team and a project are provided, we'll update the URL to point to the project.
+	if ( link.team && link.project ) {
+		url = new URL(
+			`https://linear.app/${ link.workspace ? `${ link.workspace }/` : '' }project/${
+				link.project
+			}/new`
+		);
+	}
 
 	if ( issueTitle ) {
 		url.searchParams.append( 'title', issueTitle );
