@@ -370,6 +370,49 @@
 							]
 						},
 						"keywords": [ "mdr", "lumon" ]
+					},
+					"Linear Project Feature": {
+						"description": "A feature tracked in Linear under a specific project",
+						"keywords": ["linear", "project", "calypso"],
+						"tasks": {
+							"bug": [
+								{
+									"details": "Linear Project Feature | Bug | Linear link",
+									"link": {
+										"type": "linear",
+										"workspace": "a8c",
+										"team": "calypso",
+										"project": "linear-feature-123",
+										"labels": [ "[Type] Bug" ]
+									}
+								}
+							],
+							"featureRequest": [
+								{
+									"details": "Linear Project Feature | Feature Request | Linear link",
+									"link": {
+										"type": "linear",
+										"workspace": "a8c",
+										"team": "calypso",
+										"project": "linear-feature-123",
+										"template": "1234567890"
+									}
+								}
+							],
+							"urgent": [
+								{
+									"details": "Linear Project Feature | Urgent bug | Linear link",
+									"link": {
+										"type": "linear",
+										"workspace": "a8c",
+										"team": "calypso",
+										"project": "linear-feature-123",
+										"priority": "urgent",
+										"labels": [ "[Type] Bug" ]
+									}
+								}
+							]
+						}
 					}
 				}
 			}
