@@ -2,14 +2,12 @@
 
 ## Overview
 
-Bugomattic is a tool that guides bug reporters to the right actions within large, complex organizations.
-It provides a highly configurable way to answer the question of "where should I report a bug I am seeing?"
+Bugomattic (retired March 2025 in favor of Linear) was a tool that guides bug reporters to the right actions within large, complex organizations.
+It provided a highly configurable way to answer the question of "where should I report a bug I am seeing?"
 
-This tool is developed to be an internal tool for Automatticians. It is built with wepback and deployed
-within Automattic's internal sites. Others who find it useful may fork it and adapt it to work it for
+This tool was developed to be an internal tool for Automatticians. Built with wepback and deployed
+within Automattic's internal sites. Others who found it useful might have forked it and adapted it to work it for
 their organization, following the GPL 2.0 license.
-
-For Automatticians... this is the up & coming tool that replaces the existing Bugomattic prototype.
 
 ## Development
 
